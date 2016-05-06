@@ -1,0 +1,44 @@
+version: '2'
+services:
+  wordpress:
+    image: dsifford/wordpress
+    links:
+      - db
+    ports:
+      - 8080:80
+      - 443:443
+    volumes:
+      - ./data:/data
+      - ./dist/aliemu-plugins:/app/wp-content/plugins/aliemu-plugins
+      - ./dist/Divi-child:/app/wp-content/themes/Divi-child
+      - ./wp-content/uploads:/app/wp-content/uploads
+      - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
+      - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
+      - ./wp-content/plugins/um-profile-completeness:/app/wp-content/plugins/um-profile-completeness
+      - ./wp-content/themes/Divi:/app/wp-content/themes/Divi
+    environment:
+      DB_NAME: wordpress
+      DB_PASS: root
+      PLUGINS: >-
+        google-analytics-dashboard-for-wp,
+        simple-tooltips,
+        query-monitor,
+        tablepress,
+        ultimate-member,
+        wp-mail-smtp,
+        wpdiscuz,
+        http://bit.ly/um-recaptcha,
+        http://bit.ly/um-online
+      SEARCH_REPLACE: http://www.aliemu.com,http://localhost:8080
+  db:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    volumes_from:
+      - data
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  data:
+    image: busybox
+    volumes:
+      - /var/lib/mysql

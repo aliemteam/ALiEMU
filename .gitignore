@@ -1,0 +1,42 @@
+# ===== SENSITIVE DATA =====
+#  DO NOT COMMIT TO GITHUB
+data
+
+# ===== COPYWRITTEN FILES =====
+#  DO NOT COMMIT TO GITHUB
+wp-content/themes/Divi
+
+# File system junk files
+Desktop.ini
+Thumbs.db
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+.apdisk
+.fseventsd
+.listing
+
+# Editor files
+*.sublime-*
+*.swp
+.c9
+.sass-cache/
+
+# Wordpress
+wp-content/plugins/*
+!wp-content/plugins/aliemu-plugins
+!wp-content/plugins/aliemu-plugins/**
+wp-content/uploads/
+wp-content/themes/Divi-child/php_errorlog
+
+
+# Gulp stuff
+node_modules
+
+# Local Distribution Files
+dist
+
+# Typings
+typings/**
+!typings/ALiEMU.d.ts

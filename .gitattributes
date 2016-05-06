@@ -1,0 +1,9 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly choose files that must have UNIX LF line endings
+*.sh text eol=lf
+Dockerfile text eol=lf
+data/aliemu_dsa text eol=lf
+
+*.tsx linguist-language=TypeScript
