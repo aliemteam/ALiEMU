@@ -111,7 +111,7 @@ case "$1" in
                 ;;
 
             *)
-                echo "'get' subcommmand must be either 'uploads', 'plugin', or 'database'"
+                echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', or 'database'"
                 exit 1
         esac
         ;;
