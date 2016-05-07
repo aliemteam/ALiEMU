@@ -1,6 +1,3 @@
-# API Documentation
-https://dsifford.github.io/ALiEMU
-
 # Code Formatting Guidelines
 
 If you're using Atom editor, download the `atom-beautify` package.
