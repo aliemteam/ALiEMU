@@ -40,3 +40,6 @@ dist
 # Typings
 typings/**
 !typings/ALiEMU.d.ts
+
+# Coverage Reports
+coverage

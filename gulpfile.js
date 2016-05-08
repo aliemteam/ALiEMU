@@ -1,158 +1,200 @@
 /*eslint-env es6*/
 'use strict';
 
-const gulp         = require('gulp');
-const autoprefixer = require('gulp-autoprefixer');
-const cleanCSS     = require('gulp-clean-css');
-const uglify       = require('gulp-uglify');
-const browserSync  = require('browser-sync').create();
-const sass         = require('gulp-sass');
-const webpack      = require('webpack-stream');
-const del          = require('del');
+const gulp             = require('gulp');
+const postcss          = require('gulp-postcss');
+const rename           = require('gulp-rename');
+const sugarss          = require('sugarss');
+const sourcemaps       = require('gulp-sourcemaps');
+const webpack          = require('webpack-stream');
+const browserSync      = require('browser-sync').create();
+const del              = require('del');
+const uglify           = require('gulp-uglify');
+const webpackConfig    = require('./webpack.config.js');
+const webpackDevConfig = Object.assign({}, webpackConfig, {
+    devtool: 'source-map',
+    cache: true,
+})
 
+// ==================================================
+//                 Utility Tasks
+// ==================================================
 
-//!==================================================!
-//!                   Clean                          !
-//!==================================================!
+// Delete all files in dist/aliemu-plugins
+gulp.task('clean', (done) => del(['dist/aliemu-plugins/**/*', 'dist/Divi-child/**/*'], done) );
 
-gulp.task('clean', () => {
-  return del([
-    'dist/aliemu-plugins/inc/**/*',
-  ]);
+// Trigger a browsersync reload
+gulp.task('reload', (done) => {
+    browserSync.reload();
+    done();
 });
 
-//!==================================================!
-//!                   Serve                          !
-//!==================================================!
+// ==================================================
+//                    Static
+// ==================================================
 
-gulp.task('serve', ['build'], () => {
-
-  switch (process.env.USER) {
-    case 'dsifford':
-      browserSync.init({
-        proxy: 'localhost:8080'
-      });
-      break;
-    default:
-      try {
-        let MACHINE_IP = process.env.DOCKER_HOST.match(/\d.*(?=:)/)[0] + ':8080';
-        browserSync.init({
-          proxy: process.env.MACHINE_IP
-        });
-      } catch (e) {
-        console.log('The following error occurred:\n');
-        console.log(e.message);
-      }
-  }
-
-  gulp.watch([
-    './wp-content/plugins/aliemu-plugins/**/*.{ts,tsx}',
-    './wp-content/themes/Divi-child/**/*.{ts,tsx}',
-    '!./wp-content/**/*-test.{ts,tsx}',
-    '!data.test.ts',
-  ], ['webpack']).on('change', browserSync.reload);
-
-  gulp.watch([
-    './wp-content/plugins/aliemu-plugins/**/*.scss',
-    './wp-content/themes/Divi-child/**/*.scss',
-  ], ['sass']);
-
-  gulp.watch([
-    './wp-content/plugins/aliemu-plugins/**/*',
-    './wp-content/themes/Divi-child/**/*',
-    '!./wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,scss}',
-    '!./wp-content/themes/Divi-child/**/*.{ts,tsx,scss}',
-    '!__tests__/**/*'
-  ], ['build', 'reload-delay']);
-
-});
-
-
-//!==================================================!
-//!                   Build                          !
-//!==================================================!
-
-gulp.task('build', ['clean', 'sass', 'webpack'], (cb) => {
-  new Promise(resolve => {
-    let task = gulp.src([
+gulp.task('static:aliemu-plugins', () =>
+    gulp.src([
         'wp-content/plugins/aliemu-plugins/**/*.*',
         '!wp-content/**/__tests__',
-        '!wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,json,scss}'
-      ], { base: 'wp-content/plugins/aliemu-plugins/' }
-    )
-    .pipe(gulp.dest('dist/aliemu-plugins'));
-    task.on('end', resolve);
-  }).then(() => {
-    let task = gulp.src([
+        '!wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,json,scss,sss}',
+    ], { base: 'wp-content/plugins/aliemu-plugins/' })
+    .pipe(gulp.dest('dist/aliemu-plugins'))
+);
+
+gulp.task('static:divi-child', () =>
+    gulp.src([
         'wp-content/themes/Divi-child/**/*.*',
         '!wp-content/**/__tests__',
-        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,scss\}'
-      ],{ base: 'wp-content/themes/Divi-child/' }
-    )
-    .pipe(gulp.dest('dist/Divi-child'));
-    task.on('end', cb);
-  });
-});
-
-// Compile + autoprefix + minify sass
-gulp.task('sass', () => {
-  let task1 = new Promise(resolve => {
-    let task = gulp.src([
-        'wp-content/plugins/aliemu-plugins/**/*.scss',
-      ], { base: 'wp-content/plugins/aliemu-plugins/' }
-    )
-    .pipe(sass().on('error', sass.logError))
-    .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
-    .pipe(cleanCSS({ compatibility: 'ie10' }))
-    .pipe(gulp.dest('dist/aliemu-plugins'))
-    .pipe(browserSync.stream());
-    task.on('end', resolve);
-  });
-
-  let task2 = new Promise(resolve => {
-    let task = gulp.src([
-        'wp-content/themes/Divi-child/**/*.scss',
-      ],{ base: 'wp-content/themes/Divi-child/' }
-    )
-    .pipe(sass().on('error', sass.logError))
-    .pipe(autoprefixer({ browsers: ['last 2 versions'] }))
-    .pipe(cleanCSS({ compatibility: 'ie10' }))
+        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,scss,sss}',
+    ], { base: 'wp-content/themes/Divi-child/' })
     .pipe(gulp.dest('dist/Divi-child'))
-    .pipe(browserSync.stream());
-  });
-
-  Promise.all([task1, task2]);
-
-});
-
-gulp.task('webpack', () => {
-  return gulp.src('wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
-  .pipe(webpack(require('./webpack.config.js')))
-  .pipe(gulp.dest('dist/'));
-});
+);
 
 
-//!==================================================!
-//!                  Deploy                          !
-//!==================================================!
+gulp.task('static', gulp.parallel('static:aliemu-plugins', 'static:divi-child'));
 
-// Minify JS + Remove Mapfiles
-gulp.task('deploy', ['build'], () => {
-  new Promise(resolve => {
-    let task = gulp.src(['./dist/**/*.js'])
-    .pipe(uglify())
-    .pipe(gulp.dest('./dist/'));
-    task.on('end', resolve);
-  })
-  .then(() => {
-    del(['./dist/**/*.map']);
-  });
-});
 
-//!==================================================!
-//!                    Misc                          !
-//!==================================================!
+// ==================================================
+//                     Styles
+// ==================================================
 
-gulp.task('reload-delay', ['build'], () => {
-  browserSync.reload();
-});
+const processors = [
+    require('precss'),
+    require('autoprefixer')({ browsers: ['last 2 versions'] }),
+    require('cssnano')(),
+];
+
+gulp.task('styles-dev:aliemu-plugins', () =>
+    gulp.src([
+        'wp-content/plugins/aliemu-plugins/**/*.sss',
+    ], { base: 'wp-content/plugins/aliemu-plugins/', })
+    .pipe(sourcemaps.init())
+    .pipe(postcss(processors, { parser: sugarss }))
+    .pipe(rename({ extname: '.css' }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('dist/aliemu-plugins'))
+    .pipe(browserSync.stream())
+);
+gulp.task('styles-dev:divi-child', () =>
+    gulp.src([
+        'wp-content/themes/Divi-child/**/*.sss',
+    ], { base: 'wp-content/themes/Divi-child/', })
+    .pipe(sourcemaps.init())
+    .pipe(postcss(processors, { parser: sugarss }))
+    .pipe(rename({ extname: '.css' }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest('dist/Divi-child'))
+    .pipe(browserSync.stream())
+);
+
+gulp.task('styles-prod:aliemu-plugins', () =>
+    gulp.src([
+        'wp-content/plugins/aliemu-plugins/**/*.sss',
+    ], { base: 'wp-content/plugins/aliemu-plugins/', })
+    .pipe(postcss(processors, { parser: sugarss }))
+    .pipe(rename({ extname: '.css' }))
+    .pipe(gulp.dest('dist/aliemu-plugins'))
+);
+gulp.task('styles-prod:divi-child', () =>
+    gulp.src([
+        'wp-content/themes/Divi-child/**/*.sss',
+    ], { base: 'wp-content/themes/Divi-child/', })
+    .pipe(postcss(processors, { parser: sugarss }))
+    .pipe(rename({ extname: '.css' }))
+    .pipe(gulp.dest('dist/Divi-child'))
+);
+
+gulp.task('styles:dev', gulp.parallel(
+    'styles-dev:aliemu-plugins',
+    'styles-dev:divi-child'
+));
+gulp.task('styles:prod', gulp.parallel(
+    'styles-prod:aliemu-plugins',
+    'styles-prod:divi-child'
+));
+
+
+// ==================================================
+//                    Javascript
+// ==================================================
+
+gulp.task('webpack:dev', () =>
+    gulp.src('wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx')
+    .pipe(webpack(webpackDevConfig))
+    .pipe(gulp.dest('dist/'))
+);
+
+
+gulp.task('webpack:prod', () =>
+    gulp.src('wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx')
+    .pipe(webpack(webpackConfig))
+    .pipe(gulp.dest('dist/'))
+);
+
+gulp.task('js', () =>
+    gulp.src([
+        'dist/**/*.js',
+    ])
+    .pipe(uglify({
+        compress: {
+            'dead_code': true,
+            'unused': true,
+            'drop_debugger': true,
+            'drop_console': true,
+        }
+    }))
+    .pipe(gulp.dest('dist'))
+);
+
+// ==================================================
+//                 Compound Tasks
+// ==================================================
+
+gulp.task('build', gulp.series(
+    'clean',
+    gulp.parallel('static', 'webpack:prod', 'styles:prod'),
+    'js'
+));
+
+gulp.task('default',
+    gulp.series(
+        'clean',
+        gulp.parallel('static', 'webpack:dev', 'styles:dev'), () => {
+
+            switch (process.platform) {
+                case 'linux':
+                    browserSync.init({
+                        proxy: 'localhost:8080'
+                    });
+                    break;
+                default:
+                    try {
+                        let MACHINE_IP = process.env.DOCKER_HOST.match(/\d.*(?=:)/)[0] + ':8080';
+                        browserSync.init({
+                            proxy: MACHINE_IP
+                        });
+                    } catch (e) {
+                        console.log('The following error occurred:\n');
+                        console.log(e.message);
+                    }
+            }
+
+            gulp.watch('./wp-content/**/*.sss', gulp.series('styles:dev'));
+
+            gulp.watch([
+                'wp-content/**/*.{ts,tsx}',
+                '!wp-content/**/__tests__/',
+                '!wp-content/**/__tests__/*',
+            ], gulp.series('webpack:dev', 'reload'));
+
+            gulp.watch([
+                'wp-content/**/*',
+                '!wp-content/**/*.{ts,tsx,sss}',
+                '!wp-content/**/__tests__/',
+                '!wp-content/**/__tests__/*',
+            ], gulp.series('build', 'reload'));
+
+        }
+    )
+);

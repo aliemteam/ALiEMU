@@ -1,5 +1,4 @@
 module.exports = {
-  devtool: 'source-map',
   entry: {
     'aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard': './wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx',
   },
