@@ -120,14 +120,14 @@ gulp.task('styles:prod', gulp.parallel(
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp.src('wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx')
+    gulp.src('wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackDevConfig))
     .pipe(gulp.dest('dist/'))
 );
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx')
+    gulp.src('wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('dist/'))
 );

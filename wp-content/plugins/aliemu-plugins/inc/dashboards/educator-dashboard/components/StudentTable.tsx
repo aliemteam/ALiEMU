@@ -1,6 +1,6 @@
 import * as React from 'react';
-import calculateIIIHours from './Utils/CalculateHours';
-import paginate from '../../../Components/Utils/Pagination';
+import calculateIIIHours from './utils/CalculateHours';
+import paginate from '../../../components/utils/Pagination';
 import {
     Header,
     Row,
@@ -9,7 +9,7 @@ import {
     FilterRow,
     Flex,
     Button,
-} from '../../../Components/TableComponents';
+} from '../../../components/TableComponents';
 
 
 interface Props {

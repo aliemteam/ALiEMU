@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { StudentTable, } from './Components/StudentTable';
-import { CourseTable, } from './Components/CourseTable';
+import { StudentTable, } from './components/StudentTable';
+import { CourseTable, } from './components/CourseTable';
 
 declare var AU_EducatorData: ALiEMU.EducatorDashboard.EducatorData;
 
@@ -40,8 +40,6 @@ const Heading = () =>
 <div className='au-edudash-shadowbox'>
     <h1>{AU_EducatorData.currentUser.meta.residencyUsEm}</h1>
 </div>;
-
-
 
 
 ReactDOM.render(

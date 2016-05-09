@@ -33,14 +33,14 @@
         "typings/main/ambient/react-dom/index.d.ts",
         "typings/main/ambient/react/index.d.ts",
         "typings/main/ambient/require/index.d.ts",
-        "wp-content/plugins/aliemu-plugins/inc/Components/Utils/__tests__/Pagination-test.ts",
-        "wp-content/plugins/aliemu-plugins/inc/Components/Utils/Pagination.ts",
-        "wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/Components/Utils/__tests__/CalculateHours-test.ts",
-        "wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/Components/Utils/CalculateHours.ts",
-        "wp-content/plugins/aliemu-plugins/inc/Components/TableComponents.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/Components/CourseTable.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/Components/StudentTable.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/Dashboards/EducatorDashboard/EducatorDashboard.tsx"
+        "wp-content/plugins/aliemu-plugins/inc/components/utils/__tests__/Pagination-test.ts",
+        "wp-content/plugins/aliemu-plugins/inc/components/utils/Pagination.ts",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/utils/__tests__/CalculateHours-test.ts",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/utils/CalculateHours.ts",
+        "wp-content/plugins/aliemu-plugins/inc/components/TableComponents.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/CourseTable.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/StudentTable.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx"
     ],
     "atom": {
         "rewriteTsconfig": true

@@ -7,7 +7,7 @@ import {
     Flex,
     Button,
     Pager,
-} from '../../../Components/TableComponents';
+} from '../../../components/TableComponents';
 
 interface Props {
     categories: ALiEMU.EducatorDashboard.CategoryObject;
