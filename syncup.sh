@@ -6,6 +6,7 @@
 # 'get plugin [plugin-name]' = retrieve and overwrite the plugin [plugin-name]
 # 'get --all-plugins' = retrieve all paid plugins (REQUIRED BEFORE RUNNING ENVIRONMENT)
 # 'get database' = retrieve a copy of the database from the server + rename urls
+# 'get theme' = download the Divi theme from the server
 # 'update plugin [plugin-name] = update a specific plugin'
 
 # Globals
@@ -69,6 +70,14 @@ case "$1" in
                 echo "=> Plugin $3 Retrieved Successfully!"
                 ;;
 
+            theme)
+
+                cd "$SCRIPTDIR/wp-content/themes" || exit
+                echo "=> Retrieving Divi Theme"
+                wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/themes/Divi --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                echo "=> Theme Retrieved Successfully!"
+                ;;
+
             database)
 
                 # Ensure we are in the script's directory
@@ -111,7 +120,7 @@ case "$1" in
                 ;;
 
             *)
-                echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', or 'database'"
+                echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', or 'database'"
                 exit 1
         esac
         ;;
