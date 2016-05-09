@@ -5,6 +5,7 @@
   "author": "Derek P Sifford",
   "scripts": {
     "start": "gulp serve",
+    "chown": "sudo chown -R $USER dist",
     "test": "jest"
   },
   "dependencies": {
