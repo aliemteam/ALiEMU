@@ -10,8 +10,8 @@ type CourseMeta = ALiEMU.EducatorDashboard.CourseMetaObject;
  * @return {number} The user's calculated III hours.
  */
 export default function calculateHours(user: User, courseMeta: CourseMeta): number {
-  return Object.keys(user.courseCompleted).reduce((prev, curr) => {
-    let val = courseMeta[curr].recommendedHours;
-    return val + prev;
-  }, 0);
+    return Object.keys(user.courseCompleted).reduce((prev, curr) => {
+        let val = courseMeta[curr].recommendedHours;
+        return val + prev;
+    }, 0);
 }
