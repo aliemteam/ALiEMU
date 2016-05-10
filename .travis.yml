@@ -11,4 +11,8 @@ script:
     - npm test
 after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 notifications:
-    slack: alieminnovation:qbyg3p4KvNRgsAnZnqdgQaTD
+    slack:
+        rooms:
+            - alieminnovation:qbyg3p4KvNRgsAnZnqdgQaTD
+        on_success: never
+        on_failure: always

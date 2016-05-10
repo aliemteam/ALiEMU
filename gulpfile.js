@@ -67,14 +67,14 @@ const processors = [
 
 gulp.task('styles-dev:aliemu-plugins', () =>
     gulp.src([
-        'wp-content/plugins/aliemu-plugins/**/*.sss',
+        'wp-content/plugins/aliemu-plugins/inc/styles/styles.sss',
     ], { base: 'wp-content/plugins/aliemu-plugins/', })
     .pipe(sourcemaps.init())
     .pipe(postcss(processors, { parser: sugarss }))
     .pipe(rename({ extname: '.css' }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/aliemu-plugins'))
-    .pipe(browserSync.stream())
+    .pipe(browserSync.stream({match: '**/*.css'}))
 );
 gulp.task('styles-dev:divi-child', () =>
     gulp.src([
@@ -85,12 +85,12 @@ gulp.task('styles-dev:divi-child', () =>
     .pipe(rename({ extname: '.css' }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/Divi-child'))
-    .pipe(browserSync.stream())
+    .pipe(browserSync.stream({match: '**/*.css'}))
 );
 
 gulp.task('styles-prod:aliemu-plugins', () =>
     gulp.src([
-        'wp-content/plugins/aliemu-plugins/**/*.sss',
+        'wp-content/plugins/aliemu-plugins/inc/styles/styles.sss',
     ], { base: 'wp-content/plugins/aliemu-plugins/', })
     .pipe(postcss(processors, { parser: sugarss }))
     .pipe(rename({ extname: '.css' }))
@@ -180,7 +180,13 @@ gulp.task('default',
                     }
             }
 
-            gulp.watch('./wp-content/**/*.sss', gulp.series('styles:dev'));
+            gulp.watch([
+                'wp-content/plugins/**/*.sss',
+            ], gulp.series('styles-dev:aliemu-plugins'));
+
+            gulp.watch([
+                'wp-content/themes/**/*.sss',
+            ], gulp.series('styles-dev:divi-child'));
 
             gulp.watch([
                 'wp-content/**/*.{ts,tsx}',

@@ -14,6 +14,16 @@ require_once (dirname(__FILE__) . '/inc/dashboards/dashboards.php');
 require_once (dirname(__FILE__) . '/inc/shortcodes.php');
 require_once (dirname(__FILE__) . '/inc/toastr-actions.php');
 
+
+/**
+ * Load stylesheets (highest priority)
+ * @since 1.0.3
+ */
+function au_load_styles() {
+    wp_enqueue_style('aliemu_master', plugins_url('/inc/styles/styles.css', __FILE__));
+}
+add_action( 'wp_enqueue_scripts', 'au_load_styles', 500 );
+
 /**
  * Adds the 'educator_access' role to WordPress roles.
  *
