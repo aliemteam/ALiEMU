@@ -55,8 +55,6 @@
 add_action('wp_enqueue_scripts', 'load_admin_dashboard_js');
 function load_admin_dashboard_js() {
     if ($_SERVER['QUERY_STRING'] === 'profiletab=edudash') {
-        wp_register_script('lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js');
-        wp_enqueue_script('lodash');
         wp_enqueue_script(
             'EducatorDashboard',
             plugins_url('educator-dashboard/EducatorDashboard.js', __FILE__),

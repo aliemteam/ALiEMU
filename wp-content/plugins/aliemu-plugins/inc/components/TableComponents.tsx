@@ -22,6 +22,10 @@ interface FlexProps extends React.HTMLProps<HTMLDivElement> {
     amount: '1' | '2';
 }
 
+interface ButtonProps extends React.HTMLProps<HTMLAnchorElement> {
+
+}
+
 
 // Local stylesheets
 const styles = {
@@ -167,4 +171,4 @@ export const FilterRow = (props) =>
     <div style={styles.flex.container} {...props} />;
 
 export const Button = (props) =>
-    <input style={styles.button} type='button' {...props} />;
+    <a style={styles.button} {...props} />;

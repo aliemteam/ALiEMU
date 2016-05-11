@@ -6,7 +6,6 @@ function learndash_course_grid_css($content) {
 		return $content;
 	}
 
-	// wp_enqueue_style( 'learndash_course_grid_css', plugins_url( 'aliemu-plugins/inc/learndash-course-grid/style.css' ) );
 	return $content;
 }
 

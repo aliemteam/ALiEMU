@@ -13,7 +13,7 @@ interface State {
     data: ALiEMU.EducatorDashboard.EducatorData;
 }
 
-class EducatorDashboard extends React.Component<Props, any> {
+class EducatorDashboard extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
@@ -25,11 +25,10 @@ class EducatorDashboard extends React.Component<Props, any> {
                 <Heading />
                 <StudentTable
                     users={this.props.data.users}
-                    courseMeta={this.props.data.courseData.courseMeta } />
+                    courseData={this.props.data.courseData} />
                 <CourseTable
                     users={this.props.data.users}
-                    courses={this.props.data.courseData.courses}
-                    categories={this.props.data.courseData.categories} />
+                    courseData={this.props.data.courseData} />
             </div>
         );
     }

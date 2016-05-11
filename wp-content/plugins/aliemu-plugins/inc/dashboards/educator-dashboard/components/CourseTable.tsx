@@ -1,4 +1,11 @@
 import * as React from 'react';
+import { browserDetect, } from '../../../utils/BrowserDetect';
+import {
+    downloadPolyfill,
+    getCourseCategory,
+    parseCompletionDate,
+    calculateIIIHours,
+} from '../../../utils/DashboardUtils';
 import {
     Header,
     Row,
@@ -10,8 +17,7 @@ import {
 } from '../../../components/TableComponents';
 
 interface Props {
-    categories: ALiEMU.EducatorDashboard.CategoryObject;
-    courses: ALiEMU.EducatorDashboard.CourseObject;
+    courseData: ALiEMU.EducatorDashboard.CourseData;
     users: ALiEMU.EducatorDashboard.UserObject;
 }
 
@@ -28,17 +34,60 @@ export class CourseTable extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-    }
-
-    componentWillMount() {
-        this.setState({
-            categories: Object.keys(this.props.categories).filter((category) => category !== ''),
+        this.state = {
+            categories: Object.keys(this.props.courseData.categories).filter((category) => category !== ''),
             categorySelection: '',
             courseSelection: '',
             currentPage: 0,
             visibleRows: 10,
             relevantUsers: [],
+        };
+    }
+
+    exportCourseData(e: DOMEvent) {
+        const course = this.state.courseSelection;
+
+        if (!course) return;
+
+        const filename = `${this.props.courseData.courses[course].postTitle}.csv`;
+        const lessons = this.props.courseData.lessons;
+        const users = this.props.users;
+        const lessonIDs = [];
+
+        let CSV: string = `Last Name,First Name,Course Completed,${
+            this.props.courseData.courses[course].lessons
+            .filter((lessonID: string) => typeof lessons[lessonID] !== 'undefined')
+            .map((lessonID: string) => {
+                lessonIDs.push(lessonID);
+                return `"Lesson: ${lessons[lessonID].postTitle}"`;
+            })
+            .join(',')
+        }\n`;
+
+        /** TODO: Probably put this in a function */
+        Object.keys(users).forEach((userID: string) => {
+            CSV +=
+                `"${users[userID].lastName}",` +
+                `"${users[userID].firstName}",` +
+                `"${parseCompletionDate(users[userID].courseCompleted[this.state.courseSelection])}",` +
+                `${lessonIDs.map((lessonID: string) => {
+                    try {
+                        let completed = users[userID].courseProgress[course].lessons[lessonID];
+                        if (completed === 1) {
+                            return '"Completed"';
+                        }
+                        return '"X"';
+                    } catch(e) {
+                        return '"X"';
+                    }
+                }).join(',')}\n`;
         });
+
+        const blob = new Blob(
+            [CSV, ], { type: 'text/csv;charset=utf-8', }
+        );
+
+        downloadPolyfill(filename, blob, browserDetect(), e.target.id);
     }
 
     handleChange(e: React.UIEvent) {
@@ -104,9 +153,9 @@ export class CourseTable extends React.Component<Props, State> {
                             disabled={this.state.categorySelection === ''} >
                             <option value=''> -- Select a Course -- </option>
                             {
-                                Object.keys(this.props.categories[this.state.categorySelection]).map((courseID, i) =>
+                                Object.keys(this.props.courseData.categories[this.state.categorySelection]).map((courseID, i) =>
                                     <option value={courseID} key={courseID}>
-                                        {this.props.courses[courseID].postTitle}
+                                        {this.props.courseData.courses[courseID].postTitle}
                                     </option>
                                 )
                             }
@@ -114,8 +163,9 @@ export class CourseTable extends React.Component<Props, State> {
                     </Flex>
                     <Flex amount='1'>
                         <Button
-                            value='Export Course Data'
-                            disabled={true} />
+                            children='Export Course Data'
+                            disabled={true}
+                            onClick={this.exportCourseData.bind(this)} />
                     </Flex>
                 </FilterRow>
                 <Header cells={this.headerCells} />

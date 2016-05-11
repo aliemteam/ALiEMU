@@ -378,6 +378,16 @@ class AU_Educator_Dashboard {
 		$course_holder = array();
 
 		foreach($course_query as $course) {
+			$lesson_query = $wpdb->get_results("
+				SELECT post_id
+				FROM $wpdb->postmeta
+				WHERE meta_key = 'course_id'
+				AND meta_value = $course->ID
+			");
+			$lessons = array();
+			foreach ($lesson_query as $key => $val) {
+				array_push($lessons, $val->post_id);
+			}
 			$raw_course = get_post($course->ID);
 			$course_holder[$course->ID] = array(
 				"ID" => $raw_course->ID,
@@ -385,6 +395,7 @@ class AU_Educator_Dashboard {
 				"postDate" => $raw_course->post_date,
 				"postModified" => $raw_course->post_modified,
 				"postTitle" => $raw_course->post_title,
+				"lessons" => $lessons,
 			);
 		}
 		return $course_holder;
