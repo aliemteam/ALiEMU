@@ -7,7 +7,7 @@ type Categories = ALiEMU.EducatorDashboard.CategoryObject;
  * Either immediately triggers a file download or saves a downloadable file blob
  *   to an HTML anchor element, depending on browser support for the "download"
  *   attribute.
- * TODO: still need to test this
+ * 
  * @param {string} filename The name of the file (with .csv as the suffix).
  * @param {Blob}   blob     A prepared file blob for download.
  * @param {BrowserType} browser The browser type.
