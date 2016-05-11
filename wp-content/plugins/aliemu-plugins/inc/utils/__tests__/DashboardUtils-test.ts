@@ -97,9 +97,9 @@ describe('parseCompletionDate', () => {
         expect(utils.parseCompletionDate(undefined)).toBe('X');
     });
     it('should parse various date strings correctly', () => {
-        expect(utils.parseCompletionDate(1458692807)).toBe('3/22/2016');
-        expect(utils.parseCompletionDate(1459616977)).toBe('4/2/2016');
-        expect(utils.parseCompletionDate(1461229758)).toBe('4/21/2016');
-        expect(utils.parseCompletionDate(1429798848)).toBe('4/23/2015');
+        expect(/3\/2[1-3]\/2016/.test(utils.parseCompletionDate(1458692807))).toBe(true);
+        expect(/4\/[1-3]\/2016/.test(utils.parseCompletionDate(1459616977))).toBe(true);
+        expect(/4\/2[0-2]\/2016/.test(utils.parseCompletionDate(1461229758))).toBe(true);
+        expect(/4\/2[2-4]\/2015/.test(utils.parseCompletionDate(1429798848))).toBe(true);
     });
 });
