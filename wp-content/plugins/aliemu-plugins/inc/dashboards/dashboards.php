@@ -55,11 +55,9 @@
 add_action('wp_enqueue_scripts', 'load_admin_dashboard_js');
 function load_admin_dashboard_js() {
     if ($_SERVER['QUERY_STRING'] === 'profiletab=edudash') {
-        wp_register_script('lodash', 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.js');
-        wp_enqueue_script('lodash');
         wp_enqueue_script(
             'EducatorDashboard',
-            plugins_url('EducatorDashboard/EducatorDashboard.js', __FILE__),
+            plugins_url('educator-dashboard/EducatorDashboard.js', __FILE__),
             array('jquery', 'jquery-ui-datepicker'),
             '',
             true
@@ -71,7 +69,7 @@ function load_admin_dashboard_js() {
  // Tell the tab what to display
  add_action('um_profile_content_edudash_default', 'um_profile_content_edudash_default');
  function um_profile_content_edudash_default( $args ) {
-    include_once( plugin_dir_path( __FILE__ ) . './EducatorDashboard/educator-dashboard.php' );
+    include_once( plugin_dir_path( __FILE__ ) . './educator-dashboard/educator-dashboard.php' );
  }
 
  ?>

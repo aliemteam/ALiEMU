@@ -1,0 +1,130 @@
+// ================== Tablepress ==================
+
+.tablepress-table-name
+    font 600 1em Lato
+    text-align center
+
+
+.category-capsules .tablepress thead th
+    color white
+    font 600 1.2em Lato
+    text-align center
+    background-color $blue-capsules
+
+
+.category-air .tablepress thead th
+    @extend .category-capsules .tablepress thead th
+    background-color $red-air
+
+
+#content-area .au-table-needsborders td
+    border 1px solid $gray-light
+    text-align center
+    vertical-align middle
+
+
+
+// ================== Ultimate Member ==================
+
+img.um-avatar
+    border-radius 100px
+    width 25px
+    position relative
+    top 7px
+    margin-left 8px
+
+
+.um-online > div.um-online-user > div > a > img
+    border-radius 100px
+    width 25px
+    position relative
+    top 0
+    margin-left 0
+
+
+.um-online-user
+    width auto
+    height auto
+
+
+.um-message-header img.um-avatar
+    min-height 20px !important
+
+
+// Comments
+#wc-comment-header
+    color white
+    background-color $primary
+    text-align center
+    font-weight 400
+    padding 10px
+    margin-top 40px
+    border-radius $card-radius
+
+
+// Bio box
+.ts-fab-avatar .avatar
+    width 85%
+
+
+.ts-fab-wrapper
+    padding 1em 0
+    clear both
+
+
+// Profiles
+.um-profile-body
+    max-width 100% !important
+
+
+
+// ================== WpProQuiz ==================
+
+.wpProQuiz_content
+    .wpProQuiz_button
+        background transparent
+        border-radius 3px
+        border 1px solid $primary
+        box-shadow 0 0 0
+        color $primary
+        font 1em Lato
+        line-height 20px
+        transition-duration 0.1s
+
+        &:active, &:focus, &:hover
+            background-color $primary
+            color white
+            cursor pointer
+            border-radius 3px
+            border 1px solid $primary
+            box-shadow 0 0 0
+
+
+.wpProQuiz_answerCorrect
+    background $green-correct
+    font-weight bold
+    color white
+
+
+.wpProQuiz_answerIncorrect
+    background $red-incorrect
+    font-weight bold
+    color white
+
+
+.wpProQuiz_questionList
+    background $gray-light
+    border 1px solid $primary
+
+
+.wpProQuiz_tipp > div
+    padding 10px
+    background-color $gray-light
+    border 1px dotted $primary
+    border-radius 10px
+    position absolute
+    bottom 5px
+    left 5px
+    right 5px
+    box-shadow $box-shadow
+    z-index 99999

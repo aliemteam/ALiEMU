@@ -1,0 +1,170 @@
+$divi-header-height = 50px
+$divi-footer-height = 50px
+$divi-menu-height = 50px
+$divi-navmenu-item
+    padding 0
+    max-width 150px
+    min-width 150px
+    transition none
+
+
+// Header
+#main-header
+    height $divi-header-height
+    .container.clearfix.et_menu_container
+        width 100%
+        height $divi-header-height
+        display flex
+        justify-content space-between
+        .logo_container
+            position relative
+            flex 1
+            a img
+                max-width none
+        @media all and (max-width 980px)
+            a img
+                padding 0 0 0 10px
+
+
+
+// Navigation
+#et-top-navigation
+    padding 0 !important
+    display flex !important
+    align-items center
+
+    // Desktop navigation menu
+    nav#top-menu-nav
+        ul#top-menu.nav
+            > li
+                width auto
+                height 1em
+                &.menu-item-has-children
+                    width 100px
+                    &:last-of-type
+                        width 80px
+                a
+                    color $font-color
+                    padding-bottom 17px
+                    &:hover
+                        opacity 1
+                ul.sub-menu
+                    @extend $divi-navmenu-item
+                    left -80px
+                    li
+                        @extend $divi-navmenu-item
+                    li a
+                        @extend $divi-navmenu-item
+                        padding 15px
+                        &:hover
+                            background-color darken($gray-light, 10)
+
+    // Mobile navigation menu
+    #et_mobile_nav_menu
+        height $divi-header-height
+        margin 0 10px 0 0
+        .mobile_nav
+            height $divi-header-height
+            display flex
+            align-items center
+            .mobile_menu_bar
+                padding-bottom 0
+            ul#mobile_menu
+                top $divi-header-height
+                right 0
+                left auto
+                padding 0
+                width 300px
+                li a:hover
+                    opacity 1
+                    background-color darken($gray-light, 10)
+                .sub-menu
+                    > li, &
+                        padding 0
+
+    // Search bar
+    #et_top_search
+        height $divi-header-height
+        #et_search_icon:before
+            line-height $divi-header-height
+            top 0
+    @media (max-width 980px)
+        #et_top_search
+            margin 0 5px 0 0
+
+
+// Content
+#main-content
+
+    // Correct for non-sticky footer
+    min-height 'calc(100vh - %s - %s)' % ($divi-header-height $divi-footer-height)
+
+    // Set max width boundary on homepage (HiDPI looks horrible without it)
+    .au-homepage-courselisting
+        max-width 1200px
+        margin 30px auto 0 auto
+
+    // Correct fat menu items for course menus (year selectors)
+    .et_pb_fullwidth_menu
+        > .et_pb_row, &
+            height $divi-menu-height
+
+            // Desktop menu
+            nav.fullwidth-menu-nav > ul
+                padding 0 !important
+                height $divi-menu-height
+                li
+                    > a, &
+                        line-height $divi-menu-height !important
+                        padding-bottom 0
+                        font 300 20px Lato
+                        transition none
+
+            // Mobile / Tablet menu
+            .et_mobile_nav_menu > a
+                span.mobile_menu_bar
+                    padding 0
+                    &:before
+                        top 0
+                        line-height $divi-menu-height
+                ul.et_mobile_menu
+                    padding 0
+                    top auto
+                    max-width 200px
+                    box-shadow $box-shadow
+                    left 0
+                    right 0
+                    margin auto
+                    li a
+                        text-align center
+                        font 300 20px Lato
+                        transition none
+                        &:hover
+                            transition none
+                            background-color lighten($gray-dark, 10)
+    @media (max-width 980px)
+        .et_pb_row
+            width 95% !important
+
+// Footer
+#footer-bottom
+    height $divi-footer-height
+    @media (max-width 980px)
+        #footer-info
+            display none
+
+
+// ============== Stuff to get rid of ====================
+
+// References for posts --- Will hopefully be replacing with my plugin soon
+h3.heading-more
+    background $gray-light !important
+    color $font-color !important
+
+
+// Tooltips (hopefully replacing soon)
+.et-tooltip-box
+    left -133px !important
+    width 400px !important
+    font 300 0.9em Lato
+    text-align left

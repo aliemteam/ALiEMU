@@ -14,5 +14,5 @@ notifications:
     slack:
         rooms:
             - alieminnovation:qbyg3p4KvNRgsAnZnqdgQaTD
-        on_success: never
-        on_failure: always
+        on_success: change
+        on_failure: change

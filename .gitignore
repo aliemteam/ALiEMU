@@ -16,6 +16,7 @@ Thumbs.db
 .apdisk
 .fseventsd
 .listing
+npm-debug.log
 
 # Editor files
 *.sublime-*

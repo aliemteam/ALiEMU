@@ -1,0 +1,338 @@
+
+// ==================================================
+//                    Homepage
+// ==================================================
+
+.au-homepage-courselisting-introtext
+    background-color $gray-dark
+    padding 15px 5px !important
+    border-radius $card-radius
+    h1
+        color white
+        font 700 2em Lato
+        text-align center
+
+#au-index-welcometext
+    display flex
+    flex-wrap wrap
+    padding 10px
+    box-shadow $box-shadow
+    .et_pb_column
+        width 100%
+        padding 10px
+        margin 0
+        p
+            text-align justify
+    .et_pb_column_1
+        flex 1
+        width 75%
+    .et_pb_column_2
+        width 25%
+        #login-container-flex
+            height 100%
+            display flex
+            flex-wrap wrap
+            justify-content center
+            .login-button-flex
+                display flex
+                min-width 125px
+                max-width 150px
+                padding 5px
+                align-items center
+                flex 1
+                a
+                    font-weight 700
+                    line-height 3em
+                    font-size 1.5em
+                    flex 1
+                    text-align center
+                    border solid 2px
+                    border-radius 5px
+                    color $gray-dark
+                    background transparent
+                    &:hover
+                        color white
+                        background-color $gray-dark
+                        border-color $gray-dark
+                        transition 0.1s
+@media (max-width 980px)
+    .et_pb_column
+        margin-bottom 0
+    .et_pb_section
+        padding 0
+
+
+// Course Card Containers
+#flex-course-list
+    .et_pb_column
+        .flex-course-box
+            width 100%
+            display flex
+            flex-wrap wrap
+            justify-content center
+
+
+// Course Cards
+.au-coursebox
+    background $gray-light
+    box-shadow $box-shadow
+    flex auto
+    margin 10px
+    max-width 350px
+    width 250px
+    min-width 100px
+    .category-capsules .coursebox-flex a
+        border-color $blue-capsules
+        color $blue-capsules
+        &:hover
+            background-color $blue-capsules
+            color white
+    .category-air .coursebox-flex a
+        border-color $red-air
+        color $red-air
+        &:hover
+            background-color: $red-air
+            color: white
+    .au-courseheader
+        align-items center
+        box-shadow $box-shadow
+        display flex
+        height 65px
+        justify-content flex-end
+        .au-timer
+            padding 0 5% 0 0
+            h2
+                color white
+                padding 0
+                white-space nowrap
+        &.category-capsules
+            background-color $blue-capsules
+        &.category-air
+            background-color $red-air
+    .au-coursebody
+        padding 5%
+        height 335px
+        display flex
+        flex-direction column
+        .coursebox-flex
+            display flex
+            flex-direction column
+            justify-content flex-start
+            &:first-of-type
+                justify-content center
+                max-height 2em
+                min-height 2em
+            &:nth-of-type(2)
+                min-height 20%
+            &:nth-of-type(3)
+                padding 5px 0 0 0
+                flex 1
+            &:last-of-type
+                justify-content flex-end
+                align-items flex-end
+            h1
+                font-weight 400
+                font-size responsive 20px 30px
+                color $gray-dark
+                padding 0
+            h3
+                font-weight 700
+                font-size 1em
+                color $font-color
+                text-transform uppercase
+                padding 0
+            p
+                font-weight 300
+                color $font-color
+            a
+                padding 10px 15px
+                border solid 2px
+                border-radius 5px
+                text-decoration none
+                width 120px
+                &:hover
+                    border-color transparent
+                    transition 0.1s
+                    cursor pointer
+@media all and (max-width: 400px)
+    .au-coursebox
+        max-width 95%
+
+
+// ==================================================
+//                    Iframes
+// ==================================================
+
+.au-air-frame
+    margin -60px 0 30px 0
+    font-family Lato
+    iframe
+        box-shadow $box-shadow
+    h2
+        border-radius $card-radius
+        font 700 1.5em Lato
+        text-align center
+        background-color $gray-dark
+        color white
+        padding 4px
+        box-shadow $box-shadow
+
+
+// ==================================================
+//                 Course Index Pages
+// ==================================================
+
+.au-intro-text
+    font-family Lato
+    border 0
+    margin 10px 0 30px
+    border-radius $card-radius
+    box-shadow $box-shadow
+    overflow auto
+    &.au-air-intro h2
+        background-color $red-air
+    &.au-capsules-intro h2
+        background $blue-capsules
+    h2
+        color white
+        text-align center
+        font-weight 900
+        font-size responsive 20px 30px
+        padding 10px
+        border-radius $card-radius
+        box-shadow $box-shadow
+    p
+        padding 30px !important
+        line-height 1.3
+        letter-spacing 0.7px
+        text-align justify
+    // Don't float images on small screens
+    @media (max-width 500px)
+        img
+            display block
+            float none
+            margin auto
+            margin-bottom 20px
+
+    // FIXME: Adjust the image itself, rather than this
+    .au-air-intro-logo
+        margin-bottom 15px
+        margin-top 0
+
+
+
+// Container for course cards on course pages
+.course-list-container
+    display flex
+    flex-wrap wrap
+    justify-content center
+
+
+// Lesson box -- Used in CAPSULES. Like .au-capsule, but allows the
+// author to choose the heading
+.lesson-box
+    font-family Lato
+    border 0
+    margin 10px 0 30px
+    border-radius $card-radius
+    box-shadow $box-shadow
+    // FIXME: fix this shortcode so that it uses h2, rather than header
+    header
+    h2
+        border-radius $card-radius
+        box-shadow $box-shadow
+        color white
+        font 600 1.25em Lato
+        margin 0
+        padding 10px
+        text-align center
+        background-color $blue-capsules
+    .lesson-body
+        line-height 1.3
+        letter-spacing 0.5px
+        padding 20px
+        h3
+            font-weight 700
+            font-size 1.5em
+            text-align center
+            background-color $gray-dark
+            color white
+            padding 4px
+        ul
+            margin-top 0.3em
+        p
+        ul li
+            font-weight 400
+            padding 0 10px
+
+
+// CAPSULE box
+.au-capsule
+    @extend .lesson-box
+    h2
+        @extend .lesson-box h2
+        letter-spacing 1px
+        font-weight 900
+        background-color $blue-capsules
+    h4
+        border-top 0
+        font-weight 400
+        letter-spacing 1px
+        line-height 1.3em
+        padding 30px
+        text-align center
+
+
+
+// ==================================================
+//                    Dashboards
+// ==================================================
+
+.au-edudash-shadowbox
+    background white
+    box-shadow $box-shadow
+    box-sizing border-box
+    margin-bottom 30px
+    h1
+        background $primary
+        color white
+        text-align center
+        padding 10px
+        font 600 1.5em Lato
+    h2
+        font-size 1.1em
+        background $gray-dark
+        color white
+        text-align center
+        padding 5px 0
+        width 100%
+
+
+// NOTE: Not currently in use
+.au-edudash-exportbtn
+    padding 10px 0
+    align-self center
+    font-size 0.9em
+    white-space nowrap
+    input
+        color white
+        padding 5px 30px
+        max-width 300px
+        background $primary
+        height 20px
+        border 0
+        &:hover
+            cursor pointer
+
+
+// ==================================================
+//                 About Us Page
+// ==================================================
+
+// Circular portraits
+.au-person-circle img
+    border-radius 100%
+
+// Team member headers
+.au-team-header h1
+    font 600 3em Lato

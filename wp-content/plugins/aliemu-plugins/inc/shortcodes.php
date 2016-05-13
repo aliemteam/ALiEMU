@@ -37,6 +37,6 @@
      $a = shortcode_atts(array(
                  'header' => '',
              ), $atts);
-     return '<div class="lesson-box"><header>'.esc_attr($a['header']).'</header><div class="lesson-body">'.do_shortcode($content).'</div></div>';
+     return '<div class="lesson-box"><h2>'.esc_attr($a['header']).'</h2><div class="lesson-body">'.do_shortcode($content).'</div></div>';
  }
  add_shortcode('capsules-lessonbox', 'capsules_lessonbox_shortcode');

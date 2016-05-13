@@ -10,9 +10,29 @@
 
 require_once (dirname(__FILE__) . '/inc/learndash-course-grid.php');
 require_once (dirname(__FILE__) . '/inc/meta-fields.php');
-require_once (dirname(__FILE__) . '/inc/Dashboards/dashboards.php');
+require_once (dirname(__FILE__) . '/inc/dashboards/dashboards.php');
 require_once (dirname(__FILE__) . '/inc/shortcodes.php');
 require_once (dirname(__FILE__) . '/inc/toastr-actions.php');
+
+
+/**
+ * Load stylesheets (highest priority)
+ * @since 1.0.3
+ */
+function au_load_styles() {
+    wp_enqueue_style('aliemu_master', plugins_url('/inc/styles/styles.css', __FILE__));
+}
+add_action( 'wp_enqueue_scripts', 'au_load_styles', 500 );
+
+/**
+ * Unloads wpProQuiz stylesheet, because it causes too many problems.
+ * The developer used `!important` tags on every one of his selectors.
+ * @since 1.0.3
+ */
+function au_unload_bad_styles() {
+    wp_dequeue_style('wpProQuiz_front_style');
+}
+add_action( 'wp_enqueue_scripts', 'au_unload_bad_styles', 500 );
 
 /**
  * Adds the 'educator_access' role to WordPress roles.

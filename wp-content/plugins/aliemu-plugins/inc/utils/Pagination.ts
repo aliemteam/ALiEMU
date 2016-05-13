@@ -11,7 +11,7 @@
  * @return {string[]} The object keys of the the rows that should be visible.
  */
 export default function paginate(rows: Object, visibleRows: number, currentPage: number) {
-  return Object.keys(rows).filter((uid, i: number) =>
-    (visibleRows * currentPage) <= i && i < (visibleRows * currentPage + visibleRows)
-  )
+    return Object.keys(rows).filter((uid, i: number) =>
+        (visibleRows * currentPage) <= i && i < (visibleRows * currentPage + visibleRows)
+    );
 }
