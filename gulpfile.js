@@ -72,7 +72,7 @@ gulp.task('stylus:dev', () =>
     ], { base: 'wp-content/plugins/aliemu-plugins/', })
     .pipe(sourcemaps.init())
     .pipe(stylus({
-        use: [ poststylus([rucksack, autoprefixer]) ],
+        use: [ poststylus([rucksack, autoprefixer]), ],
         compress: true,
     }))
     .pipe(sourcemaps.write('.'))
@@ -85,7 +85,7 @@ gulp.task('stylus:prod', () =>
         'wp-content/plugins/aliemu-plugins/inc/styles/styles.styl',
     ], { base: 'wp-content/plugins/aliemu-plugins/', })
     .pipe(stylus({
-        use: [ poststylus([rucksack, autoprefixer]) ],
+        use: [ poststylus([rucksack, autoprefixer]), ],
         compress: true,
     }))
     .pipe(gulp.dest('dist/aliemu-plugins'))
@@ -172,7 +172,7 @@ gulp.task('default',
                 '!wp-content/**/*.{ts,tsx,styl}',
                 '!wp-content/**/__tests__/',
                 '!wp-content/**/__tests__/*',
-            ], gulp.series('build', 'reload'));
+            ], gulp.series('static', 'reload'));
 
         }
     )

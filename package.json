@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Development taskrunner pipeline",
   "author": "Derek P Sifford",
+  "license": "MIT",
+  "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
     "start": "gulp serve",
     "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",

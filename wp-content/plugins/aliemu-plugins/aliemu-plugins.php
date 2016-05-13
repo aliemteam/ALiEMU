@@ -25,6 +25,16 @@ function au_load_styles() {
 add_action( 'wp_enqueue_scripts', 'au_load_styles', 500 );
 
 /**
+ * Unloads wpProQuiz stylesheet, because it causes too many problems.
+ * The developer used `!important` tags on every one of his selectors.
+ * @since 1.0.3
+ */
+function au_unload_bad_styles() {
+    wp_dequeue_style('wpProQuiz_front_style');
+}
+add_action( 'wp_enqueue_scripts', 'au_unload_bad_styles', 500 );
+
+/**
  * Adds the 'educator_access' role to WordPress roles.
  *
  * @author Chris Gaafary
