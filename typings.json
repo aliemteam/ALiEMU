@@ -4,8 +4,10 @@
   "ambientDependencies": {
     "enzyme": "registry:dt/enzyme#1.2.0+20160324040416",
     "jest": "registry:dt/jest#0.9.0+20160319033628",
+    "moment-node": "registry:dt/moment-node#2.11.1+20160511043338",
     "react": "registry:dt/react#0.14.0+20160319053454",
     "react-addons-test-utils": "registry:dt/react-addons-test-utils#0.14.0+20160316155526",
+    "react-datepicker": "registry:dt/react-datepicker#0.27.0+20160505171556",
     "react-dom": "registry:dt/react-dom#0.14.0+20160316155526",
     "require": "registry:dt/require#2.1.20+20160316155526",
     "sinon": "registry:dt/sinon#1.16.0+20160317120654"

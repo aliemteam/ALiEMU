@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as Datepicker from 'react-datepicker';
+import * as Moment from 'moment';
 import paginate from '../../../utils/Pagination';
 import { browserDetect, } from '../../../utils/BrowserDetect';
 import {
@@ -17,6 +19,7 @@ import {
     Button,
 } from '../../../components/TableComponents';
 
+require('react-datepicker/dist/react-datepicker.css');
 
 interface Props {
     users: ALiEMU.EducatorDashboard.UserObject;
@@ -27,6 +30,8 @@ interface State {
     currentPage: number;
     visibleRows: number;
     advancedFilter: boolean;
+    startDate: moment.Moment;
+    endDate: moment.Moment;
 }
 
 export class StudentTable extends React.Component<Props, State> {
@@ -45,6 +50,8 @@ export class StudentTable extends React.Component<Props, State> {
             currentPage: 0,
             visibleRows: 10,
             advancedFilter: false,
+            startDate: Moment(),
+            endDate: Moment(),
         };
     }
 
@@ -110,6 +117,14 @@ export class StudentTable extends React.Component<Props, State> {
         );
 
         downloadPolyfill(filename, blob, browserDetect(), e.target.id);
+    }
+
+    handleDateChange(type: string, date: moment.Moment) {
+        this.setState(
+            Object.assign({}, this.state, {
+                [type]: date,
+            })
+        );
     }
 
     paginate(e: React.UIEvent) {
@@ -191,26 +206,18 @@ export class StudentTable extends React.Component<Props, State> {
                 { this.state.advancedFilter &&
                     <FilterRow>
                         <Flex amount='1'>
-                            <strong>From:</strong>
-                            <input type='text'
-                                id='filter-from-year'
-                                style={{
-                                    height: '30px !important',
-                                    fontSize: '1em',
-                                    padding: '2px',
-                                    marginLeft: '5px !important',
-                                    maxWidth: '200px',
-                                }} />
-                            <strong>to</strong>
-                            <input type='text'
-                                id='filter-to-year'
-                                style={{
-                                    height: '30px !important',
-                                    fontSize: '1em',
-                                    padding: '2px',
-                                    marginLeft: '5px !important',
-                                    maxWidth: '200px',
-                                }} />
+                            <strong
+                                children='From'
+                                style={{padding: '0 10px', }} />
+                            <Datepicker
+                                selected={this.state.startDate}
+                                onChange={this.handleDateChange.bind(this, 'startDate')} />
+                            <strong
+                                children='to'
+                                style={{padding: '0 10px', }} />
+                            <Datepicker
+                                selected={this.state.endDate}
+                                onChange={this.handleDateChange.bind(this, 'endDate')} />
                             <Button children='Recalculate' />
                         </Flex>
                     </FilterRow>
