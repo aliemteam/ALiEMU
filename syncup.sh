@@ -12,6 +12,12 @@
 # Globals
 SCRIPTDIR=$(dirname "$0")
 PaidPlugins=(learndash-propanel sfwd-lms um-profile-completeness)
+NATIVE=true
+CONTAINER_IP=localhost
+
+###
+# PRECHECKS
+#
 
 # Collect the FTP password, exit if it doesn't exist
 if [ -f ./data/ftp_pass ]; then
@@ -27,14 +33,15 @@ if [ ! -f ./data/aliemu_dsa ]; then
     exit 0
 fi
 
-# OS-specific variables
-if [[ $(uname) == "Linux" ]]; then
-  ONLINUX=true
-  CONTAINER_IP="localhost"
-else
-  ONLINUX=false
-  CONTAINER_IP=$(docker-machine ip "$DOCKER_MACHINE_NAME")
+# Check to see if the user is running docker through a virtual machine or natively
+#  and set the CONTAINER_IP accordingly.
+docker-machine ip $DOCKER_MACHINE_NAME &>/dev/null
+if [ $? == 0 ]; then
+    CONTAINER_IP=$(docker-machine ip $DOCKER_MACHINE_NAME)
+    NATIVE=false
 fi
+
+
 
 cd "$SCRIPTDIR" || exit
 
@@ -74,7 +81,7 @@ case "$1" in
 
                 cd "$SCRIPTDIR/wp-content/themes" || exit
                 echo "=> Retrieving Divi Theme"
-                wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/themes/Divi --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                sudo wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/themes/Divi --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
                 echo "=> Theme Retrieved Successfully!"
                 ;;
 
@@ -91,7 +98,7 @@ case "$1" in
                 ssh-add aliemu_dsa
 
                 # SSH into siteground and backup the database and copy to the data directory
-                if [[ $ONLINUX == true ]]; then
+                if [[ $NATIVE == true ]]; then
                     ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
                     cd public_html
                     wp db export database.sql"
@@ -115,7 +122,7 @@ case "$1" in
 
                 # Replace live URL with dev URL
                 echo "=> Replacing URLs..."
-                docker exec -it "$(docker ps -lq)" bash -c "wp search-replace  'http://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid --allow-root"
+                docker exec -it "$(docker ps -lq)" bash -c "wp search-replace  'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid --allow-root"
                 echo "=> Database Successfully Imported!"
                 ;;
 
