@@ -30,6 +30,7 @@ Pull the uploads from the server | `./syncup.sh get uploads`
 Pull the theme from the server | `./syncup.sh get theme`
 Spin up the dev server | `docker-compose up -d`
 Wait until the logs say `WordPress Setup Complete` | `docker-compose logs -f wordpress`
+Take ownership of the volumed docker directories | `npm run chown`
 Start browserSync | `gulp`
 
 When done with your feature, create a pull request from your feature branch to the master branch of this repo.
