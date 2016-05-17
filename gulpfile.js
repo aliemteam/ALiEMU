@@ -139,22 +139,17 @@ gulp.task('default',
         'clean',
         gulp.parallel('static', 'webpack:dev', 'stylus:dev'), () => {
 
-            switch (process.platform) {
-                case 'linux':
-                    browserSync.init({
-                        proxy: 'localhost:8080'
-                    });
-                    break;
-                default:
-                    try {
-                        let MACHINE_IP = process.env.DOCKER_HOST.match(/\d.*(?=:)/)[0] + ':8080';
-                        browserSync.init({
-                            proxy: MACHINE_IP
-                        });
-                    } catch (e) {
-                        console.log('The following error occurred:\n');
-                        console.log(e.message);
-                    }
+            // Tries to connect via docker-machine first, if it fails, then default to
+            // docker native (keeping this in the event we get more contributors in the future)
+            try {
+                let MACHINE_IP = process.env.DOCKER_HOST.match(/\d.*(?=:)/)[0] + ':8080';
+                browserSync.init({
+                    proxy: MACHINE_IP
+                });
+            } catch(e) {
+                browserSync.init({
+                    proxy: 'localhost:8080'
+                });
             }
 
             gulp.watch([

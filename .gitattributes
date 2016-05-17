@@ -7,4 +7,3 @@ Dockerfile text eol=lf
 data/aliemu_dsa text eol=lf
 
 *.tsx linguist-language=TypeScript
-*.sss linguist-language=CSS
