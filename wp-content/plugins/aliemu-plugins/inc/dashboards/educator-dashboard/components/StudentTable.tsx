@@ -29,6 +29,8 @@ interface Props {
 interface State {
     currentPage: number;
     visibleRows: number;
+    filteredUsers: ALiEMU.EducatorDashboard.UserObject;
+    filter: string;
     advancedFilter: boolean;
     startDate: moment.Moment;
     endDate: moment.Moment;
@@ -49,9 +51,11 @@ export class StudentTable extends React.Component<Props, State> {
         this.state = {
             currentPage: 0,
             visibleRows: 10,
+            filteredUsers: this.props.users,
+            filter: '',
             advancedFilter: false,
-            startDate: Moment(),
-            endDate: Moment(),
+            startDate: null,
+            endDate: null,
         };
     }
 
@@ -144,6 +148,30 @@ export class StudentTable extends React.Component<Props, State> {
         );
     }
 
+    filterString(e: DOMEvent) {
+        e.preventDefault();
+
+        const filter = e.target.value.toLowerCase();
+        const filteredUsers: ALiEMU.EducatorDashboard.UserObject =
+            Object.keys(this.props.users).filter(uid => {
+                const displayName = this.props.users[uid].displayName.toLowerCase();
+                const gradYear = this.props.users[uid].auGraduationYear;
+                if (displayName.search(filter) > -1) return true;
+                if (gradYear && gradYear.toString().search(filter) > -1) return true;
+                return false;
+            }).reduce((res, uid) => {
+                res[uid] = this.props.users[uid];
+                return res;
+            }, {});
+
+        this.setState(
+            Object.assign({}, this.state, {
+                filter,
+                filteredUsers,
+            })
+        );
+    }
+
     render() {
         return (
             <div className='au-edudash-shadowbox'>
@@ -175,8 +203,10 @@ export class StudentTable extends React.Component<Props, State> {
                             <strong>Filter:</strong>
                         </label>
                         <input
-                        type='text'
-                        id='search-query' />
+                            type='text'
+                            id='search-query'
+                            value={this.state.filter}
+                            onChange={this.filterString.bind(this)} />
                         <div
                             style={{
                                 fontSize: '1.3em',
@@ -226,7 +256,7 @@ export class StudentTable extends React.Component<Props, State> {
                 {/* Table */}
                 <Header cells={this.headerProps} />
                 {
-                    paginate(this.props.users, this.state.visibleRows, this.state.currentPage)
+                    paginate(this.state.filteredUsers, this.state.visibleRows, this.state.currentPage)
                     .map((uid, i) =>
                     <TableBody
                         key={uid}
@@ -240,7 +270,7 @@ export class StudentTable extends React.Component<Props, State> {
 
                 {/* Pagination Buttons */}
                 <Pager
-                    totalRows={this.totalStudents}
+                    totalRows={Object.keys(this.state.filteredUsers).length}
                     currentPage={this.state.currentPage}
                     visibleRows={this.state.visibleRows}
                     onClick={this.paginate.bind(this)} />

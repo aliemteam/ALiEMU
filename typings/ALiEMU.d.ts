@@ -1,7 +1,7 @@
 type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox'
 
 interface DOMEvent extends Event {
-    target: HTMLElement;
+    target: HTMLInputElement;
 }
 
 declare namespace ALiEMU {
