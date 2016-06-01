@@ -1,9 +1,25 @@
 jest.unmock('../DashboardUtils');
+jest.unmock('moment');
 
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
+import * as Moment from 'moment';
 
-const categoryMock: ALiEMU.EducatorDashboard.CategoryObject = JSON.parse(`{"AIR":{"93":93,"144":144,"179":179,"221":221,"259":259,"286":286,"339":339,"807":807,"1274":1274,"1910":1910,"1948":1948,"1989":1989,"2016":2016,"2677":2677},"Capsules":{"408":408,"1406":1406,"1604":1604,"1715":1715,"2178":2178,"2438":2438},"":{"2528":2528,"2638":2638}}`);
+const D = {
+    jan: 1420088400,
+    feb: 1422766800,
+    mar: 1425186000,
+    apr: 1427860800,
+    may: 1430452800,
+    jun: 1433131200,
+    jul: 1435723200,
+    aug: 1438401600,
+    sep: 1441080000,
+    oct: 1443672000,
+    nov: 1446350400,
+    dec: 1448946000,
+};
+
 
 interface TestUserMetaCompleted {
     courseCompleted: {
@@ -19,9 +35,9 @@ interface TestCourseMetaHours {
 
 let testUser: TestUserMetaCompleted = {
     courseCompleted: {
-        1: 1221341,
-        5: 5244353,
-        10: 1232522,
+        1: D.jan,
+        5: D.may,
+        10: D.dec,
     },
 };
 
@@ -62,34 +78,90 @@ type UM = ALiEMU.EducatorDashboard.UserMeta
 type CM = ALiEMU.EducatorDashboard.CourseMetaObject
 
 describe('calculateHours', () => {
-    it('should calculate the hours correctly', () => {
 
-        expect(utils.calculateIIIHours(testUser as UM, testMeta as CM)).toEqual(16);
+    const setup = (s?: string, e?: string) => {
+        let start: moment.Moment = null;
+        let end: moment.Moment = null;
+        if (s) start = Moment(s, 'YYYY-MM-DD');
+        if (e) end = Moment(e, 'YYYY-MM-DD');
+        return {
+            start,
+            end,
+        };
+    };
+
+    let user;
+    const meta = Object.assign({}, testMeta) as CM;
+
+    beforeEach(() => {
+        user = Object.assign({}, testUser) as UM;
+    });
+
+    afterEach(() => {
+        user = Object.assign({}, testUser) as UM;
+    });
+
+
+    it('should calculate total hours with no date range', () => {
+        const userTest: TestUserMetaCompleted = {
+            courseCompleted: {
+                1: D.jan,
+                5: D.may,
+                10: D.dec,
+            },
+        };
+
+        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(16);
 
         // Add 7
-        testUser.courseCompleted[7] = 1231234;
-        expect(utils.calculateIIIHours(testUser as UM, testMeta as CM)).toEqual(23);
+        userTest.courseCompleted[7] = 1231234;
+        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(23);
 
         // Subtract 10
-        delete testUser.courseCompleted[10];
-        expect(utils.calculateIIIHours(testUser as UM, testMeta as CM)).toEqual(13);
+        delete userTest.courseCompleted[10];
+        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(13);
 
         // Subtract 13
-        testUser.courseCompleted = {};
-        expect(utils.calculateIIIHours(testUser as UM, testMeta as CM)).toEqual(0);
+        userTest.courseCompleted = {};
+        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(0);
 
         // Add 5
-        testUser.courseCompleted[5] = 12341234;
-        expect(utils.calculateIIIHours(testUser as UM, testMeta as CM)).toEqual(5);
+        userTest.courseCompleted[5] = 12341234;
+        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(5);
 
         // Throw TypeError
-        testUser.courseCompleted[100] = 2341234;
+        userTest.courseCompleted[100] = 2341234;
         try {
-            utils.calculateIIIHours(testUser as UM, testMeta as CM);
+            utils.calculateIIIHours(userTest as UM, meta, setup());
         } catch (e) {
             expect(e.name).toBe('TypeError');
         }
 
+    });
+
+    it('should calculate total hours with a start date only', () => {
+        expect(utils.calculateIIIHours(user, meta, setup('2015-05-01'))).toBe(15);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-05-02'))).toBe(10);
+        expect(utils.calculateIIIHours(user, meta, setup('2014-01-24'))).toBe(16);
+        expect(utils.calculateIIIHours(user, meta, setup('2016-01-24'))).toBe(0);
+    });
+
+    it('should calculate total hours with an end date only', () => {
+        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-05-01'))).toBe(6);
+        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-04-30'))).toBe(1);
+        expect(utils.calculateIIIHours(user, meta, setup(null, '2014-01-24'))).toBe(0);
+        expect(utils.calculateIIIHours(user, meta, setup(null, '2016-01-24'))).toBe(16);
+    });
+
+    it('should calculate total hours with a full date range', () => {
+        expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2015-05-01'))).toBe(5);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2015-04-30'))).toBe(0);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-01-01', '2015-04-30'))).toBe(1);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2016-04-30'))).toBe(15);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-02-13', '2016-04-30'))).toBe(15);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-06-30', '2015-12-24'))).toBe(10);
+        expect(utils.calculateIIIHours(user, meta, setup('2013-01-01', '2016-01-24'))).toBe(16);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-04-30', '2016-01-24'))).toBe(15);
     });
 });
 
@@ -106,25 +178,27 @@ describe('parseCompletionDate', () => {
 });
 
 
-const setup = () => {
-    document.body.innerHTML = `
-        <div><a id='test'>Test</a></div>
-    `;
-    const spyCreateObjectURL = sinon.spy();
-    const spyMsSaveBlob = sinon.spy();
-    window.URL.createObjectURL = spyCreateObjectURL;
-    window.navigator.msSaveBlob = spyMsSaveBlob;
-    const blob = new Blob(
-        ['test,test,test,test\ntest,test,test,test', ], { type: 'text/csv;charset=utf-8', }
-    );
-    return {
-        blob,
-        spyCreateObjectURL,
-        spyMsSaveBlob,
-    };
-};
 
 describe('downloadPolyfill', () => {
+
+    const setup = () => {
+        document.body.innerHTML = `
+            <div><a id='test'>Test</a></div>
+        `;
+        const spyCreateObjectURL = sinon.spy();
+        const spyMsSaveBlob = sinon.spy();
+        window.URL.createObjectURL = spyCreateObjectURL;
+        window.navigator.msSaveBlob = spyMsSaveBlob;
+        const blob = new Blob(
+            ['test,test,test,test\ntest,test,test,test', ], { type: 'text/csv;charset=utf-8', }
+        );
+        return {
+            blob,
+            spyCreateObjectURL,
+            spyMsSaveBlob,
+        };
+    };
+
     it('should call the correct functions based on browser', () => {
         const { blob, spyMsSaveBlob, spyCreateObjectURL, } = setup();
         utils.downloadPolyfill('test.csv', blob, 'chrome', 'test');

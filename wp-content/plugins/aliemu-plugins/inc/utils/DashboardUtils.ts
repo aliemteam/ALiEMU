@@ -1,3 +1,5 @@
+import * as Moment from 'moment';
+
 type User = ALiEMU.EducatorDashboard.UserMeta;
 type CourseMeta = ALiEMU.EducatorDashboard.CourseMetaObject;
 type Categories = ALiEMU.EducatorDashboard.CategoryObject;
@@ -7,7 +9,7 @@ type Categories = ALiEMU.EducatorDashboard.CategoryObject;
  * Either immediately triggers a file download or saves a downloadable file blob
  *   to an HTML anchor element, depending on browser support for the "download"
  *   attribute.
- * 
+ *
  * @param {string} filename The name of the file (with .csv as the suffix).
  * @param {Blob}   blob     A prepared file blob for download.
  * @param {BrowserType} browser The browser type.
@@ -79,9 +81,25 @@ export const parseCompletionDate = (date: number|undefined): string => {
  * @param  {CourseMeta} courseMeta The complete CourseMetaObject.
  * @return {number} The user's calculated III hours.
  */
-export const calculateIIIHours = (user: User, courseMeta: CourseMeta): number => {
+export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange: {start: moment.Moment, end: moment.Moment}): number => {
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
-        let val = courseMeta[curr].recommendedHours;
-        return val + prev;
+        const { start, end } = dateRange;
+        const d = Moment.unix(user.courseCompleted[curr]);
+        const addedHours: number = courseMeta[curr].recommendedHours + prev;
+        switch (true) {
+            case !start && !end:
+                return addedHours;
+            case !start && end !== null:
+                if (d.isBefore(end) || d.isSame(end)) return addedHours;
+                return prev;
+            case start !== null && !end:
+                if (d.isAfter(start) || d.isSame(start)) return addedHours;
+                return prev;
+            default:
+                let isBetween = d.isBetween(start, end);
+                let isSame = d.isSame(start) || d.isSame(end);
+                if (isBetween || isSame) return addedHours;
+                return prev;
+        }
     }, 0);
 };

@@ -29,11 +29,10 @@ interface Props {
 interface State {
     currentPage: number;
     visibleRows: number;
-    filteredUsers: ALiEMU.EducatorDashboard.UserObject;
+    filteredUsers: ALiEMU.EducatorDashboard.UserMeta[];
     filter: string;
     advancedFilter: boolean;
-    startDate: moment.Moment;
-    endDate: moment.Moment;
+    dateRange: ALiEMU.EducatorDashboard.DateRange;
 }
 
 export class StudentTable extends React.Component<Props, State> {
@@ -48,14 +47,30 @@ export class StudentTable extends React.Component<Props, State> {
 
     constructor(props) {
         super(props);
+
+        const filteredUsers = Object.keys(this.props.users)
+            .sort((uid1, uid2) => {
+                const p1 = this.props.users[uid1].auGraduationYear;
+                const p2 = this.props.users[uid2].auGraduationYear;
+                if (!p1 && !p2) return 0;
+                if (p1 && !p2) return -1;
+                if (!p1 && p2) return 1;
+                if (p1 < p2) return 1;
+                if (p1 > p2) return -1;
+                return 0;
+            })
+            .map(uid => this.props.users[uid]);
+
         this.state = {
             currentPage: 0,
             visibleRows: 10,
-            filteredUsers: this.props.users,
+            filteredUsers,
             filter: '',
             advancedFilter: false,
-            startDate: null,
-            endDate: null,
+            dateRange: {
+                start: null,
+                end: null,
+            },
         };
     }
 
@@ -84,7 +99,7 @@ export class StudentTable extends React.Component<Props, State> {
                 `"${users[uid].lastName}",` +
                 `"${users[uid].firstName}",` +
                 `"${users[uid].auGraduationYear || ''}",` +
-                `"${calculateIIIHours(users[uid], this.props.courseData.courseMeta)}",` +
+                `"${calculateIIIHours(users[uid], this.props.courseData.courseMeta, this.state.dateRange)}",` +
                 `"${inProgress - completed}",` +
                 `"${completed}"\n`;
         });
@@ -123,10 +138,12 @@ export class StudentTable extends React.Component<Props, State> {
         downloadPolyfill(filename, blob, browserDetect(), e.target.id);
     }
 
-    handleDateChange(type: string, date: moment.Moment) {
+    handleDateChange(type: 'start'|'end', date: moment.Moment) {
         this.setState(
             Object.assign({}, this.state, {
-                [type]: date,
+                dateRange: Object.assign({}, this.state.dateRange, {
+                    [type]: date,
+                }),
             })
         );
     }
@@ -136,9 +153,9 @@ export class StudentTable extends React.Component<Props, State> {
         this.setState(Object.assign({}, this.state, { currentPage, }));
     }
 
-    rowSelect(e: React.UIEvent) {
-        let selection = (e.target as HTMLSelectElement).value;
-        let visibleRows = selection === 'all' ? this.totalStudents : selection;
+    rowSelect(e: DOMEvent) {
+        let selection = e.target.value;
+        let visibleRows = selection === 'all' ? this.totalStudents : parseInt(selection);
         this.setState(Object.assign({}, this.state, { visibleRows, }));
     }
 
@@ -152,22 +169,32 @@ export class StudentTable extends React.Component<Props, State> {
         e.preventDefault();
 
         const filter = e.target.value.toLowerCase();
-        const filteredUsers: ALiEMU.EducatorDashboard.UserObject =
-            Object.keys(this.props.users).filter(uid => {
+        const filteredUsers: ALiEMU.EducatorDashboard.UserMeta[] =
+            Object.keys(this.props.users)
+            .filter(uid => {
                 const displayName = this.props.users[uid].displayName.toLowerCase();
                 const gradYear = this.props.users[uid].auGraduationYear;
                 if (displayName.search(filter) > -1) return true;
                 if (gradYear && gradYear.toString().search(filter) > -1) return true;
                 return false;
-            }).reduce((res, uid) => {
-                res[uid] = this.props.users[uid];
-                return res;
-            }, {});
+            })
+            .sort((uid1, uid2) => {
+                const p1 = this.props.users[uid1].auGraduationYear;
+                const p2 = this.props.users[uid2].auGraduationYear;
+                if (!p1 && !p2) return 0;
+                if (p1 && !p2) return -1;
+                if (!p1 && p2) return 1;
+                if (p1 < p2) return 1;
+                if (p1 > p2) return -1;
+                return 0;
+            })
+            .map(uid => this.props.users[uid]);
 
         this.setState(
             Object.assign({}, this.state, {
                 filter,
                 filteredUsers,
+                currentPage: 0,
             })
         );
     }
@@ -240,15 +267,14 @@ export class StudentTable extends React.Component<Props, State> {
                                 children='From'
                                 style={{padding: '0 10px', }} />
                             <Datepicker
-                                selected={this.state.startDate}
-                                onChange={this.handleDateChange.bind(this, 'startDate')} />
+                                selected={this.state.dateRange.start}
+                                onChange={this.handleDateChange.bind(this, 'start')} />
                             <strong
                                 children='to'
                                 style={{padding: '0 10px', }} />
                             <Datepicker
-                                selected={this.state.endDate}
-                                onChange={this.handleDateChange.bind(this, 'endDate')} />
-                            <Button children='Recalculate' />
+                                selected={this.state.dateRange.end}
+                                onChange={this.handleDateChange.bind(this, 'end')} />
                         </Flex>
                     </FilterRow>
                 }
@@ -257,20 +283,20 @@ export class StudentTable extends React.Component<Props, State> {
                 <Header cells={this.headerProps} />
                 {
                     paginate(this.state.filteredUsers, this.state.visibleRows, this.state.currentPage)
-                    .map((uid, i) =>
+                    .map((user, i) =>
                     <TableBody
-                        key={uid}
-                        id={uid}
-                        name={this.props.users[uid].displayName}
-                        classOf={this.props.users[uid].auGraduationYear}
-                        hours={calculateIIIHours(this.props.users[uid], this.props.courseData.courseMeta)}
-                        onClick={this.exportUserData.bind(this, uid)} />
+                        key={user.ID}
+                        id={user.ID}
+                        name={user.displayName}
+                        classOf={user.auGraduationYear}
+                        hours={calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}
+                        onClick={this.exportUserData.bind(this, user.uid)} />
                     )
                 }
 
                 {/* Pagination Buttons */}
                 <Pager
-                    totalRows={Object.keys(this.state.filteredUsers).length}
+                    totalRows={this.state.filteredUsers.length}
                     currentPage={this.state.currentPage}
                     visibleRows={this.state.visibleRows}
                     onClick={this.paginate.bind(this)} />
@@ -284,7 +310,7 @@ export class StudentTable extends React.Component<Props, State> {
 interface TableBodyProps {
     id: string;
     name: string;
-    classOf: string;
+    classOf: number;
     hours: number;
     onClick();
 }
@@ -300,7 +326,7 @@ class TableBody extends React.Component<TableBodyProps, {}> {
         return (
             <Row>
                 <Cell align='left'>{name}</Cell>
-                <Cell align='left'>{classOf}</Cell>
+                <Cell align='left'>{!classOf ? 'Unspecified' : classOf}</Cell>
                 <Cell align='center'>{hours}</Cell>
                 <Cell align='center'>
                     <Button

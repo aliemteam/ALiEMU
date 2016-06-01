@@ -4,7 +4,7 @@ module.exports = function (wallaby) {
             "wp-content/**/*.tsx",
             "wp-content/**/*.ts",
             "typings/**/*.d.ts",
-            "!lib/**/__tests__/*",
+            "!wp-content/**/__tests__/*",
         ],
         tests: [
             "wp-content/**/__tests__/*-test.tsx",

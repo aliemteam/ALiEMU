@@ -8,6 +8,11 @@ declare namespace ALiEMU {
 
     namespace EducatorDashboard {
 
+        type DateRange = {
+            start: moment.Moment;
+            end: moment.Moment;
+        };
+
         interface EducatorData {
             courseData: CourseData;
             currentUser: {

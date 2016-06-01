@@ -1,11 +1,10 @@
 {
     "rules": {
         "class-name": true,
-        "comment-format": [true, "check-space", "check-uppercase"],
+        "comment-format": [true, "check-space"],
         "indent": [true, "spaces"],
         "jsdoc-format": true,
         "no-angle-bracket-type-assertion": true,
-        "no-any": true,
         "no-conditional-assignment": true,
         "no-duplicate-key": true,
         "no-duplicate-variable": true,
@@ -19,8 +18,7 @@
         "trailing-comma": [
             true,
             {
-                "multiline": "always",
-                "singleline": "always"
+                "multiline": "always"
             }
         ],
         "no-var-keyword": true,
