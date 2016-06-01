@@ -147,14 +147,14 @@ describe('calculateHours', () => {
     });
 
     it('should calculate total hours with an end date only', () => {
-        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-05-01'))).toBe(6);
+        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-05-02'))).toBe(6);
         expect(utils.calculateIIIHours(user, meta, setup(null, '2015-04-30'))).toBe(1);
         expect(utils.calculateIIIHours(user, meta, setup(null, '2014-01-24'))).toBe(0);
         expect(utils.calculateIIIHours(user, meta, setup(null, '2016-01-24'))).toBe(16);
     });
 
     it('should calculate total hours with a full date range', () => {
-        expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2015-05-01'))).toBe(5);
+        expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2015-05-02'))).toBe(5);
         expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2015-04-30'))).toBe(0);
         expect(utils.calculateIIIHours(user, meta, setup('2015-01-01', '2015-04-30'))).toBe(1);
         expect(utils.calculateIIIHours(user, meta, setup('2015-02-01', '2016-04-30'))).toBe(15);
