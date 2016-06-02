@@ -74,7 +74,6 @@ let testMeta: TestCourseMetaHours = {
     },
 };
 
-type UM = ALiEMU.EducatorDashboard.UserMeta
 type CM = ALiEMU.EducatorDashboard.CourseMetaObject
 
 describe('calculateHours', () => {
@@ -94,11 +93,11 @@ describe('calculateHours', () => {
     const meta = Object.assign({}, testMeta) as CM;
 
     beforeEach(() => {
-        user = Object.assign({}, testUser) as UM;
+        user = Object.assign({}, testUser) as any;
     });
 
     afterEach(() => {
-        user = Object.assign({}, testUser) as UM;
+        user = Object.assign({}, testUser) as any;
     });
 
 
@@ -111,28 +110,28 @@ describe('calculateHours', () => {
             },
         };
 
-        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(16);
+        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(16);
 
         // Add 7
         userTest.courseCompleted[7] = 1231234;
-        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(23);
+        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(23);
 
         // Subtract 10
         delete userTest.courseCompleted[10];
-        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(13);
+        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(13);
 
         // Subtract 13
         userTest.courseCompleted = {};
-        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(0);
+        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(0);
 
         // Add 5
         userTest.courseCompleted[5] = 12341234;
-        expect(utils.calculateIIIHours(userTest as UM, meta, setup())).toEqual(5);
+        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(5);
 
         // Throw TypeError
         userTest.courseCompleted[100] = 2341234;
         try {
-            utils.calculateIIIHours(userTest as UM, meta, setup());
+            utils.calculateIIIHours(userTest as any, meta, setup());
         } catch (e) {
             expect(e.name).toBe('TypeError');
         }

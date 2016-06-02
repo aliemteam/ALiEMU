@@ -1,4 +1,4 @@
-jest.unmock('../Pagination.ts');
+jest.unmock('../Pagination');
 
 import paginate from '../Pagination';
 

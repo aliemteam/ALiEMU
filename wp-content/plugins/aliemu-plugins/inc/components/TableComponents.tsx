@@ -129,24 +129,25 @@ export const Header = ( props: HeaderProps ) =>
 
 
 export const Pager = (props: PagerProps) =>
-    <div style={styles.pagination.pager}>
+    <div style={styles.pagination.pager} {...props}>
         {
             Array
             .from({length: props.totalRows, }, (k, v) => v)
             .filter((el) => el % props.visibleRows === 0)
             .map((el, i) =>
-            <div
-                key={i}
-                style={
-                    props.currentPage !== i
-                    ? styles.pagination.button
-                    : Object.assign({}, styles.pagination.button, {
-                        background: '#0092E0',
-                        color: '#fff',
-                    })
-                }
-                children={i + 1}
-                onClick={props.onClick} />
+                <div
+                    key={i}
+                    style={
+                        props.currentPage !== i
+                        ? styles.pagination.button
+                        : Object.assign({}, styles.pagination.button, {
+                            background: '#0092E0',
+                            color: '#fff',
+                        })
+                    }
+                    className={props.currentPage !== i ? 'page-button' : 'page-button active'}
+                    children={i + 1}
+                    onClick={props.onClick.bind(null, {type: 'PAGINATE', page: i})} />
             )
         }
     </div>;

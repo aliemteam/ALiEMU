@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
 import * as Moment from 'moment';
 import paginate from '../../../utils/Pagination';
-import { browserDetect, } from '../../../utils/BrowserDetect';
+import { browserDetect } from '../../../utils/BrowserDetect';
 import {
     downloadPolyfill,
     getCourseCategory,
@@ -19,20 +19,18 @@ import {
     Button,
 } from '../../../components/TableComponents';
 
-require('react-datepicker/dist/react-datepicker.css');
-
 interface Props {
     users: ALiEMU.EducatorDashboard.UserObject;
     courseData: ALiEMU.EducatorDashboard.CourseData;
 }
 
 interface State {
-    currentPage: number;
-    visibleRows: number;
-    filteredUsers: ALiEMU.EducatorDashboard.UserMeta[];
-    filter: string;
-    advancedFilter: boolean;
-    dateRange: ALiEMU.EducatorDashboard.DateRange;
+    readonly currentPage: number;
+    readonly visibleRows: number;
+    readonly filteredUsers: ALiEMU.EducatorDashboard.UserMeta[];
+    readonly filter: string;
+    readonly advancedFilter: boolean;
+    readonly dateRange: ALiEMU.EducatorDashboard.DateRange;
 }
 
 export class StudentTable extends React.Component<Props, State> {
@@ -74,71 +72,72 @@ export class StudentTable extends React.Component<Props, State> {
         };
     }
 
-    exportAllData(e: DOMEvent) {
+    exportCSV(userID: string, e: DOMEvent) {
 
-        const { users, } = this.props;
-        let CSV: string =
-            'Last Name,First Name,Class of,Total III Hours Awarded,Courses In Progress,Courses Completed\n';
+        e.preventDefault();
 
-        Object.keys(users).forEach((uid: string) => {
-            let inProgress: number;
-            let completed: number;
-            try {
-                inProgress = Object.keys(users[uid].courseProgress).length;
-            } catch (e) {
-                inProgress = 0;
+        let CSV: string;
+        let filename: string;
+        const { users } = this.props;
+
+        if (!userID) {
+            CSV = [
+                'Last Name',
+                'First Name',
+                'Class of',
+                'Total III Hours Awarded',
+                'Courses In Progress',
+                'Courses Completed',
+            ].join(',') + '\n';
+            filename = 'ALiEMU_Program_Export.csv';
+
+            Object.keys(users).forEach((uid: string) => {
+                let inProgress: number;
+                let completed: number;
+                try {
+                    inProgress = Object.keys(users[uid].courseProgress).length;
+                } catch (err) {
+                    inProgress = 0;
+                }
+
+                try {
+                    completed = Object.keys(users[uid].courseCompleted).length;
+                } catch (err) {
+                    completed = 0;
+                }
+
+                CSV +=
+                    `"${users[uid].lastName}",` +
+                    `"${users[uid].firstName}",` +
+                    `"${users[uid].auGraduationYear || ''}",` +
+                    `"${calculateIIIHours(users[uid], this.props.courseData.courseMeta, this.state.dateRange)}",` +
+                    `"${inProgress - completed}",` +
+                    `"${completed}"\n`;
+            });
+        }
+        else {
+
+            const courseProgress = users[userID].courseProgress;
+            if (!courseProgress) return alert('This user has not interacted with any courses.');
+
+            filename = `${users[userID].displayName.replace(/\s/, '_')}.csv`;
+            CSV = 'Registered Courses,Steps Completed,Date Completed,Associated III Credit Hours,Category\n';
+
+            for (let key of Object.keys(courseProgress)) {
+                CSV +=
+                    `"${this.props.courseData.courses[key].postTitle}",` +
+                    `"${courseProgress[key].completed} out of ${courseProgress[key].total}",` +
+                    `"${parseCompletionDate(users[userID].courseCompleted[key])}",` +
+                    `"${this.props.courseData.courseMeta[key].recommendedHours}",` +
+                    `"${getCourseCategory(key, this.props.courseData.categories)}"\n`;
             }
-
-            try {
-                completed = Object.keys(users[uid].courseCompleted).length;
-            } catch (e) {
-                completed = 0;
-            }
-
-            CSV +=
-                `"${users[uid].lastName}",` +
-                `"${users[uid].firstName}",` +
-                `"${users[uid].auGraduationYear || ''}",` +
-                `"${calculateIIIHours(users[uid], this.props.courseData.courseMeta, this.state.dateRange)}",` +
-                `"${inProgress - completed}",` +
-                `"${completed}"\n`;
-        });
-
-        const blob = new Blob(
-            [CSV, ], { type: 'text/csv;charset=utf-8', }
-        );
-
-        downloadPolyfill('ALiEMU_Program_Export.csv', blob, browserDetect(), e.target.id);
-    }
-
-    exportUserData(userID: string, e: DOMEvent) {
-
-        if (!this.props.users[userID].courseProgress) {
-            alert('This user has not interacted with any courses.');
-            return;
         }
 
-        const courseProgress = this.props.users[userID].courseProgress;
-        const filename = `${this.props.users[userID].displayName.replace(/\s/, '_')}.csv`;
-        let CSV: string = 'Registered Courses,Steps Completed,Date Completed,Associated III Credit Hours,Category\n';
-
-        for (let key of Object.keys(courseProgress)) {
-            CSV +=
-                `"${this.props.courseData.courses[key].postTitle}",` +
-                `"${courseProgress[key].completed} out of ${courseProgress[key].total}",` +
-                `"${parseCompletionDate(this.props.users[userID].courseCompleted[key])}",` +
-                `"${this.props.courseData.courseMeta[key].recommendedHours}",` +
-                `"${getCourseCategory(key, this.props.courseData.categories)}"\n`;
-        }
-
-        const blob = new Blob(
-            [CSV, ], { type: 'text/csv;charset=utf-8', }
-        );
-
+        const blob = new Blob([CSV], {type: 'text/csv;charset=utf-8'});
         downloadPolyfill(filename, blob, browserDetect(), e.target.id);
     }
 
-    handleDateChange(type: 'start'|'end', date: moment.Moment) {
+    selectDate(type: 'start'|'end', date: moment.Moment) {
         this.setState(
             Object.assign({}, this.state, {
                 dateRange: Object.assign({}, this.state.dateRange, {
@@ -146,26 +145,38 @@ export class StudentTable extends React.Component<Props, State> {
                 }),
             })
         );
+    };
+
+    actions(action: {type: string, [key: string]: any}, e: DOMEvent) {
+        switch (action.type) {
+            case 'PAGINATE': {
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        currentPage: action['page'],
+                    })
+                );
+            }
+            case 'SELECT_VISIBLE_ROWS': {
+                let selection = e.target.value;
+                let visibleRows = selection === 'all' ? this.totalStudents : selection;
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        visibleRows,
+                        currentPage: 0,
+                    })
+                );
+            }
+            case 'TOGGLE_ADVANCED_FILTER': {
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        advancedFilter: !this.state.advancedFilter,
+                    })
+                );
+            }
+        }
     }
 
-    paginate(e: React.UIEvent) {
-        let currentPage = parseInt((e.target as HTMLSpanElement).innerText) - 1;
-        this.setState(Object.assign({}, this.state, { currentPage, }));
-    }
-
-    rowSelect(e: DOMEvent) {
-        let selection = e.target.value;
-        let visibleRows = selection === 'all' ? this.totalStudents : parseInt(selection);
-        this.setState(Object.assign({}, this.state, { visibleRows, }));
-    }
-
-    toggleAdvancedFilter(e: React.UIEvent) {
-        this.setState(
-            Object.assign({}, this.state, { advancedFilter: !this.state.advancedFilter, })
-        );
-    }
-
-    filterString(e: DOMEvent) {
+    filter(e: DOMEvent) {
         e.preventDefault();
 
         const filter = e.target.value.toLowerCase();
@@ -210,8 +221,9 @@ export class StudentTable extends React.Component<Props, State> {
                         Show
                         <select
                             style={{ margin: '0 5px', }}
+                            id='row-select'
                             defaultValue={this.state.visibleRows}
-                            onChange={this.rowSelect.bind(this)} >
+                            onChange={this.actions.bind(this, {type: 'SELECT_VISIBLE_ROWS'})} >
                             <option value={10}>10</option>
                             { this.totalStudents > 25 &&
                                 <option value={25}>25</option>
@@ -219,7 +231,9 @@ export class StudentTable extends React.Component<Props, State> {
                             { this.totalStudents > 50 &&
                                 <option value={50}>50</option>
                             }
-                            <option value={'all'} data-totalStudents={this.totalStudents}>all</option>
+                            { this.totalStudents > 10 &&
+                                <option value={'all'} data-totalStudents={this.totalStudents}>all</option>
+                            }
                         </select>
                         students
                     </div>
@@ -233,7 +247,7 @@ export class StudentTable extends React.Component<Props, State> {
                             type='text'
                             id='search-query'
                             value={this.state.filter}
-                            onChange={this.filterString.bind(this)} />
+                            onChange={this.filter.bind(this)} />
                         <div
                             style={{
                                 fontSize: '1.3em',
@@ -244,7 +258,7 @@ export class StudentTable extends React.Component<Props, State> {
                                 cursor: 'pointer',
                             }}
                             id='advanced-filter-toggle'
-                            onClick={this.toggleAdvancedFilter.bind(this)} >
+                            onClick={this.actions.bind(this, {type: 'TOGGLE_ADVANCED_FILTER'})} >
                             <i className={
                                 this.state.advancedFilter
                                 ? 'um-faicon-caret-up'
@@ -254,8 +268,9 @@ export class StudentTable extends React.Component<Props, State> {
                     </Flex>
                     <div>
                         <Button
+                            id='program-export'
                             children='Export Program Data'
-                            onClick={this.exportAllData.bind(this)} />
+                            onClick={this.exportCSV.bind(this, null)} />
                     </div>
                 </FilterRow>
 
@@ -267,14 +282,17 @@ export class StudentTable extends React.Component<Props, State> {
                                 children='From'
                                 style={{padding: '0 10px', }} />
                             <Datepicker
+                                ref='datepicker'
+                                id='start-date'
                                 selected={this.state.dateRange.start}
-                                onChange={this.handleDateChange.bind(this, 'start')} />
+                                onChange={this.selectDate.bind(this, 'start')} />
                             <strong
                                 children='to'
                                 style={{padding: '0 10px', }} />
                             <Datepicker
+                                id='end-date'
                                 selected={this.state.dateRange.end}
-                                onChange={this.handleDateChange.bind(this, 'end')} />
+                                onChange={this.selectDate.bind(this, 'end')} />
                         </Flex>
                     </FilterRow>
                 }
@@ -284,57 +302,27 @@ export class StudentTable extends React.Component<Props, State> {
                 {
                     paginate(this.state.filteredUsers, this.state.visibleRows, this.state.currentPage)
                     .map((user, i) =>
-                    <TableBody
-                        key={user.ID}
-                        id={user.ID}
-                        name={user.displayName}
-                        classOf={user.auGraduationYear}
-                        hours={calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}
-                        onClick={this.exportUserData.bind(this, user.uid)} />
+                        <Row key={user.ID} id={`student-table-row-${i}`} className='table-row'>
+                            <Cell align='left'>{user.displayName}</Cell>
+                            <Cell align='left'>{!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}</Cell>
+                            <Cell align='center'>{calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}</Cell>
+                            <Cell align='center'>
+                                <Button
+                                    children='Export Data'
+                                    onClick={this.exportCSV.bind(this, user.ID)}/>
+                            </Cell>
+                        </Row>
                     )
                 }
 
                 {/* Pagination Buttons */}
                 <Pager
+                    id='pager'
                     totalRows={this.state.filteredUsers.length}
                     currentPage={this.state.currentPage}
                     visibleRows={this.state.visibleRows}
-                    onClick={this.paginate.bind(this)} />
+                    onClick={this.actions.bind(this)} />
             </div>
-        );
-    }
-}
-
-
-
-interface TableBodyProps {
-    id: string;
-    name: string;
-    classOf: number;
-    hours: number;
-    onClick();
-}
-
-class TableBody extends React.Component<TableBodyProps, {}> {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { name, classOf, hours, onClick, id, } = this.props;
-        return (
-            <Row>
-                <Cell align='left'>{name}</Cell>
-                <Cell align='left'>{!classOf ? 'Unspecified' : classOf}</Cell>
-                <Cell align='center'>{hours}</Cell>
-                <Cell align='center'>
-                    <Button
-                        children='Export Data'
-                        id={id}
-                        onClick={onClick}/>
-                </Cell>
-            </Row>
         );
     }
 }

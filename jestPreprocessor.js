@@ -27,6 +27,7 @@ function transpile(src, path, debugFile) {
             .replace(/(}\)\()(.*\|\|.*;)/g, '$1/* istanbul ignore next */$2')
             .replace(/(var __extends = \(this && this.__extends\))/g, '$1/* istanbul ignore next */')
             .replace(/(var __assign = \(this && this.__assign\) \|\| Object.assign)/g, '$1 /* istanbul ignore next */')
+            .replace(/^(require|import).*\.css.*;$/gm, '')
         );
     }
 
@@ -40,7 +41,8 @@ function transpile(src, path, debugFile) {
     )
     .replace(/(}\)\()(.*\|\|.*;)/g, '$1/* istanbul ignore next */$2')
     .replace(/(var __extends = \(this && this.__extends\))/g, '$1/* istanbul ignore next */')
-    .replace(/(var __assign = \(this && this.__assign\) \|\| Object.assign)/g, '$1 /* istanbul ignore next */');
+    .replace(/(var __assign = \(this && this.__assign\) \|\| Object.assign)/g, '$1 /* istanbul ignore next */')
+    .replace(/^(require|import).*\.css.*;$/gm, '');
 
 
     if (path.endsWith(debugFile)) fs.writeFileSync('DEBUG_FILE.js', code);

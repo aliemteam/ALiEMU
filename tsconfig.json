@@ -25,6 +25,7 @@
     "compileOnSave": false,
     "buildOnSave": false,
     "files": [
+        "test-utils/Mocks.ts",
         "typings/ALiEMU.d.ts",
         "typings/globals/enzyme/index.d.ts",
         "typings/globals/jest/index.d.ts",
@@ -41,9 +42,9 @@
         "wp-content/plugins/aliemu-plugins/inc/utils/__tests__/Pagination-test.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/BrowserDetect.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/DashboardUtils.ts",
-        "wp-content/plugins/aliemu-plugins/inc/utils/Mocks.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/Pagination.ts",
         "wp-content/plugins/aliemu-plugins/inc/components/TableComponents.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/StudentTable-test.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/CourseTable.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/StudentTable.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx"

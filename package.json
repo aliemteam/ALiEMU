@@ -10,6 +10,7 @@
     "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
     "chown": "sudo chown -R $USER $(pwd)/dist",
     "pretest": "npm run lint",
+    "clear-cache": "rm -rf node_modules/jest-cli/.haste_cache",
     "test": "jest",
     "lint": "stylint wp-content/plugins/aliemu-plugins/inc/styles -c .stylintrc && tslint 'wp-content/**/*.{ts,tsx}'"
   },
@@ -49,11 +50,7 @@
   },
   "jest": {
     "scriptPreprocessor": "jestPreprocessor.js",
-    "testFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "testRegex": "__tests__/.*\\.(js|ts|tsx)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -65,7 +62,8 @@
       "react-dom",
       "react-addons-test-utils",
       "enzyme",
-      "sinon"
+      "sinon",
+      "<rootDir>/test-utils/Mocks"
     ],
     "verbose": true,
     "collectCoverage": true

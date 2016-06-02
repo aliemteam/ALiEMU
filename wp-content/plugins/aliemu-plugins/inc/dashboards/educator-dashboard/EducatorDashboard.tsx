@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { StudentTable, } from './components/StudentTable';
 import { CourseTable, } from './components/CourseTable';
+import 'react-datepicker/dist/react-datepicker.css';
 
 declare var AU_EducatorData: ALiEMU.EducatorDashboard.EducatorData;
 

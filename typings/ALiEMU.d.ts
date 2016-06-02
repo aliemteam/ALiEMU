@@ -46,7 +46,7 @@ declare namespace ALiEMU {
         }
 
         interface CourseMetaObject {
-            [i: number]: CourseMeta;
+            [courseID: number]: CourseMeta;
         }
 
         interface CourseMeta {
@@ -77,10 +77,10 @@ declare namespace ALiEMU {
             courseAccessed: {
                 [courseID: number]: number
             }|number[];
-            courseCompleted: {
+            courseCompleted?: {
                 [courseID: number]: number
             }|number[];
-            courseProgress: {
+            courseProgress?: {
                 [courseID: number]: LearnDash.CourseProgress
             };
             description: string;
@@ -153,8 +153,13 @@ declare namespace LearnDash {
         postTitle: string;
     }
 
-    interface Lessons extends Courses {
-        'menu_order': number;
+    interface Lessons {
+        ID: number;
+        menuOrder: number;
+        postAuthor: number;
+        postDate: string;
+        postModified: string;
+        postTitle: string;
     }
 
     /**

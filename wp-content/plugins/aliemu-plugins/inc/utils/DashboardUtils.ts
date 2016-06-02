@@ -22,9 +22,11 @@ export const downloadPolyfill = (filename: string, blob: Blob, browser: BrowserT
         case 'firefox':
         case 'edge':
             let a: HTMLAnchorElement = document.createElement('a');
-            a.setAttribute('href', URL.createObjectURL(blob));
-            a.setAttribute('download', filename);
+            document.body.appendChild(a);
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
             a.click();
+            document.body.removeChild(a);
             break;
         case 'ie':
             window.navigator.msSaveBlob(blob, filename);

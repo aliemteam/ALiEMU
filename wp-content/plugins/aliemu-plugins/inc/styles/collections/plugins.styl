@@ -33,24 +33,6 @@ img.um-avatar
     top 7px
     margin-left 8px
 
-
-.um-online > div.um-online-user > div > a > img
-    border-radius 100px
-    width 25px
-    position relative
-    top 0
-    margin-left 0
-
-
-.um-online-user
-    width auto
-    height auto
-
-
-.um-message-header img.um-avatar
-    min-height 20px !important
-
-
 // Comments
 #wc-comment-header
     color white
@@ -66,7 +48,7 @@ img.um-avatar
 .ts-fab-avatar .avatar
     width 85%
 
-
+// ?
 .ts-fab-wrapper
     padding 1em 0
     clear both
@@ -80,44 +62,45 @@ img.um-avatar
 
 // ================== WpProQuiz ==================
 
-.wpProQuiz_content
+
+.category-air
     .wpProQuiz_button
-        background transparent
-        border-radius 3px
-        border 1px solid $primary
-        box-shadow 0 0 0
-        color $primary
-        font 1em Lato
-        line-height 20px
-        transition-duration 0.1s
+        bordered-button small $red-air
 
-        &:active, &:focus, &:hover
-            background-color $primary
-            color white
-            cursor pointer
+.category-capsules
+    .wpProQuiz_button
+        bordered-button small $blue-capsules
+
++prefix-classes('wpProQuiz_')
+    .answerCorrect
+        background $green-correct
+        font-weight bold
+        color white
+
+    .answerIncorrect
+        background $red-incorrect
+        font-weight bold
+        color white
+
+    .list
+        padding-bottom 0 !important
+        .questionList
+            background $gray-light
             border-radius 3px
-            border 1px solid $primary
-            box-shadow 0 0 0
+            padding 20px !important
+            margin 10px 0
+            .questionListItem
+                list-style none
+                margin-left 0 !important
+                .questionInput
+                    line-height 26px
+                    vertical-align text-top
 
 
-.wpProQuiz_answerCorrect
-    background $green-correct
-    font-weight bold
-    color white
 
 
-.wpProQuiz_answerIncorrect
-    background $red-incorrect
-    font-weight bold
-    color white
-
-
-.wpProQuiz_questionList
-    background $gray-light
-    border 1px solid $primary
-
-
-.wpProQuiz_tipp > div
+// I think this is for tooltips?
+.tipp > div
     padding 10px
     background-color $gray-light
     border 1px dotted $primary
