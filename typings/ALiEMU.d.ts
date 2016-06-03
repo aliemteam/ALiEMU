@@ -11,6 +11,11 @@ interface Action {
 
 declare namespace ALiEMU {
 
+    type CSV = {
+        data: string;
+        filename: string;
+    }
+
     namespace EducatorDashboard {
 
         type DateRange = {

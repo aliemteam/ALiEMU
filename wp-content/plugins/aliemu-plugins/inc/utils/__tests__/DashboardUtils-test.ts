@@ -4,6 +4,7 @@ jest.unmock('moment');
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
 import * as Moment from 'moment';
+import { courseData, users } from '../../../../../../test-utils/Fixtures';
 
 const D = {
     jan: 1420088400,
@@ -166,13 +167,19 @@ describe('calculateHours', () => {
 
 describe('parseCompletionDate', () => {
     it('should parse undefined as "X"', () => {
-        expect(utils.parseCompletionDate(undefined)).toBe('X');
+        expect(utils.parseCompletionData(undefined)).toBe('X');
     });
     it('should parse various date strings correctly', () => {
-        expect(/3\/2[1-3]\/2016/.test(utils.parseCompletionDate(1458692807))).toBe(true);
-        expect(/4\/[1-3]\/2016/.test(utils.parseCompletionDate(1459616977))).toBe(true);
-        expect(/4\/2[0-2]\/2016/.test(utils.parseCompletionDate(1461229758))).toBe(true);
-        expect(/4\/2[2-4]\/2015/.test(utils.parseCompletionDate(1429798848))).toBe(true);
+        expect(/03\/2[1-3]\/2016/.test(utils.parseCompletionData(1458692807))).toBe(true);
+        expect(/04\/0[1-3]\/2016/.test(utils.parseCompletionData(1459616977))).toBe(true);
+        expect(/04\/2[0-2]\/2016/.test(utils.parseCompletionData(1461229758))).toBe(true);
+        expect(/04\/2[2-4]\/2015/.test(utils.parseCompletionData(1429798848))).toBe(true);
+    });
+    it('should parse date with hours and give back date and hours', () => {
+        expect(utils.parseCompletionData(1458692807, '12')).toBe('03/22/2016","12');
+        expect(utils.parseCompletionData(1461229758, '3')).toBe('04/21/2016","3');
+        expect(utils.parseCompletionData(undefined, '3')).toBe('X","0');
+        expect(utils.parseCompletionData(undefined, '8')).toBe('X","0');
     });
 });
 
@@ -235,5 +242,65 @@ describe('getCourseCategory', () => {
         expect(utils.getCourseCategory('250', categories)).toBe('TEST2');
         expect(utils.getCourseCategory('100', categories)).toBe('TEST1');
         expect(utils.getCourseCategory('275', categories)).toBe('TEST2');
+    });
+});
+
+describe('CSV Class', () => {
+
+    it('should construct', () => {
+        expect(new utils.CSV(users, courseData)).toBeTruthy();
+    });
+
+    const CSV = new utils.CSV(users, courseData);
+    describe('CSV.user()', () => {
+        it('should return a properly formatted user CSV', () => {
+            let expected: ALiEMU.CSV = {
+                filename: 'Maximal_User.csv',
+                data: `"Registered Courses","Steps Completed","Date Completed","Associated III Credit Hours","Category"\n"Course 1","5 out of 5","06/09/2015","1","AIR"\n"Course 3","1 out of 5","X","0","AIR"\n`,
+            };
+            expect(CSV.user('2')).toEqual(expected);
+        });
+        it('should return false if the user has not interacted with courses', () => {
+            expect(CSV.user('1')).toBe(false);
+        });
+    });
+
+    describe('CSV.allUsers()', () => {
+        it('should return a CSV without date range', () => {
+            const expected = {
+                filename: 'ALiEMU_Program_Export.csv',
+                data: `"Last Name","First Name","Class of","Total III Hours Awarded","Courses In Progress","Courses Completed"\n"User","Minimal","","0","0","0"\n"User","Maximal","2018","1","1","1"\n`,
+            };
+            expect(CSV.allUsers({start: null, end: null})).toEqual(expected);
+        });
+        it('should return a CSV with a date range', () => {
+            const expected = {
+                filename: 'ALiEMU_Program_Export.csv',
+                data: `"Last Name","First Name","Class of","Total III Hours Awarded","Courses In Progress","Courses Completed"\n"User","Minimal","","0","0","0"\n"User","Maximal","2018","0","1","1"\n`,
+            };
+            const dateRange = {
+                start: Moment('2015-07-01'),
+                end: null,
+            };
+            expect(CSV.allUsers(dateRange)).toEqual(expected);
+        });
+    });
+
+    describe('CSV.course()', () => {
+        it('should return a CSV', () => {
+            const expected = {
+                filename: 'Course_1.csv',
+                data: `"Last Name","First Name","Course Completed","Lesson: Lesson 110","Lesson: Lesson 120","Lesson: Lesson 130","Lesson: Lesson 140"\n"User","Minimal","X","X","X","X","X"\n"User","Maximal","06/09/2015","Completed","Completed","Completed","Completed"\n`,
+            };
+            expect(CSV.course('100')).toEqual(expected);
+            const newUsers = Object.assign({}, users);
+            newUsers[2].courseProgress[100].lessons[140] = 0;
+            const newCSV = new utils.CSV(newUsers, courseData);
+            const newExpected = {
+                filename: 'Course_1.csv',
+                data: `"Last Name","First Name","Course Completed","Lesson: Lesson 110","Lesson: Lesson 120","Lesson: Lesson 130","Lesson: Lesson 140"\n"User","Minimal","X","X","X","X","X"\n"User","Maximal","06/09/2015","Completed","Completed","Completed","X"\n`,
+            };
+            expect(newCSV.course('100')).toEqual(newExpected);
+        });
     });
 });

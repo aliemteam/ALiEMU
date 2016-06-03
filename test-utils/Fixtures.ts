@@ -332,7 +332,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 110',
     },
     120: {
         ID: 120,
@@ -340,7 +340,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 120',
     },
     130: {
         ID: 130,
@@ -348,7 +348,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 130',
     },
     140: {
         ID: 140,
@@ -356,7 +356,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 140',
     },
     210: {
         ID: 210,
@@ -364,7 +364,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 210',
     },
     220: {
         ID: 220,
@@ -372,7 +372,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 220',
     },
     230: {
         ID: 230,
@@ -380,7 +380,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 230',
     },
     240: {
         ID: 240,
@@ -388,7 +388,7 @@ export const lessons: {[i: number]: LearnDash.Lessons} = {
         postAuthor: 0,
         postDate: '2015-04-20 14:21:26',
         postModified: '2015-04-20 14:21:26',
-        postTitle: 'Lesson ',
+        postTitle: 'Lesson 240',
     },
 };
 

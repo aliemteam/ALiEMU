@@ -1,5 +1,7 @@
 import * as Moment from 'moment';
 
+type Users = ALiEMU.EducatorDashboard.UserObject;
+type Courses = ALiEMU.EducatorDashboard.CourseData;
 type User = ALiEMU.EducatorDashboard.UserMeta;
 type CourseMeta = ALiEMU.EducatorDashboard.CourseMetaObject;
 type Categories = ALiEMU.EducatorDashboard.CategoryObject;
@@ -62,16 +64,22 @@ export const getCourseCategory = (courseID: string, categories: Categories): str
  * Returns either a formatted date or 'X' based on whether or not the date string
  *   is defined.
  *
- * @param {number|undefined} date  The date string (or undefined).
- * @return {string} The parsed date string or 'X'.
+ * @param date  The date string (or undefined).
+ * @param hours The associated hours for the course.
+ * @return The parsed date and hours string or X","X. (format allows array join)
  */
-export const parseCompletionDate = (date: number|undefined): string => {
-    if (typeof date === 'undefined') {
-        return 'X';
+export const parseCompletionData = (date: number|undefined, hours?: string): string => {
+    if (!hours) {
+        if (typeof date === 'undefined') {
+            return `X`;
+        }
+        return Moment.unix(date).calendar();
     }
-    return new Date(
-        date * 1000
-    ).toLocaleDateString();
+
+    if (typeof date === 'undefined') {
+        return `X","0`;
+    }
+    return `${Moment.unix(date).calendar()}","${hours}`;
 };
 
 
@@ -83,6 +91,7 @@ export const parseCompletionDate = (date: number|undefined): string => {
  * @return {number} The user's calculated III hours.
  */
 export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange: {start: moment.Moment, end: moment.Moment}): number => {
+    if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
         const d = Moment.unix(user.courseCompleted[curr]);
@@ -104,3 +113,136 @@ export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange:
         }
     }, 0);
 };
+
+/* TODO: document this */
+export class CSV {
+
+    private users: Users;
+    private courses: ALiEMU.EducatorDashboard.CourseObject;
+    private courseData: ALiEMU.EducatorDashboard.CourseData;
+    private courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject;
+    private categories: ALiEMU.EducatorDashboard.CategoryObject;
+    private lessons;
+
+    constructor(users: Users, courses: Courses) {
+        this.users = users;
+        this.courses = courses.courses;
+        this.courseData = courses;
+        this.courseMeta = courses.courseMeta;
+        this.categories = courses.categories;
+        this.lessons = courses.lessons;
+    }
+
+    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.CSV {
+        const filename = 'ALiEMU_Program_Export.csv';
+        let data = [
+            'Last Name',
+            'First Name',
+            'Class of',
+            'Total III Hours Awarded',
+            'Courses In Progress',
+            'Courses Completed',
+        ]
+        .map(i => `"${i}"`)
+        .join(',') + '\n';
+
+        Object.keys(this.users).forEach((uid: string) => {
+            const inProgress: number = this.users[uid].courseProgress
+                ? Object.keys(this.users[uid].courseProgress).length
+                : 0;
+
+            const completed: number = this.users[uid].courseCompleted
+                ? Object.keys(this.users[uid].courseCompleted).length
+                : 0;
+            data += [
+                this.users[uid].lastName,
+                this.users[uid].firstName,
+                this.users[uid].auGraduationYear || '',
+                calculateIIIHours(this.users[uid], this.courseMeta, dateRange),
+                inProgress - completed,
+                completed,
+            ]
+            .map(i => `"${i}"`)
+            .join(',') + '\n';
+        });
+        return { filename, data };
+    }
+
+    user(userID: string): ALiEMU.CSV|boolean {
+
+        const courseProgress = this.users[userID].courseProgress;
+        const { courses, courseMeta, categories } = this.courseData;
+
+        if (!courseProgress) return false;
+
+        const filename = `${this.users[userID].displayName.replace(/\s/, '_')}.csv`;
+        let data: string = [
+            'Registered Courses',
+            'Steps Completed',
+            'Date Completed',
+            'Associated III Credit Hours',
+            'Category',
+        ]
+        .map(i => `"${i}"`)
+        .join(',') + '\n';
+
+        for (let key of Object.keys(courseProgress)) {
+            data += [
+                courses[key].postTitle,
+                `${courseProgress[key].completed} out of ${courseProgress[key].total}`,
+                parseCompletionData(
+                    this.users[userID].courseCompleted[key],
+                    courseMeta[key].recommendedHours
+                ),
+                getCourseCategory(key, categories),
+            ]
+            .map(i => `"${i}"`)
+            .join(',') + '\n';
+        }
+        return { filename, data };
+    }
+
+    course(courseID: string): ALiEMU.CSV {
+        const filename = `${this.courses[courseID].postTitle.replace(/\s/, '_')}.csv`;
+        const lessonIDs = [];
+
+        let data: string = [
+            'Last Name',
+            'First Name',
+            'Course Completed',
+            ...this.courses[courseID].lessons
+                .filter((lessonID: string) => typeof this.lessons[lessonID] !== 'undefined')
+                .map((lessonID: string) => {
+                    lessonIDs.push(lessonID);
+                    return `Lesson: ${this.lessons[lessonID].postTitle}`;
+                }),
+        ]
+        .map(i => `"${i}"`)
+        .join(',') + '\n';
+
+        Object.keys(this.users).forEach((userID: string) => {
+            const completionData = this.users[userID].courseCompleted
+                ? parseCompletionData(this.users[userID].courseCompleted[courseID])
+                : 'X';
+            data += [
+                this.users[userID].lastName,
+                this.users[userID].firstName,
+                completionData,
+                ...lessonIDs.map((lessonID: string) => {
+                    try {
+                        let completed = this.users[userID].courseProgress[courseID].lessons[lessonID];
+                        if (completed === 1) {
+                            return 'Completed';
+                        }
+                        return 'X';
+                    } catch (e) {
+                        return 'X';
+                    }
+                }),
+            ]
+            .map(i => `"${i}"`)
+            .join(',') + '\n';
+        });
+        return { filename, data };
+    }
+}

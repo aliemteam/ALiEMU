@@ -5,9 +5,9 @@ jest.unmock('../../../../utils/Pagination');
 import * as React from 'react';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-import { users, courseData, createMinimalUser } from '../../../../../../../../test-utils/Mocks';
+import { users, courseData, createMinimalUser } from '../../../../../../../../test-utils/Fixtures';
+import { CSV } from '../../../../utils/DashboardUtils';
 import { StudentTable } from '../StudentTable';
-
 
 const setup = (USERS = users, COURSEDATA = courseData) => {
     const component = mount(
@@ -213,23 +213,31 @@ describe('<StudentTable />', () => {
 
     describe('Export CSV functions', () => {
         it('should call exportCSV for global program export', () => {
+            const stub = sinon.stub(CSV.prototype, 'allUsers', () => ({filename: 'test.csv', data: 'test,test,test'}));
             const { component, exportBtn } = setup();
             exportBtn.simulate('click');
+            stub.restore();
         });
 
         it('should call exportCSV for user-level export', () => {
+            const stub = sinon.stub(CSV.prototype, 'user', () => ({filename: 'test.csv', data: 'test,test,test'}));
             const { component } = setup();
-            const userExport = component.find('#student-table-row-0').children().at(3).children();
-            userExport.simulate('click');
+            const user1Export = component.find('#student-table-row-0').children().at(3).children();
+            const user2Export = component.find('#student-table-row-1').children().at(3).children();
+            user1Export.simulate('click');
+            user2Export.simulate('click');
+            stub.restore();
         });
 
         it('should alert the user when the student has no course interactions', () => {
+            const stub = sinon.stub(CSV.prototype, 'user', () => false);
             const { component } = setup();
             const spy = sinon.spy(window, 'alert');
             const userExport = component.find('#student-table-row-1').children().at(3).children();
             userExport.simulate('click');
             expect(spy.callCount).toBe(1);
             spy.reset();
+            stub.restore();
         });
     });
 });

@@ -7,8 +7,11 @@ jest.unmock('moment');
 import * as React from 'react';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-import { users, courseData, createMinimalUser } from '../../../../../../../../test-utils/Mocks';
+import { users, courseData, createMinimalUser } from '../../../../../../../../test-utils/Fixtures';
+import { CSV } from '../../../../utils/DashboardUtils';
 import { CourseTable } from '../CourseTable';
+
+sinon.stub(CSV.prototype, 'course', () => ({filename: 'asd', data: 'asd'}));
 
 const setup = (USERS = users) => {
     const component = mount(

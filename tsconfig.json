@@ -25,7 +25,7 @@
     "compileOnSave": false,
     "buildOnSave": false,
     "files": [
-        "test-utils/Mocks.ts",
+        "test-utils/Fixtures.ts",
         "typings/ALiEMU.d.ts",
         "typings/globals/enzyme/index.d.ts",
         "typings/globals/jest/index.d.ts",

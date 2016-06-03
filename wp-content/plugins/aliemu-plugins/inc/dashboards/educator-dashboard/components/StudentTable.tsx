@@ -5,8 +5,9 @@ import { browserDetect } from '../../../utils/BrowserDetect';
 import {
     downloadPolyfill,
     getCourseCategory,
-    parseCompletionDate,
+    parseCompletionData,
     calculateIIIHours,
+    CSV,
 } from '../../../utils/DashboardUtils';
 import {
     Header,
@@ -40,9 +41,11 @@ export class StudentTable extends React.Component<Props, State> {
         { content: 'Total III Hours', align: 'center', },
         { content: 'User Export', align: 'center', },
     ];
+    private CSV;
 
     constructor(props) {
         super(props);
+        this.CSV = new CSV(this.props.users, this.props.courseData);
 
         const filteredUsers = Object.keys(this.props.users)
             .sort((uid1, uid2) => {
@@ -71,68 +74,15 @@ export class StudentTable extends React.Component<Props, State> {
     }
 
     exportCSV(userID: string, e: DOMEvent) {
-
         e.preventDefault();
+        const CSV = userID
+            ? this.CSV.user(userID)
+            : this.CSV.allUsers(this.state.dateRange);
 
-        let CSV: string;
-        let filename: string;
-        const { users } = this.props;
+        if (!CSV) return alert('This user has not interacted with any courses');
 
-        if (!userID) {
-            CSV = [
-                'Last Name',
-                'First Name',
-                'Class of',
-                'Total III Hours Awarded',
-                'Courses In Progress',
-                'Courses Completed',
-            ].join(',') + '\n';
-            filename = 'ALiEMU_Program_Export.csv';
-
-            Object.keys(users).forEach((uid: string) => {
-                let inProgress: number;
-                let completed: number;
-                try {
-                    inProgress = Object.keys(users[uid].courseProgress).length;
-                } catch (err) {
-                    inProgress = 0;
-                }
-
-                try {
-                    completed = Object.keys(users[uid].courseCompleted).length;
-                } catch (err) {
-                    completed = 0;
-                }
-
-                CSV +=
-                    `"${users[uid].lastName}",` +
-                    `"${users[uid].firstName}",` +
-                    `"${users[uid].auGraduationYear || ''}",` +
-                    `"${calculateIIIHours(users[uid], this.props.courseData.courseMeta, this.state.dateRange)}",` +
-                    `"${inProgress - completed}",` +
-                    `"${completed}"\n`;
-            });
-        }
-        else {
-
-            const courseProgress = users[userID].courseProgress;
-            if (!courseProgress) return alert('This user has not interacted with any courses.');
-
-            filename = `${users[userID].displayName.replace(/\s/, '_')}.csv`;
-            CSV = 'Registered Courses,Steps Completed,Date Completed,Associated III Credit Hours,Category\n';
-
-            for (let key of Object.keys(courseProgress)) {
-                CSV +=
-                    `"${this.props.courseData.courses[key].postTitle}",` +
-                    `"${courseProgress[key].completed} out of ${courseProgress[key].total}",` +
-                    `"${parseCompletionDate(users[userID].courseCompleted[key])}",` +
-                    `"${this.props.courseData.courseMeta[key].recommendedHours}",` +
-                    `"${getCourseCategory(key, this.props.courseData.categories)}"\n`;
-            }
-        }
-
-        const blob = new Blob([CSV], {type: 'text/csv;charset=utf-8'});
-        downloadPolyfill(filename, blob, browserDetect(), e.target.id);
+        const blob = new Blob([CSV.data], {type: 'text/csv;charset=utf-8'});
+        downloadPolyfill(CSV.filename, blob, browserDetect(), e.target.id);
     }
 
     selectDate(type: 'start'|'end', date: moment.Moment) {

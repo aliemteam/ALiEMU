@@ -32,7 +32,7 @@ module.exports = function (wallaby) {
                   'react-addons-test-utils',
                   'enzyme',
                   'sinon',
-                  '<rootDir>/test-utils/Mocks',
+                  '<rootDir>/test-utils/Fixtures',
                 ],
             });
         }

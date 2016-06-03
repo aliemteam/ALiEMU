@@ -4,7 +4,8 @@ import paginate from '../../../utils/Pagination';
 import * as moment from 'moment';
 import {
     downloadPolyfill,
-    parseCompletionDate,
+    parseCompletionData,
+    CSV,
 } from '../../../utils/DashboardUtils';
 import {
     Header,
@@ -32,6 +33,7 @@ interface State {
 
 export class CourseTable extends React.Component<Props, State> {
 
+    public CSV;
     private visibleRows: number;
     private headerCells = [
         { content: 'User Name', align: 'left' },
@@ -40,6 +42,7 @@ export class CourseTable extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
+        this.CSV = new CSV(this.props.users, this.props.courseData);
         this.visibleRows = 10;
         this.state = {
             categories: Object.keys(this.props.courseData.categories)
@@ -54,46 +57,10 @@ export class CourseTable extends React.Component<Props, State> {
     }
 
     exportCourseData(e: DOMEvent) {
-        const course = this.state.selections.course;
-        const filename = `${this.props.courseData.courses[course].postTitle}.csv`;
-        const lessons = this.props.courseData.lessons;
-        const users = this.props.users;
-        const lessonIDs = [];
-
-        let CSV: string = `Last Name,First Name,Course Completed,${
-            this.props.courseData.courses[course].lessons
-            .filter((lessonID: string) => typeof lessons[lessonID] !== 'undefined')
-            .map((lessonID: string) => {
-                lessonIDs.push(lessonID);
-                return `"Lesson: ${lessons[lessonID].postTitle}"`;
-            })
-            .join(',')
-        }\n`;
-
-        /** TODO: Probably put this in a function */
-        Object.keys(users).forEach((userID: string) => {
-            CSV +=
-                `"${users[userID].lastName}",` +
-                `"${users[userID].firstName}",` +
-                `"${parseCompletionDate(users[userID].courseCompleted[this.state.selections.course])}",` +
-                `${lessonIDs.map((lessonID: string) => {
-                    try {
-                        let completed = users[userID].courseProgress[course].lessons[lessonID];
-                        if (completed === 1) {
-                            return '"Completed"';
-                        }
-                        return '"X"';
-                    } catch(e) {
-                        return '"X"';
-                    }
-                }).join(',')}\n`;
-        });
-
-        const blob = new Blob(
-            [CSV], {type: 'text/csv;charset=utf-8'}
-        );
-
-        downloadPolyfill(filename, blob, browserDetect(), e.target.id);
+        const courseID = this.state.selections.course;
+        const CSV = this.CSV.course(courseID);
+        const blob = new Blob([CSV.data], {type: 'text/csv;charset=utf-8'});
+        downloadPolyfill(CSV.filename, blob, browserDetect(), e.target.id);
     }
 
     reducer(action: Action, e?: DOMEvent) {
