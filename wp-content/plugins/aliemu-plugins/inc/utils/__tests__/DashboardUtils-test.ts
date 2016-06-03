@@ -176,8 +176,12 @@ describe('parseCompletionDate', () => {
         expect(/04\/2[2-4]\/2015/.test(utils.parseCompletionData(1429798848))).toBe(true);
     });
     it('should parse date with hours and give back date and hours', () => {
-        expect(utils.parseCompletionData(1458692807, '12')).toBe('03/22/2016","12');
-        expect(utils.parseCompletionData(1461229758, '3')).toBe('04/21/2016","3');
+        let payload = utils.parseCompletionData(1458692807, '12').split('","');
+        expect(/03\/2[1-3]\/2016/.test(payload[0])).toBe(true);
+        expect(payload[1]).toBe('12');
+        payload = utils.parseCompletionData(1461229758, '3').split('","');
+        expect(/04\/2[0-2]\/2016/.test(payload[0])).toBe(true);
+        expect(payload[1]).toBe('3');
         expect(utils.parseCompletionData(undefined, '3')).toBe('X","0');
         expect(utils.parseCompletionData(undefined, '8')).toBe('X","0');
     });
