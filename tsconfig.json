@@ -44,6 +44,7 @@
         "wp-content/plugins/aliemu-plugins/inc/utils/DashboardUtils.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/Pagination.ts",
         "wp-content/plugins/aliemu-plugins/inc/components/TableComponents.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/CourseTable-test.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/StudentTable-test.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/CourseTable.tsx",
         "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/StudentTable.tsx",

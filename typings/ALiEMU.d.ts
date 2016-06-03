@@ -4,6 +4,11 @@ interface DOMEvent extends Event {
     target: HTMLInputElement;
 }
 
+interface Action {
+    type: string;
+    [key: string]: any;
+}
+
 declare namespace ALiEMU {
 
     namespace EducatorDashboard {

@@ -1,12 +1,10 @@
 jest.unmock('../StudentTable');
 jest.unmock('../../../../components/TableComponents');
 jest.unmock('../../../../utils/Pagination');
-jest.unmock('moment');
 
 import * as React from 'react';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-import * as moment from 'moment';
 import { users, courseData, createMinimalUser } from '../../../../../../../../test-utils/Mocks';
 import { StudentTable } from '../StudentTable';
 
@@ -201,14 +199,14 @@ describe('<StudentTable />', () => {
         it('should navigate to the correct page when clicked', () => {
             const { component, pager } = setup(userdata);
             expect(pager.children().length).toBe(6);
-            expect(pager.children().first().props().className).toBe('page-button active');
+            expect(pager.children().first().props().className).toBe('au-edudash-pager-btn-active');
             expect(component.state().currentPage).toBe(0);
             const page4 = pager.children().at(3);
             expect(page4.props().children).toBe(4);
             page4.simulate('click');
             expect(component.state().currentPage).toBe(3);
-            expect(page4.props().className).toBe('page-button active');
-            expect(pager.children().first().props().className).toBe('page-button');
+            expect(page4.props().className).toBe('au-edudash-pager-btn-active');
+            expect(pager.children().first().props().className).toBe('au-edudash-pager-btn');
             expect(component.children().at(3).children().first().props().children).toBe('User 30');
         });
     });

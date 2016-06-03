@@ -3,7 +3,7 @@ import * as React from 'react';
 interface HeaderProps extends React.HTMLProps<HTMLDivElement> {
     cells: {
         content: string
-        centered: boolean
+        align: 'left'|'center'|'right';
     }[];
 }
 
@@ -15,15 +15,11 @@ interface PagerProps extends React.HTMLProps<HTMLDivElement> {
 }
 
 interface CellProps extends React.HTMLProps<HTMLDivElement> {
-    align: 'left' | 'center';
+    align: 'left'|'center'|'right';
 }
 
 interface FlexProps extends React.HTMLProps<HTMLDivElement> {
-    amount: '1' | '2';
-}
-
-interface ButtonProps extends React.HTMLProps<HTMLAnchorElement> {
-
+    amount: 'auto'|number;
 }
 
 
@@ -35,17 +31,6 @@ const styles = {
         color: '#555',
         borderTop: 'solid 1px rgb(238, 238, 238)',
         borderBottom: 'solid 1px rgb(238, 238, 238)',
-    },
-    headerCell: {
-        left: {
-            flex: 1,
-            fontWeight: 'bold',
-        },
-        center: {
-            flex: 1,
-            textAlign: 'center',
-            fontWeight: 'bold',
-        },
     },
     row: {
         display: 'flex',
@@ -59,29 +44,6 @@ const styles = {
             flexWrap: 'wrap',
             padding: '0 10px',
             alignItems: 'center',
-        },
-        flex1: {
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '5px 0',
-        },
-        flex2: {
-            display: 'flex',
-            flex: 2,
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '5px 0',
-        },
-    },
-    cell: {
-        left: {
-            flex: 1,
-        },
-        center: {
-            textAlign: 'center',
-            flex: 1,
         },
     },
     pagination: {
@@ -104,16 +66,6 @@ const styles = {
             margin: '5px 2.5px',
         },
     },
-    button: {
-        color: 'white',
-        padding: '5px 15px',
-        maxWidth: '300px',
-        background: '#34A0DC',
-        height: '20px',
-        cursor: 'pointer',
-        border: 'none',
-        marginLeft: '5px',
-    },
 };
 
 
@@ -122,14 +74,19 @@ export const Header = ( props: HeaderProps ) =>
         {props.cells.map((cell, i) =>
             <div
                 key={i}
-                style={ cell.centered ? styles.headerCell.center : styles.headerCell.left }
-                children={cell.content} /> )
+                style={{
+                    flex: 1,
+                    textAlign: cell.align,
+                    fontWeight: 'bold',
+                }}
+                children={cell.content} />
+            )
         }
     </div>;
 
 
 export const Pager = (props: PagerProps) =>
-    <div style={styles.pagination.pager} {...props}>
+    <div className='au-edudash-pager' {...props}>
         {
             Array
             .from({length: props.totalRows, }, (k, v) => v)
@@ -137,15 +94,7 @@ export const Pager = (props: PagerProps) =>
             .map((el, i) =>
                 <div
                     key={i}
-                    style={
-                        props.currentPage !== i
-                        ? styles.pagination.button
-                        : Object.assign({}, styles.pagination.button, {
-                            background: '#0092E0',
-                            color: '#fff',
-                        })
-                    }
-                    className={props.currentPage !== i ? 'page-button' : 'page-button active'}
+                    className={props.currentPage !== i ? 'au-edudash-pager-btn' : 'au-edudash-pager-btn-active'}
                     children={i + 1}
                     onClick={props.onClick.bind(null, {type: 'PAGINATE', page: i})} />
             )
@@ -153,23 +102,25 @@ export const Pager = (props: PagerProps) =>
     </div>;
 
 export const Cell = ( props: CellProps ) =>
-    <div
-        style={props.align === 'left' ? styles.cell.left : styles.cell.center }
+    <div style={{
+            textAlign: props.align,
+            flex: 1,
+        }}
         {...props} />;
 
 
 export const Flex = ( props: FlexProps ) =>
-    <div style={
-        props.amount === '1'
-        ? styles.flex.flex1
-        : styles.flex.flex2
-    } {...props} />;
+    <div style={{
+            display: 'flex',
+            flex: props.amount,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '5px 0',
+        }}
+        {...props} />;
 
 export const Row = (props) =>
     <div style={styles.row} {...props} />;
 
 export const FilterRow = (props) =>
     <div style={styles.flex.container} {...props} />;
-
-export const Button = (props) =>
-    <a style={styles.button} {...props} />;

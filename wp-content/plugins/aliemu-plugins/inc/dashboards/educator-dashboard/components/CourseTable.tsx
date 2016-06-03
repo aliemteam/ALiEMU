@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { browserDetect, } from '../../../utils/BrowserDetect';
+import { browserDetect } from '../../../utils/BrowserDetect';
+import paginate from '../../../utils/Pagination';
+import * as moment from 'moment';
 import {
     downloadPolyfill,
-    getCourseCategory,
     parseCompletionDate,
-    calculateIIIHours,
 } from '../../../utils/DashboardUtils';
 import {
     Header,
@@ -12,7 +12,6 @@ import {
     Cell,
     FilterRow,
     Flex,
-    Button,
     Pager,
 } from '../../../components/TableComponents';
 
@@ -23,32 +22,39 @@ interface Props {
 
 interface State {
     categories: string[];
-    categorySelection: string;
-    courseSelection: string;
+    selections: {
+        category: string;
+        course: string;
+    };
     currentPage: number;
-    visibleRows: number;
     relevantUsers: ALiEMU.EducatorDashboard.UserMeta[];
 }
 
 export class CourseTable extends React.Component<Props, State> {
 
+    private visibleRows: number;
+    private headerCells = [
+        { content: 'User Name', align: 'left' },
+        { content: 'Course Completion Date', align: 'left' },
+    ];
+
     constructor(props: Props) {
         super(props);
+        this.visibleRows = 10;
         this.state = {
-            categories: Object.keys(this.props.courseData.categories).filter((category) => category !== ''),
-            categorySelection: '',
-            courseSelection: '',
+            categories: Object.keys(this.props.courseData.categories)
+                .filter((category) => category !== ''),
+            selections: {
+                category: '',
+                course: '',
+            },
             currentPage: 0,
-            visibleRows: 10,
             relevantUsers: [],
         };
     }
 
     exportCourseData(e: DOMEvent) {
-        const course = this.state.courseSelection;
-
-        if (!course) return;
-
+        const course = this.state.selections.course;
         const filename = `${this.props.courseData.courses[course].postTitle}.csv`;
         const lessons = this.props.courseData.lessons;
         const users = this.props.users;
@@ -69,7 +75,7 @@ export class CourseTable extends React.Component<Props, State> {
             CSV +=
                 `"${users[userID].lastName}",` +
                 `"${users[userID].firstName}",` +
-                `"${parseCompletionDate(users[userID].courseCompleted[this.state.courseSelection])}",` +
+                `"${parseCompletionDate(users[userID].courseCompleted[this.state.selections.course])}",` +
                 `${lessonIDs.map((lessonID: string) => {
                     try {
                         let completed = users[userID].courseProgress[course].lessons[lessonID];
@@ -84,59 +90,62 @@ export class CourseTable extends React.Component<Props, State> {
         });
 
         const blob = new Blob(
-            [CSV, ], { type: 'text/csv;charset=utf-8', }
+            [CSV], {type: 'text/csv;charset=utf-8'}
         );
 
         downloadPolyfill(filename, blob, browserDetect(), e.target.id);
     }
 
-    handleChange(e: React.UIEvent) {
-        let newValue = (e.target as HTMLSelectElement).value;
-        let target = ((e.target as HTMLSelectElement).id);
-        let newState: State;
-
-        switch (target) {
-            case 'category':
-                newState = Object.assign({}, this.state, { categorySelection: newValue, });
-                break;
-            case 'course':
-                let courseID = (e.target as HTMLSelectElement).value;
-                let newStateUsers: ALiEMU.EducatorDashboard.UserMeta[] = [];
-
-                for (let userID in this.props.users) {
-                    if (this.props.users[userID].courseCompleted[courseID]) {
-                        newStateUsers.push(this.props.users[userID]);
-                    }
-                }
-                newState = Object.assign({}, this.state, {
-                    courseSelection: newValue,
-                    relevantUsers: newStateUsers,
-                });
-                break;
+    reducer(action: Action, e?: DOMEvent) {
+        if (e) e.preventDefault();
+        switch (action.type) {
+            case 'SELECT_CATEGORY': {
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        selections: {
+                            category: e.target.value,
+                            course: '',
+                        },
+                        relevantUsers: [],
+                    })
+                );
+            }
+            case 'SELECT_COURSE': {
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        selections: Object.assign({}, this.state.selections, {
+                            course: e.target.value,
+                        }),
+                        relevantUsers: Object.keys(this.props.users)
+                            .filter(id => this.props.users[id].courseCompleted &&
+                                this.props.users[id].courseCompleted.hasOwnProperty(e.target.value))
+                            .map(id => this.props.users[id]),
+                    })
+                );
+            }
+            case 'PAGINATE': {
+                return this.setState(
+                    Object.assign({}, this.state, {
+                        currentPage: action['page'],
+                    })
+                );
+            }
         }
-
-        this.setState(newState);
-    }
-
-    paginate(e: React.UIEvent) {
-        let currentPage = parseInt((e.target as HTMLSpanElement).innerText) - 1;
-        this.setState(Object.assign({}, this.state, { currentPage, }));
     }
 
     render() {
         return (
             <div className='au-edudash-shadowbox'>
-                <h2>Course Overview</h2>
+                <h2 children='Course Overview' />
                 <FilterRow>
                     <Flex amount='1'>
                         <select
                             id='category'
-                            style={{ width: '95%', }}
-                            onChange={this.handleChange.bind(this)}
-                            defaultValue='' >
+                            style={{width: '95%'}}
+                            onChange={this.reducer.bind(this, {type: 'SELECT_CATEGORY'})}
+                            defaultValue=''>
                             <option value=''> -- Select a Category -- </option>
-                            {
-                                this.state.categories.map((category: string, i: number) =>
+                            { this.state.categories.map((category: string, i: number) =>
                                     <option value={category} key={i}>
                                         {category}
                                     </option>
@@ -147,13 +156,13 @@ export class CourseTable extends React.Component<Props, State> {
                     <Flex amount='2'>
                         <select
                             id='course'
-                            style={{ width: '95%', }}
+                            style={{width: '95%'}}
                             defaultValue=''
-                            onChange={this.handleChange.bind(this)}
-                            disabled={this.state.categorySelection === ''} >
+                            onChange={this.reducer.bind(this, {type: 'SELECT_COURSE'})}
+                            disabled={this.state.selections.category === ''}>
                             <option value=''> -- Select a Course -- </option>
-                            {
-                                Object.keys(this.props.courseData.categories[this.state.categorySelection]).map((courseID, i) =>
+                            { this.state.selections.category &&
+                                Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID, i) =>
                                     <option value={courseID} key={courseID}>
                                         {this.props.courseData.courses[courseID].postTitle}
                                     </option>
@@ -162,45 +171,38 @@ export class CourseTable extends React.Component<Props, State> {
                         </select>
                     </Flex>
                     <Flex amount='1'>
-                        <Button
+                        <a
+                            id='course-export'
+                            className={
+                                this.state.selections.course !== ''
+                                ? 'au-edudash-exportbtn'
+                                : 'au-edudash-exportbtn-disabled'
+                            }
                             children='Export Course Data'
-                            disabled={true}
                             onClick={this.exportCourseData.bind(this)} />
                     </Flex>
                 </FilterRow>
                 <Header cells={this.headerCells} />
-                {
-                    this.state.relevantUsers.filter((user, i: number) => {
-                        let vr = this.state.visibleRows;
-                        let cp = this.state.currentPage;
-                        return ((vr * cp) <= i && i < (vr * cp + vr));
-                    })
+                { paginate(this.state.relevantUsers, this.visibleRows, this.state.currentPage)
                     .map((user: ALiEMU.EducatorDashboard.UserMeta, i: number) =>
-                        <Row key={user.ID}>
+                        <Row key={user.ID} id={`course-table-row-${i}`}>
                             <Cell align='left'>{user.displayName}</Cell>
                             <Cell align='left'>
                             {
-                                new Date(
-                                    parseInt(user.courseCompleted[this.state.courseSelection] + '000')
-                                ).toLocaleDateString()
+                                moment.unix(user.courseCompleted[this.state.selections.course]).calendar()
                             }
                             </Cell>
                         </Row>
                     )
                 }
-                { this.state.courseSelection !== '' &&
+                { this.state.selections.course !== '' &&
                     <Pager
-                        visibleRows={this.state.visibleRows}
+                        visibleRows={this.visibleRows}
                         currentPage={this.state.currentPage}
                         totalRows={this.state.relevantUsers.length}
-                        onClick={this.paginate.bind(this)} />
+                        onClick={this.reducer.bind(this)} />
                 }
             </div>
         );
     }
-
-    private headerCells = [
-        { content: 'User Name', centered: false, },
-        { content: 'Course Completion Date', centered: false, },
-    ];
 }

@@ -4,6 +4,7 @@
         "comment-format": [true, "check-space"],
         "indent": [true, "spaces"],
         "jsdoc-format": true,
+        "forin": true,
         "no-angle-bracket-type-assertion": true,
         "no-conditional-assignment": true,
         "no-duplicate-key": true,

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
-import * as Moment from 'moment';
 import paginate from '../../../utils/Pagination';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import {
@@ -16,7 +15,6 @@ import {
     Pager,
     FilterRow,
     Flex,
-    Button,
 } from '../../../components/TableComponents';
 
 interface Props {
@@ -37,10 +35,10 @@ export class StudentTable extends React.Component<Props, State> {
 
     private totalStudents: number = Object.keys(this.props.users).length;
     private headerProps = [
-        { content: 'Full Name', centered: false, },
-        { content: 'Class', centered: false, },
-        { content: 'Total III Hours', centered: true, },
-        { content: 'User Export', centered: true, },
+        { content: 'Full Name', align: 'left', },
+        { content: 'Class', align: 'left', },
+        { content: 'Total III Hours', align: 'center', },
+        { content: 'User Export', align: 'center', },
     ];
 
     constructor(props) {
@@ -267,7 +265,8 @@ export class StudentTable extends React.Component<Props, State> {
                         </div>
                     </Flex>
                     <div>
-                        <Button
+                        <a
+                            className='au-edudash-exportbtn'
                             id='program-export'
                             children='Export Program Data'
                             onClick={this.exportCSV.bind(this, null)} />
@@ -279,7 +278,7 @@ export class StudentTable extends React.Component<Props, State> {
                     <FilterRow>
                         <Flex amount='1'>
                             <strong
-                                children='From'
+                                children='Display III hours accrued from'
                                 style={{padding: '0 10px', }} />
                             <Datepicker
                                 ref='datepicker'
@@ -307,7 +306,8 @@ export class StudentTable extends React.Component<Props, State> {
                             <Cell align='left'>{!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}</Cell>
                             <Cell align='center'>{calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}</Cell>
                             <Cell align='center'>
-                                <Button
+                                <a
+                                    className='au-edudash-exportbtn'
                                     children='Export Data'
                                     onClick={this.exportCSV.bind(this, user.ID)}/>
                             </Cell>

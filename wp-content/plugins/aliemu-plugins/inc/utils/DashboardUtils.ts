@@ -42,7 +42,6 @@ export const downloadPolyfill = (filename: string, blob: Blob, browser: BrowserT
 
 /**
  * Retrieves the category for a given courseID
- * TODO: still need to test this
  * @param {string} courseID       The courseID.
  * @param {Categories} categories The entire CategoryObject.
  * @return {string}  The category.
