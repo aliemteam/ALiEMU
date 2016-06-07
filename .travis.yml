@@ -11,8 +11,8 @@ script:
     - npm test
 after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 notifications:
-    slack:
-        rooms:
-            - alieminnovation:qbyg3p4KvNRgsAnZnqdgQaTD
+    webhooks:
+        urls:
+            - https://aliem-slackbot.herokuapp.com/aliemu/hooks/travis-ci
         on_success: change
         on_failure: change
