@@ -5,6 +5,7 @@
 const gulp          = require('gulp');
 const browserSync   = require('browser-sync').create();
 const del           = require('del');
+const exec          = require('child_process').exec;
 // CSS
 const stylus        = require('gulp-stylus');
 const poststylus    = require('poststylus');
@@ -29,6 +30,12 @@ const webpackDevConfig = Object.assign({}, webpackConfig, {
 
 // Delete all files in dist/aliemu-plugins
 gulp.task('clean', (done) => del(['dist/aliemu-plugins/**/*', 'dist/Divi-child/**/*'], done) );
+
+// Take ownership of dist directory
+gulp.task('chown', (done) => exec('chown -R $(whoami) dist'), (err, stdout, stderr) => {
+    if (err) throw err;
+    done();
+});
 
 // Trigger a browsersync reload
 gulp.task('reload', (done) => {
@@ -136,6 +143,7 @@ gulp.task('build', gulp.series(
 
 gulp.task('default',
     gulp.series(
+        'chown',
         'clean',
         gulp.parallel('static', 'webpack:dev', 'stylus:dev'), () => {
 

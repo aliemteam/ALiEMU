@@ -46,3 +46,28 @@ function requested_dashboard_access($id) {
         wp_mail(array('mlin@aliem.com', 'cgaafary@gmail.com', 'dereksifford@gmail.com'), 'User Requesting Dashboard Access', $message, $headers);
     }
 }
+
+add_action('slack_email_hook', 'slack_contact');
+function slack_contact($data) {
+    slack_message('contact-form', $data);
+}
+
+/**
+ * Master handler for posting messages to Slack.
+ *
+ * Tries a total of five times to send the message to slack. If the message is
+ *  posted successfully (eg, if the HTTP response is 200), then functoin exits.
+ * @param  string $route Enpoint to hit.
+ * @param  array $data   Associative array of data to send.
+ * @return void
+ */
+function slack_message($route, $data) {
+    for ($i = 0; $i < 5; $i++) {
+        $response = wp_remote_post("http://104.131.189.237:5000/aliemu/$route", array(
+            'body' => array(
+                'data' => json_encode($data),
+            )
+        ));
+        if (!is_wp_error($response)) break;
+    }
+}
