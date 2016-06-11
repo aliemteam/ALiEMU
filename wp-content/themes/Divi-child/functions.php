@@ -49,7 +49,7 @@ function requested_dashboard_access($id) {
 
 add_action('slack_email_hook', 'slack_contact');
 function slack_contact($data) {
-    slack_message('contact-form', $data);
+    slack_message('messages/contact-form', $data);
 }
 
 /**
