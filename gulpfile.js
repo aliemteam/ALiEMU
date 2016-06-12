@@ -32,9 +32,15 @@ const webpackDevConfig = Object.assign({}, webpackConfig, {
 gulp.task('clean', (done) => del(['dist/aliemu-plugins/**/*', 'dist/Divi-child/**/*'], done) );
 
 // Take ownership of dist directory
-gulp.task('chown', (done) => exec('chown -R $(whoami) dist'), (err, stdout, stderr) => {
-    if (err) throw err;
-    done();
+gulp.task('chown', (done) => {
+    exec('ls -ld dist | awk \'{print $3}\'', (err, stdout, stderr) => {
+        if (err) throw err;
+        if (stdout === process.env.USER) return done();
+        exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (err) => {
+            if (err) throw err;
+            done();
+        });
+    });
 });
 
 // Trigger a browsersync reload
