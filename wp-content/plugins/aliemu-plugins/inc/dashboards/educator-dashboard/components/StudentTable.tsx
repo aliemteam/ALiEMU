@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
 import paginate from '../../../utils/Pagination';
+import * as moment from 'moment';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import {
     downloadPolyfill,
@@ -38,6 +39,7 @@ export class StudentTable extends React.Component<Props, State> {
     private headerProps = [
         { content: 'Full Name', align: 'left', },
         { content: 'Class', align: 'left', },
+        { content: 'Last Activity', align: 'left', },
         { content: 'Total III Hours', align: 'center', },
         { content: 'User Export', align: 'center', },
     ];
@@ -250,10 +252,11 @@ export class StudentTable extends React.Component<Props, State> {
                 <Header cells={this.headerProps} />
                 {
                     paginate(this.state.filteredUsers, this.state.visibleRows, this.state.currentPage)
-                    .map((user, i) =>
+                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i) =>
                         <Row key={user.ID} id={`student-table-row-${i}`} className='table-row'>
                             <Cell align='left'>{user.displayName}</Cell>
                             <Cell align='left'>{!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}</Cell>
+                            <Cell align='left'>{!user.umLastLogin || user.umLastLogin.toString().length !== 10 ? 'No activity found' : moment.unix(user.umLastLogin).fromNow()}</Cell>
                             <Cell align='center'>{calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}</Cell>
                             <Cell align='center'>
                                 <a

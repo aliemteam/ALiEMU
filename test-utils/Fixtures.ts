@@ -219,7 +219,7 @@ export const users: ALiEMU.EducatorDashboard.UserObject = {
         residencyUsEm: 'Hawaii - ALiEM University',
         role: 'admin',
         submitted: '',
-        umLastLogin: 1462832070,
+        umLastLogin: 146283070,
         username: 'minimaluser',
     },
     2: {

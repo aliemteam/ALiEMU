@@ -1,6 +1,7 @@
 jest.unmock('../StudentTable');
 jest.unmock('../../../../components/TableComponents');
 jest.unmock('../../../../utils/Pagination');
+jest.unmock('moment');
 
 import * as React from 'react';
 import { mount } from 'enzyme';
@@ -222,8 +223,8 @@ describe('<StudentTable />', () => {
         it('should call exportCSV for user-level export', () => {
             const stub = sinon.stub(CSV.prototype, 'user', () => ({filename: 'test.csv', data: 'test,test,test'}));
             const { component } = setup();
-            const user1Export = component.find('#student-table-row-0').children().at(3).children();
-            const user2Export = component.find('#student-table-row-1').children().at(3).children();
+            const user1Export = component.find('#student-table-row-0').children().at(4).children();
+            const user2Export = component.find('#student-table-row-1').children().at(4).children();
             user1Export.simulate('click');
             user2Export.simulate('click');
             stub.restore();
@@ -233,7 +234,7 @@ describe('<StudentTable />', () => {
             const stub = sinon.stub(CSV.prototype, 'user', () => false);
             const { component } = setup();
             const spy = sinon.spy(window, 'alert');
-            const userExport = component.find('#student-table-row-1').children().at(3).children();
+            const userExport = component.find('#student-table-row-1').children().at(4).children();
             userExport.simulate('click');
             expect(spy.callCount).toBe(1);
             spy.reset();
