@@ -7,6 +7,42 @@ $divi-navmenu-item
     min-width 150px
     transition none
 
+a
+    color $primary
+    &:hover
+        color $secondary
+
+.category-air
+    a
+        color $primary-air
+        &:hover
+            color secondary($primary-air)
+.category-capsules
+    a
+        color $primary-capsules
+        &:hover
+            color secondary($primary-capsules)
+
+.nav
+    li ul
+        border-top 3px solid $primary
+
+// accents
+.et_pb_sum,
+.et_pb_pricing li a,
+.et_pb_pricing_table_button,
+.et_overlay:before,
+.et_pb_member_social_links a:hover,
+.woocommerce-page #content input.button:hover .et_pb_widget li a:hover,
+.et_pb_bg_layout_light .et_pb_promo_button,
+.et_pb_bg_layout_light.et_pb_module.et_pb_button,
+.et_pb_bg_layout_light .et_pb_more_button,
+.et_pb_filterable_portfolio .et_pb_portfolio_filters li a.active,
+.et_pb_filterable_portfolio .et_pb_portofolio_pagination ul li a.active,
+.et_pb_gallery .et_pb_gallery_pagination ul li a.active,
+.et_pb_contact_submit,
+.et_pb_bg_layout_light .et_pb_newsletter_button
+    color $primary
 
 // Header
 #main-header
@@ -21,7 +57,7 @@ $divi-navmenu-item
             flex 1
             a img
                 max-width none
-        @media all and (max-width 980px)
+        @media (max-width 980px)
             a img
                 padding 0 0 0 10px
 
@@ -142,9 +178,6 @@ $divi-navmenu-item
                         &:hover
                             transition none
                             background-color lighten($gray-dark, 10)
-    @media (max-width 980px)
-        .et_pb_row
-            width 95% !important
 
 // Footer
 #footer-bottom
@@ -168,3 +201,20 @@ h3.heading-more
     width 400px !important
     font 300 0.9em Lato
     text-align left
+
+
+// Pagebuilder
++prefix-classes('et_pb_')
+    .row
+        width unset
+        max-width unset
+    @media (min-width 981px)
+        .row
+            padding 0
+    @media (max-width 980px)
+        .section
+            padding 0
+        .row
+            width 95% !important
+        .column
+            margin-bottom 0

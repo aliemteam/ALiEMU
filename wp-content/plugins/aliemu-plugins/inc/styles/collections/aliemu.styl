@@ -55,25 +55,17 @@
                         background-color $gray-dark
                         border-color $gray-dark
                         transition 0.1s
-@media (max-width 980px)
-    .et_pb_column
-        margin-bottom 0
-    .et_pb_section
-        padding 0
-// @media (min-width: 981px)
-//     .et_pb_row
-//         width 100%
-//         max-width 100%
+
 
 
 // Course Card Containers
 #flex-course-list
-    .et_pb_column
-        .flex-course-box
-            width 100%
-            display flex
-            flex-wrap wrap
-            justify-content center
+    box-shadow $box-shadow
+    .flex-course-box
+        width 100%
+        display flex
+        flex-wrap wrap
+        justify-content center
 
 
 // Course Cards
@@ -86,16 +78,16 @@
     width 300px
     min-width 200px
     .category-capsules .coursebox-flex a
-        border-color $blue-capsules
-        color $blue-capsules
+        border-color $primary-capsules
+        color $primary-capsules
         &:hover
-            background-color $blue-capsules
+            background-color $primary-capsules
             color white
     .category-air .coursebox-flex a
-        border-color $red-air
-        color $red-air
+        border-color $primary-air
+        color $primary-air
         &:hover
-            background-color: $red-air
+            background-color: $primary-air
             color: white
     .au-courseheader
         align-items center
@@ -110,9 +102,9 @@
                 padding 0
                 white-space nowrap
         &.category-capsules
-            background-color $blue-capsules
+            background-color $primary-capsules
         &.category-air
-            background-color $red-air
+            background-color $primary-air
     .au-coursebody
         padding 5%
         height 335px
@@ -153,7 +145,7 @@
                 border solid 2px
                 border-radius 5px
                 text-decoration none
-                // width 120px
+                width 120px
                 &:hover
                     border-color transparent
                     transition 0.1s
@@ -193,10 +185,20 @@
     border-radius $card-radius
     box-shadow $box-shadow
     overflow auto
-    &.au-air-intro h2
-        background-color $red-air
-    &.au-capsules-intro h2
-        background $blue-capsules
+    &.au-air-intro
+        h2
+            background-color $primary-air
+        a
+            color $primary-air
+            &:hover
+                color secondary($primary-air)
+    &.au-capsules-intro
+        h2
+            background $primary-capsules
+        a
+            color $primary-capsules
+            &:hover
+                color secondary($primary-capsules)
     h2
         color white
         text-align center
@@ -228,7 +230,7 @@
 // Container for course cards on course pages
 .course-list-container
     display flex
-    flex-wrap wrap
+    flex-wrap wrap-reverse
     justify-content center
 
 
@@ -250,7 +252,7 @@
         margin 0
         padding 10px
         text-align center
-        background-color $blue-capsules
+        background-color $primary-capsules
     .lesson-body
         line-height 1.3
         letter-spacing 0.5px
@@ -277,7 +279,7 @@
         @extend .lesson-box h2
         letter-spacing 1px
         font-weight 900
-        background-color $blue-capsules
+        background-color $primary-capsules
     h4
         border-top 0
         font-weight 400
@@ -288,8 +290,42 @@
 
 
 // ==================================================
-//                 About Us Page
+//                 About Page
 // ==================================================
+
+#post-1151
+    .et_pb_row
+        display flex
+
++prefix-classes('au-')
+    .team-container
+        display flex
+        flex-wrap wrap
+        justify-content space-around
+        width 70%
+        margin auto
+
+    .team-member
+        display flex
+        flex-direction column
+        max-width 250px
+        margin 20px
+        .photo img
+            height 250px
+            border-radius 250px
+            margin-bottom 10px
+        .about
+            display flex
+            flex-direction column
+            flex auto
+        .name
+            display flex
+            h4
+                display inline-block
+            div
+                display inline-block
+                padding-right 5px
+
 
 // Circular portraits
 .au-person-circle img
@@ -299,6 +335,57 @@
 .au-team-header h1
     font 600 3em Lato
 
+.au-team-header
+    background-color $gray-dark
+.et_pb_member_position
+    color $font-color
+
+.et_pb_section_0
+.et_pb_section_2
+.et_pb_section_4
+    &.et_pb_section.au-about-header
+        background-color $primary !important
+
+// Sponsors
+.au-sponsors
+    background $gray-light
+    display flex
+    justify-content center
+    div
+        align-self center
+        padding 20px
+    a img
+        max-height 150px
+        mix-blend-mode multiply
+
+// ==================================================
+//                 Contact Page
+// ==================================================
+#contact-form
+    max-width 80%
+    margin auto
+
+// ==================================================
+//                 User Agreement
+// ==================================================
+#au-terms
+    max-width 80%
+    margin 40px auto
+    h1
+        font-weight 600
+        text-align center
+        margin 15px 0
+    h2
+        font-weight 600
+        margin 10px 0
+    h4
+        text-decoration underline
+        margin-left 20px
+    p, ul, ol
+        margin-left 40px
+        text-align justify
+    p:first-of-type
+        margin-left 0
 
 // ==================================================
 //                    Dashboards
@@ -317,7 +404,7 @@ $pager-btn
     margin 5px 2px
     user-select none
     &:hover
-        border-color darken($primary, 10)
+        border-color $secondary
         box-shadow 0 0 .2em rgba(0,0,0,0.2)
     &:active
         box-shadow inset 0 0 1em rgba(0,0,0,0.1)
@@ -333,7 +420,7 @@ $export-btn
     user-select none
     &:hover
         cursor pointer
-        background darken($primary, 5)
+        background $secondary
 
 
 +prefix-classes('au-edudash-')

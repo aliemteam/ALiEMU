@@ -106,10 +106,10 @@ series-common(colorvar)
                     background-position 98% center
 
     .category-air
-        series-common($red-air)
+        series-common($primary-air)
 
     .category-capsules
-        series-common($blue-capsules)
+        series-common($primary-capsules)
 
 
 // Profile
@@ -117,6 +117,10 @@ series-common(colorvar)
     .learndash_profile_heading
         @extend $ld-list-heading
         background $primary
+    a
+        color $primary
+    .list_arrow
+        cursor pointer
 
 
 // Sidebar
