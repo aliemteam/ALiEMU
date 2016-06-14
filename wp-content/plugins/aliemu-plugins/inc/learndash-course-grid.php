@@ -51,7 +51,7 @@ function learndash_course_grid_course_list($filepath, $name, $args, $echo, $retu
 				<div class="coursebox-flex"><h3><?php echo get_the_category()[0]->cat_name; ?></h3></div>
 				<div class="coursebox-flex"><h1><?php the_title(); ?></h1></div>
 				<div class="coursebox-flex"><p><?php echo $course_options['sfwd-courses_course_short_description']; ?></p></div>
-				<div class="coursebox-flex"> <a href="<?php the_permalink(); ?>">View Course</a> </div>
+				<div class="coursebox-flex"> <a href="<?php the_permalink(); ?>">View Block</a> </div>
 			</div>
 		</article><!-- #post-## -->
 	</div>
