@@ -52,6 +52,19 @@ function slack_contact($data) {
     slack_message('messages/contact-form', $data);
 }
 
+add_action('comment_post', 'slack_comment');
+function slack_comment($commentId) {
+    $comment = get_comment($commentId);
+    $post = get_post($comment->comment_post_ID);
+    slack_message('messages/comments', array(
+        'name' => $comment->comment_author,
+        'email' => $comment->comment_author_email,
+        'content' => $comment->comment_content,
+        'postUrl' => $post->guid,
+        'postName' => $post->post_title,
+    ));
+}
+
 /**
  * Master handler for posting messages to Slack.
  *
@@ -70,4 +83,10 @@ function slack_message($route, $data) {
         ));
         if (!is_wp_error($response)) break;
     }
+}
+
+function console_log( $data ){
+  echo '<script>';
+  echo 'console.log('. json_encode( $data ) .')';
+  echo '</script>';
 }
