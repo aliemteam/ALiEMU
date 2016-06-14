@@ -90,3 +90,29 @@ function console_log( $data ){
   echo 'console.log('. json_encode( $data ) .')';
   echo '</script>';
 }
+
+////////////////////////////////////////////////////////////////////////
+// Ultimate Member Profile Display Name Integration ////////////////////
+////////////////////////////////////////////////////////////////////////
+add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
+function wpdiscuz_um_author($author_name, $comment) {
+    if ($comment->user_id) {
+        $column = 'display_name'; // Other options: 'user_login', 'user_nicename', 'nickname', 'first_name', 'last_name'
+        if (class_exists('UM_API')) {
+            um_fetch_user($comment->user_id); $author_name = um_user($column); um_reset_user();
+        } else {
+            $author_name = get_the_author_meta($column, $comment->user_id);
+        }
+    }
+    return $author_name;
+}
+////////////////////////////////////////////////////////////////////////
+// Ultimate Member Profile URL Integration /////////////////////////////
+////////////////////////////////////////////////////////////////////////
+add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);
+function wpdiscuz_um_profile_url($profile_url, $user) {
+    if ($user && class_exists('UM_API')) {
+        um_fetch_user($user->ID); $profile_url = um_user_profile_url();
+    }
+    return $profile_url;
+}
