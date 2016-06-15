@@ -8,9 +8,10 @@
   "scripts": {
     "start": "gulp serve",
     "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
-    "chown": "sudo chown -R $USER $(pwd)/dist",
     "pretest": "npm run lint",
     "clear-cache": "rm -rf node_modules/jest-cli/.haste_cache",
+    "deploy": "./scripts/deploy",
+    "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "test": "jest",
     "lint": "stylint wp-content/plugins/aliemu-plugins/inc/styles -c .stylintrc && tslint 'wp-content/**/*.{ts,tsx}'"
   },

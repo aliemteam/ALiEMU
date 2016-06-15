@@ -57,7 +57,7 @@ gulp.task('static:aliemu-plugins', () =>
     gulp.src([
         'wp-content/plugins/aliemu-plugins/**/*.*',
         '!wp-content/**/__tests__',
-        '!wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,json,scss,sss}',
+        '!wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,json,styl,md}',
     ], { base: 'wp-content/plugins/aliemu-plugins/' })
     .pipe(gulp.dest('dist/aliemu-plugins'))
 );
@@ -66,7 +66,7 @@ gulp.task('static:divi-child', () =>
     gulp.src([
         'wp-content/themes/Divi-child/**/*.*',
         '!wp-content/**/__tests__',
-        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,scss,sss}',
+        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,styl,md}',
     ], { base: 'wp-content/themes/Divi-child/' })
     .pipe(gulp.dest('dist/Divi-child'))
 );
