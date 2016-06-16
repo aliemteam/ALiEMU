@@ -16,6 +16,9 @@ deploy:
     on:
         branch: master
 after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+branches:
+    only:
+        - master
 notifications:
     webhooks:
         urls:
