@@ -1,7 +1,7 @@
 
 #post-2
     #particles
-        position absolute
+        position fixed
         height calc(100vh - 50px)
         width 100%
         background-image url("")
@@ -76,72 +76,62 @@
                         bordered-button(large, white, $primary)
 
     #row-2
-        height 75vh
-        background $blue2
+        height calc(100vh - 50px)
+        display flex
+        justify-content center
+        align-items center
         .container
-            display flex
-            justify-content space-around
-            align-items center
-            flex-direction column
-            color white
-            height 100%
-            div
-                width 50%
+            position relative
+            height auto
+            width 500px
 
-    #row-3
-        height 75vh
-        background $orange
-        .container
+        .splash
             display flex
-            justify-content space-around
-            align-items center
-            flex-direction column
-            color white
             height 100%
-            div
-                width 50%
-
-    #row-4
-        height 75vh
-        background $blue1
-        .container
-            display flex
-            justify-content space-around
-            align-items center
             flex-direction column
-            color white
-            height 100%
-            div
-                width 50%
+            justify-content space-between
+            > div
+                margin 5px 0
+            .info-card
+                background $gray-light
+                display flex
+                flex auto
+                flex-flow column
+                border-radius 3px
+                text-align center
+                div
+                    position relative
+                    // flex auto
+                    // display flex
+                    justify-content center
+                    align-items center
+                    text-align center
+                .info-header
+                    border-radius 3px 3px 0 0
+                    padding-top 8px
+                    background-color $primary
+                    h1
+                        color white
+                .info-text
+                    padding 15px 20px
+                    p
+                        color $gray-dark
+                        font-size 1em
+                        font-weight 300
 
-    #row-5
-        height 75vh
-        background $primary
-        .container
-            display flex
-            justify-content space-around
-            align-items center
-            flex-direction column
-            color white
-            height 100%
-            div
-                width 50%
-
-    #row-6
-        height 75vh
-        background $blue3
-        .container
-            display flex
-            justify-content space-around
-            align-items center
-            flex-direction column
-            color white
-            height 100%
-            div
-                width 50%
-                h1
-                    color white
-
+            .learn-more
+                background $primary
+                display flex
+                flex auto
+                border-radius 3px
+                text-align center
+                div
+                    display flex
+                    justify-content center
+                    align-items center
+                    flex auto
+                    a
+                        bordered-button(large, white, $primary)
 
 
 
