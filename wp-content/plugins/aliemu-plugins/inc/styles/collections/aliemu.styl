@@ -1,4 +1,3 @@
-
 #post-2
     #particles
         position fixed
@@ -75,15 +74,17 @@
                     a
                         bordered-button(large, white, $primary)
 
-    #row-2
-        height calc(100vh - 50px)
+    #row-2, #row-3
+        // height calc(100vh - 150px)
+        margin-top 100px
+        margin-bottom 50px
         display flex
         justify-content center
         align-items center
         .container
             position relative
             height auto
-            width 500px
+            width 800px
 
         .splash
             display flex
@@ -93,7 +94,6 @@
             > div
                 margin 5px 0
             .info-card
-                background $gray-light
                 display flex
                 flex auto
                 flex-flow column
@@ -113,12 +113,12 @@
                     h1
                         color white
                 .info-text
+                    background $gray-light
                     padding 15px 20px
                     p
                         color $gray-dark
                         font-size 1em
                         font-weight 300
-
             .learn-more
                 background $primary
                 display flex
@@ -132,6 +132,25 @@
                     flex auto
                     a
                         bordered-button(large, white, $primary)
+            .series-logos
+                display flex
+                flex auto
+                flex-flow row wrap
+                justify-content: space-around;
+                div
+                    background $gray-light
+                    display flex
+                    flex auto
+                    max-width 200px
+                    // margin 15px
+                    margin-top 20px
+                    // padding 30px
+                    // a
+                    //     max-width 100%
+                    //     max-height 100%
+                    //     img
+                    //         max-width 100%
+                    //         max-height 100%
 
 
 
@@ -554,6 +573,7 @@ $export-btn
     max-width 300px
     background $primary
     user-select none
+    margin-left 9px
     &:hover
         cursor pointer
         background $secondary
