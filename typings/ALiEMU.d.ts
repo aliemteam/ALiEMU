@@ -1,3 +1,4 @@
+import * as moment from 'moment';
 type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox'
 
 interface DOMEvent extends Event {
