@@ -1,3 +1,4 @@
+import * as ALiEMU from '../../../../../../../typings/ALiEMU.d';
 import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
 import paginate from '../../../utils/Pagination';
@@ -75,7 +76,7 @@ export class StudentTable extends React.Component<Props, State> {
         };
     }
 
-    exportCSV(userID: string, e: DOMEvent) {
+    exportCSV(userID: string, e: ALiEMU.Globals.DOMEvent) {
         e.preventDefault();
         const CSV = userID
             ? this.CSV.user(userID)
@@ -97,7 +98,7 @@ export class StudentTable extends React.Component<Props, State> {
         );
     };
 
-    actions(action: {type: string, [key: string]: any}, e: DOMEvent) {
+    actions(action: {type: string, [key: string]: any}, e: ALiEMU.Globals.DOMEvent) {
         switch (action.type) {
             case 'PAGINATE': {
                 return this.setState(
@@ -126,7 +127,7 @@ export class StudentTable extends React.Component<Props, State> {
         }
     }
 
-    filter(e: DOMEvent) {
+    filter(e: ALiEMU.Globals.DOMEvent) {
         e.preventDefault();
 
         const filter = e.target.value.toLowerCase();

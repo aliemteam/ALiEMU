@@ -1,9 +1,11 @@
+import * as ALiEMU from '../../../../../../typings/ALiEMU.d';
+
 jest.unmock('../DashboardUtils');
 jest.unmock('moment');
 
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
-import * as Moment from 'moment';
+import * as moment from 'moment';
 import { courseData, users } from '../../../../../../test-utils/Fixtures';
 
 const D = {
@@ -82,8 +84,8 @@ describe('calculateHours', () => {
     const setup = (s?: string, e?: string) => {
         let start: moment.Moment = null;
         let end: moment.Moment = null;
-        if (s) start = Moment(s, 'YYYY-MM-DD');
-        if (e) end = Moment(e, 'YYYY-MM-DD');
+        if (s) start = moment(s, 'YYYY-MM-DD');
+        if (e) end = moment(e, 'YYYY-MM-DD');
         return {
             start,
             end,
@@ -258,7 +260,7 @@ describe('CSV Class', () => {
     const CSV = new utils.CSV(users, courseData);
     describe('CSV.user()', () => {
         it('should return a properly formatted user CSV', () => {
-            let expected: ALiEMU.CSV = {
+            let expected: ALiEMU.Globals.CSV = {
                 filename: 'Maximal_User.csv',
                 data: `"Registered Courses","Steps Completed","Date Completed","Associated III Credit Hours","Category"\n"Course 1","5 out of 5","06/09/2015","1","AIR"\n"Course 3","1 out of 5","X","0","AIR"\n`,
             };
@@ -283,7 +285,7 @@ describe('CSV Class', () => {
                 data: `"Last Name","First Name","Class of","Total III Hours Awarded","Courses In Progress","Courses Completed"\n"User","Minimal","","0","0","0"\n"User","Maximal","2018","0","1","1"\n`,
             };
             const dateRange = {
-                start: Moment('2015-07-01'),
+                start: moment('2015-07-01'),
                 end: null,
             };
             expect(CSV.allUsers(dateRange)).toEqual(expected);

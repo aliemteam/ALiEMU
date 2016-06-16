@@ -1,3 +1,4 @@
+import * as ALiEMU from '../typings/ALiEMU.d';
 
 export const categories: ALiEMU.EducatorDashboard.CategoryObject = {
     AIR: {
@@ -325,7 +326,7 @@ export const createMinimalUser = (id: number, gradYear: number) => (
     }
 );
 
-export const lessons: {[i: number]: LearnDash.Lessons} = {
+export const lessons: {[i: number]: ALiEMU.LearnDash.Lessons} = {
     110: {
         ID: 110,
         menuOrder: 0,
