@@ -1,7 +1,8 @@
+import { Globals } from '../../../../../typings/ALiEMU.d';
 
-export function browserDetect(): BrowserType {
+export function browserDetect(): Globals.BrowserType {
     const UA: string = navigator.userAgent;
-    let broswer: BrowserType;
+    let broswer: Globals.BrowserType;
 
     switch (true) {
         case UA.indexOf('Edge') > -1:
