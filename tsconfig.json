@@ -27,13 +27,7 @@
     "files": [
         "test-utils/Fixtures.ts",
         "typings/ALiEMU.d.ts",
-        "typings/globals/enzyme/index.d.ts",
-        "typings/globals/jest/index.d.ts",
-        "typings/globals/moment-node/index.d.ts",
-        "typings/globals/react-addons-test-utils/index.d.ts",
         "typings/globals/react-datepicker/index.d.ts",
-        "typings/globals/react-dom/index.d.ts",
-        "typings/globals/react/index.d.ts",
         "typings/globals/require/index.d.ts",
         "typings/globals/sinon/index.d.ts",
         "typings/index.d.ts",
