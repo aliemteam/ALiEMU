@@ -75,10 +75,6 @@ a
             > li
                 width auto
                 height 1em
-                &.menu-item-has-children
-                    width 100px
-                    &:last-of-type
-                        width 80px
                 a
                     color $font-color
                     padding-bottom 17px
@@ -186,13 +182,24 @@ a
         #footer-info
             display none
 
+//Learn More
+
 
 // ============== Stuff to get rid of ====================
 
 // References for posts --- Will hopefully be replacing with my plugin soon
+// Derek don't remove this actually. This dropdown tab can be used for more than references so we can keep the styling even after we switch to your plugin.
+.et-learn-more
+    border none !important
+
+span.et_learnmore_arrow
+    border none
+
 h3.heading-more
-    background $gray-light !important
-    color $font-color !important
+    text-shadow none !important
+    border none !important
+    // background $gray-dark !important
+    // color $font-light-color !important
 
 
 // Tooltips (hopefully replacing soon)

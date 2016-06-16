@@ -9,6 +9,12 @@ before_script:
     - npm install
 script:
     - npm test
+deploy:
+    provider: script
+    script: scripts/deploy
+    skip_cleanup: true
+    on:
+        branch: master
 after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 notifications:
     webhooks:
