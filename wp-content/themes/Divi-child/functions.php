@@ -8,6 +8,11 @@ function theme_enqueue_scripts() {
     wp_enqueue_script('nav-helper',
         get_stylesheet_directory_uri().'/js/nav-helper.js',
         false, false, true);
+
+    if (is_front_page()) {
+        wp_enqueue_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js');
+        wp_enqueue_script('particles-home', get_stylesheet_directory_uri().'/js/particles-home.js', array('particlesjs'), false, true);
+    }
 }
 
 add_action('user_register', 'requested_dashboard_access');

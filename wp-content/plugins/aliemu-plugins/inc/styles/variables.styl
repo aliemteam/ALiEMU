@@ -9,11 +9,12 @@ $card-radius = 3px 3px 0 0 // Border radius for card-type items (top only)
 
 // ================== Mixins ===================
 
-bordered-button(type, color = false)
+bordered-button(type, color = false, hovercolor = false)
     font-size 14px
     font-family 'Open Sans'
     background transparent
     text-decoration none
+    text-align center
     border solid 2px
     border-radius 5px
     outline 0
@@ -24,7 +25,10 @@ bordered-button(type, color = false)
         border-color transparent
         transition 0.1s
         cursor pointer
-        color white
+        if hovercolor is a 'color'
+            color hovercolor
+        else
+            color white
         background-color $primary
         if color is a 'color'
             background-color color
