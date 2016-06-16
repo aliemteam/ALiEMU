@@ -20,5 +20,5 @@ notifications:
     webhooks:
         urls:
             - http://104.131.189.237:5000/aliemu/hooks/travis-ci
-        on_success: change
+        on_success: never
         on_failure: change
