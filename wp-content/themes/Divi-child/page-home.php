@@ -38,8 +38,7 @@
                     <div class="au-container">
                         <div class="au-splash">
                             <div class="au-info-card">
-                                <div class="au-info-header"><h1>Click a series below to learn more about it!</h1></div>
-                                <div class="au-info-text"><p>We currently offer three series of learning modules. Click on a course series below to learn more about it!</p></div>
+                                <div class="au-info-header"><h1>Click a series to learn more!</h1></div>
                                 <div class="au-series-logos">
                                     <div><a href="#"><img src="/wp-content/themes/Divi-child/images/air-button.png"></a></div>
                                     <div><a href="#"><img src="/wp-content/themes/Divi-child/images/airpro-button.png"></a></div>
