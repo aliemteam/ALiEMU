@@ -14,6 +14,7 @@
 +prefix-classes('au-')
     #row-1
         height calc(100vh - 50px)
+        margin-bottom 20vh
         display flex
         justify-content center
         align-items center
@@ -75,9 +76,7 @@
                         bordered-button(large, white, $primary)
 
     #row-2, #row-3
-        // height calc(100vh - 150px)
-        margin-top 100px
-        margin-bottom 50px
+        height 50vh
         display flex
         justify-content center
         align-items center
@@ -142,9 +141,6 @@
                     justify-content space-between
                     max-width 200px
                     margin-top 20px
-
-
-
 
 // ==================================================
 //                    Homepage
@@ -236,6 +232,12 @@
         &:hover
             background-color: $primary-air
             color: white
+    .category-airpro .coursebox-flex a
+        border-color $primary-airpro
+        color $primary-airpro
+        &:hover
+            background-color: $primary-airpro
+            color: white
     .au-courseheader
         align-items center
         box-shadow $box-shadow
@@ -252,6 +254,8 @@
             background-color $primary-capsules
         &.category-air
             background-color $primary-air
+        &.category-airpro
+            background-color $primary-airpro
     .au-coursebody
         padding 5%
         height 335px
@@ -345,6 +349,13 @@
             color $primary-capsules
             &:hover
                 color secondary($primary-capsules)
+    &.au-air-pro-intro
+        h2
+            background-color $primary-airpro
+        a
+            color $primary-airpro
+            &:hover
+                color secondary($primary-airpro)
     h2
         color white
         text-align center
@@ -497,6 +508,7 @@
     background $gray-light
     display flex
     justify-content center
+    margin-top 15vh
     div
         align-self center
         padding 20px
