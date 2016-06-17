@@ -50,10 +50,10 @@
                 </div>
                 <div class="au-sponsors">
                     <div>
-                        <a href="http://www.cordem.org/" target="_blank"><img src="https://www.aliemu.com/wp-content/uploads/2016/06/CORD-EM-transp.png"></a>
+                        <a href="http://www.cordem.org/" target="_blank"><img src="/wp-content/uploads/2016/06/CORD-EM-transp.png"></a>
                     </div>
                     <div>
-                        <a href="http://www.theteachingcourse.com/" target="_blank"><img src="https://www.aliemu.com/wp-content/uploads/2016/06/Teaching-Course-Logo.png"></a>
+                        <a href="http://www.theteachingcourse.com/" target="_blank"><img src="/wp-content/uploads/2016/06/Teaching-Course-Logo.png"></a>
                     </div>
                 </div>
             </div>
