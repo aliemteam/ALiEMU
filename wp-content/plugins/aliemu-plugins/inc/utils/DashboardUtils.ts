@@ -1,4 +1,5 @@
-import * as Moment from 'moment';
+import * as ALiEMU from '../../../../../typings/ALiEMU.d';
+import * as moment from 'moment';
 
 type Users = ALiEMU.EducatorDashboard.UserObject;
 type Courses = ALiEMU.EducatorDashboard.CourseData;
@@ -18,7 +19,7 @@ type Categories = ALiEMU.EducatorDashboard.CategoryObject;
  * @param {string} ElementID The HTML ID of the target element.
  * @return {void}
  */
-export const downloadPolyfill = (filename: string, blob: Blob, browser: BrowserType, ElementID: string): void  => {
+export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.Globals.BrowserType, ElementID: string): void  => {
     switch (browser) {
         case 'chrome':
         case 'firefox':
@@ -73,13 +74,13 @@ export const parseCompletionData = (date: number|undefined, hours?: string): str
         if (typeof date === 'undefined') {
             return `X`;
         }
-        return Moment.unix(date).calendar();
+        return moment.unix(date).calendar();
     }
 
     if (typeof date === 'undefined') {
         return `X","0`;
     }
-    return `${Moment.unix(date).calendar()}","${hours}`;
+    return `${moment.unix(date).calendar()}","${hours}`;
 };
 
 
@@ -94,7 +95,7 @@ export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange:
     if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
-        const d = Moment.unix(user.courseCompleted[curr]);
+        const d = moment.unix(user.courseCompleted[curr]);
         const addedHours: number = courseMeta[curr].recommendedHours + prev;
         switch (true) {
             case !start && !end:
@@ -133,7 +134,7 @@ export class CSV {
         this.lessons = courses.lessons;
     }
 
-    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.CSV {
+    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.Globals.CSV {
         const filename = 'ALiEMU_Program_Export.csv';
         let data = [
             'Last Name',
@@ -168,7 +169,7 @@ export class CSV {
         return { filename, data };
     }
 
-    user(userID: string): ALiEMU.CSV|boolean {
+    user(userID: string): ALiEMU.Globals.CSV|boolean {
 
         const courseProgress = this.users[userID].courseProgress;
         const { courses, courseMeta, categories } = this.courseData;
@@ -202,7 +203,7 @@ export class CSV {
         return { filename, data };
     }
 
-    course(courseID: string): ALiEMU.CSV {
+    course(courseID: string): ALiEMU.Globals.CSV {
         const filename = `${this.courses[courseID].postTitle.replace(/\s/, '_')}.csv`;
         const lessonIDs = [];
 

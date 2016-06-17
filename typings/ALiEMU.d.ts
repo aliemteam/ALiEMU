@@ -1,19 +1,20 @@
-type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox'
-
-interface DOMEvent extends Event {
-    target: HTMLInputElement;
-}
-
-interface Action {
-    type: string;
-    [key: string]: any;
-}
+import * as moment from 'moment';
 
 declare namespace ALiEMU {
 
-    type CSV = {
-        data: string;
-        filename: string;
+    namespace Globals {
+        type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
+        interface DOMEvent extends Event {
+            target: HTMLInputElement;
+        }
+        interface Action {
+            type: string;
+            [key: string]: any;
+        }
+        interface CSV {
+            data: string;
+            filename: string;
+        }
     }
 
     namespace EducatorDashboard {
@@ -79,8 +80,8 @@ declare namespace ALiEMU {
             ID: number;
             accountStatus: string;
             auGraduationYear: number;
-            badgeosAchievements?: BadgeOS.CompletedAchievementsObject;
-            badgeosActiveAchievements?: BadgeOS.ActiveAchievementsObject;
+            badgeosAchievements?: any;
+            badgeosActiveAchievements?: any;
             badgeosPoints?: number;
             completed?: string;
             country?: string;
@@ -119,87 +120,89 @@ declare namespace ALiEMU {
 
     }
 
+    namespace LearnDash {
+
+        // Date below in the following form: `YYYY-MM-DD HH:MM:SS`
+        interface Courses {
+            ID: number;
+            lessons: string[];
+            postAuthor: number;
+            postDate: string;
+            postModified: string;
+            postTitle: string;
+        }
+
+        interface Lessons {
+            ID: number;
+            menuOrder: number;
+            postAuthor: number;
+            postDate: string;
+            postModified: string;
+            postTitle: string;
+        }
+
+        /**
+         * Lessons can either be an object who's keys are completed lesson IDs or, if
+         * no lessons are completed, an empty array.
+         */
+        interface CourseProgress {
+            completed: number;
+            lessons: number[] | {
+                [lessonID: number]: number
+            };
+            topics: {
+                [lessonID: number]: {
+                    [topicID: number]: number
+                }
+            };
+            total: number;
+        }
+
+        interface Quiz {
+            count: number;
+            pass: number;
+            percentage: string;
+            'pro_quizid': string;
+            quiz: string;
+            rank: string;
+            score: string;
+            time: number;
+            timespent: string;
+            'total_points': string;
+        }
+
+    }
+
+
 }
 
 
-declare namespace BadgeOS {
+// declare namespace BadgeOS {
+//
+//     interface CompletedAchievementsObject {
+//         [i: number]: CompletedAchievement[];
+//     }
+//
+//     interface ActiveAchievementsObject {
+//         [ID: number]: ActiveAchievement;
+//     }
+//
+//     interface Achievement {
+//         points: string;
+//         'post_type': 'step' | 'badges';
+//     }
+//
+//     interface CompletedAchievement extends Achievement {
+//         ID: string;
+//         'date_earned': number;
+//     }
+//
+//     interface ActiveAchievement extends Achievement {
+//         ID: number;
+//         'date_started': number;
+//         'last_activity_date': number;
+//     }
+//
+// }
 
-    interface CompletedAchievementsObject {
-        [i: number]: CompletedAchievement[];
-    }
-
-    interface ActiveAchievementsObject {
-        [ID: number]: ActiveAchievement;
-    }
-
-    interface Achievement {
-        points: string;
-        'post_type': 'step' | 'badges';
-    }
-
-    interface CompletedAchievement extends Achievement {
-        ID: string;
-        'date_earned': number;
-    }
-
-    interface ActiveAchievement extends Achievement {
-        ID: number;
-        'date_started': number;
-        'last_activity_date': number;
-    }
-
-}
-
-
-declare namespace LearnDash {
-
-    // Date below in the following form: `YYYY-MM-DD HH:MM:SS`
-    interface Courses {
-        ID: number;
-        lessons: string[];
-        postAuthor: number;
-        postDate: string;
-        postModified: string;
-        postTitle: string;
-    }
-
-    interface Lessons {
-        ID: number;
-        menuOrder: number;
-        postAuthor: number;
-        postDate: string;
-        postModified: string;
-        postTitle: string;
-    }
-
-    /**
-     * Lessons can either be an object who's keys are completed lesson IDs or, if
-     * no lessons are completed, an empty array.
-     */
-    interface CourseProgress {
-        completed: number;
-        lessons: number[] | {
-            [lessonID: number]: number
-        };
-        topics: {
-            [lessonID: number]: {
-                [topicID: number]: number
-            }
-        };
-        total: number;
-    }
-
-    interface Quiz {
-        count: number;
-        pass: number;
-        percentage: string;
-        'pro_quizid': string;
-        quiz: string;
-        rank: string;
-        score: string;
-        time: number;
-        timespent: string;
-        'total_points': string;
-    }
-
-}
+export = ALiEMU;

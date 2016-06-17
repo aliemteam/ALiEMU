@@ -1,6 +1,9 @@
 {
     "compilerOptions": {
         "target": "es6",
+        "types": [
+            "jest"
+        ],
         "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
@@ -15,40 +18,37 @@
         "suppressImplicitAnyIndexErrors": true
     },
     "filesGlob": [
-        "*/**/*.ts",
-        "*/**/*.tsx",
-        "typings/index.d.ts",
-        "typings/ALiEMU.d.ts",
-        "!node_modules/**",
+        "{wp-content,test-utils}/**/*.{ts,tsx}",
+        "typings/{ALiEMU,index,react-datepicker}.d.ts",
+        "node_modules/@types/**/*index.d.ts",
         "!dist/**"
     ],
     "compileOnSave": false,
     "buildOnSave": false,
     "files": [
         "test-utils/Fixtures.ts",
-        "typings/ALiEMU.d.ts",
-        "typings/globals/enzyme/index.d.ts",
-        "typings/globals/jest/index.d.ts",
-        "typings/globals/moment-node/index.d.ts",
-        "typings/globals/react-addons-test-utils/index.d.ts",
-        "typings/globals/react-datepicker/index.d.ts",
-        "typings/globals/react-dom/index.d.ts",
-        "typings/globals/react/index.d.ts",
-        "typings/globals/require/index.d.ts",
-        "typings/globals/sinon/index.d.ts",
-        "typings/index.d.ts",
+        "wp-content/plugins/aliemu-plugins/inc/components/TableComponents.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/CourseTable-test.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/StudentTable-test.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/CourseTable.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/StudentTable.tsx",
+        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx",
         "wp-content/plugins/aliemu-plugins/inc/utils/__tests__/BrowserDetect-test.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/__tests__/DashboardUtils-test.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/__tests__/Pagination-test.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/BrowserDetect.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/DashboardUtils.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/Pagination.ts",
-        "wp-content/plugins/aliemu-plugins/inc/components/TableComponents.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/CourseTable-test.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/__tests__/StudentTable-test.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/CourseTable.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/components/StudentTable.tsx",
-        "wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx"
+        "typings/ALiEMU.d.ts",
+        "typings/index.d.ts",
+        "typings/react-datepicker.d.ts",
+        "node_modules/@types/enzyme/index.d.ts",
+        "node_modules/@types/jest/index.d.ts",
+        "node_modules/@types/moment/index.d.ts",
+        "node_modules/@types/node/index.d.ts",
+        "node_modules/@types/react-addons-test-utils/index.d.ts",
+        "node_modules/@types/react-dom/index.d.ts",
+        "node_modules/@types/react/index.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
