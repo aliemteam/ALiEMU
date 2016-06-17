@@ -33,6 +33,22 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id="row-3">
+                    <div class="au-container">
+                        <div class="au-splash">
+                            <div class="au-info-card">
+                                <div class="au-info-header"><h1>Click a series below to learn more about it!</h1></div>
+                                <div class="au-info-text"><p>We currently offer three series of learning modules. Click on a course series below to learn more about it!</p></div>
+                                <div class="au-series-logos">
+                                    <div><a href="#"><img src="/wp-content/themes/Divi-child/images/air-button.png"></a></div>
+                                    <div><a href="#"><img src="/wp-content/themes/Divi-child/images/airpro-button.png"></a></div>
+                                    <div><a href="#"><img src="/wp-content/themes/Divi-child/images/capsules-button.png"></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="au-sponsors">
                     <div>
                         <a href="http://www.cordem.org/" target="_blank"><img src="https://www.aliemu.com/wp-content/uploads/2016/06/CORD-EM-transp.png"></a>
