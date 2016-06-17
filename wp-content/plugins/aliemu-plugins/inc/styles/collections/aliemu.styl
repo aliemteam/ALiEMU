@@ -191,6 +191,15 @@
             color $primary-air
             &:hover
                 color secondary($primary-air)
+    &.au-air-pro-intro
+        width 80%
+        margin auto
+        h2
+            background-color $primary-airpro
+        a
+            color $primary-airpro
+            &:hover
+                color secondary($primary-airpro)
     &.au-capsules-intro
         h2
             background $primary-capsules
@@ -229,7 +238,8 @@
 // Container for course cards on course pages
 .course-list-container
     display flex
-    flex-wrap wrap-reverse
+    // Changed back to "wrap" after issue filed by mlin
+    flex-wrap wrap
     justify-content center
 
 
