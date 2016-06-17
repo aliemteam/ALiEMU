@@ -1,3 +1,5 @@
+*
+    font-family 'Lato'
 
 #post-2
     #particles
@@ -336,7 +338,6 @@
     .lesson-body
         line-height 1.3
         letter-spacing 0.5px
-        padding 20px
         h3
             font-weight 700
             font-size 1.5em
@@ -344,12 +345,10 @@
             background-color $gray-dark
             color white
             padding 4px
-        ul
-            margin-top 0.3em
-        p
-        ul li
+            margin-bottom 5px
+        p, ul
             font-weight 400
-            padding 0 10px
+            padding 10px
 
 
 // CAPSULE box
@@ -358,7 +357,7 @@
     h2
         @extend .lesson-box h2
         letter-spacing 1px
-        font-weight 900
+        font-weight 600
         background-color $primary-capsules
     h4
         border-top 0
@@ -367,6 +366,9 @@
         line-height 1.3em
         padding 30px
         text-align center
+
+.take-home-point
+    @extend .au-capsule
 
 
 // ==================================================

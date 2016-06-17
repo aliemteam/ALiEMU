@@ -5,16 +5,29 @@
     text-align center
 
 
-.category-capsules .tablepress thead th
-    color white
-    font 600 1.2em Lato
-    text-align center
-    background-color $primary-capsules
+.tablepress
+    thead th
+        color white
+        font 400 1.2em Lato
+        text-align center
+        background $primary
+    tfoot th
+        @extend .tablepress thead th
+        font-size 0.8em
+        text-align left
+        a
+            color white
+
+.category-capsules .tablepress
+    thead th,
+    tfoot th
+        background-color $primary-capsules
 
 
-.category-air .tablepress thead th
-    @extend .category-capsules .tablepress thead th
-    background-color $primary-air
+.category-air .tablepress
+    thead th,
+    tfoot th,
+        background-color $primary-air
 
 
 #content-area .au-table-needsborders td
@@ -101,9 +114,9 @@ img.um-avatar
             margin 10px 0
             .questionListItem
                 list-style none
-                margin-left 0 !important
                 .questionInput
                     line-height 26px
+                    margin-left -20px
                     vertical-align text-top
 
     .results > div:last-of-type
