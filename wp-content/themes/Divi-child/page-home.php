@@ -37,9 +37,9 @@
                         <div class="au-info-card">
                             <div class="au-info-header"><h1>Click a series to learn more</h1></div>
                             <div class="au-series-logos">
-                                <div><a href="#"><img src="/wp-content/uploads/2016/06/air-button.png"></a></div>
-                                <div><a href="#"><img src="/wp-content/uploads/2016/06/airpro-button.png"></a></div>
-                                <div><a href="#"><img src="/wp-content/uploads/2016/06/capsules-button.png"></a></div>
+                                <div><a href="/air"><img src="/wp-content/uploads/2016/06/air-button.png"></a></div>
+                                <div><a href="/air-pro"><img src="/wp-content/uploads/2016/06/airpro-button.png"></a></div>
+                                <div><a href="/capsules"><img src="/wp-content/uploads/2016/06/capsules-button.png"></a></div>
                             </div>
                         </div>
                     </div>
