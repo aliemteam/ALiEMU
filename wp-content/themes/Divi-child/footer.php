@@ -16,16 +16,16 @@ if (!is_page_template('page-template-blank.php')) : ?>
                 <div id="footer-info">Designed by Chris Gaafary</div>
                 <div id="footer-social-icons">
                     <div class="et-social-icon et-social-facebook">
-                        <a href="https://www.facebook.com/pages/Academic-Life-in-Emergency-Medicine/242608792433177" class="icon"></a>
+                        <a href="https://www.facebook.com/academiclifeinem" class="icon" target="_blank"></a>
                     </div>
                     <div class="et-social-icon et-social-twitter">
-                        <a href="https://twitter.com/aliemteam" class="icon"></a>
+                        <a href="https://twitter.com/aliemteam" class="icon" target="_blank"></a>
                     </div>
                     <div class="et-social-icon et-social-google-plus">
-                        <a href="https://plus.google.com/+Academiclifeinem/posts" class="icon"></a>
+                        <a href="https://plus.google.com/+Academiclifeinem/posts" class="icon" target="_blank"></a>
                     </div>
                     <div class="et-social-icon et-social-rss">
-                        <a href="http://aliem.com/?feed=rss2" class="icon"></a>
+                        <a href="http://aliem.com/?feed=rss2" class="icon" target="_blank"></a>
                     </div>
                 </div>
             </div>
