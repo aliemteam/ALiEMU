@@ -1,21 +1,38 @@
 <?php
 
+/**
+ * Shortcode which GETs and returns the recommended III hours for certificates.
+ * @return string The recommended hours
+ */
+function au_course_hours() {
+    $course_id = @$_GET['course_id'];
+	if (empty( $course_id )) {
+		return '';
+	}
+    $meta = get_post_meta($course_id, '_au-meta', true);
+    return $meta['au-recommended_hours'];
+}
+add_shortcode('course-hours', 'au_course_hours');
 
-add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
+
+/**
+ * Master function to enqueue all scripts / styles
+ * @return void
+ */
 function theme_enqueue_scripts() {
-    // CSS
     wp_enqueue_style('parent-style', get_template_directory_uri().'/style.css');
-    wp_enqueue_script('nav-helper',
-        get_stylesheet_directory_uri().'/js/nav-helper.js',
-        false, false, true);
+    wp_enqueue_script('nav-helper', get_stylesheet_directory_uri().'/js/nav-helper.js', false, false, true);
 
+    // Only on home page
     if (is_front_page()) {
         wp_enqueue_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js');
         wp_enqueue_script('particles-home', get_stylesheet_directory_uri().'/js/particles-home.js', array('particlesjs'), false, true);
     }
 }
+add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 
-add_action('user_register', 'requested_dashboard_access');
+
+// FIXME: Route to slack instead
 function requested_dashboard_access($id) {
     if (isset($_POST['au_requested_educator_access']) && $_POST['au_requested_educator_access'][0] === 'Yes') {
         $formid = $_POST['form_id'];
@@ -51,13 +68,25 @@ function requested_dashboard_access($id) {
         wp_mail(array('mlin@aliem.com', 'cgaafary@gmail.com', 'dereksifford@gmail.com'), 'User Requesting Dashboard Access', $message, $headers);
     }
 }
+add_action('user_register', 'requested_dashboard_access');
 
-add_action('slack_email_hook', 'slack_contact');
+
+/**
+ * Routes contact form messages to Slack
+ * @param  array $data  Associative array with message data.
+ * @return void
+ */
 function slack_contact($data) {
     slack_message('messages/contact-form', $data);
 }
+add_action('slack_email_hook', 'slack_contact');
 
-add_action('comment_post', 'slack_comment');
+
+/**
+ * Routes all comments to Slack
+ * @param  string $commentId The comment ID.
+ * @return void
+ */
 function slack_comment($commentId) {
     $comment = get_comment($commentId);
     $post = get_post($comment->comment_post_ID);
@@ -69,6 +98,8 @@ function slack_comment($commentId) {
         'postName' => $post->post_title,
     ));
 }
+add_action('comment_post', 'slack_comment');
+
 
 /**
  * Master handler for posting messages to Slack.
@@ -90,16 +121,13 @@ function slack_message($route, $data) {
     }
 }
 
-function console_log( $data ){
-  echo '<script>';
-  echo 'console.log('. json_encode( $data ) .')';
-  echo '</script>';
-}
 
-////////////////////////////////////////////////////////////////////////
-// Ultimate Member Profile Display Name Integration ////////////////////
-////////////////////////////////////////////////////////////////////////
-add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
+/**
+ * Ultimate Member Profile Display Name Integration
+ * @param  string $author_name The author's name.
+ * @param  object $comment     WordPress comment object.
+ * @return string
+ */
 function wpdiscuz_um_author($author_name, $comment) {
     if ($comment->user_id) {
         $column = 'display_name'; // Other options: 'user_login', 'user_nicename', 'nickname', 'first_name', 'last_name'
@@ -111,13 +139,19 @@ function wpdiscuz_um_author($author_name, $comment) {
     }
     return $author_name;
 }
-////////////////////////////////////////////////////////////////////////
-// Ultimate Member Profile URL Integration /////////////////////////////
-////////////////////////////////////////////////////////////////////////
-add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);
+add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
+
+
+/**
+ * Ultimate Member Profile URL Integration
+ * @param  string $profile_url The user's profile URL?
+ * @param  object $user        WordPress user object.
+ * @return string
+ */
 function wpdiscuz_um_profile_url($profile_url, $user) {
     if ($user && class_exists('UM_API')) {
         um_fetch_user($user->ID); $profile_url = um_user_profile_url();
     }
     return $profile_url;
 }
+add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);
