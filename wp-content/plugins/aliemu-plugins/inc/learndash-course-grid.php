@@ -58,4 +58,6 @@ function learndash_course_grid_course_list($filepath, $name, $args, $echo, $retu
 
 	<?php
 
+    return $filepath;
+
 }
