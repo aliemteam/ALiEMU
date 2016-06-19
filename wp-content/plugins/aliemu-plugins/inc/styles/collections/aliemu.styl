@@ -116,6 +116,65 @@
 // ==================================================
 
 
+#post-171
+    +prefix-classes('au-')
+        .container
+            margin 40px auto 10px auto
+            width 70%
+
+        .heading
+            height 50px
+            background $primary-air
+            text-align center
+            border-top-right-radius 3px
+            border-top-left-radius 3px
+            h1
+                color white
+                line-height 50px
+                margin 0
+        .content
+            display flex
+            padding 20px
+            background $gray-light
+            .text
+                flex auto
+                table
+                    width 100%
+                    th
+                        text-align left
+    .links-row
+        display flex
+        justify-content center
+        line-height 2em
+        padding 0.5em 0 1em 0
+        a
+            font-size 2em
+            margin 0 10px
+    .year-row
+        min-height 50vh
+        display flex
+        &:nth-of-type(3)
+            background $blue1
+        &:nth-of-type(4)
+            background $orange
+        &:nth-of-type(5)
+            background $primary
+        .au-year
+            display flex
+            align-items center
+            h1
+                transform rotate(270deg)
+                color white
+                font-size 2em
+    .course-boxes
+        display flex
+        overflow-x auto
+        .au-coursebox
+            min-width 350px
+            margin 30px 10px
+
+
+
 // Course Card Containers
 #flex-course-list
     box-shadow $box-shadow
