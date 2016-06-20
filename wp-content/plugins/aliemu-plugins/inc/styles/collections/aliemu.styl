@@ -69,7 +69,7 @@
                 bordered-button(large, white, $gray-dark)
 
     .learn-more
-        background $primary
+        background $au-primary
         display flex
         flex auto
         border-radius 3px
@@ -80,7 +80,7 @@
             align-items center
             flex auto
             a
-                bordered-button(large, white, $primary)
+                bordered-button(large, white, $au-primary)
 
     .info-card
         display flex
@@ -90,7 +90,7 @@
         text-align center
         .info-header
             border-radius 3px 3px 0 0
-            background-color $primary
+            background-color $au-primary
             h1
                 color white
                 line-height 1.5em
@@ -119,12 +119,12 @@
 #post-171
     +prefix-classes('au-')
         .container
-            margin 40px auto 10px auto
+            margin 40px auto 40px auto
             max-width 85%
 
         .heading
             min-height 50px
-            background $primary-air
+            background $air-primary
             text-align center
             vertical-align middle
             border-top-right-radius 3px
@@ -149,6 +149,7 @@
                         text-align left
                 a
                     font-weight 600
+                    color $air-primary
 
         .image
             margin 10px
@@ -157,26 +158,27 @@
     .links-row
         display flex
         justify-content center
-        line-height 2em
-        padding 0.5em 0 1em 0
+        // line-height 2em
+        padding 0.5em 0 0.5em 0
+        background $gray-dark
         a
-            font-size 2em
+            font-size 1em
             margin 0 10px
+            color white
+        a:hover
+            color $air-tertiary
     .year-row
         min-height 50vh
         display flex
-        margin-bottom 10px
-        background $gray-dark
-        // &:nth-of-type(3)
-        //     background $blue1
-        // &:nth-of-type(4)
-        //     background $blue1
-        // &:nth-of-type(5)
-        //     background $blue1
+        &:nth-of-type(3)
+            background $air-secondary
+        &:nth-of-type(4)
+            background $air-tertiary
+        &:nth-of-type(5)
+            background $air-secondary
         .au-year
             display flex
             align-items center
-            background $gray-dark
             h1
                 transform rotate(270deg)
                 color white
@@ -210,22 +212,22 @@
     width 300px
     min-width 200px
     .category-capsules .coursebox-flex a
-        border-color $primary-capsules
-        color $primary-capsules
+        border-color $capsules-primary
+        color $capsules-primary
         &:hover
-            background-color $primary-capsules
+            background-color $capsules-primary
             color white
     .category-air .coursebox-flex a
-        border-color $primary-air
-        color $primary-air
+        border-color $air-primary
+        color $air-primary
         &:hover
-            background-color: $primary-air
+            background-color: $air-primary
             color: white
     .category-airpro .coursebox-flex a
-        border-color $primary-airpro
-        color $primary-airpro
+        border-color $airpro-primary
+        color $airpro-primary
         &:hover
-            background-color: $primary-airpro
+            background-color: $airpro-primary
             color: white
     .au-courseheader
         align-items center
@@ -240,11 +242,11 @@
                 padding 0
                 white-space nowrap
         &.category-capsules
-            background-color $primary-capsules
+            background-color $capsules-primary
         &.category-air
-            background-color $primary-air
+            background-color $air-primary
         &.category-airpro
-            background-color $primary-airpro
+            background-color $airpro-primary
     .au-coursebody
         padding 5%
         height 335px
@@ -326,34 +328,34 @@
     overflow auto
     &.au-air-intro
         h2
-            background-color $primary-air
+            background-color $air-primary
         a
-            color $primary-air
+            color $air-primary
             &:hover
-                color secondary($primary-air)
+                color secondary($air-primary)
     &.au-air-pro-intro
         width 80%
         margin auto
         h2
-            background-color $primary-airpro
+            background-color $airpro-primary
         a
-            color $primary-airpro
+            color $airpro-primary
             &:hover
-                color secondary($primary-airpro)
+                color secondary($airpro-primary)
     &.au-capsules-intro
         h2
-            background $primary-capsules
+            background $capsules-primary
         a
-            color $primary-capsules
+            color $capsules-primary
             &:hover
-                color secondary($primary-capsules)
+                color secondary($capsules-primary)
     &.au-air-pro-intro
         h2
-            background-color $primary-airpro
+            background-color $airpro-primary
         a
-            color $primary-airpro
+            color $airpro-primary
             &:hover
-                color secondary($primary-airpro)
+                color secondary($airpro-primary)
     h2
         color white
         text-align center
@@ -408,7 +410,7 @@
         margin 0
         padding 10px
         text-align center
-        background-color $primary-capsules
+        background-color $capsules-primary
     .lesson-body
         line-height 1.3
         letter-spacing 0.5px
@@ -432,7 +434,7 @@
         @extend .lesson-box h2
         letter-spacing 1px
         font-weight 600
-        background-color $primary-capsules
+        background-color $capsules-primary
     h4
         border-top 0
         font-weight 400
@@ -500,7 +502,7 @@
 .et_pb_section_2
 .et_pb_section_4
     &.et_pb_section.au-about-header
-        background-color $primary !important
+        background-color $au-primary !important
 
 // Sponsors
 
@@ -543,9 +545,9 @@ $pager-btn
     line-height 1.5em
     text-align center
     cursor pointer
-    border 1px solid $primary
+    border 1px solid $au-primary
     border-radius 2px
-    color $primary
+    color $au-primary
     background white
     margin 5px 2px
     user-select none
@@ -562,7 +564,7 @@ $export-btn
     color white
     padding 5px 30px
     max-width 300px
-    background $primary
+    background $au-primary
     user-select none
     margin-left 9px
     &:hover
@@ -577,7 +579,7 @@ $export-btn
         box-sizing border-box
         margin-bottom 30px
         h1
-            background $primary
+            background $au-primary
             color white
             text-align center
             padding 10px
@@ -607,7 +609,7 @@ $export-btn
         .pager-btn-active
             @extend $pager-btn
             color white
-            background $primary
+            background $au-primary
 
 // Footer
 #main-footer
