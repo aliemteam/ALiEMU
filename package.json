@@ -48,7 +48,7 @@
     "rucksack-css": "^0.8.6",
     "sinon": "^1.17.4",
     "style-loader": "^0.13.1",
-    "stylint": "^1.4.1",
+    "stylint": "^1.5.3",
     "ts-loader": "^0.8.1",
     "tslint": "^3.11.0",
     "typescript": "^1.9.0-dev.20160616-1.0",
