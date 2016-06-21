@@ -1,0 +1,36 @@
+.category-air
+    .au-card
+        card($air-primary)
+
++prefix-classes('au-')
+    .links-row
+        display flex
+        justify-content center
+        padding 0.5em 0 0.5em 0
+        background $gray-dark
+        a
+            margin 0 10px
+            color white
+            &:hover
+                text-decoration underline
+                color white
+
+    .year-row
+        padding 0 0 40px 0
+        background $gray-light
+        .year
+            text-align center
+            padding 10px 0
+            h1
+                font-weight 300
+                font-size 2em
+                padding 0
+
+    .course-boxes
+        display flex
+        overflow-x auto
+        align-items center
+        background $gray-light
+        .coursebox
+            min-width 350px
+            margin 10px
