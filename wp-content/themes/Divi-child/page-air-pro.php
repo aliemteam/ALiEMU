@@ -19,14 +19,13 @@
         <div class="au-links-row">
             <a href="#year-2016">2016</a>
             <a href="#year-2015">2015</a>
-            <a href="#year-2014">2014</a>
         </div>
         <div class="au-year-row" id="year-2016">
             <div class="au-year">
                 <h1>2016</h1>
             </div>
             <div class="au-course-boxes">
-                <?php echo do_shortcode('[ld_course_list category_name="air" tag="2016"]'); ?>
+                <?php echo do_shortcode('[ld_course_list category_name="air-pro" tag="2016"]'); ?>
             </div>
         </div>
         <div class="au-year-row" id="year-2015">
@@ -34,15 +33,7 @@
                 <h1>2015</h1>
             </div>
             <div class="au-course-boxes">
-                <?php echo do_shortcode('[ld_course_list category_name="air" tag="2015"]'); ?>
-            </div>
-        </div>
-        <div class="au-year-row" id="year-2014">
-            <div class="au-year">
-                <h1>2014</h1>
-            </div>
-            <div class="au-course-boxes">
-                <?php echo do_shortcode('[ld_course_list category_name="air" tag="2014"]'); ?>
+                <?php echo do_shortcode('[ld_course_list category_name="air-pro" tag="2015"]'); ?>
             </div>
         </div>
     </article><?php endwhile; ?>
