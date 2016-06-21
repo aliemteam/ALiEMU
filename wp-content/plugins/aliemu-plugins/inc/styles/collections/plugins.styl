@@ -18,16 +18,23 @@
         a
             color white
 
-.category-capsules .tablepress
-    thead th,
-    tfoot th
-        background-color $capsules-primary
+.category-capsules
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $capsules-primary
 
+.category-air
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $air-primary
 
-.category-air .tablepress
-    thead th,
-    tfoot th,
-        background-color $air-primary
+.category-air-pro
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $airpro-primary
 
 
 #content-area .au-table-needsborders td
@@ -83,6 +90,10 @@ img.um-avatar
 .category-capsules
     .wpProQuiz_button
         bordered-button(small, $capsules-primary)
+
+.category-air-pro
+    .wpProQuiz_button
+        bordered-button(small, $airpro-primary)
 
 .quiz_continue_link
     order 1

@@ -2,6 +2,14 @@
     .au-card
         card($air-primary)
 
+.category-capsules
+    .au-card
+        card($capsules-primary)
+
+.category-air-pro
+    .au-card
+        card($airpro-primary)
+
 +prefix-classes('au-')
     .links-row
         display flex
@@ -34,3 +42,13 @@
         .coursebox
             min-width 350px
             margin 10px
+
+    .no-scroll
+        flex-flow row wrap
+        justify-content space-between
+        padding 20px 30px
+
+@media (max-width: 480px)
+    card(primary-color)
+        margin 0 0 20px 0
+        max-width 100%
