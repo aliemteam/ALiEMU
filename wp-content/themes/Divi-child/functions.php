@@ -3,8 +3,8 @@
 /**
  * Remove emojis
  */
-remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-remove_action( 'wp_print_styles', 'print_emoji_styles' );
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
 
 /**
  * Shortcode which GETs and returns the recommended III hours for certificates.
@@ -38,41 +38,22 @@ function theme_enqueue_scripts() {
 add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 
 
-// FIXME: Route to slack instead
 function requested_dashboard_access($id) {
-    if (isset($_POST['au_requested_educator_access']) && $_POST['au_requested_educator_access'][0] === 'Yes') {
-        $formid = $_POST['form_id'];
-        $username = $_POST['user_login-' . $formid];
+    if (!isset($_POST['au_requested_educator_access']) || !$_POST['au_requested_educator_access'][0] === 'Yes') return;
 
-        $headers = array(
-            'Content-Type: text/html',
-            'charset=UTF-8',
-        );
-        $messageData = array(
-            "First Name" => $_POST['first_name-' . $formid],
-            "Last Name" => $_POST['last_name-' . $formid],
-            "Email Address" => $_POST['user_email-' . $formid],
-            "Program" => $_POST['residency_us_em'],
-            "Role" => $_POST['role'] == 'em-resident' ? 'Resident' : 'Faculty',
-            "Graduation Year" => $_POST['au_graduation_year-' . $formid],
-            "Bio" => $_POST['description']
-        );
+    $formid = $_POST['form_id'];
+    $username = $_POST['user_login-' . $formid];
 
-        $message = "<div style='font-size: 16px; font-family: sans;'>"
-                 .      "<p>User '{$username}' has requested dashboard access.</p>"
-                 .      "<h3>User Information</h3>"
-                 .      "<table>";
+    $messageData = array(
+        "name" => $_POST['first_name-' . $formid] . ' ' . $_POST['last_name-' . $formid],
+        "username" => $username,
+        "email" => $_POST['user_email-' . $formid],
+        "program" => $_POST['residency_us_em'],
+        "role" => $_POST['role'] == 'em-resident' ? 'Resident' : 'Faculty',
+        "bio" => $_POST['description']
+    );
 
-        foreach ($messageData as $key => $value) {
-            $message .= "<tr>"
-                     .      "<td style='min-width: 200px; font-weight: bold;'>{$key}</td>"
-                     .      "<td>{$value}</td>"
-                     .  "</tr>";
-        }
-        $message .= "</table><p>Please confirm or reject as soon as possible. Thanks!</p></div>";
-
-        wp_mail(array('mlin@aliem.com', 'cgaafary@gmail.com', 'dereksifford@gmail.com'), 'User Requesting Dashboard Access', $message, $headers);
-    }
+    slack_message('messages/dashboard-access', $messageData);
 }
 add_action('user_register', 'requested_dashboard_access');
 
@@ -118,7 +99,7 @@ add_action('comment_post', 'slack_comment');
  */
 function slack_message($route, $data) {
     for ($i = 0; $i < 5; $i++) {
-        $response = wp_remote_post("http://104.131.189.237:5000/aliemu/$route", array(
+        $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/aliemu/$route", array(
             'body' => array(
                 'data' => json_encode($data),
             )
@@ -138,7 +119,9 @@ function wpdiscuz_um_author($author_name, $comment) {
     if ($comment->user_id) {
         $column = 'display_name'; // Other options: 'user_login', 'user_nicename', 'nickname', 'first_name', 'last_name'
         if (class_exists('UM_API')) {
-            um_fetch_user($comment->user_id); $author_name = um_user($column); um_reset_user();
+            um_fetch_user($comment->user_id);
+            $author_name = um_user($column);
+            um_reset_user();
         } else {
             $author_name = get_the_author_meta($column, $comment->user_id);
         }
@@ -156,7 +139,8 @@ add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
  */
 function wpdiscuz_um_profile_url($profile_url, $user) {
     if ($user && class_exists('UM_API')) {
-        um_fetch_user($user->ID); $profile_url = um_user_profile_url();
+        um_fetch_user($user->ID);
+        $profile_url = um_user_profile_url();
     }
     return $profile_url;
 }
