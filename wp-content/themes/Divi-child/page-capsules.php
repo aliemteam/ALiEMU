@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="au-image">
-                    <img src="https://www.aliemu.com/wp-content/uploads/2016/06/air-badge.png"/>
+                    <img src="https://www.aliemu.com/wp-content/uploads/2016/06/capsules-badge.png"/>
                 </div>
             </div>
         </div>
