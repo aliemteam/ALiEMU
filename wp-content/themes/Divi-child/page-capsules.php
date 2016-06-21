@@ -1,14 +1,14 @@
 <?php get_header(); ?>
 <div id="main-content"><?php while (have_posts()) : the_post(); ?>
-    <article id="post-<?php the_ID(); ?>" <?php post_class('category-air'); ?>>
+    <article id="post-<?php the_ID(); ?>" <?php post_class('category-capsules'); ?>>
         <div class="au-card">
             <div class="au-heading">
-                <h1>ALiEM Approved Instructional Resources (AIR)</h1>
+                <h1>Capsules:Practical Pharmacology for the Emergency Medicine Practitioner</h1>
             </div>
             <div class="au-content">
                 <div class="au-text">
                     <div>
-                        Welcome to the <a href="#"><strong>Approved Instructional Resources (AIR) series</strong></a>! This series screens and grades open access blog posts and podcasts in the field of emergency medicine (EM) over the past 12 months to identify high quality, social media-based, educational resources for EM residents. This series is one of the most popular initiatives used by over 80 U.S. EM residency programs to fulfill their <a href="#">Individualized Interactive Instruction (III)</a>, or asynchronous online learning, conference needs. Below are the AIR blocks listed in reverse chronological order along with their suggested number of III conference hour credit. If you are a program director and wish to track your residents’ progress, please sign up for our <a href="#">Educator Dashboard access.</a>
+                        Welcome to the Capsules series: Practical Pharmacology for the Emergency Medicine Practitioner!  The Capsules series was conceived in response to a perceived deficiency of EM pharmacology information in Free Open Access Meducation (FOAM) resources. Led by creator Dr. Bryan Hayes, the Capsules series’ primary focus is bringing EM pharmacology education to the bedside by distilling complex principles into easy-to-apply concepts. It’s our version of what-you-need-to-know as an EM practitioner. Our secondary aim is to provide U.S. EM residency programs with an objective method for evaluating residents at each level of the Pharmacotherapy milestone as outlined by ACGME. We have assembled an outstanding team of pharmacists from around the country to create and review each module. In addition, we have several outstanding physician colleagues to peer-review each module after review by our pharmacist team. If you’re not already familiar with Capsules, then <a href="">click here</a> for the full description of what it is and why we created it.
                     </div>
                 </div>
                 <div class="au-image">
