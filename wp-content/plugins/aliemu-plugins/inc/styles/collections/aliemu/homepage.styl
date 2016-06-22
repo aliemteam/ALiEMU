@@ -22,14 +22,15 @@
                 position relative
                 height 400px
                 width 500px
-        #row-2
-        #row-3
-            @extend .au-homepage #row-1
-            height auto
-            margin 10vh auto
-            .container
+
+        for i in 2..6
+            #row-{i}
+                @extend .au-homepage #row-1
                 height auto
-                width 800px
+                margin 10vh auto
+                .container
+                    height auto
+                    width 800px
 
         .splash
             display flex
@@ -112,12 +113,3 @@
                 justify-content space-between
                 max-width 200px
                 margin-top 20px
-
-    .faculty-start
-        for i in 1..6
-            #row-{i}
-                height auto
-                margin 10vh auto
-                .container
-                    height auto
-                    width 800px
