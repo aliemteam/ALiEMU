@@ -19,7 +19,7 @@
                             <div class="au-info-text">
                                 <p>Welcome to ALiEMU! We are proud to provide a free service to your program’s educational efforts with an innovative platform aimed at enhancing the content and tracking of Individualized Interactive Instruction (III) for your learners. In order to begin using the interface as a supplement to your curriculum, please follow the steps below to:</p>
                                 <ol>
-                                    <li><a href="">Register</a> for a special faculty account.</li>
+                                    <li><a href="#row-6">Register</a> for a special faculty account.</li>
                                     <li>Gain access to the Educator Dashboard</li>
                                     <li>Learn how to export module completion data of your trainees</li>
                                 </ol>
