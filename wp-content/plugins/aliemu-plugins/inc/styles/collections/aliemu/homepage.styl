@@ -1,6 +1,5 @@
 +prefix-classes('au-')
     .homepage
-    .faculty-start
         #particles
             position fixed
             height calc(100vh - 50px)
@@ -24,12 +23,9 @@
                 width 500px
         #row-2
         #row-3
-        #row-4
-        #row-5
-        #row-6
             @extend .au-homepage #row-1
             height auto
-            margin 100px auto
+            margin 10vh auto
             .container
                 height auto
                 width 800px
@@ -49,7 +45,7 @@
             background $gray-light
             justify-content space-around
             a
-                bordered-button(large, $gray-dark)
+                bordered-button(large, $primary)
         .faculty
             display flex
             flex auto
@@ -111,3 +107,20 @@
                 justify-content space-between
                 max-width 200px
                 margin-top 20px
+
+    .faculty-start
+        for i in 1 2 3 4 5 6
+            #row-{i}
+                display flex
+                height auto
+                margin 10vh auto
+                justify-content center
+                align-items center
+                .container
+                    height auto
+                    width 800px
+        .info-card
+            @extend .au-homepage .au-info-card
+        .login
+            @extend .au-homepage .au-login
+            margin-top 1em
