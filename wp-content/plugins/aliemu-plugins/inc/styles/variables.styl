@@ -35,13 +35,20 @@ bordered-button(type, color = false, hovercolor = false)
     if type is small
         padding 5px 8px
         min-width 80px
+    if type is medium
+        padding 8px 8px
+        min-width 100px
     if type is large
         padding 10px 15px
         min-width 120px
 
 card(primary-color)
-    margin 40px auto 40px auto
+    padding 40px 0
+    margin auto
     max-width 85%
+    @media (max-width 480px)
+        margin 0 0 20px 0
+        max-width none
     .au-heading
         min-height 50px
         background primary-color
@@ -56,7 +63,8 @@ card(primary-color)
     .au-content
         display flex
         justify-content center
-        flex-flow row wrap-reverse
+        @media (max-width 480px)
+            flex-direction column
         padding 20px
         background $gray-light
         .au-text
@@ -66,6 +74,9 @@ card(primary-color)
                 color primary-color
                 &:hover
                     color lighten(primary-color, 10)
+            @media (max-width 480px)
+                order 2
+                text-align justify
     .au-image
         margin 10px
         img
