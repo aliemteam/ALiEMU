@@ -7,36 +7,48 @@
  * @author Chris Gaafary
  */
 
- // Air Frame Shortcode
- function air_frame_shortcode($atts) {
-     $a = shortcode_atts(array(
-                 'type' => 'AIR',
-                 'src' => '',
-             ), $atts);
-     if ($a['type'] == 'AIR') {
-         $type_var = 'AIR Stamp of Approval';
-     } elseif ($a['type'] == 'HM') {
-         $type_var = 'Honorable Mention';
-     }
-     elseif ($a['type'] == 'EXTRA') {
-         $type_var = 'Extras';
-     }
-     return '<div class="au-air-frame"><h2>'.$type_var.'</h2><iframe src="'.esc_attr($a['src']).'" width="100%" height="600px"></iframe></div>';
- }
- add_shortcode('airframe', 'air_frame_shortcode');
+// Capsules CAPSULE Shortcode
+function capsule_shortcode($atts, $content = null) {
+    $content = do_shortcode($content);
+    return "
+        <div class='lesson-box'>
+            <h2 class='lesson-heading'>CAPSULE</h2>
+            <div class='lesson-body'>
+                <h4>$content</h4>
+            </div>
+        </div>
+    ";
+}
+add_shortcode('capsule', 'capsule_shortcode');
 
 
- // Capsules CAPSULE Shortcode
- function capsule_shortcode($atts, $content = null) {
-     return '<div class="au-capsule"><h2>CAPSULE</h2><h4>'.do_shortcode($content).'</h4></div>';
- }
- add_shortcode('capsule', 'capsule_shortcode');
+//Capsules Lesson Box Shortcode
+function capsules_lessonbox_shortcode($atts, $content = null) {
+    $shortcode = shortcode_atts(array(
+        'header' => '',
+    ), $atts);
+    extract($shortcode);
+    $content = do_shortcode($content);
+    return "
+        <div class='lesson-box'>
+            <h2 class='lesson-heading'>$header</h2>
+            <div class='lesson-body'>
+                $content
+            </div>
+        </div>
+    ";
+}
+add_shortcode('capsules-lessonbox', 'capsules_lessonbox_shortcode');
 
- //Capsules Lesson Box Shortcode
- function capsules_lessonbox_shortcode($atts, $content = null) {
-     $a = shortcode_atts(array(
-                 'header' => '',
-             ), $atts);
-     return '<div class="lesson-box"><h2>'.esc_attr($a['header']).'</h2><div class="lesson-body">'.do_shortcode($content).'</div></div>';
- }
- add_shortcode('capsules-lessonbox', 'capsules_lessonbox_shortcode');
+
+/**
+ * Shortcode which GETs and returns the recommended III hours for certificates.
+ * @return string The recommended hours
+ */
+function au_course_hours() {
+    $course_id = @$_GET['course_id'];
+    if (empty($course_id)) return '';
+    $meta = get_post_meta($course_id, '_au-meta', true);
+    return $meta['au-recommended_hours'];
+}
+add_shortcode('course-hours', 'au_course_hours');

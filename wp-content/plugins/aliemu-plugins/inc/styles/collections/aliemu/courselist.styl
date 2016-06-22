@@ -1,16 +1,14 @@
 coursebox(primarycolor)
-    background $gray-light
+    background white
     box-shadow $box-shadow
-    flex auto
     margin 10px
-    max-width 350px
-    width 300px
+    max-width 300px
     min-width 300px
     .au-courseheader
         align-items center
         box-shadow $box-shadow
         display flex
-        height 65px
+        height 60px
         justify-content flex-end
         background-color primarycolor
         .au-timer
@@ -24,6 +22,7 @@ coursebox(primarycolor)
         height 300px
         display flex
         flex-direction column
+        box-shadow inset 0 20px 20px -20px rgba(0,0,0,0.3)
         .coursebox-flex
             display flex
             flex-direction column
@@ -35,14 +34,15 @@ coursebox(primarycolor)
             &:nth-of-type(2)
                 min-height 20%
             &:nth-of-type(3)
-                padding 5px 0 0 0
-                flex 1
+                height 110px
+                min-height 110px
+                flex auto
             &:last-of-type
                 justify-content flex-end
                 align-items flex-end
             h1
-                font-weight 400
-                font-size responsive 20px 30px
+                font-weight 300
+                font-size responsive 20px 25px
                 color $gray-dark
                 padding 0
             h3
@@ -55,17 +55,7 @@ coursebox(primarycolor)
                 font-weight 300
                 color $font-color
             a
-                padding 10px 15px
-                border solid primarycolor 2px
-                border-radius 5px
-                color primarycolor
-                text-decoration none
-                &:hover
-                    border-color transparent
-                    background-color primarycolor
-                    color white
-                    transition 0.1s
-                    cursor pointer
+                bordered-button(medium, primarycolor)
 
 .category-air .au-coursebox
     coursebox($air-primary)
