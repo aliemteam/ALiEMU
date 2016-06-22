@@ -4,7 +4,7 @@
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
             <div class="entry-content">
                 <div id="particles"></div>
-                <div id="row-1">
+                <div id="row-2">
                     <div class="au-container">
                         <div class="au-info-card">
                             <div class="au-info-header"><h1>Attention</h1></div>
@@ -12,7 +12,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="row-2">
+                <div id="row-3">
                     <div class="au-container">
                         <div class="au-info-card">
                             <div class="au-info-header"><h1>Attention</h1></div>
@@ -23,6 +23,43 @@
                                     <li>Gain access to the Educator Dashboard</li>
                                     <li>Learn how to export module completion data of your trainees</li>
                                 </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="row-4">
+                    <div class="au-container">
+                        <div class="au-info-card">
+                            <div class="au-info-header"><h1>What is III?</h1></div>
+                            <div class="au-info-text">
+                                <p>In 2008, the Residency Review Committee (RRC) in Emergency Medicine as well as the Accreditation Council for Graduate Medical Education (ACGME) endorsed a change in the education hours requirements for residencies. Previously, five hours of educational conference time was required per week. The new recommendation allows residencies to decrease their conference time to four hours per week with an additional one hour of documented asynchronous learning outside the classroom. This series abides by the CORD and ACGME’s requirements for III. Upon request, all EM program directors will have access to our master read-only list of residents who complete the quiz. In addition, faculty on our Executive Board will engage with residents in the blog comment section for questions and comments that arise during reading.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="row-5">
+                    <div class="au-container">
+                        <div class="au-info-card">
+                            <div class="au-info-header"><h1>How does this count for III credit?</h1></div>
+                            <div class="au-info-text">
+                                <p>Per the ACGME and EM RRC [PDF, pg 4-5], III credit depends on fulfilling all 4 of the following criteria, and this is how we address them:</p>
+                                <ol>
+                                    <li>The program director must monitor resident participation. – We give read-access to PDs.</li>
+                                    <li>There must be an evaluation component. – We include quizzes for each block.</li>
+                                    <li>There must be faculty oversight. – We have faculty not only screening the content for accuracy and value, but also monitoring the blog comments section if there are questions to reply in a timely fashion.</li>
+                                    <li>The activity must be monitored for effectiveness. – We have an internal QI process as well as a post-block survey to incorporate learner feedback.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="row-6">
+                    <div class="au-container">
+                        <div class="au-info-card">
+                            <div class="au-info-header"><h1>Establishing a Faculty Account</h1></div>
+                            <div class="au-info-text">
+                                <p>We welcome anyone and everyone from different skill levels, countries, and disciplines to learn on ALiEMU. At the time of this writing, ALiEMU officially supports Educator Dashboard usage to perform resident tracking ONLY for U.S. Emergency Medicine allopathic and osteopathic residency programs. This allows for easier progress tracking for III credit. We have a separate registration page specifically for faculty accounts. To access this registration page, click the Register a Faculty Account button below.</p>
+                                <p>For privacy reasons, only faculty members and those approved by the Residency Program Director (PD) will be granted access to the Educator Dashboard. Please only check the box for Require access to the Educator Dashboard if you are a faculty or staff member at your currently affiliated residency program. We request some basic biographical information in the box that follows in order to confirm your relationship to the residency program you’ve selected. If you are a Program Coordinator requesting access on behalf of your PD, please include that individual’s name for reference purposes.</p>
                             </div>
                         </div>
                     </div>
