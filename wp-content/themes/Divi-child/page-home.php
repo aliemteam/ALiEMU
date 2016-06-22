@@ -16,7 +16,7 @@
                             </div>
                             <div class="au-faculty">
                                 <div><h1>Emergency Medicine Faculty</h1></div>
-                                <div><a href="#">Start Here</a></div>
+                                <div><a href="/faculty-start">Start Here</a></div>
                             </div>
                             <div class="au-learn-more">
                                 <div><a href="#row-2" id="learn-more">Learn More</a></div>
