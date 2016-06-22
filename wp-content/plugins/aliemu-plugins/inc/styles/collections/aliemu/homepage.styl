@@ -84,7 +84,6 @@
             flex auto
             flex-flow column
             border-radius 3px
-            text-align center
             .info-header
                 border-radius 3px 3px 0 0
                 background-color $primary
@@ -92,12 +91,17 @@
                     color white
                     line-height 1.5em
                     padding 0
+                    text-align center
             .info-text
                 background $gray-light
                 padding 15px 20px
+                text-align left
                 p
                     color $gray-dark
                     font-weight 300
+                ol
+                    list-style-position inside
+                    padding 1em 0
 
         .series-logos
             display flex
@@ -109,7 +113,7 @@
                 margin-top 20px
 
     .faculty-start
-        for i in 1 2 3 4 5 6
+        for i in 1..6
             #row-{i}
                 display flex
                 height auto
