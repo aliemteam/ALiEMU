@@ -58,8 +58,13 @@
                         <div class="au-info-card">
                             <div class="au-info-header"><h1>Establishing a Faculty Account</h1></div>
                             <div class="au-info-text">
-                                <p>We welcome anyone and everyone from different skill levels, countries, and disciplines to learn on ALiEMU. At the time of this writing, ALiEMU officially supports Educator Dashboard usage to perform resident tracking ONLY for U.S. Emergency Medicine allopathic and osteopathic residency programs. This allows for easier progress tracking for III credit. We have a separate registration page specifically for faculty accounts. To access this registration page, click the Register a Faculty Account button below.</p>
-                                <p>For privacy reasons, only faculty members and those approved by the Residency Program Director (PD) will be granted access to the Educator Dashboard. Please only check the box for Require access to the Educator Dashboard if you are a faculty or staff member at your currently affiliated residency program. We request some basic biographical information in the box that follows in order to confirm your relationship to the residency program you’ve selected. If you are a Program Coordinator requesting access on behalf of your PD, please include that individual’s name for reference purposes.</p>
+                                <div>
+                                    <p>We welcome anyone and everyone from different skill levels, countries, and disciplines to learn on ALiEMU. At the time of this writing, ALiEMU officially supports Educator Dashboard usage to perform resident tracking ONLY for U.S. Emergency Medicine allopathic and osteopathic residency programs. This allows for easier progress tracking for III credit. We have a separate registration page specifically for faculty accounts. To access this registration page, click the Register a Faculty Account button below.</p>
+                                    <p>For privacy reasons, only faculty members and those approved by the Residency Program Director (PD) will be granted access to the Educator Dashboard. Please only check the box for Require access to the Educator Dashboard if you are a faculty or staff member at your currently affiliated residency program. We request some basic biographical information in the box that follows in order to confirm your relationship to the residency program you’ve selected. If you are a Program Coordinator requesting access on behalf of your PD, please include that individual’s name for reference purposes.</p>
+                                </div>
+                                <div class="au-login">
+                                    <a href="#">Register a Faculty Account</a>
+                                </div>
                             </div>
                         </div>
                     </div>
