@@ -1,5 +1,6 @@
 +prefix-classes('au-')
-    .homepage
+    .homepage,
+    .faculty-start
         #particles
             position fixed
             height calc(100vh - 50px)
@@ -115,16 +116,8 @@
     .faculty-start
         for i in 1..6
             #row-{i}
-                display flex
                 height auto
                 margin 10vh auto
-                justify-content center
-                align-items center
                 .container
                     height auto
                     width 800px
-        .info-card
-            @extend .au-homepage .au-info-card
-        .login
-            @extend .au-homepage .au-login
-            margin-top 1em
