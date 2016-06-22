@@ -1,4 +1,40 @@
 
+// ==================================================
+//                 Capsules Boxes
+// ==================================================
+
+.lesson-box
+.take-home-point
+    font-family Lato
+    border 0
+    margin 10px 0 30px
+    box-shadow $box-shadow
+    .lesson-heading
+        border-radius $card-radius
+        box-shadow $box-shadow
+        color white
+        font 600 1.25em Lato
+        margin 0
+        padding 10px
+        text-align center
+        background-color $capsules-primary
+        letter-spacing 1px
+    .lesson-body
+        *
+            line-height 1.3em
+        h3
+            background-color $gray-dark !important
+        h4
+            font-weight 400
+            letter-spacing 1px
+            padding 30px
+            text-align center
+        p, ul
+            font-weight 400
+            padding 10px
+        table
+            margin 0
+
 
 // ==================================================
 //                 About Page
@@ -129,76 +165,3 @@
 @media (max-width 480px)
     #footer-info
         display none
-
-// ==================================================
-//                    Iframes
-// ==================================================
-
-.au-air-frame
-    margin -60px 0 30px 0
-    font-family Lato
-    iframe
-        box-shadow $box-shadow
-    h2
-        border-radius $card-radius
-        font 700 1.5em Lato
-        text-align center
-        background-color $gray-dark
-        color white
-        padding 4px
-        box-shadow $box-shadow
-
-
-// Lesson box -- Used in CAPSULES. Like .au-capsule, but allows the
-// author to choose the heading
-.lesson-box
-    font-family Lato
-    border 0
-    margin 10px 0 30px
-    border-radius $card-radius
-    box-shadow $box-shadow
-    // FIXME: fix this shortcode so that it uses h2, rather than header
-    header
-    h2
-        border-radius $card-radius
-        box-shadow $box-shadow
-        color white
-        font 600 1.25em Lato
-        margin 0
-        padding 10px
-        text-align center
-        background-color $capsules-primary
-    .lesson-body
-        line-height 1.3
-        letter-spacing 0.5px
-        h3
-            font-weight 700
-            font-size 1.5em
-            text-align center
-            background-color $gray-dark
-            color white
-            padding 4px
-            margin-bottom 5px
-        p, ul
-            font-weight 400
-            padding 10px
-
-
-// CAPSULE box
-.au-capsule
-    @extend .lesson-box
-    h2
-        @extend .lesson-box h2
-        letter-spacing 1px
-        font-weight 600
-        background-color $capsules-primary
-    h4
-        border-top 0
-        font-weight 400
-        letter-spacing 1px
-        line-height 1.3em
-        padding 30px
-        text-align center
-
-.take-home-point
-    @extend .au-capsule

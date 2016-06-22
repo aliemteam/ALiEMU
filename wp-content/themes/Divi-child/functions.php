@@ -6,20 +6,6 @@
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
 
-/**
- * Shortcode which GETs and returns the recommended III hours for certificates.
- * @return string The recommended hours
- */
-function au_course_hours() {
-    $course_id = @$_GET['course_id'];
-	if (empty( $course_id )) {
-		return '';
-	}
-    $meta = get_post_meta($course_id, '_au-meta', true);
-    return $meta['au-recommended_hours'];
-}
-add_shortcode('course-hours', 'au_course_hours');
-
 
 /**
  * Master function to enqueue all scripts / styles
