@@ -263,7 +263,6 @@ class AU_Educator_Dashboard {
 		foreach ($courses as $key => $value) {
 			$this_meta = get_metadata('post', $key );
 			$meta[$key]['recommendedHours'] = intval(unserialize($this_meta['_au-meta'][0])['au-recommended_hours']);
-			// $meta[$key]['learnDashMeta'] = unserialize($this_meta['_sfwd-courses'][0]);
 			$learndash_meta = unserialize($this_meta['_sfwd-courses'][0]);
 
 			foreach($learndash_meta as $k => $v) {

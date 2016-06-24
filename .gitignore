@@ -1,6 +1,7 @@
 # ===== SENSITIVE DATA =====
 #  DO NOT COMMIT TO GITHUB
 data
+.env
 
 # ===== COPYWRITTEN FILES =====
 #  DO NOT COMMIT TO GITHUB
