@@ -1,9 +1,6 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "types": [
-            "jest"
-        ],
         "module": "commonjs",
         "moduleResolution": "node",
         "isolatedModules": false,
