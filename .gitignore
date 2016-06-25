@@ -45,3 +45,5 @@ typings/**
 
 # Coverage Reports
 coverage
+
+.env
