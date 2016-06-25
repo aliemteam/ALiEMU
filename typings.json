@@ -1,7 +1,0 @@
-{
-  "name": "aliemu",
-  "dependencies": {},
-  "globalDependencies": {
-    "sinon": "registry:dt/sinon#1.16.0+20160517064723"
-  }
-}
