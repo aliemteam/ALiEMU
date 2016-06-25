@@ -37,7 +37,6 @@
         "wp-content/plugins/aliemu-plugins/inc/utils/DashboardUtils.ts",
         "wp-content/plugins/aliemu-plugins/inc/utils/Pagination.ts",
         "typings/ALiEMU.d.ts",
-        "typings/index.d.ts",
         "typings/react-datepicker.d.ts",
         "node_modules/@types/enzyme/index.d.ts",
         "node_modules/@types/jest/index.d.ts",
@@ -45,7 +44,8 @@
         "node_modules/@types/node/index.d.ts",
         "node_modules/@types/react-addons-test-utils/index.d.ts",
         "node_modules/@types/react-dom/index.d.ts",
-        "node_modules/@types/react/index.d.ts"
+        "node_modules/@types/react/index.d.ts",
+        "node_modules/@types/sinon/index.d.ts"
     ],
     "atom": {
         "rewriteTsconfig": true
