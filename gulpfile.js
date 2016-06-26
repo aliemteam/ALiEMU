@@ -6,6 +6,7 @@ const gulp          = require('gulp');
 const browserSync   = require('browser-sync').create();
 const del           = require('del');
 const exec          = require('child_process').exec;
+const replace       = require('gulp-replace');
 // CSS
 const stylus        = require('gulp-stylus');
 const poststylus    = require('poststylus');
@@ -186,3 +187,34 @@ gulp.task('default',
         }
     )
 );
+
+// ==================================================
+//               Plugin/Theme Fixes
+// ==================================================
+
+gulp.task('fix-divi', () => {
+    const slackEmailHook = `
+    do_action('slack_email_hook', array(
+        'name' => $contact_name,
+        'email' => $contact_email,
+        'message' => stripslashes( wp_strip_all_tags( $message_pattern ) ),
+    ));
+    `;
+
+    return gulp.src([
+        './wp-content/themes/Divi/includes/builder/main-modules.php'
+    ], { base: './' })
+    .pipe(replace(/wp_mail(.|\n)+?;/, slackEmailHook))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('fix-learndash', () =>
+    gulp.src([
+        './wp-content/plugins/sfwd-lms/**/*.{php,po,pot}'
+    ], { base: './' })
+    .pipe(replace(/PRINT YOUR CERTIFICATE!?/, 'Print Certificate'))
+    .pipe(gulp.dest('./'))
+);
+
+
+gulp.task('fix-files', gulp.parallel('fix-divi', 'fix-learndash'));

@@ -36,8 +36,6 @@ services:
             WP_DEBUG: 'true'
             WP_DEBUG_LOG: 'true'
             WP_DEBUG_DISPLAY: 'false'
-            WP_ENV: >-
-                ALIEM_API_KEY=${ALIEM_API_KEY}
     db:
         image: mysql:5.7
         ports:
