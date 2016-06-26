@@ -21,6 +21,11 @@ function theme_enqueue_scripts() {
         wp_enqueue_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js');
         wp_enqueue_script('particles-home', get_stylesheet_directory_uri().'/js/particles-home.js', array('particlesjs'), false, true);
     }
+
+    if (is_page('about')) {
+        wp_enqueue_style('bootstrap-nav-css', get_stylesheet_directory_uri().'/side-nav.css');
+        wp_enqueue_script('about-nav', get_stylesheet_directory_uri().'/js/about-nav.js', array('jquery'), false, true);
+    }
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 

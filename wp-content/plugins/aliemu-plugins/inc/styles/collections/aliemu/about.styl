@@ -1,9 +1,10 @@
 +prefix-classes('au-')
     .about
         display flex
-        flex-flow row
         margin 10px 5%
         p
+        li
+        td
             font-weight 300
         .group
             margin 5px 0 45px
@@ -12,6 +13,7 @@
                 color white
                 background $primary
                 text-align center
+                border-radius $card-radius
                 line-height 1.5em
                 padding 0
                 font-size 1.5em
@@ -26,7 +28,6 @@
 
     .about-nav
         width 300px
-        // position fixed
         .nav
             li
                 margin-left 20px
@@ -42,7 +43,7 @@
                         font-weight 400
 
     .about-body
-        max-width 100%
+        padding-top 30px
         ol
             list-style decimal
             padding-left 20px
@@ -72,8 +73,10 @@
 
 #about-sidebar
     margin-right 20px
-    margin-top 10px
     min-width 300px
+    nav
+        position fixed
+        top 100px
 
 @media (max-width: 768px)
     #about-sidebar
