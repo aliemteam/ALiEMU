@@ -7,8 +7,8 @@ if (!is_page_template('page-template-blank.php')) : ?>
 
         <div id="footer-sponsors">
             <div class="footer-sponsors-container">
-                <a href="http://www.cordem.org/" target="_blank"><img src="/wp-content/uploads/2016/06/cordemlogo-color.png"></a>
-                <a href="http://www.theteachingcourse.com/" target="_blank"><img src="/wp-content/uploads/2016/06/teachingcourse-logo-color.png"></a>
+                <a href="http://www.cordem.org/" target="_blank"><img src="/wp-content/uploads/2016/06/cord-logo-grayscale.png"></a>
+                <a href="http://www.theteachingcourse.com/" target="_blank"><img src="/wp-content/uploads/2016/06/teaching-course-logo-grayscale.png"></a>
             </div>
         </div>
 		<div id="footer-bottom">
