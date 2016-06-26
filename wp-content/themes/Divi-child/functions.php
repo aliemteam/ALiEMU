@@ -1,14 +1,5 @@
 <?php
 
-// add_filter('the_content', 'deleteme');
-// function deleteme($content) {
-//     $a = rest_url();
-//     for ($i=0; $i < 20; $i++) {
-//         $content .= "<br>" . $a . "<br>";
-//     }
-//     return $content;
-// }
-// NOTE: HTTP Base URL = localhost:3000/wp-json/
 
 /**
  * Remove emojis
@@ -41,6 +32,7 @@ function requested_dashboard_access($id) {
     $username = $_POST['user_login-' . $formid];
 
     $messageData = array(
+        "id" => $id,
         "name" => $_POST['first_name-' . $formid] . ' ' . $_POST['last_name-' . $formid],
         "username" => $username,
         "email" => $_POST['user_email-' . $formid],
