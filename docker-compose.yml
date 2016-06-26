@@ -21,8 +21,10 @@ services:
             DB_PASS: root
             PLUGINS: >-
                 academic-bloggers-toolkit,
+                https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 google-analytics-dashboard-for-wp,
                 query-monitor,
+                rest-api,
                 simple-tooltips,
                 tablepress,
                 tinymce-advanced,

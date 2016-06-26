@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Remove emojis
  */
@@ -31,6 +32,7 @@ function requested_dashboard_access($id) {
     $username = $_POST['user_login-' . $formid];
 
     $messageData = array(
+        "id" => $id,
         "name" => $_POST['first_name-' . $formid] . ' ' . $_POST['last_name-' . $formid],
         "username" => $username,
         "email" => $_POST['user_email-' . $formid],
@@ -84,11 +86,15 @@ add_action('comment_post', 'slack_comment');
  * @return void
  */
 function slack_message($route, $data) {
+    $key = getenv('ALIEM_API_KEY');
     for ($i = 0; $i < 5; $i++) {
         $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/aliemu/$route", array(
+            'headers' => array(
+                'ALIEM_API_KEY' => $key,
+            ),
             'body' => array(
                 'data' => json_encode($data),
-            )
+            ),
         ));
         if (!is_wp_error($response)) break;
     }
@@ -97,37 +103,37 @@ function slack_message($route, $data) {
 
 /**
  * Ultimate Member Profile Display Name Integration
- * @param  string $author_name The author's name.
+ * @param  string $authorName The author's name.
  * @param  object $comment     WordPress comment object.
  * @return string
  */
-function wpdiscuz_um_author($author_name, $comment) {
+function wpdiscuz_um_author($authorName, $comment) {
     if ($comment->user_id) {
         $column = 'display_name'; // Other options: 'user_login', 'user_nicename', 'nickname', 'first_name', 'last_name'
         if (class_exists('UM_API')) {
             um_fetch_user($comment->user_id);
-            $author_name = um_user($column);
+            $authorName = um_user($column);
             um_reset_user();
-        } else {
-            $author_name = get_the_author_meta($column, $comment->user_id);
+            return $authorName;
         }
+        $authorName = get_the_author_meta($column, $comment->user_id);
     }
-    return $author_name;
+    return $authorName;
 }
 add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
 
 
 /**
  * Ultimate Member Profile URL Integration
- * @param  string $profile_url The user's profile URL?
+ * @param  string $profileUrl The user's profile URL?
  * @param  object $user        WordPress user object.
  * @return string
  */
-function wpdiscuz_um_profile_url($profile_url, $user) {
+function wpdiscuz_um_profile_url($profileUrl, $user) {
     if ($user && class_exists('UM_API')) {
         um_fetch_user($user->ID);
-        $profile_url = um_user_profile_url();
+        $profileUrl = um_user_profile_url();
     }
-    return $profile_url;
+    return $profileUrl;
 }
 add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);
