@@ -15,7 +15,7 @@
         #row-1
             display flex
             margin 0 5%
-            height 100vh
+            height calc(100vh - 50px)
             padding-bottom 20vh
             justify-content center
             align-items center
@@ -28,9 +28,9 @@
             #row-{i}
                 @extend .au-homepage #row-1
                 height auto
-                margin 15vh auto
                 padding 0
                 .container
+                    margin 50px 0
                     height auto
                     width 800px
 
