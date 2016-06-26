@@ -17,7 +17,7 @@ function theme_enqueue_scripts() {
     wp_enqueue_script('nav-helper', get_stylesheet_directory_uri().'/js/nav-helper.js', false, false, true);
 
     // Only on home page
-    if (is_front_page()) {
+    if (is_front_page() || is_page('faculty-start')) {
         wp_enqueue_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js');
         wp_enqueue_script('particles-home', get_stylesheet_directory_uri().'/js/particles-home.js', array('particlesjs'), false, true);
     }
