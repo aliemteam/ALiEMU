@@ -4,7 +4,7 @@
 
 File | Location | Description
 -----|----------|------------
-`/includes/builder/main-modules.php`| Just under the `wp_mail` function on line 9552 | Adds hook so we can send emails to slack (be sure to also comment out the `wp_mail` function above)
+`/includes/builder/main-modules.php`| Just under the `wp_mail` function on line 9601 | Adds hook so we can send emails to slack (be sure to also comment out the `wp_mail` function above)
 
 ```php
 <?php

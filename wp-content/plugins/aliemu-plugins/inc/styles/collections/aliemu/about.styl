@@ -1,0 +1,83 @@
++prefix-classes('au-')
+    .about
+        display flex
+        margin 10px 5%
+        p
+        li
+        td
+            font-weight 300
+        .group
+            margin 5px 0 45px
+            background $gray-light
+            h3
+                color white
+                background $primary
+                text-align center
+                border-radius $card-radius
+                line-height 1.5em
+                padding 0
+                font-size 1.5em
+            div
+                padding 25px
+
+        .subgroup
+            background $gray-light
+            padding 25px 20px 15px
+            h4
+                font-size 1.2em
+
+    .about-nav
+        width 300px
+        .nav
+            li
+                margin-left 20px
+                padding-left 5px
+                margin-bottom 7px
+            a
+                font-weight 600
+            .sub-nav
+                li
+                    padding-left 20px
+                    margin-bottom 7px
+                    a
+                        font-weight 400
+
+    .about-body
+        padding-top 30px
+        ol
+            list-style decimal
+            padding-left 20px
+            li
+                margin-top 0.5em
+        ul
+            list-style disc
+            font-weight 400
+            padding-left 30px
+            margin-top 0.5em
+            font-weight 400
+
+
+    .iii-table
+        margin-top 1.2em
+        thead
+            background $primary
+            color white
+            text-align center
+            th
+                padding 7px
+
+        td
+            padding 10px
+            text-align center
+
+
+#about-sidebar
+    margin-right 20px
+    min-width 300px
+    nav
+        position fixed
+        top 100px
+
+@media (max-width: 768px)
+    #about-sidebar
+        display none

@@ -1,0 +1,167 @@
+
+// ==================================================
+//                 Capsules Boxes
+// ==================================================
+
+.lesson-box
+.take-home-point
+    font-family Lato
+    border 0
+    margin 10px 0 30px
+    box-shadow $box-shadow
+    .lesson-heading
+        border-radius $card-radius
+        box-shadow $box-shadow
+        color white
+        font 600 1.25em Lato
+        margin 0
+        padding 10px
+        text-align center
+        background-color $capsules-primary
+        letter-spacing 1px
+    .lesson-body
+        *
+            line-height 1.3em
+        h3
+            background-color $gray-dark !important
+        h4
+            font-weight 400
+            letter-spacing 1px
+            padding 30px
+            text-align center
+        p, ul
+            font-weight 400
+            padding 10px
+        table
+            margin 0
+
+
+// ==================================================
+//                 About Page
+// ==================================================
+
+#post-1151
+    .et_pb_row
+        display flex
+
++prefix-classes('au-')
+    .team-container
+        display flex
+        flex-wrap wrap
+        justify-content space-around
+        width 70%
+        margin auto
+
+    .team-member
+        display flex
+        flex-direction column
+        max-width 250px
+        margin 20px
+        .photo img
+            height 250px
+            border-radius 250px
+            margin-bottom 10px
+        .about
+            display flex
+            flex-direction column
+            flex auto
+        .name
+            display flex
+            h4
+                display inline-block
+            div
+                display inline-block
+                padding-right 5px
+    // Circular portraits
+    .person-circle img
+        border-radius 100%
+
+// Team member headers
+.au-team-header h1
+    font 600 3em Lato
+
+.au-team-header
+    background-color $gray-dark
+.et_pb_member_position
+    color $font-color
+
+.et_pb_section_0
+.et_pb_section_2
+.et_pb_section_4
+    &.et_pb_section.au-about-header
+        background-color $primary !important
+
+
+// ==================================================
+//                 Contact Page
+// ==================================================
+#contact-form
+    max-width 80%
+    margin auto
+
+// ==================================================
+//                 User Agreement
+// ==================================================
+#au-terms
+    max-width 80%
+    margin 40px auto
+    h1
+        font-weight 600
+        text-align center
+        margin 15px 0
+    h2
+        font-weight 600
+        margin 10px 0
+    h4
+        text-decoration underline
+        margin-left 20px
+    p, ul, ol
+        margin-left 40px
+        text-align justify
+    p:first-of-type
+        margin-left 0
+
+// ==================================================
+//                     Footer
+// ==================================================
+#main-footer
+    display flex
+    flex-flow column
+    background $gray-dark
+#footer-sponsors
+    display flex
+    .footer-sponsors-container
+        background $gray-light
+        padding 5px
+        width 100%
+        z-index 2
+        display flex
+        justify-content space-around
+        a img
+            max-height 75px
+            mix-blend-mode multiply
+#footer-bottom
+    display flex
+    padding 0
+    .footer-bottom-container
+        display flex
+        z-index 2
+        background $gray-dark
+        flex auto
+        justify-content space-between
+        padding 0 20px
+        > div
+            line-height 50px
+            height 50px
+        #footer-social-icons
+            display flex
+            > div
+                padding 0 5px
+            a::before
+                line-height 50px
+        #footer-info
+            padding-bottom 0
+
+@media (max-width 480px)
+    #footer-info
+        display none

@@ -13,10 +13,10 @@
  * Instantiates the toastr scripts
  */
 function add_toastr() {
-    wp_register_script( 'toastr', ('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js'), false, '2.1.2', true );
-    wp_register_style( 'toastr-css', ('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'), false, '2.1.2' );
-    wp_enqueue_script( 'toastr' );
-    wp_enqueue_style( 'toastr-css' );
+    wp_register_script('toastr', ('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js'), false, '2.1.2', true);
+    wp_register_style('toastr-css', ('https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css'), false, '2.1.2');
+    wp_enqueue_script('toastr');
+    wp_enqueue_style('toastr-css');
 }
 add_action('wp_enqueue_scripts', 'add_toastr');
 
@@ -34,7 +34,6 @@ function program_toast($post) {
     global $current_user;
     $grad_year_is_set = get_user_meta($current_user->ID, 'au_graduation_year', true);
     $is_a_resident = get_user_meta($current_user->ID, 'role', true);
-    // $is_a_resident = get_user_meta($current_user->ID, 'residency_us_em', true);
 
     if ($_SERVER["REQUEST_URI"] === "/user/$current_user->user_login/" &&
         !$grad_year_is_set && $is_a_resident == 'em-resident') {

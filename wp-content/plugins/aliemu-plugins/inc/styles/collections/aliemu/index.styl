@@ -1,3 +1,6 @@
+*
+    font-family Lato
+
 p
     letter-spacing 0.01em
     word-spacing 0.05em
@@ -18,8 +21,7 @@ select:disabled
 .comment-content ol,
 .entry-content ol
     list-style-type decimal
-    list-style-position outside
-    letter-spacing 1px
+    list-style-position inside
 
 
 // Remove padding on homepage slider
@@ -47,3 +49,11 @@ select:disabled
 @media only screen and (max-width 768px)
     h1
         font-size 1.5em
+
+
+@require 'homepage'
+@require 'series-pages'
+@require 'dashboards'
+@require 'courselist'
+@require 'misc'
+@require 'about'

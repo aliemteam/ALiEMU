@@ -22,6 +22,6 @@ branches:
 notifications:
     webhooks:
         urls:
-            - http://104.131.189.237:5000/aliemu/hooks/travis-ci
-        on_success: never
+            - https://aliem-slackbot.herokuapp.com/aliemu/hooks/travis-ci
+        on_success: change
         on_failure: change

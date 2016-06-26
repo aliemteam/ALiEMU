@@ -262,9 +262,10 @@ class AU_Educator_Dashboard {
 		$meta = array();
 		foreach ($courses as $key => $value) {
 			$this_meta = get_metadata('post', $key );
-			$meta[$key]['recommendedHours'] = intval(unserialize($this_meta['_au-meta'][0])['au-recommended_hours']);
-			// $meta[$key]['learnDashMeta'] = unserialize($this_meta['_sfwd-courses'][0]);
-			$learndash_meta = unserialize($this_meta['_sfwd-courses'][0]);
+			$meta[$key]['recommendedHours'] = @intval(unserialize($this_meta['_au-meta'][0])['au-recommended_hours']);
+			$learndash_meta = @unserialize($this_meta['_sfwd-courses'][0]);
+
+            if (!$learndash_meta) continue;
 
 			foreach($learndash_meta as $k => $v) {
 				$camel_key = preg_replace_callback(
@@ -353,7 +354,9 @@ class AU_Educator_Dashboard {
 	private static function get_course_categories($courses) {
 		$categories = array();
 		foreach ($courses as $key => $value) {
-			$categories[$key] = get_the_category($key)[0]->name;
+            $category = get_the_category($key);
+            if (!$category) continue;
+            $categories[$key] = $category[0]->name;
 		}
 		return $categories;
 	}

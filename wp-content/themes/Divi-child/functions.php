@@ -1,58 +1,72 @@
 <?php
 
 
-add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
+/**
+ * Remove emojis
+ */
+remove_action('wp_head', 'print_emoji_detection_script', 7);
+remove_action('wp_print_styles', 'print_emoji_styles');
+
+
+/**
+ * Master function to enqueue all scripts / styles
+ * @return void
+ */
 function theme_enqueue_scripts() {
-    // CSS
     wp_enqueue_style('parent-style', get_template_directory_uri().'/style.css');
-    wp_enqueue_script('nav-helper',
-        get_stylesheet_directory_uri().'/js/nav-helper.js',
-        false, false, true);
-}
+    wp_enqueue_script('nav-helper', get_stylesheet_directory_uri().'/js/nav-helper.js', false, false, true);
 
-add_action('user_register', 'requested_dashboard_access');
-function requested_dashboard_access($id) {
-    if (isset($_POST['au_requested_educator_access']) && $_POST['au_requested_educator_access'][0] === 'Yes') {
-        $formid = $_POST['form_id'];
-        $username = $_POST['user_login-' . $formid];
+    // Only on home page
+    if (is_front_page() || is_page('faculty-start')) {
+        wp_enqueue_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js');
+        wp_enqueue_script('particles-home', get_stylesheet_directory_uri().'/js/particles-home.js', array('particlesjs'), false, true);
+    }
 
-        $headers = array(
-            'Content-Type: text/html',
-            'charset=UTF-8',
-        );
-        $messageData = array(
-            "First Name" => $_POST['first_name-' . $formid],
-            "Last Name" => $_POST['last_name-' . $formid],
-            "Email Address" => $_POST['user_email-' . $formid],
-            "Program" => $_POST['residency_us_em'],
-            "Role" => $_POST['role'] == 'em-resident' ? 'Resident' : 'Faculty',
-            "Graduation Year" => $_POST['au_graduation_year-' . $formid],
-            "Bio" => $_POST['description']
-        );
-
-        $message = "<div style='font-size: 16px; font-family: sans;'>"
-                 .      "<p>User '{$username}' has requested dashboard access.</p>"
-                 .      "<h3>User Information</h3>"
-                 .      "<table>";
-
-        foreach ($messageData as $key => $value) {
-            $message .= "<tr>"
-                     .      "<td style='min-width: 200px; font-weight: bold;'>{$key}</td>"
-                     .      "<td>{$value}</td>"
-                     .  "</tr>";
-        }
-        $message .= "</table><p>Please confirm or reject as soon as possible. Thanks!</p></div>";
-
-        wp_mail(array('mlin@aliem.com', 'cgaafary@gmail.com', 'dereksifford@gmail.com'), 'User Requesting Dashboard Access', $message, $headers);
+    if (is_page('about')) {
+        wp_enqueue_style('bootstrap-nav-css', get_stylesheet_directory_uri().'/side-nav.css');
+        wp_enqueue_script('about-nav', get_stylesheet_directory_uri().'/js/about-nav.js', array('jquery'), false, true);
     }
 }
+add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 
-add_action('slack_email_hook', 'slack_contact');
+
+function requested_dashboard_access($id) {
+    if (!isset($_POST['au_requested_educator_access']) || !$_POST['au_requested_educator_access'][0] === 'Yes') return;
+
+    $formid = $_POST['form_id'];
+    $username = $_POST['user_login-' . $formid];
+
+    $messageData = array(
+        "id" => $id,
+        "name" => $_POST['first_name-' . $formid] . ' ' . $_POST['last_name-' . $formid],
+        "username" => $username,
+        "email" => $_POST['user_email-' . $formid],
+        "program" => $_POST['residency_us_em'],
+        "role" => $_POST['role'] == 'em-resident' ? 'Resident' : 'Faculty',
+        "bio" => $_POST['description']
+    );
+
+    slack_message('messages/dashboard-access', $messageData);
+}
+add_action('user_register', 'requested_dashboard_access');
+
+
+/**
+ * Routes contact form messages to Slack
+ * @param  array $data  Associative array with message data.
+ * @return void
+ */
 function slack_contact($data) {
     slack_message('messages/contact-form', $data);
 }
+add_action('slack_email_hook', 'slack_contact');
 
-add_action('comment_post', 'slack_comment');
+
+/**
+ * Routes all comments to Slack
+ * @param  string $commentId The comment ID.
+ * @return void
+ */
 function slack_comment($commentId) {
     $comment = get_comment($commentId);
     $post = get_post($comment->comment_post_ID);
@@ -64,6 +78,8 @@ function slack_comment($commentId) {
         'postName' => $post->post_title,
     ));
 }
+add_action('comment_post', 'slack_comment');
+
 
 /**
  * Master handler for posting messages to Slack.
@@ -75,44 +91,54 @@ function slack_comment($commentId) {
  * @return void
  */
 function slack_message($route, $data) {
+    $key = get_option('ALIEM_API_KEY');
     for ($i = 0; $i < 5; $i++) {
-        $response = wp_remote_post("http://104.131.189.237:5000/aliemu/$route", array(
+        $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/aliemu/$route", array(
+            'headers' => array(
+                'ALIEM_API_KEY' => $key,
+            ),
             'body' => array(
                 'data' => json_encode($data),
-            )
+            ),
         ));
         if (!is_wp_error($response)) break;
     }
 }
 
-function console_log( $data ){
-  echo '<script>';
-  echo 'console.log('. json_encode( $data ) .')';
-  echo '</script>';
-}
 
-////////////////////////////////////////////////////////////////////////
-// Ultimate Member Profile Display Name Integration ////////////////////
-////////////////////////////////////////////////////////////////////////
-add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
-function wpdiscuz_um_author($author_name, $comment) {
+/**
+ * Ultimate Member Profile Display Name Integration
+ * @param  string $authorName The author's name.
+ * @param  object $comment     WordPress comment object.
+ * @return string
+ */
+function wpdiscuz_um_author($authorName, $comment) {
     if ($comment->user_id) {
         $column = 'display_name'; // Other options: 'user_login', 'user_nicename', 'nickname', 'first_name', 'last_name'
         if (class_exists('UM_API')) {
-            um_fetch_user($comment->user_id); $author_name = um_user($column); um_reset_user();
-        } else {
-            $author_name = get_the_author_meta($column, $comment->user_id);
+            um_fetch_user($comment->user_id);
+            $authorName = um_user($column);
+            um_reset_user();
+            return $authorName;
         }
+        $authorName = get_the_author_meta($column, $comment->user_id);
     }
-    return $author_name;
+    return $authorName;
 }
-////////////////////////////////////////////////////////////////////////
-// Ultimate Member Profile URL Integration /////////////////////////////
-////////////////////////////////////////////////////////////////////////
-add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);
-function wpdiscuz_um_profile_url($profile_url, $user) {
+add_filter('wpdiscuz_comment_author', 'wpdiscuz_um_author', 10, 2);
+
+
+/**
+ * Ultimate Member Profile URL Integration
+ * @param  string $profileUrl The user's profile URL?
+ * @param  object $user        WordPress user object.
+ * @return string
+ */
+function wpdiscuz_um_profile_url($profileUrl, $user) {
     if ($user && class_exists('UM_API')) {
-        um_fetch_user($user->ID); $profile_url = um_user_profile_url();
+        um_fetch_user($user->ID);
+        $profileUrl = um_user_profile_url();
     }
-    return $profile_url;
+    return $profileUrl;
 }
+add_filter('wpdiscuz_profile_url', 'wpdiscuz_um_profile_url', 10, 2);

@@ -5,16 +5,36 @@
     text-align center
 
 
-.category-capsules .tablepress thead th
-    color white
-    font 600 1.2em Lato
-    text-align center
-    background-color $primary-capsules
+.tablepress
+    thead th
+        color white
+        font 400 1.2em Lato
+        text-align center
+        background $primary
+    tfoot th
+        @extend .tablepress thead th
+        font-size 0.8em
+        text-align left
+        a
+            color white
 
+.category-capsules
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $capsules-primary
 
-.category-air .tablepress thead th
-    @extend .category-capsules .tablepress thead th
-    background-color $primary-air
+.category-air
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $air-primary
+
+.category-air-pro
+    .tablepress
+        thead th,
+        tfoot th
+            background-color $airpro-primary
 
 
 #content-area .au-table-needsborders td
@@ -34,6 +54,16 @@ img.um-avatar
     margin-left 8px
 
 // Comments
+.category-capsules
+    #wc-comment-header
+        background-color $capsules-primary
+.category-air
+    #wc-comment-header
+        background-color $air-primary
+.category-air-pro
+    #wc-comment-header
+        background-color $airpro-primary
+
 #wc-comment-header
     color white
     background-color $primary
@@ -58,6 +88,21 @@ img.um-avatar
 .um-profile-body
     max-width 100% !important
 
+input[type=submit].um-button
+input[type=submit].um-button:focus
+a.um-button
+a.um-button.um-disabled:hover
+a.um-button.um-disabled:focus
+a.um-button.um-disabled:active
+    background $primary !important
+
+.um-button.um-alt
+input[type=submit].um-button.um-alt
+    color white !important
+
+.um-profile-headericon a:hover
+.um-profile-edit-a.active
+    color $primary !important
 
 
 // ================== WpProQuiz ==================
@@ -65,11 +110,15 @@ img.um-avatar
 
 .category-air
     .wpProQuiz_button
-        bordered-button(small, $primary-air)
+        bordered-button(small, $air-primary)
 
 .category-capsules
     .wpProQuiz_button
-        bordered-button(small, $primary-capsules)
+        bordered-button(small, $capsules-primary)
+
+.category-air-pro
+    .wpProQuiz_button
+        bordered-button(small, $airpro-primary)
 
 .quiz_continue_link
     order 1
@@ -101,9 +150,9 @@ img.um-avatar
             margin 10px 0
             .questionListItem
                 list-style none
-                margin-left 0 !important
                 .questionInput
                     line-height 26px
+                    margin-left -20px
                     vertical-align text-top
 
     .results > div:last-of-type
