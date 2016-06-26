@@ -6,7 +6,7 @@
         p
             font-weight 300
         .group
-            margin 30px 0
+            margin 5px 0 45px
             background $gray-light
             h3
                 color white
@@ -25,19 +25,56 @@
                 font-size 1.2em
 
     .about-nav
-        margin-right 20px
-        min-width 300px
-        display fixed
-        li
-            margin-left 20px
-            margin-bottom 5px
-        // a
-        //     color $gray-dark
-        //     font-weight 600
+        width 300px
+        // position fixed
+        .nav
+            li
+                margin-left 20px
+                padding-left 5px
+                margin-bottom 7px
+            a
+                font-weight 600
+            .sub-nav
+                li
+                    padding-left 20px
+                    margin-bottom 7px
+                    a
+                        font-weight 400
 
     .about-body
         max-width 100%
+        ol
+            list-style decimal
+            padding-left 20px
+            li
+                margin-top 0.5em
+        ul
+            list-style disc
+            font-weight 400
+            padding-left 30px
+            margin-top 0.5em
+            font-weight 400
+
+
+    .iii-table
+        margin-top 1.2em
+        thead
+            background $primary
+            color white
+            text-align center
+            th
+                padding 7px
+
+        td
+            padding 10px
+            text-align center
+
 
 #about-sidebar
-    ul
-        width 100%
+    margin-right 20px
+    margin-top 10px
+    min-width 300px
+
+@media (max-width: 768px)
+    #about-sidebar
+        display none

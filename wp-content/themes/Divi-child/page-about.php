@@ -2,8 +2,9 @@
 <div id="main-content"><?php while (have_posts()) : the_post(); ?>
     <article id="post-<?php the_ID(); ?>" <?php post_class('au-about'); ?>>
         <!-- Nav Bar -->
+        <div id="about-sidebar">
         <nav class="au-about-nav">
-            <ul id="about-sidebar">
+            <ul class="au-nav">
                 <!-- ALiEMU Content -->
                 <li>
                     <a href="#au-content">The ALiEMU Content</a>
@@ -12,26 +13,38 @@
                 <li>
                     <a href="#au-content">ALiEMU Courses Eligible for III or Asynchronous Learning Credit</a>
                 </li>
-                <!-- Capsules -->
-                <li>
-                    <a href="#au-about-capsules">Capsules Series</a>
-                        <ul class="nav nav-stacked">
-                            <li><a href="#au-about-capsules-intro">What is the Capsules series?</a></li>
-                            <li><a href="#au-about-capsules-design">Design</a></li>
-                        </ul>
-                </li>
                 <!-- AIR Series -->
                 <li>
                     <a href="#au-about-air">AIR Series</a>
-                        <ul class="nav nav-stacked">
+                        <ul class="au-sub-nav">
                             <li><a href="#au-about-air-intro">What is the AIR Series?</a></li>
                             <li><a href="#au-about-air-creation">Why create the AIR Series?</a></li>
                             <li><a href="#au-about-air-posts">How are the highest quality blog posts and podcasts identified?</a></li>
-                            <li><a href="#au-about-air-posts">What are the definitions of the AIR-Approved and Honorable Mention labels?</a></li>
+                            <li><a href="#au-about-air-labels">What are the definitions of the AIR-Approved and Honorable Mention labels?</a></li>
+                        </ul>
+                </li>
+                <!-- AIR-Pro Series -->
+                <li>
+                    <a href="#au-about-air-pro">AIR-Pro Series</a>
+                        <ul class="au-sub-nav">
+                            <li><a href="#au-about-air-pro-intro">What is the AIR-Pro Series?</a></li>
+                            <li><a href="#au-about-air-pro-creation">Why create the AIR-Pro Series?</a></li>
+                            <li><a href="#au-about-air-pro-posts">How are the highest quality blog posts and podcasts identified?</a></li>
+                            <li><a href="#au-about-air-pro-different">How is the scoring different from the AIR Series?</a></li>
+                            <li><a href="#au-about-air-pro-labels">What are the definitions of the AIR-Pro Approved and Honorable Mention labels?</a></li>
+                        </ul>
+                </li>
+                <!-- Capsules -->
+                <li>
+                    <a href="#au-about-capsules">Capsules Series</a>
+                        <ul class="au-sub-nav">
+                            <li><a href="#au-about-capsules-intro">What is the Capsules series?</a></li>
+                            <li><a href="#au-about-capsules-creation">Why create the Capsules series?</a></li>
                         </ul>
                 </li>
             </ul>
         </nav>
+        </div>
         <!-- Main Content -->
             <div class="au-about-body">
                 <!-- The ALiEMU Content -->
