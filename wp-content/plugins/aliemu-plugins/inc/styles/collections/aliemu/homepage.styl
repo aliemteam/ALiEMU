@@ -15,7 +15,8 @@
         #row-1
             display flex
             margin 0 5%
-            height calc(100vh - 50px)
+            height 100vh
+            padding-bottom 20vh
             justify-content center
             align-items center
             .container
@@ -28,6 +29,7 @@
                 @extend .au-homepage #row-1
                 height auto
                 margin 10vh auto
+                padding 0
                 .container
                     height auto
                     width 800px
@@ -39,22 +41,14 @@
             justify-content space-between
             > div
                 margin 5px 0
-        .login
-            display flex
-            flex auto
-            border-radius 3px
-            align-items center
-            background $gray-light
-            justify-content space-around
-            a
-                bordered-button(large, $primary)
-        .faculty
+        .general
             display flex
             flex auto
             flex-flow column
-            background $gray-dark
+            background $gray-light
             border-radius 3px
             text-align center
+            padding 5px 0
             div
                 position relative
                 flex auto
@@ -63,11 +57,20 @@
                 align-items center
                 text-align center
                 h1
+                    color $primary
+                    padding 0
+                a
+                    bordered-button(large, $primary)
+        .faculty
+            @extend .au-homepage .au-general
+            background $gray-dark
+            div
+                h1
                     color white
                 a
                     bordered-button(large, white, $gray-dark)
 
-        .learn-more
+        .login
             background $primary
             display flex
             flex auto
