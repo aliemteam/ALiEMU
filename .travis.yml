@@ -23,5 +23,5 @@ notifications:
     webhooks:
         urls:
             - https://aliem-slackbot.herokuapp.com/aliemu/hooks/travis-ci
-        on_success: never
+        on_success: change
         on_failure: change
