@@ -97,13 +97,22 @@ series-common(colorvar)
                 &:hover
                     background-color $gray-light !important
                 &.completed
-                    background url('../images/completed.png') no-repeat
+                    background url('/wp-content/uploads/2016/06/completed.png') no-repeat
                     background-size 30px
                     background-position 98% center
                 &.notcompleted
-                    background url('../images/notcompleted.png') no-repeat
+                    background url('/wp-content/uploads/2016/06/notcompleted.png') no-repeat
                     background-size 30px
                     background-position 98% center
+    @media (max-width 480px)
+        #lessons_list
+        #quiz_list
+        #course_list
+            .list-count
+            .list-arrow
+                padding 3px
+            h4 a
+                padding 10px 30px 10px 2%
 
     .category-air
         series-common($air-primary)
