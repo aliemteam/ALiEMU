@@ -16,7 +16,7 @@
     },
     "filesGlob": [
         "{wp-content,test-utils}/**/*.{ts,tsx}",
-        "typings/{ALiEMU,index,react-datepicker}.d.ts",
+        "typings/{ALiEMU,react-datepicker}.d.ts",
         "node_modules/@types/**/*index.d.ts",
         "!dist/**"
     ],
