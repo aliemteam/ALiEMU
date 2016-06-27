@@ -12,7 +12,7 @@ get_header(); ?>
                             <img src="/wp-content/uploads/2016/06/ALiEMU-logo-long.png" alt="" />
                         </div>
                         <div class="au-splash">
-                        <?php if (!$user): ?>
+                        <?php if (!is_user_logged_in()): ?>
                             <div class="au-general">
                                 <div><h1>General Members</h1></div>
                                 <div><a href="#row-4">Register Here</a></div>
@@ -41,7 +41,7 @@ get_header(); ?>
                         </div>
                     </div>
                 </div>
-                <?php if (!$user): ?>
+                <?php if (!is_user_logged_in()): ?>
                     <div id="row-2">
                         <div class="au-container">
                             <div class="au-info-card">
