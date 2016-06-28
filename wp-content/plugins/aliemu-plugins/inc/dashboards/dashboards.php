@@ -8,28 +8,6 @@
  */
 
  /***********************************************************
-  *      Ultimate Member Course Dashboard Profile Tab       *
-  ***********************************************************/
-
- // Add a Course Dashboard tab to show LeardDash Profile
- add_filter('um_profile_tabs', 'coursedash_tab', 500);
- function coursedash_tab( $tabs ) {
-     $tabs['coursedash'] = array(
-         'name' => 'Course Dashboard',
-         'icon' => 'um-faicon-list-alt',
-         'custom' => true
-     );
-     return $tabs;
- }
-
- // Tell the tab to display LearnDash Profile
- add_action('um_profile_content_coursedash_default', 'um_profile_content_coursedash_default');
- function um_profile_content_coursedash_default( $args ) {
-     echo do_shortcode('[ld_profile]');
- }
-
-
- /***********************************************************
   *     Ultmate Member Educator Dashboard Functionality     *
   ***********************************************************/
 
