@@ -1,7 +1,9 @@
 coursebox(primarycolor)
     background white
     box-shadow $box-shadow
+    white-space normal
     margin 10px
+    display inline-block
     max-width 300px
     min-width 300px
     .au-courseheader
@@ -57,12 +59,18 @@ coursebox(primarycolor)
             a
                 bordered-button(medium, primarycolor)
 
-.category-air .au-coursebox
-    coursebox($air-primary)
-.category-capsules .au-coursebox
-    coursebox($capsules-primary)
-.category-air-pro .au-coursebox
-    coursebox($airpro-primary)
+.category-air
+.tag-air
+    .au-coursebox
+        coursebox($air-primary)
+.category-capsules
+.tag-capsules
+    .au-coursebox
+        coursebox($capsules-primary)
+.category-air-pro
+.tag-air-pro
+    .au-coursebox
+        coursebox($airpro-primary)
 
 @media all and (max-width: 480px)
     .au-coursebox

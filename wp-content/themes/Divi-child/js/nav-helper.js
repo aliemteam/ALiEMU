@@ -26,6 +26,15 @@
 
             topMenus[key].children[0].addEventListener('click', function(e) {
                 e.preventDefault();
+                var isLink =
+                    e.target.tagName === 'A'
+                    && e.target.attributes[0].nodeValue !== '#'
+                    && e.target.pathname !== '/user/'
+
+                if (isLink) {
+                    return window.location.href = e.target.href;
+                }
+
                 var items = e.target.nextElementSibling.children;
                 var i;
 

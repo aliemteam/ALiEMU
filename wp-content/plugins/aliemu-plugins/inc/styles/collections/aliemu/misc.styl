@@ -10,6 +10,7 @@
     margin 10px 0 30px
     box-shadow $box-shadow
     .lesson-heading
+    h2
         border-radius $card-radius
         box-shadow $box-shadow
         color white
@@ -19,11 +20,17 @@
         text-align center
         background-color $capsules-primary
         letter-spacing 1px
+    p
+        padding 10px 20px
+        text-align justify
     .lesson-body
         *
             line-height 1.3em
         h3
-            background-color $gray-dark !important
+            background-color $capsules-primary !important
+            color white
+            text-align center
+            padding 10px
         h4
             font-weight 400
             letter-spacing 1px
@@ -59,6 +66,9 @@
         margin 20px
         .photo img
             max-height 250px
+            max-width 250px
+            height 100%
+            width 100%
             border-radius 250px
             margin-bottom 10px
         .about

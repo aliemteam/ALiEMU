@@ -1,12 +1,15 @@
 .category-air
+.tag-air
     .au-card
         card($air-primary)
 
 .category-capsules
+.tag-capsules
     .au-card
         card($capsules-primary)
 
 .category-air-pro
+.tag-air-pro
     .au-card
         card($airpro-primary)
 
@@ -35,8 +38,13 @@
                 padding 0
 
     .course-boxes
-        display flex
-        overflow-x auto
+        overflow-x scroll
+        overflow-y hidden
+        -webkit-overflow-scrolling touch
+        white-space nowrap
+        width auto
+        max-height 360px
+        height 360px
         align-items center
         background $gray-light
         .coursebox
@@ -45,7 +53,7 @@
 
     .no-scroll
         flex-flow row wrap
-        justify-content center 
+        justify-content center
         padding 20px 30px
 
 @media (max-width: 480px)
