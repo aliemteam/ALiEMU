@@ -138,7 +138,7 @@
                     </div>
                     <div id="au-about-air-pro-different" class="au-subgroup">
                         <h4>How is the scoring different from the AIR Series?</h4>
-                        <p>TThere are 3 areas where the two series differ.</p>
+                        <p>There are 3 areas where the two series differ.</p>
                         <ol>
                             <li>On the scoring instrument, we replaced the Best Evidence in Emergency Medicine (BEEM) domain with Recency.</li>
                             <li>The AIR-Pro series curates blogs and podcasts without a timeframe limit, unlike the AIR series which only includes posts within the previous 12 months. Based on our experience with the AIR Series, we observed that many high-quality, advanced-level blogs and podcasts were older than 12 months. AIR’s time cut-off was created partly to avoid impractically long lists of blog posts and podcasts to review each month. Because the AIR-Pro Series concentrates on very focused questions, we removed this timeframe cut off and instead just reward more recently published posts with a higher Recency score.</li>
