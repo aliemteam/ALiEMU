@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Remove emojis
  */
@@ -28,6 +27,19 @@ function theme_enqueue_scripts() {
     }
 }
 add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
+
+
+add_filter('body_class', 'remove_sidebar_when_unneeded');
+function remove_sidebar_when_unneeded($classes) {
+    global $post;
+    $category = get_the_category($post->ID);
+
+    if ($category[0]->slug !== 'capsules') {
+        $classes[] = 'et_full_width_page';
+    }
+
+    return $classes;
+}
 
 
 function requested_dashboard_access($id) {
@@ -79,7 +91,6 @@ function slack_comment($commentId) {
     ));
 }
 add_action('comment_post', 'slack_comment');
-
 
 /**
  * Master handler for posting messages to Slack.
