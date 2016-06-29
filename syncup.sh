@@ -102,12 +102,16 @@ case "$1" in
                     ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
                     cd public_html
                     wp db export database.sql"
+                    echo '=> Downloading database to local machine...'
                     scp -i aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql .
+                    echo '=> Deleting database copy from server...'
+                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
                 else
                     ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
                     cd public_html
                     wp db export database.sql"
                     scp -i aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql .
+                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
 
                     # Machine not running? Start it up!
                     if [[ $(docker-machine status "$DOCKER_MACHINE_NAME") != 'Running' ]]; then
