@@ -130,7 +130,8 @@ class AU_Educator_Dashboard {
 		$users = get_users(array(
 			'meta_key' => 'residency_us_em',
 			'meta_value' => $this->current_user->residency_us_em,
-			'fields' => 'all_with_meta'
+			'fields' => 'all_with_meta',
+			'exclude' => $graduatedUsers
 		));
 		foreach ($users as $key => $value) {
 			unset($value->data->user_pass);
