@@ -120,10 +120,18 @@ class AU_Educator_Dashboard {
 	 * @return mixed[] Associative array of users within the current user's Institution
 	 */
 	private function get_current_users() {
+		$graduatedUsers = get_users(array(
+			'meta_key' => 'au_graduation_year',
+			'meta_value' => date('Y'),
+			'meta_compare' => '<',
+			'fields' => 'ID'
+		));
+
 		$users = get_users(array(
 			'meta_key' => 'residency_us_em',
 			'meta_value' => $this->current_user->residency_us_em,
-			'fields' => 'all_with_meta'
+			'fields' => 'all_with_meta',
+			'exclude' => $graduatedUsers
 		));
 		foreach ($users as $key => $value) {
 			unset($value->data->user_pass);
