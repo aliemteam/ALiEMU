@@ -9,7 +9,6 @@
  */
 
 
-require_once (dirname(__FILE__) . '/inc/meta-fields.php');
 require_once (dirname(__FILE__) . '/inc/dashboards/dashboards.php');
 require_once (dirname(__FILE__) . '/inc/shortcodes.php');
 require_once (dirname(__FILE__) . '/inc/toastr-actions.php');
