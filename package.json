@@ -24,9 +24,9 @@
     "@types/react-dom": "^0.14.8-alpha",
     "@types/sinon": "^1.16.20-alpha",
     "moment": "^2.13.0",
-    "react": "^15.1.0",
+    "react": "^15.2.0",
     "react-datepicker": "^0.27.0",
-    "react-dom": "^15.1.0",
+    "react-dom": "^15.2.0",
     "typescript": "^2.0.0-dev.20160628"
   },
   "devDependencies": {
@@ -47,7 +47,7 @@
     "gulp-uglify": "^1.5.4",
     "jest-cli": "^13.0.0",
     "poststylus": "^0.2.3",
-    "react-addons-test-utils": "^15.1.0",
+    "react-addons-test-utils": "^15.2.0",
     "rucksack-css": "^0.8.6",
     "sinon": "^1.17.4",
     "style-loader": "^0.13.1",
