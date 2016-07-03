@@ -8,7 +8,10 @@
  */
 function remove_sidebar_when_unneeded($classes) {
     global $post;
+    if (!$post) return $classes;
+
     $category = get_the_category($post->ID);
+    if (!$category) return $classes;
 
     if ($category[0]->slug !== 'capsules') {
         $classes[] = 'et_full_width_page';
