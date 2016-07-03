@@ -124,6 +124,7 @@ class AU_Educator_Dashboard {
 			'meta_key' => 'au_graduation_year',
 			'meta_value' => date('Y'),
 			'meta_compare' => '<',
+			'exclude' => $this->current_user->ID,
 			'fields' => 'ID'
 		));
 
