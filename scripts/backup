@@ -2,7 +2,7 @@
 
 SCRIPTDIR=$(dirname "${BASH_SOURCE[0]}")
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
-FILENAME=$(date +%Y-%m-%d_aliemu)
+FILENAME=$(date +%Y-%m-%d_%H-%M_aliemu)
 
 cd $ROOTDIR/data || exit 1
 
