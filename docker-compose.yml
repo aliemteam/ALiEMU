@@ -10,18 +10,23 @@ services:
             - 8080:80
             - 443:443
         volumes:
+            # Database
             - ./data:/data
+            # Plugins
             - ./dist/aliemu-plugins:/var/www/aliemu.com/htdocs/wp-content/plugins/aliemu-plugins
-            - ./dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
-            - ./wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
             - ./wp-content/plugins/learndash-propanel:/var/www/aliemu.com/htdocs/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/var/www/aliemu.com/htdocs/wp-content/plugins/sfwd-lms
             - ./wp-content/plugins/um-profile-completeness:/var/www/aliemu.com/htdocs/wp-content/plugins/um-profile-completeness
+            # Themes
+            - ./dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
             - ./wp-content/themes/Divi:/var/www/aliemu.com/htdocs/wp-content/themes/Divi
+            # Uploads
+            - ./wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
         environment:
             DB_NAME: wordpress
             DB_USER: root
             DB_PASS: root
+            PHP_VERSION: 7.0
             SITE_NAME: aliemu.com
             LOCALHOST: 'true'
             PLUGINS: >-

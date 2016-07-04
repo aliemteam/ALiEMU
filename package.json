@@ -23,7 +23,7 @@
     "@types/react-addons-test-utils": "^0.14.8-alpha",
     "@types/react-dom": "^0.14.8-alpha",
     "@types/sinon": "^1.16.20-alpha",
-    "moment": "^2.13.0",
+    "moment": "^2.14.1",
     "react": "^15.2.0",
     "react-datepicker": "^0.28.0",
     "react-dom": "^15.2.0",
