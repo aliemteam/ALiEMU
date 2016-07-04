@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
-    "start": "gulp serve",
+    "backup": "./scripts/backup",
     "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
     "pretest": "npm run lint",
     "clear-cache": "rm -rf node_modules/jest-cli/.haste_cache",
@@ -25,12 +25,12 @@
     "@types/sinon": "^1.16.20-alpha",
     "moment": "^2.13.0",
     "react": "^15.2.0",
-    "react-datepicker": "^0.27.0",
+    "react-datepicker": "^0.28.0",
     "react-dom": "^15.2.0",
     "typescript": "^2.0.0-dev.20160628"
   },
   "devDependencies": {
-    "autoprefixer": "^6.3.6",
+    "autoprefixer": "^6.3.7",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
