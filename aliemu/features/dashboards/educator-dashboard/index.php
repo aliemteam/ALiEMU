@@ -469,6 +469,7 @@ wp_localize_script(
 		)
 	)
 );
+wp_enqueue_script('EducatorDashboard');
 
 ?>
 

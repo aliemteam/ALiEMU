@@ -27,8 +27,6 @@ npm-debug.log
 
 # Wordpress
 wp-content/plugins/*
-!wp-content/plugins/aliemu-plugins
-!wp-content/plugins/aliemu-plugins/**
 wp-content/uploads/
 wp-content/themes/Divi-child/php_errorlog
 

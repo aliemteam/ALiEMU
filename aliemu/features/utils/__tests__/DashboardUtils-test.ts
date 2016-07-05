@@ -4,7 +4,7 @@ jest.unmock('moment');
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
 import * as moment from 'moment';
-import { courseData, users } from '../../../../../../../test-utils/Fixtures';
+import { courseData, users } from '../../../../test-utils/Fixtures';
 
 const D = {
     jan: 1420088400,

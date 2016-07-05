@@ -7,6 +7,7 @@ const browserSync   = require('browser-sync').create();
 const del           = require('del');
 const exec          = require('child_process').exec;
 const replace       = require('gulp-replace');
+const rename        = require('gulp-rename');
 // CSS
 const stylus        = require('gulp-stylus');
 const poststylus    = require('poststylus');
@@ -29,7 +30,7 @@ const webpackDevConfig = Object.assign({}, webpackConfig, {
 //                 Utility Tasks
 // ==================================================
 
-// Delete all files in dist/aliemu-plugins
+// Delete all files in dist/Divi-child/
 gulp.task('clean', (done) => del(['dist/Divi-child/**/*'], done) );
 
 // Take ownership of dist directory
@@ -54,23 +55,58 @@ gulp.task('reload', (done) => {
 //                    Static
 // ==================================================
 
-gulp.task('static', () =>
+gulp.task('static:main', () =>
     gulp.src([
-        'wp-content/themes/Divi-child/**/*.*',
-        '!wp-content/**/__tests__',
-        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,styl,md}',
-    ], { base: 'wp-content/themes/Divi-child/' })
+        'aliemu/**/*.*',
+        '!aliemu/templates/**/*.*',
+        '!aliemu/templates',
+        '!aliemu/**/__tests__',
+        '!aliemu/**/*.{ts,tsx,json,styl,md,txt}',
+    ], { base: './aliemu' })
     .pipe(gulp.dest('dist/Divi-child'))
+);
+
+gulp.task('static:templates:pages', () =>
+    gulp.src([
+        'aliemu/templates/pages/*.php'
+    ], { base: './aliemu/templates/pages' })
+    .pipe(rename({
+        prefix: 'page-'
+    }))
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
+
+gulp.task('static:templates:overrides', () =>
+    gulp.src([
+        'aliemu/templates/overrides/*.php'
+    ], { base: './aliemu/templates/overrides'})
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
+
+gulp.task('static:learndash', () =>
+    gulp.src([
+        'aliemu/templates/learndash/*.php'
+    ], { base: './aliemu/templates'})
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
+
+gulp.task('static',
+    gulp.parallel(
+        'static:main',
+        'static:templates:pages',
+        'static:templates:overrides',
+        'static:learndash'
+    )
 );
 
 // ==================================================
 //                     Styles
 // ==================================================
 
-gulp.task('stylus:dev', () =>
+gulp.task('stylus:dev:step1', () =>
     gulp.src([
-        'wp-content/themes/Divi-child/aliemu-plugins/inc/styles/styles.styl',
-    ], { base: 'wp-content/themes/Divi-child/', })
+        'aliemu/styles/style.styl',
+    ], { base: './aliemu/styles', })
     .pipe(sourcemaps.init())
     .pipe(stylus({
         use: [ poststylus([rucksack, autoprefixer]), ]
@@ -80,10 +116,10 @@ gulp.task('stylus:dev', () =>
     .pipe(browserSync.stream({ match: '**/*.css' }))
 );
 
-gulp.task('stylus:prod', () =>
+gulp.task('stylus:prod:step1', () =>
     gulp.src([
-        'wp-content/themes/Divi-child/aliemu-plugins/inc/styles/styles.styl',
-    ], { base: 'wp-content/themes/Divi-child/', })
+        'aliemu/styles/style.styl',
+    ], { base: './aliemu', })
     .pipe(stylus({
         use: [ poststylus([rucksack, autoprefixer]), ],
         compress: true,
@@ -91,20 +127,41 @@ gulp.task('stylus:prod', () =>
     .pipe(gulp.dest('dist/Divi-child'))
 );
 
+gulp.task('stylus:step2', (done) => {
+    const header =
+    '/*\n' +
+    ' Theme Name: Divi Child\n' +
+    ' Theme URI: http://www.elegantthemes.com/gallery/divi/\n' +
+    ' Description: Divi Child Theme\n' +
+    ' Author: Elegant Themes\n' +
+    ' Author URI: http://www.elegantthemes.com\n' +
+    ' Template: Divi\n' +
+    ' Version: 1.0.0\n' +
+    ' License: GNU General Public License v2\n' +
+    ' License URI: http://www.gnu.org/licenses/gpl-2.0.html\n' +
+    '*/\n';
+    exec(`echo -en "${header}$(<dist/Divi-child/style.css)" > dist/Divi-child/style.css`, (err) => {
+        if (err) throw err;
+        done();
+    });
+});
+
+gulp.task('stylus:dev', gulp.series('stylus:dev:step1', 'stylus:step2'));
+gulp.task('stylus:prod', gulp.series('stylus:prod:step1', 'stylus:step2'))
 
 // ==================================================
 //                    Javascript
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp.src('wp-content/themes/Divi-child/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackDevConfig))
     .pipe(gulp.dest('dist/'))
 );
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('wp-content/themes/Divi-child/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('dist/'))
 );
@@ -154,20 +211,20 @@ gulp.task('default',
             }
 
             gulp.watch([
-                'wp-content/themes/**/*.styl',
+                'aliemu/**/*.styl',
             ], gulp.series('stylus:dev'));
 
             gulp.watch([
-                'wp-content/**/*.{ts,tsx}',
-                '!wp-content/**/__tests__/',
-                '!wp-content/**/__tests__/*',
+                'aliemu/**/*.{ts,tsx}',
+                '!aliemu/**/__tests__/',
+                '!aliemu/**/__tests__/*',
             ], gulp.series('webpack:dev', 'reload'));
 
             gulp.watch([
-                'wp-content/**/*',
-                '!wp-content/**/*.{ts,tsx,styl}',
-                '!wp-content/**/__tests__/',
-                '!wp-content/**/__tests__/*',
+                'aliemu/**/*',
+                '!aliemu/**/*.{ts,tsx,styl}',
+                '!aliemu/**/__tests__/',
+                '!aliemu/**/__tests__/*',
             ], gulp.series('static', 'reload'));
 
         }

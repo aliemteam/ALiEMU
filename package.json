@@ -13,7 +13,7 @@
     "deploy": "./scripts/deploy",
     "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "test": "jest",
-    "lint": "stylint wp-content/themes/Divi-child/aliemu-plugins/inc/styles -c .stylintrc && tslint 'wp-content/**/*.{ts,tsx}'"
+    "lint": "stylint aliemu/styles -c .stylintrc && tslint 'aliemu/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@types/enzyme": "^1.2.23-alpha",
@@ -41,6 +41,7 @@
     "del": "^2.2.1",
     "enzyme": "^2.3.0",
     "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.5.0",
