@@ -13,7 +13,7 @@
     "deploy": "./scripts/deploy",
     "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "test": "jest",
-    "lint": "stylint wp-content/plugins/aliemu-plugins/inc/styles -c .stylintrc && tslint 'wp-content/**/*.{ts,tsx}'"
+    "lint": "stylint wp-content/themes/Divi-child/aliemu-plugins/inc/styles -c .stylintrc && tslint 'wp-content/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@types/enzyme": "^1.2.23-alpha",
