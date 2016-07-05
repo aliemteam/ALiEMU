@@ -19,7 +19,7 @@ require_once (dirname(__FILE__) . '/inc/toastr-actions.php');
  * @since 1.0.3
  */
 function au_load_styles() {
-    wp_enqueue_style('aliemu_master', plugins_url('/inc/styles/styles.css', __FILE__));
+    wp_enqueue_style('aliemu_master', get_stylesheet_directory_uri() . '/aliemu-plugins/inc/styles/styles.css');
 }
 add_action( 'wp_enqueue_scripts', 'au_load_styles', 500 );
 

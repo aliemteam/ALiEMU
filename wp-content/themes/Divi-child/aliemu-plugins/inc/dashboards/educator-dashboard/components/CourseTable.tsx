@@ -1,4 +1,3 @@
-import * as ALiEMU from '../../../../../../../typings/ALiEMU.d';
 import * as React from 'react';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import paginate from '../../../utils/Pagination';
@@ -57,14 +56,14 @@ export class CourseTable extends React.Component<Props, State> {
         };
     }
 
-    exportCourseData(e: ALiEMU.Globals.DOMEvent) {
+    exportCourseData(e: ALiEMU.DOMEvent) {
         const courseID = this.state.selections.course;
         const CSV = this.CSV.course(courseID);
         const blob = new Blob([CSV.data], {type: 'text/csv;charset=utf-8'});
         downloadPolyfill(CSV.filename, blob, browserDetect(), e.target.id);
     }
 
-    reducer(action: ALiEMU.Globals.Action, e?: ALiEMU.Globals.DOMEvent) {
+    reducer(action: ALiEMU.Action, e?: ALiEMU.DOMEvent) {
         if (e) e.preventDefault();
         switch (action.type) {
             case 'SELECT_CATEGORY': {

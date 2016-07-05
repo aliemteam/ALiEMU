@@ -1,4 +1,3 @@
-import * as ALiEMU from '../../../../../typings/ALiEMU.d';
 import * as moment from 'moment';
 
 type Users = ALiEMU.EducatorDashboard.UserObject;
@@ -19,7 +18,7 @@ type Categories = ALiEMU.EducatorDashboard.CategoryObject;
  * @param {string} ElementID The HTML ID of the target element.
  * @return {void}
  */
-export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.Globals.BrowserType, ElementID: string): void  => {
+export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.BrowserType, ElementID: string): void  => {
     switch (browser) {
         case 'chrome':
         case 'firefox':
@@ -134,7 +133,7 @@ export class CSV {
         this.lessons = courses.lessons;
     }
 
-    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.Globals.CSV {
+    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.CSV {
         const filename = 'ALiEMU_Program_Export.csv';
         let data = [
             'Last Name',
@@ -169,7 +168,7 @@ export class CSV {
         return { filename, data };
     }
 
-    user(userID: string): ALiEMU.Globals.CSV|boolean {
+    user(userID: string): ALiEMU.CSV|boolean {
 
         const courseProgress = this.users[userID].courseProgress;
         const { courses, courseMeta, categories } = this.courseData;
@@ -203,7 +202,7 @@ export class CSV {
         return { filename, data };
     }
 
-    course(courseID: string): ALiEMU.Globals.CSV {
+    course(courseID: string): ALiEMU.CSV {
         const filename = `${this.courses[courseID].postTitle.replace(/\s/, '_')}.csv`;
         const lessonIDs = [];
 

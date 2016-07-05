@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__) . '/aliemu-plugins/aliemu-plugins.php');
+
 /**
  * Remove emojis
  */

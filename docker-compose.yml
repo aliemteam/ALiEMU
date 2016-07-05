@@ -13,10 +13,8 @@ services:
             # Database
             - ./data:/data
             # Plugins
-            - ./dist/aliemu-plugins:/var/www/aliemu.com/htdocs/wp-content/plugins/aliemu-plugins
             - ./wp-content/plugins/learndash-propanel:/var/www/aliemu.com/htdocs/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/var/www/aliemu.com/htdocs/wp-content/plugins/sfwd-lms
-            - ./wp-content/plugins/um-profile-completeness:/var/www/aliemu.com/htdocs/wp-content/plugins/um-profile-completeness
             # Themes
             - ./dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
             - ./wp-content/themes/Divi:/var/www/aliemu.com/htdocs/wp-content/themes/Divi

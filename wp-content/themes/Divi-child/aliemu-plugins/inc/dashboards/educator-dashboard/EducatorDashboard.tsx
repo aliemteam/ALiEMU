@@ -1,11 +1,9 @@
-import * as ALiEMU from '../../../../../../typings/ALiEMU.d';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { StudentTable, } from './components/StudentTable';
 import { CourseTable, } from './components/CourseTable';
 import 'react-datepicker/dist/react-datepicker.css';
 
-declare const ALiEMU;
 declare const AU_EducatorData: ALiEMU.EducatorDashboard.EducatorData;
 
 interface Props {

@@ -1,12 +1,10 @@
-import * as ALiEMU from '../../../../../../typings/ALiEMU.d';
-
 jest.unmock('../DashboardUtils');
 jest.unmock('moment');
 
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
 import * as moment from 'moment';
-import { courseData, users } from '../../../../../../test-utils/Fixtures';
+import { courseData, users } from '../../../../../../../test-utils/Fixtures';
 
 const D = {
     jan: 1420088400,
@@ -260,7 +258,7 @@ describe('CSV Class', () => {
     const CSV = new utils.CSV(users, courseData);
     describe('CSV.user()', () => {
         it('should return a properly formatted user CSV', () => {
-            let expected: ALiEMU.Globals.CSV = {
+            let expected: ALiEMU.CSV = {
                 filename: 'Maximal_User.csv',
                 data: `"Registered Courses","Steps Completed","Date Completed","Associated III Credit Hours","Category"\n"Course 1","5 out of 5","06/09/2015","1","AIR"\n"Course 3","1 out of 5","X","0","AIR"\n`,
             };
