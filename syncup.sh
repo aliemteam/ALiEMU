@@ -91,19 +91,19 @@ case "$1" in
 
                 # SSH into siteground and backup the database and copy to the data directory
                 if [[ $NATIVE == true ]]; then
-                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
+                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
                     cd public_html
                     wp db export database.sql"
                     echo '=> Downloading database to local machine...'
-                    scp -i aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql .
+                    scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
                     echo '=> Deleting database copy from server...'
-                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
+                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
                 else
-                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
+                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
                     cd public_html
                     wp db export database.sql"
-                    scp -i aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql .
-                    ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
+                    scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
+                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
 
                     # Machine not running? Start it up!
                     if [[ $(docker-machine status "$DOCKER_MACHINE_NAME") != 'Running' ]]; then
