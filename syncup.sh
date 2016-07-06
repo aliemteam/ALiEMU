@@ -44,108 +44,115 @@ fi
 
 # Prepare for SSH
 chmod 400 $SCRIPTDIR/data/aliemu_dsa
-eval "$(ssh-agent -s)"
-ssh-add $SCRIPTDIR/data/aliemu_dsa
+eval "$(ssh-agent -s)" &>/dev/null
+ssh-add $SCRIPTDIR/data/aliemu_dsa &>/dev/null
 
-case "$1" in
+main() {
 
-    get)
+    if [[ $# == 0 ]]; then
+        get_uploads
+        get_database
+        exit 0
+    fi
 
-        case "$2" in
+    if [[ $1 == 'init' ]]; then
+        get_theme
+        get_all_plugins
+        get_uploads
+        get_database
+        exit 0
+    fi
 
-            uploads)
+    case "$1" in
+        get)
+            case "$2" in
+                uploads)
+                    get_uploads;;
+                --all-plugins)
+                    get_all_plugins;;
+                plugin)
+                    get_plugin $3;;
+                theme)
+                    get_theme;;
+                database)
+                    get_database;;
+                *)
+                    echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', or 'database'" && exit 1
+            esac;;
+        update)
+            case "$2" in
+                plugin)
+                    echo "=> Updating plugin: $3"
+                    PLUGIN=$3
+                    docker exec -it "$(docker ps -lq)" bash -c "wp plugin install $PLUGIN --force --activate --allow-root"
+                    ;;
+                *)
+                    echo "'update' subcommand must be 'plugin'" && exit 1
+            esac;;
+        *)
+            echo "The only commands available are 'get' and 'update'" && exit 1
+    esac
+}
 
-                cd "$SCRIPTDIR/wp-content" || exit
-                echo "=> Downloading uploads from server..."
-                rsync --ignore-existing --progress -az -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/uploads/ "$SCRIPTDIR/wp-content/uploads"
-                echo "=> Uploads Synced Successfully!"
-                ;;
+get_uploads() {
+    cd "$SCRIPTDIR/wp-content" || exit
+    echo "=> Downloading uploads from server..."
+    rsync --ignore-existing --progress -az -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/uploads/ "$SCRIPTDIR/wp-content/uploads"
+    echo "=> Uploads Synced Successfully!"
+}
 
-            --all-plugins)
+get_all_plugins() {
+    for plugin in "${PaidPlugins[@]}"; do
+        echo "=> Retrieving plugin: $plugin"
+        rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$PLUGIN" "$SCRIPTDIR/wp-content"
+        echo "=> Plugin $plugin Retrieved Successfully!"
+    done
+}
 
-                cd "$SCRIPTDIR/wp-content/plugins" || exit
-                for plugin in "${PaidPlugins[@]}"; do
-                    echo "=> Retrieving plugin: $plugin"
-                    rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$PLUGIN" "$SCRIPTDIR/wp-content"
-                    echo "=> Plugin $plugin Retrieved Successfully!"
-                done
-                ;;
+get_plugin() {
+    echo "=> Retrieving plugin: $1"
+    rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$1" "$SCRIPTDIR/wp-content/plugins"
+    echo "=> Plugin $1 Retrieved Successfully!"
+}
 
-            plugin)
+get_theme() {
+    echo "=> Retrieving Divi Theme"
+    rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/themes/Divi "$SCRIPTDIR/wp-content/themes"
+    echo "=> Theme Retrieved Successfully!"
+}
 
-                cd "$SCRIPTDIR/wp-content/plugins" || exit
-                echo "=> Retrieving plugin: $3"
-                rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$3" "$SCRIPTDIR/wp-content/plugins"
-                echo "=> Plugin $3 Retrieved Successfully!"
-                ;;
+get_database() {
+    # SSH into siteground and backup the database and copy to the data directory
+    if [[ $NATIVE == true ]]; then
+        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
+        cd public_html
+        wp db export database.sql"
+        echo '=> Downloading database to local machine...'
+        scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
+        echo '=> Deleting database copy from server...'
+        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
+    else
+        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
+        cd public_html
+        wp db export database.sql"
+        scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
+        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
 
-            theme)
+        # Machine not running? Start it up!
+        if [[ $(docker-machine status "$DOCKER_MACHINE_NAME") != 'Running' ]]; then
+            cd "$SCRIPTDIR" || exit
+            docker-compose up -d
+        fi
+    fi
 
-                cd "$SCRIPTDIR/wp-content/themes" || exit
-                echo "=> Retrieving Divi Theme"
-                rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/themes/Divi "$SCRIPTDIR/wp-content/themes"
-                echo "=> Theme Retrieved Successfully!"
-                ;;
+    # Import the database
+    echo "=> Importing database..."
+    docker exec -it "$(docker ps -lq)" bash -c "wp db import /data/database.sql --allow-root"
 
-            database)
+    # Replace live URL with dev URL
+    echo "=> Replacing URLs..."
+    docker exec -it "$(docker ps -lq)" bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
+    echo "=> Database Successfully Imported!"
+}
 
-                # SSH into siteground and backup the database and copy to the data directory
-                if [[ $NATIVE == true ]]; then
-                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
-                    cd public_html
-                    wp db export database.sql"
-                    echo '=> Downloading database to local machine...'
-                    scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
-                    echo '=> Deleting database copy from server...'
-                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
-                else
-                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
-                    cd public_html
-                    wp db export database.sql"
-                    scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
-                    ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
-
-                    # Machine not running? Start it up!
-                    if [[ $(docker-machine status "$DOCKER_MACHINE_NAME") != 'Running' ]]; then
-                        cd "$SCRIPTDIR" || exit
-                        docker-compose up -d
-                    fi
-                fi
-
-                # Import the database
-                echo "=> Importing database..."
-                docker exec -it "$(docker ps -lq)" bash -c "wp db import /data/database.sql --allow-root"
-
-                # Replace live URL with dev URL
-                echo "=> Replacing URLs..."
-                docker exec -it "$(docker ps -lq)" bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
-                echo "=> Database Successfully Imported!"
-                ;;
-
-            *)
-                echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', or 'database'"
-                exit 1
-        esac
-        ;;
-
-    update)
-
-        case "$2" in
-
-            plugin)
-
-                echo "=> Updating plugin: $3"
-                PLUGIN=$3
-                docker exec -it "$(docker ps -lq)" bash -c "wp plugin install $PLUGIN --force --activate --allow-root"
-                ;;
-
-            *)
-                echo "'update' subcommand must be 'plugin'"
-                exit 1
-        esac
-        ;;
-
-    *)
-        echo "The only commands available are 'get' and 'update'"
-        exit 1
-esac
+main "$@"

@@ -36,9 +36,9 @@ gulp.task('clean', (done) => del(['dist/Divi-child/**/*'], done) );
 
 // Take ownership of dist directory
 gulp.task('chown', (done) => {
-    exec('ls -ld dist | awk \'{print $3}\'', (err, stdout, stderr) => {
+    exec('ls -ld dist/Divi-child/ | awk \'{print $3}\'', (err, stdout, stderr) => {
         if (err) throw err;
-        if (stdout === process.env.USER) return done();
+        if (stdout.trim() === process.env.USER) return done();
         exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (err) => {
             if (err) throw err;
             done();
