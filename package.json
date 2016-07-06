@@ -41,6 +41,7 @@
     "del": "^2.2.1",
     "enzyme": "^2.3.0",
     "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-jade2php": "^1.0.3",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.6.0",

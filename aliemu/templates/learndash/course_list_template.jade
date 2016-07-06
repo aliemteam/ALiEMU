@@ -1,0 +1,21 @@
+- post_id = get_the_id()
+- ld = get_post_meta(post_id, '_sfwd-courses', true)
+- hours = ld['sfwd-courses_recommendedHours']
+- category = get_the_category()
+- if (!category) wp_die();
+- category = category[0].cat_name
+.au-coursebox
+    | <article id="post-<?php echo $post_id; ?>" <?php post_class('thumbnail course'); ?> >
+    | <div <?php post_class(array('thumbnail course', 'au-courseheader')); ?>>
+    .au-timer 
+        if hours == 1
+            h2 #{hours} hour
+        else
+            h2 #{hours} hours
+    | </div>
+    .au-coursebody
+        .coursebox-flex #[h3 #[!=category]]
+        .coursebox-flex #[h1 #[-the_title()]]
+        .coursebox-flex #[p #[!= ld['sfwd-courses_course_short_description']]]
+        .coursebox-flex #[a(href="#{the_permalink()}") View Block]
+    | </article>

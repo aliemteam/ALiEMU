@@ -2,22 +2,23 @@
 'use strict';
 
 // General
-const gulp          = require('gulp');
-const browserSync   = require('browser-sync').create();
-const del           = require('del');
-const exec          = require('child_process').exec;
-const replace       = require('gulp-replace');
-const rename        = require('gulp-rename');
+const gulp = require('gulp');
+const browserSync = require('browser-sync').create();
+const del = require('del');
+const exec = require('child_process').exec;
+const replace = require('gulp-replace');
+const rename = require('gulp-rename');
+const jade = require('gulp-jade2php');
 // CSS
-const stylus        = require('gulp-stylus');
-const poststylus    = require('poststylus');
-const autoprefixer  = require('autoprefixer')({ browsers: ['last 2 versions'] });
-const rucksack      = require('rucksack-css');
-const sourcemaps    = require('gulp-sourcemaps');
+const stylus = require('gulp-stylus');
+const poststylus = require('poststylus');
+const autoprefixer = require('autoprefixer')({ browsers: ['last 2 versions'] });
+const rucksack = require('rucksack-css');
+const sourcemaps = require('gulp-sourcemaps');
 // JS
-const uglify        = require('gulp-uglify');
+const uglify = require('gulp-uglify');
 // TypeScript
-const webpack       = require('webpack-stream');
+const webpack = require('webpack-stream');
 const webpackConfig = require('./webpack.config.js');
 const webpackDevConfig = Object.assign({}, webpackConfig, {
     devtool: 'eval-source-map',
@@ -68,9 +69,16 @@ gulp.task('static:main', () =>
 
 gulp.task('static:templates:pages', () =>
     gulp.src([
-        'aliemu/templates/pages/*.php'
+        'aliemu/templates/pages/*.jade'
     ], { base: './aliemu/templates/pages' })
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
     .pipe(rename({
+        extname: '.php',
         prefix: 'page-'
     }))
     .pipe(gulp.dest('dist/Divi-child/'))
@@ -78,15 +86,33 @@ gulp.task('static:templates:pages', () =>
 
 gulp.task('static:templates:overrides', () =>
     gulp.src([
-        'aliemu/templates/overrides/*.php'
+        'aliemu/templates/overrides/*.jade'
     ], { base: './aliemu/templates/overrides'})
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
+    .pipe(rename({
+        extname: '.php',
+    }))
     .pipe(gulp.dest('dist/Divi-child/'))
 );
 
 gulp.task('static:learndash', () =>
     gulp.src([
-        'aliemu/templates/learndash/*.php'
+        'aliemu/templates/learndash/*.jade'
     ], { base: './aliemu/templates'})
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
+    .pipe(rename({
+        extname: '.php',
+    }))
     .pipe(gulp.dest('dist/Divi-child/'))
 );
 
