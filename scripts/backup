@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTDIR=$(dirname "${BASH_SOURCE[0]}")
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
 FILENAME=$(date +%Y-%m-%d_%H-%M_aliemu)
 

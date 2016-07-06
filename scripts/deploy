@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTDIR=$(dirname "${BASH_SOURCE[0]}")
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
 SECRET=$( [ -f $ROOTDIR/data/ftp_pass ] && cat $ROOTDIR/data/ftp_pass || [ ! -z $FTP_PASS ] && echo $FTP_PASS || false)
 

@@ -10,8 +10,8 @@
 # 'update plugin [plugin-name] = update a specific plugin'
 
 # Globals
-SCRIPTDIR=$(dirname "$0")
-PaidPlugins=(learndash-propanel sfwd-lms um-profile-completeness)
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PaidPlugins=(learndash-propanel sfwd-lms)
 NATIVE=true
 CONTAINER_IP=localhost
 
@@ -19,31 +19,33 @@ CONTAINER_IP=localhost
 # PRECHECKS
 #
 
-# Collect the FTP password, exit if it doesn't exist
-if [ -f ./data/ftp_pass ]; then
-    FTPpass=$(cat ./data/ftp_pass)
-else
-    echo '=> Error: You must have the file "ftp_pass" located within your data directory'
-    exit 0
+type rsync &>/dev/null
+if [[ $? == 1 ]]; then
+    echo '=> Error: rsync must be installed.'
+    exit 1
 fi
 
 # Exit if the DSA file doesn't exist
-if [ ! -f ./data/aliemu_dsa ]; then
+if [[ ! -f ./data/aliemu_dsa ]]; then
     echo '=> Error: You must have the file "aliemu_dsa" located within your data directory'
-    exit 0
+    exit 1
 fi
 
 # Check to see if the user is running docker through a virtual machine or natively
 #  and set the CONTAINER_IP accordingly.
-docker-machine ip $DOCKER_MACHINE_NAME &>/dev/null
-if [ $? == 0 ]; then
-    CONTAINER_IP=$(docker-machine ip $DOCKER_MACHINE_NAME)
-    NATIVE=false
+type docker-machine &>/dev/null
+if [[ $? == 0 ]]; then
+    docker-machine ip $DOCKER_MACHINE_NAME &>/dev/null
+    if [[ $? == 0 ]]; then
+        CONTAINER_IP=$(docker-machine ip $DOCKER_MACHINE_NAME)
+        NATIVE=false
+    fi
 fi
 
-
-
-cd "$SCRIPTDIR" || exit
+# Prepare for SSH
+chmod 400 $SCRIPTDIR/data/aliemu_dsa
+eval "$(ssh-agent -s)"
+ssh-add $SCRIPTDIR/data/aliemu_dsa
 
 case "$1" in
 
@@ -55,7 +57,7 @@ case "$1" in
 
                 cd "$SCRIPTDIR/wp-content" || exit
                 echo "=> Downloading uploads from server..."
-                wget -rq -nH --cut-dirs=1 -l inf --no-clobber ftp://ftp.aliemu.com/wp-content/uploads/ --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                rsync --ignore-existing --progress -az -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/uploads/ "$SCRIPTDIR/wp-content/uploads"
                 echo "=> Uploads Synced Successfully!"
                 ;;
 
@@ -64,7 +66,7 @@ case "$1" in
                 cd "$SCRIPTDIR/wp-content/plugins" || exit
                 for plugin in "${PaidPlugins[@]}"; do
                     echo "=> Retrieving plugin: $plugin"
-                    wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/plugins/"$plugin" --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                    rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$PLUGIN" "$SCRIPTDIR/wp-content"
                     echo "=> Plugin $plugin Retrieved Successfully!"
                 done
                 ;;
@@ -73,7 +75,7 @@ case "$1" in
 
                 cd "$SCRIPTDIR/wp-content/plugins" || exit
                 echo "=> Retrieving plugin: $3"
-                wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/plugins/"$3" --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$3" "$SCRIPTDIR/wp-content/plugins"
                 echo "=> Plugin $3 Retrieved Successfully!"
                 ;;
 
@@ -81,21 +83,11 @@ case "$1" in
 
                 cd "$SCRIPTDIR/wp-content/themes" || exit
                 echo "=> Retrieving Divi Theme"
-                sudo wget -m -nH --cut-dirs=2 ftp://ftp.aliemu.com/wp-content/themes/Divi --ftp-user=dsifford@aliemu.com --ftp-password="$FTPpass"
+                rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/themes/Divi "$SCRIPTDIR/wp-content/themes"
                 echo "=> Theme Retrieved Successfully!"
                 ;;
 
             database)
-
-                # Ensure we are in the script's directory
-                cd "$SCRIPTDIR/data" || exit
-
-                # Ensure proper file permissions
-                chmod 400 aliemu_dsa
-
-                # Run ssh-agent and add the ssh private key
-                eval "$(ssh-agent -s)"
-                ssh-add aliemu_dsa
 
                 # SSH into siteground and backup the database and copy to the data directory
                 if [[ $NATIVE == true ]]; then
@@ -126,7 +118,7 @@ case "$1" in
 
                 # Replace live URL with dev URL
                 echo "=> Replacing URLs..."
-                docker exec -it "$(docker ps -lq)" bash -c "wp search-replace  'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid --allow-root"
+                docker exec -it "$(docker ps -lq)" bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
                 echo "=> Database Successfully Imported!"
                 ;;
 
