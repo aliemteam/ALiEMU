@@ -5,7 +5,7 @@ data
 
 # ===== COPYWRITTEN FILES =====
 #  DO NOT COMMIT TO GITHUB
-wp-content/themes/Divi
+wp-content/themes
 
 # File system junk files
 Desktop.ini
@@ -26,10 +26,7 @@ npm-debug.log
 .sass-cache/
 
 # Wordpress
-wp-content/plugins/*
-wp-content/uploads/
-wp-content/themes/Divi-child/php_errorlog
-
+wp-content
 
 # Gulp stuff
 node_modules
@@ -44,5 +41,3 @@ typings/**
 
 # Coverage Reports
 coverage
-
-.env

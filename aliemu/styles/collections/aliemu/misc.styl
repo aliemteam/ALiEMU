@@ -52,6 +52,20 @@
         display flex
 
 +prefix-classes('au-')
+    .team-header
+        height h = 300px
+        background $primary
+        &.air-team
+            background $air-primary
+        &.airpro-team
+            background $airpro-primary
+        &.capsules-team
+            background $capsules-primary
+        h1
+            font 600 3em Lato
+            color white
+            line-height h
+            text-align center
     .team-container
         display flex
         flex-wrap wrap
@@ -87,19 +101,7 @@
         border-radius 100%
 
 // Team member headers
-.au-team-header h1
-    font 600 3em Lato
 
-.au-team-header
-    background-color $gray-dark
-.et_pb_member_position
-    color $font-color
-
-.et_pb_section_0
-.et_pb_section_2
-.et_pb_section_4
-    &.et_pb_section.au-about-header
-        background-color $primary !important
 
 
 // ==================================================

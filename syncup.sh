@@ -95,7 +95,6 @@ main() {
 }
 
 get_uploads() {
-    cd "$SCRIPTDIR/wp-content" || exit
     echo "=> Downloading uploads from server..."
     rsync --ignore-existing --progress -az -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/uploads/ "$SCRIPTDIR/wp-content/uploads"
     echo "=> Uploads Synced Successfully!"
