@@ -5,7 +5,7 @@ mixin user(name, img, title, role, twitter)
         .au-about
             .au-name
                 if twitter
-                    .au-social 
+                    .au-social
                         a(href="https://twitter.com/#{twitter}" class="et_pb_font_icon et_pb_twitter_icon")
                 h4=name
             .au-title=title
@@ -14,16 +14,16 @@ mixin user(name, img, title, role, twitter)
 - get_header()
 
 #main-content.au-page-aliem-team
-    
+
     // Core Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header #[h1 Core Team]
         .au-team-container
-            +user("Michelle Lin, MD", "2015/04/michelle-lin.jpg", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Founder, ALiEMU", "mlin")
-            +user("Chris Gaafary, MD", "2015/06/chris-gaafary.jpg", "EM Chief Resident, University of Tennessee Chattanooga", "Chief of Design and Development", "cgaafary")
+            +user("Michelle Lin, MD", "2015/04/michelle-lin.jpg", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Co-Founder, ALiEMU", "mlin")
+            +user("Chris Gaafary, MD", "2015/06/chris-gaafary.jpg", "EM Chief Resident, University of Tennessee Chattanooga", "Co-Founder / Chief of Design and Development, ALiEMU", "cgaafary")
             +user("Andrew Grock, MD", "2015/04/Andy-Grock.jpg", "Assistant Professor of Emergency Medicine UCLA Department of Emergency Medicine", "Creator and Lead Editor, ALiEM AIR Series", "andygrock")
             +user("Bryan Hayes, PharmD", "2015/04/mwG3dREX.jpeg", "Clinical Associate Professor, University of Maryland", "Creator and Lead Editor, ALiEM Capsules Series", "pharmertoxguy")
-            +user("Derek Sifford, FP-C, CCP-C", "2015/06/derrick.jpg", "Paramedic. Undergraduate Student. ALiEM CTO", "Consultant, Technical Design", "flightmed1")
+            +user("Derek Sifford, FP-C, CCP-C", "2015/06/derrick.jpg", "Paramedic. Undergraduate Student. ALiEM CTO", "Chief Technical Officer, ALiEMU", "flightmed1")
             +user("Jonathan Bronner, MD", "2016/06/jonathan-bronner.jpeg", "Assistant Professor And Assistant Program Director, University of Kentucky Department of EM", "ALiEMU Education Design Officer", "Bronski_EM")
             +user("Nikita Joshi, MD", "2015/04/nikitajoshi.jpg", "Clinical Instructor, Stanford University, Department of EM", "Member, ALiEMU Advisory Board", "njoshi8")
             +user("Teresa Chan, MD", "2015/06/teresa-chan.jpg", "Assistant Professor, McMaster University", "Member, ALiEMU Advisory Board", "tchanmd")
@@ -47,7 +47,7 @@ mixin user(name, img, title, role, twitter)
             +user("Anand Swaminathan MD MPH", "2015/04/Swami.jpg", "Assistant Program Director and Assistant Professor of EM, NYU Medical Center", "", "emswami")
             +user("Taku Taira, MD", "2015/04/takutaira.jpg", "Associate Program Director and Assistant Professor of EM, USC School of Medicine", "", "takutaira")
             +user("Lalena Yarris MD MCR", "2015/04/lainieyarris.jpg", "Program Director and Associate Professor of EM; Oregon Health Sciences University", "", "")
-    
+
     // Capsules Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header.au-capsules-team #[h1 Capsules Team]
@@ -69,7 +69,7 @@ mixin user(name, img, title, role, twitter)
             +user("Lewis Nelson, MD, FAACT, FACMT, FACEP", "2015/04/lewis-nelson.png", "Professor of Emergency Medicine, New York University", "", "LNelsonMD")
             +user("Michael Winters, MD, FAAEM, FACEP", "2015/06/winters-portrait.jpg", "Associate Professor of Emergency Medicine and Internal Medicine, University of Maryland", "", "critcareguys")
             +user("David Juurlink, BPharm, MD, PhD, FRCPC", "2015/04/david-juurlink.jpeg", "Professor of Medicine, University of Toronto", "", "DavidJuurlink")
-    
+
     // AIR-Pro Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header.au-airpro-team #[h1 AIR-Pro Team]
