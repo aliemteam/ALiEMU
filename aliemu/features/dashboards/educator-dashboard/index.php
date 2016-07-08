@@ -16,7 +16,7 @@
  * @since 1.0.1
  * @version 0.1.1
  */
-class AU_Educator_Dashboard {
+class EducatorDashboard {
 
 	public $current_user;
 	public $courses;
@@ -26,7 +26,7 @@ class AU_Educator_Dashboard {
 	public $user_meta;
 	private $categories;
 	private $user_data;
-	private $skipped_usermeta = array(
+	private $skipped_usermeta = [
 		'_badgeos_can_notify_user',
 		'_enable_new_pm',
 		'_hide_online_status',
@@ -98,17 +98,17 @@ class AU_Educator_Dashboard {
 		'wp_user-settings',
 		'wp_user-settings-time',
 		'wp_user_level',
-	);
+	];
 
 	function __construct() {
 		$this->current_user      = wp_get_current_user();
-		$this->courses 			 = $this->get_courses();
-		$this->course_meta       = $this->get_course_meta($this->courses);
-		$this->lessons			 = $this->get_lessons();
-		$this->categories		 = $this->get_course_categories($this->courses);
-		$this->unique_categories = $this->encode_unique_categories($this->categories);
-		$this->user_data         = $this->get_current_users();
-		$this->user_meta         = $this->get_current_users_meta($this->user_data);
+		$this->courses 			 = $this->getCourses();
+		$this->course_meta       = $this->getCourseMeta($this->courses);
+		$this->lessons			 = $this->getLessons();
+		$this->categories		 = $this->getCourseCategories($this->courses);
+		$this->unique_categories = $this->encodeUniqueCategories($this->categories);
+		$this->user_data         = $this->getCurrentUsers();
+		$this->user_meta         = $this->getCurrentUsersMeta($this->user_data);
 	}
 
 	/**
@@ -119,21 +119,21 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return mixed[] Associative array of users within the current user's Institution
 	 */
-	private function get_current_users() {
-		$graduatedUsers = get_users(array(
+	private function getCurrentUsers() {
+		$graduatedUsers = get_users([
 			'meta_key' => 'au_graduation_year',
 			'meta_value' => date('Y'),
 			'meta_compare' => '<',
 			'exclude' => $this->current_user->ID,
 			'fields' => 'ID'
-		));
+		]);
 
-		$users = get_users(array(
+		$users = get_users([
 			'meta_key' => 'residency_us_em',
 			'meta_value' => $this->current_user->residency_us_em,
 			'fields' => 'all_with_meta',
 			'exclude' => $graduatedUsers
-		));
+		]);
 		foreach ($users as $key => $value) {
 			unset($value->data->user_pass);
 		}
@@ -151,20 +151,20 @@ class AU_Educator_Dashboard {
 	 * @return mixed[] Associative array of metadata with keys the same as the
 	 *                 keys of the current_user array.
 	 */
-	private function get_current_users_meta($users_array) {
-		$meta = array();
-		$need_to_unserialize = array(
+	private function getCurrentUsersMeta($users_array) {
+		$meta = [];
+		$need_to_unserialize = [
 			'_badgeos_achievements',
 			'_badgeos_active_achievements',
 			'_badgeos_triggered_triggers',
 			'_sfwd-quizzes',
 			'_sfwd-course_progress',
-		);
+		];
 
 		foreach ($users_array as $key => $value) {
 			$meta[$key] = get_user_meta($users_array[$key]->data->ID);
-			$completed_courses = array();
-			$accessed_courses= array();
+			$completed_courses = [];
+			$accessed_courses= [];
 
 			foreach ($meta[$key] as $k => $v) {
 
@@ -267,30 +267,30 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return mixed[] Associative array of metadata
 	 */
-	private function get_course_meta($courses) {
-		$meta = array();
+	private function getCourseMeta($courses) {
+		$meta = [];
 		foreach ($courses as $key => $value) {
-			$this_meta = get_metadata('post', $key );
-			$meta[$key]['recommendedHours'] = @intval(unserialize($this_meta['_au-meta'][0])['au-recommended_hours']);
-			$learndash_meta = @unserialize($this_meta['_sfwd-courses'][0]);
+			$thisMeta = get_metadata('post', $key );
+			$meta[$key]['recommendedHours'] = @intval(unserialize($thisMeta['_au-meta'][0])['au-recommended_hours']);
+			$learndashMeta = @unserialize($thisMeta['_sfwd-courses'][0]);
 
-            if (!$learndash_meta) continue;
+            if (!$learndashMeta) continue;
 
-			foreach($learndash_meta as $k => $v) {
-				$camel_key = preg_replace_callback(
+			foreach($learndashMeta as $k => $v) {
+				$camelKey = preg_replace_callback(
 					'/(?<!^)[-_]\w/',
 					function($matches) {
         				return strtoupper($matches[0][1]);
 					},
 					$k
 				);
-				$camel_key = preg_replace_callback(
+				$camelKey = preg_replace_callback(
     				'/^(sfwdCourses\w(ourse\w)?)/',
 					function($match) {
 						return strtolower($match[0][strlen($match[0])-1]);
-					}, $camel_key
+					}, $camelKey
 				);
-				$meta[$key][$camel_key] = $v;
+				$meta[$key][$camelKey] = $v;
 			}
 
 		}
@@ -298,38 +298,18 @@ class AU_Educator_Dashboard {
 	}
 
 	/**
-	 * Helper function to unserialize a specific meta field.
-	 *
-	 * @author Derek P Sifford
-	 * @since 0.0.1
-	 *
-	 * @param  string  $meta_key        The key name of the data we're interested in
-	 * @param  mixed[] $user_meta_array Associative array containing the user meta
-	 *
-	 * @return mixed[] Array containing the unserialized meta field for each user.
-	 *                 The keynames of the array are the same as the user_data array.
-	 */
-	private function unserialize_the_meta($meta_key, $user_meta_array) {
-		$output = array();
-		foreach ($user_meta_array as $key => $value) {
-			$output[$key] = unserialize($user_meta_array[$key][$meta_key][0]);
-		}
-		return $output;
-	}
-
-	/**
 	 * Method that generates a multidimensional array in the form of...
 	 *   ```php
-	 *   array(
-	 *   	$unique_category_1 => array(
+	 *   [
+	 *   	$unique_category_1 => [
 	 *   		$course_ID_1,
 	 *   		$course_ID_2
-	 *   	),
-	 *   	$unique_category_2 => array(
+	 *   	],
+	 *   	$unique_category_2 => [
 	 *   		$course_ID_3,
 	 *   		$course_ID_4
-	 *   	)
-	 *   );
+	 *   	]
+	 *   ];
 	 *   ```
 	 * @author Derek P Sifford
 	 * @since 0.1.1
@@ -338,11 +318,11 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return array[string[]] Multidimensional array in the format shown above.
 	 */
-	private function encode_unique_categories($categories) {
-		$unique_holder = array_unique($categories);
-		$payload = array();
-		foreach($unique_holder as $unique) {
-			$payload[$unique] = array();
+	private function encodeUniqueCategories($categories) {
+		$uniqueHolder = array_unique($categories);
+		$payload = [];
+		foreach($uniqueHolder as $unique) {
+			$payload[$unique] = [];
 		}
 		foreach($categories as $key => $value) {
 			$payload[$value][$key] = $key;
@@ -360,8 +340,8 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return string[] Associative array of course categories indexed by post ID.
 	 */
-	private static function get_course_categories($courses) {
-		$categories = array();
+	private static function getCourseCategories($courses) {
+		$categories = [];
 		foreach ($courses as $key => $value) {
             $category = get_the_category($key);
             if (!$category) continue;
@@ -378,39 +358,39 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return mixed[] Array of arrays containing course information; Key = Course ID
 	 */
-	private static function get_courses() {
+	private static function getCourses() {
 		global $wpdb;
 
-		$course_query = $wpdb->get_results("
+		$courseQuery = $wpdb->get_results("
 			SELECT ID
 			FROM $wpdb->posts
 			WHERE post_type = 'sfwd-courses'
 		");
 
-		$course_holder = array();
+		$courseHolder = [];
 
-		foreach($course_query as $course) {
-			$lesson_query = $wpdb->get_results("
+		foreach($courseQuery as $course) {
+			$lessonQuery = $wpdb->get_results("
 				SELECT post_id
 				FROM $wpdb->postmeta
 				WHERE meta_key = 'course_id'
 				AND meta_value = $course->ID
 			");
-			$lessons = array();
-			foreach ($lesson_query as $key => $val) {
+			$lessons = [];
+			foreach ($lessonQuery as $key => $val) {
 				array_push($lessons, $val->post_id);
 			}
-			$raw_course = get_post($course->ID);
-			$course_holder[$course->ID] = array(
-				"ID" => $raw_course->ID,
-				"postAuthor" => intval($raw_course->post_author),
-				"postDate" => $raw_course->post_date,
-				"postModified" => $raw_course->post_modified,
-				"postTitle" => $raw_course->post_title,
+			$c = get_post($course->ID);
+			$courseHolder[$course->ID] = [
+				"ID" => $c->ID,
+				"postAuthor" => intval($c->post_author),
+				"postDate" => $c->post_date,
+				"postModified" => $c->post_modified,
+				"postTitle" => $c->post_title,
 				"lessons" => $lessons,
-			);
+			];
 		}
-		return $course_holder;
+		return $courseHolder;
 	}
 
 	/**
@@ -421,53 +401,53 @@ class AU_Educator_Dashboard {
 	 *
 	 * @return mixed[] Array of arrays containing lesson information; Key = lesson ID
 	 */
-	private static function get_lessons() {
+	private static function getLessons() {
 		global $wpdb;
 
-		$lesson_query = $wpdb->get_results("
+		$lessonQuery = $wpdb->get_results("
 			SELECT ID
 			FROM $wpdb->posts
 			WHERE post_type = 'sfwd-lessons'
 		");
 
-		$lesson_holder = array();
+		$lessonHolder = [];
 
-		foreach ($lesson_query as $lesson) {
-			$raw_lesson = get_post($lesson->ID);
-			$lesson_holder[$lesson->ID] = array(
+		foreach ($lessonQuery as $lesson) {
+			$l = get_post($lesson->ID);
+			$lessonHolder[$lesson->ID] = [
 				"ID" => intval($lesson->ID),
-				"menuOrder" => $raw_lesson->menu_order,
-				"postAuthor" => intval($raw_lesson->post_author),
-				"postDate" => $raw_lesson->post_date,
-				"postModified" => $raw_lesson->post_modified,
-				"postTitle" => $raw_lesson->post_title,
-			);
+				"menuOrder" => $l->menu_order,
+				"postAuthor" => intval($l->post_author),
+				"postDate" => $l->post_date,
+				"postModified" => $l->post_modified,
+				"postTitle" => $l->post_title,
+			];
 		}
 
-		return $lesson_holder;
+		return $lessonHolder;
 
 	}
 
 }
 
-$au_dashboard = new AU_Educator_Dashboard();
+$au_dashboard = new EducatorDashboard();
 
 wp_localize_script(
 	'EducatorDashboard',
 	'AU_EducatorData',
-	array(
+	[
 		'users' => $au_dashboard->user_meta,
-		'currentUser' => array(
+		'currentUser' => [
 			'ID' => $au_dashboard->current_user->ID,
 			'meta' => $au_dashboard->user_meta[$au_dashboard->current_user->ID],
-		),
-		'courseData' => array(
+		],
+		'courseData' => [
 			'courseMeta' => $au_dashboard->course_meta,
 			'courses' => $au_dashboard->courses,
 			'lessons' => $au_dashboard->lessons,
 			'categories' => $au_dashboard->unique_categories,
-		)
-	)
+		]
+	]
 );
 wp_enqueue_script('EducatorDashboard');
 

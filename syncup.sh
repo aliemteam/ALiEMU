@@ -55,15 +55,12 @@ main() {
         exit 0
     fi
 
-    if [[ $1 == 'init' ]]; then
-        get_theme
-        get_all_plugins
-        get_uploads
-        get_database
-        exit 0
-    fi
-
     case "$1" in
+        init)
+            get_theme
+            get_all_plugins
+            get_uploads
+            get_database;;
         get)
             case "$2" in
                 uploads)
@@ -145,12 +142,17 @@ get_database() {
     fi
 
     # Import the database
+    if [[ ! $(docker ps -q --filter name=aliemu_wordpress_1) ]]; then
+        echo "=> Dev environment not running. Skipping import."
+        exit 0
+    fi
+
     echo "=> Importing database..."
-    docker exec -it "$(docker ps -lq)" bash -c "wp db import /data/database.sql --allow-root"
+    docker exec -it aliemu_wordpress_1 bash -c "wp db import /data/database.sql --allow-root"
 
     # Replace live URL with dev URL
     echo "=> Replacing URLs..."
-    docker exec -it "$(docker ps -lq)" bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
+    docker exec -it aliemu_wordpress_1 bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
     echo "=> Database Successfully Imported!"
 }
 

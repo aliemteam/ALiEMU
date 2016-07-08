@@ -263,11 +263,11 @@ gulp.task('default',
 
 gulp.task('fix-divi', () => {
     const slackEmailHook = `
-    do_action('slack_email_hook', array(
+    do_action('slack_email_hook', [
         'name' => $contact_name,
         'email' => $contact_email,
-        'message' => stripslashes( wp_strip_all_tags( $message_pattern ) ),
-    ));
+        'message' => stripslashes(wp_strip_all_tags($message_pattern)),
+    ]);
     `;
 
     return gulp.src([

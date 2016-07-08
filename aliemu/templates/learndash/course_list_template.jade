@@ -6,7 +6,7 @@
 - category = category[0].cat_name
 .au-coursebox
     | <article id="post-<?php echo $post_id; ?>" <?php post_class('thumbnail course'); ?> >
-    | <div <?php post_class(array('thumbnail course', 'au-courseheader')); ?>>
+    | <div <?php post_class(['thumbnail course', 'au-courseheader']); ?>>
     .au-timer 
         if hours == 1
             h2 #{hours} hour

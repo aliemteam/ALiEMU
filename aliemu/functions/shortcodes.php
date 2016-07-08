@@ -24,9 +24,9 @@ add_shortcode('capsule', 'capsule_shortcode');
 
 //Capsules Lesson Box Shortcode
 function capsules_lessonbox_shortcode($atts, $content = null) {
-    $shortcode = shortcode_atts(array(
+    $shortcode = shortcode_atts([
         'header' => '',
-    ), $atts);
+    ], $atts);
     extract($shortcode);
     $content = do_shortcode($content);
     return "
