@@ -95,7 +95,7 @@ export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange:
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
         const d = moment.unix(user.courseCompleted[curr]);
-        const addedHours: number = courseMeta[curr].recommendedHours + prev;
+        const addedHours: number = parseInt(courseMeta[curr].recommendedHours) + prev;
         switch (true) {
             case !start && !end:
                 return addedHours;

@@ -289,11 +289,7 @@ class EducatorDashboard {
 						return strtolower($match[0][strlen($match[0])-1]);
 					}, $camelKey
 				);
-                if ($camelKey === 'recommendedHours') {
-                    $meta[$key][$camelKey] = intval($v);
-                    continue;
-                }
-				$meta[$key][$camelKey] = $v;
+                $meta[$key][$camelKey] = $v;
 			}
 
 		}
