@@ -50,6 +50,10 @@ wpProQuiz_front_style
 
 */
 
+/**
+ * Calls the ScriptLoader class at the wp_enqueue_scripts hook.
+ * @return void
+ */
 function callScriptLoader() {
     new ScriptLoader(strtok($_SERVER["REQUEST_URI"], '?'), $_SERVER['QUERY_STRING']);
 }
@@ -77,6 +81,14 @@ class ScriptLoader {
         'et-builder-modules-script',
     ];
 
+    /**
+     * ScriptLoader constructor
+     *
+     * Constructs the loadable scripts/styles into arrays and calles the script
+     *   delegator.
+     * @param string $request Server request string
+     * @param string $query   Server query string
+     */
     public function __construct($request, $query) {
         global $current_user, $ROOT_URI, $TEMPLATE_URI;
         $this->scripts = [
@@ -97,6 +109,15 @@ class ScriptLoader {
         $this->delegate($request, $query, $current_user);
     }
 
+    /**
+     * Master delegator for the script loader.
+     *
+     * Loads/Unloads scripts and styles based on the current page.
+     * @param  string $req   Server request string
+     * @param  string $query Server query string
+     * @param  object $user  Current WordPress user
+     * @return void
+     */
     private function delegate($req, $query, $user) {
         // Always load these
         $load = [
@@ -143,6 +164,12 @@ class ScriptLoader {
         $this->unload(...$unload);
     }
 
+    /**
+     * Helper function that loads scripts/styles from an array of handles.
+     * @param  array $scripts Array of script handles.
+     * @param  array $styles  Array of style handles.
+     * @return void
+     */
     private function load($scripts, $styles) {
         foreach(array_unique($styles) as $style) {
             wp_enqueue_style(...$this->styles[$style]);
@@ -152,6 +179,12 @@ class ScriptLoader {
         }
     }
 
+    /**
+     * Helper function that unloads scripts/styles from an array of handles.
+     * @param  array $scripts Array of script handles.
+     * @param  array $styles  Array of style handles.
+     * @return void
+     */
     private function unload($scripts, $styles) {
         foreach(array_unique($scripts) as $script) {
             wp_dequeue_script($script);
