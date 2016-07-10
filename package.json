@@ -7,9 +7,9 @@
   "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
     "backup": "./scripts/backup",
-    "wp": "wpcmd() { docker exec $(docker ps -lq) /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
+    "wp": "wpcmd() { docker exec aliemu_wordpress_1 /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
     "pretest": "npm run lint",
-    "clear-cache": "rm -rf node_modules/jest-cli/.haste_cache",
+    "clear-cache": "docker exec aliemu_wordpress_1 /bin/bash -c \"ee clean\"",
     "deploy": "./scripts/deploy",
     "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "test": "jest",

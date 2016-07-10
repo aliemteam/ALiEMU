@@ -271,7 +271,6 @@ class EducatorDashboard {
 		$meta = [];
 		foreach ($courses as $key => $value) {
 			$thisMeta = get_metadata('post', $key );
-			$meta[$key]['recommendedHours'] = @intval(unserialize($thisMeta['_au-meta'][0])['au-recommended_hours']);
 			$learndashMeta = @unserialize($thisMeta['_sfwd-courses'][0]);
 
             if (!$learndashMeta) continue;
@@ -290,6 +289,10 @@ class EducatorDashboard {
 						return strtolower($match[0][strlen($match[0])-1]);
 					}, $camelKey
 				);
+                if ($camelKey === 'recommendedHours') {
+                    $meta[$key][$camelKey] = intval($v);
+                    continue;
+                }
 				$meta[$key][$camelKey] = $v;
 			}
 

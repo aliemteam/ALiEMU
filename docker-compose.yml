@@ -32,7 +32,6 @@ services:
                 query-monitor,
                 rest-api,
                 sendgrid-email-delivery-simplified,
-                simple-tooltips,
                 tablepress,
                 tinymce-advanced,
                 ultimate-member,

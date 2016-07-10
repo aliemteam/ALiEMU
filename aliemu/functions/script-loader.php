@@ -17,7 +17,6 @@ masonry
 nav-helper
 particles-home
 particlesjs
-simple_tooltips_base
 toastr
 um_minified
 um_recaptcha
@@ -42,7 +41,6 @@ magnific-popup
 open-sans
 parent-style
 sfwd_front_css
-simple_tooltips_style
 tablepress-default
 toastr-css
 um-recaptcha
@@ -71,13 +69,11 @@ class ScriptLoader {
     private $lessonPageStyles = [
         'abt_frontend_styles',
         'et-shortcodes-css',
-        'simple_tooltips_style',
         'tablepress-default',
     ];
 
     private $lessonPageScripts = [
         'abt_frontend_js',
-        'simple_tooltips_base',
         'et-builder-modules-script',
     ];
 
