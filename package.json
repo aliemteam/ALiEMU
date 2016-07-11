@@ -7,13 +7,15 @@
   "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
     "backup": "./scripts/backup",
-    "wp": "wpcmd() { docker exec aliemu_wordpress_1 /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
-    "pretest": "npm run lint",
-    "clear-cache": "docker exec aliemu_wordpress_1 /bin/bash -c \"ee clean\"",
     "deploy": "./scripts/deploy",
     "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
+    "clear-cache": "docker exec aliemu_wordpress_1 /bin/bash -c \"ee clean\"",
+    "wp": "wpcmd() { docker exec aliemu_wordpress_1 /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
+    "lint": "stylint aliemu/styles -c .stylintrc && tslint 'aliemu/**/*.{ts,tsx}'",
+    "pretest": "npm run lint",
     "test": "jest",
-    "lint": "stylint aliemu/styles -c .stylintrc && tslint 'aliemu/**/*.{ts,tsx}'"
+    "staging:up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.override.yml -f ./docker-compose.staging.yml up -d",
+    "production:up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.prod.yml up -d"
   },
   "dependencies": {
     "@types/enzyme": "^1.2.23-alpha",

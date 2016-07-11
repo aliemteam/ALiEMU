@@ -21,24 +21,8 @@ services:
             - ./wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
         environment:
             DB_NAME: wordpress
-            DB_USER: root
-            DB_PASS: root
-            PHP_VERSION: 7.0
             SITE_NAME: aliemu.com
-            LOCALHOST: 'true'
-            PLUGINS: >-
-                academic-bloggers-toolkit,
-                google-analytics-dashboard-for-wp,
-                query-monitor,
-                rest-api,
-                sendgrid-email-delivery-simplified,
-                tablepress,
-                tinymce-advanced,
-                ultimate-member,
-                wpdiscuz,
-                [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
-                [um-recaptcha]http://bit.ly/um-recaptcha,
-            SEARCH_REPLACE: https://www.aliemu.com,http://localhost:8080
+            PHP_VERSION: 7.0
             WP_DEBUG: 'true'
             WP_DEBUG_LOG: 'true'
             WP_DEBUG_DISPLAY: 'false'
@@ -48,8 +32,6 @@ services:
             - 3306:3306
         volumes_from:
             - data
-        environment:
-            MYSQL_ROOT_PASSWORD: root
     data:
         image: busybox
         volumes:

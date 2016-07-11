@@ -1,0 +1,5 @@
+version: '2'
+services:
+    wordpress:
+        environment:
+            SEARCH_REPLACE: https://www.aliemu.com,http://45.55.211.226:8080
