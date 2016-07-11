@@ -21,7 +21,7 @@ function requested_dashboard_access($id) {
         "bio" => $_POST['description']
     ];
 
-    slack_message('messages/dashboard-access', $messageData);
+    slack_message('aliemu/messages/dashboard-access', $messageData);
 }
 add_action('user_register', 'requested_dashboard_access');
 
@@ -32,7 +32,7 @@ add_action('user_register', 'requested_dashboard_access');
  * @return void
  */
 function slack_contact($data) {
-    slack_message('messages/contact-form', $data);
+    slack_message('aliemu/messages/contact-form', $data);
 }
 add_action('slack_email_hook', 'slack_contact');
 
@@ -45,7 +45,24 @@ add_action('slack_email_hook', 'slack_contact');
 function slack_comment($commentId) {
     $comment = get_comment($commentId);
     $post = get_post($comment->comment_post_ID);
-    slack_message('messages/comments', [
+    $category = get_the_category($post->ID)[0]->slug;
+
+    switch ($category) {
+        case 'capsules':
+            $endpoint = 'capsules/messages/comments';
+            break;
+        case 'air':
+            $endpoint = 'airseries/messages/comments';
+            break;
+        case 'air-pro':
+            $endpoint = 'airseries-pro/messages/comments';
+            break;
+        default:
+            $endpoint = 'aliemu/messages/comments';
+            break;
+    }
+
+    slack_message($endpoint, [
         'name' => $comment->comment_author,
         'email' => $comment->comment_author_email,
         'content' => $comment->comment_content,
@@ -67,7 +84,7 @@ add_action('comment_post', 'slack_comment');
 function slack_message($route, $data) {
     $key = get_option('ALIEM_API_KEY');
     for ($i = 0; $i < 5; $i++) {
-        $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/aliemu/$route", [
+        $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/$route", [
             'headers' => [
                 'ALIEM_API_KEY' => $key,
             ],
