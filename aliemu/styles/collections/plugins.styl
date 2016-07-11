@@ -1,43 +1,47 @@
 // ================== Tablepress ==================
+#content-area
+    #left-area
+        .tablepress-table-name
+            font 600 1em Lato
+            text-align center
 
-.tablepress-table-name
-    font 600 1em Lato
-    text-align center
+        h2.tablepress-table-name
+            font-size 1.5em
 
 
-.tablepress
-    thead th
-        color white
-        font 400 1.2em Lato
-        text-align center
-        background $primary
-    tfoot th
-        @extend .tablepress thead th
-        font-size 0.8em
-        text-align left
-        a
-            color white
+        .tablepress
+            thead th
+                color white
+                font 400 1.2em Lato
+                text-align center
+                background $primary
+            tfoot th
+                @extend #content-area #left-area .tablepress thead th
+                font-size 0.8em
+                text-align left
+                a
+                    color white
 
-.category-capsules
-.tag-capsules
-    .tablepress
-        thead th,
-        tfoot th
-            background-color $capsules-primary
+        .category-capsules
+        .tag-capsules
+            .tablepress
+                thead th,
+                tfoot th
+                    background-color $capsules-primary
 
-.category-air
-.tag-air
-    .tablepress
-        thead th,
-        tfoot th
-            background-color $air-primary
+        .category-air
+        .tag-air
+            .tablepress
+                thead th,
+                tfoot th
+                    background-color $air-primary
 
-.category-air-pro
-.tag-air-pro
-    .tablepress
-        thead th,
-        tfoot th
-            background-color $airpro-primary
+        .category-air-pro
+        .tag-air-pro
+            .tablepress
+                thead th,
+                tfoot th
+                    background-color $airpro-primary
 
 
 #content-area .au-table-needsborders td

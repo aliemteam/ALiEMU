@@ -56,6 +56,84 @@ series-common(colorvar)
 
 // Lessons
 #content-area
+    #left-area
+        .learndash
+            h2
+                font-size 1.75em
+                font-weight 800
+                color $gray-dark
+                padding 15px 0 20px
+
+            h3
+                font-size 1.5em
+                font-weight 600
+                color $gray-dark
+                text-align left
+                padding 15px 0 10px
+
+            h4
+                font-size 1.3em
+                font-weight 400
+                color $gray-dark
+                padding 10px 0 10px
+
+            p
+                font-size 1.05rem
+
+            ul
+                @extends #content-area #left-area .learndash p
+
+            li
+                @extends #content-area #left-area .learndash p
+
+            table
+                td
+                    @extends #content-area #left-area .learndash p
+                    font-size 1rem
+                li
+                    font-size 1rem
+
+            // ==================================================
+            //                 Capsules Boxes
+            // ==================================================
+
+            .lesson-box
+            .take-home-point
+                font-family Lato
+                border 0
+                margin 15px 0
+                box-shadow $box-shadow
+                .lesson-heading
+                h2
+                    border-radius $card-radius
+                    // box-shadow $box-shadow
+                    color white
+                    font 600 1.25em Lato
+                    margin 0
+                    padding 10px
+                    text-align center
+                    background-color $capsules-primary
+                    letter-spacing 1px
+                p
+                    @extends #content-area #left-area .learndash p
+                    text-align justify
+                .lesson-body
+                    padding 20px
+                    *
+                        line-height 1.3em
+                    h3
+                        // background-color $capsules-primary !important
+                        color $gray-dark
+                        text-align center
+                    h4
+                        font-weight 400
+                        letter-spacing 1px
+                        text-align center
+                    p, ul
+                        font-weight 400
+                    table
+                        margin 0
+
 
     // Applies to any unordered list in posts
     .entry-content li
