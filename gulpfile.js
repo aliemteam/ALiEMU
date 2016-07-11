@@ -145,7 +145,7 @@ gulp.task('stylus:dev:step1', () =>
 gulp.task('stylus:prod:step1', () =>
     gulp.src([
         'aliemu/styles/style.styl',
-    ], { base: './aliemu', })
+    ], { base: './aliemu/styles', })
     .pipe(stylus({
         use: [ poststylus([rucksack, autoprefixer]), ],
         compress: true,
