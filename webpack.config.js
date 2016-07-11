@@ -1,6 +1,6 @@
 module.exports = {
     entry: {
-        'aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard': './wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx',
+        'Divi-child/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
     },
     output: {
         filename: '[name].js',

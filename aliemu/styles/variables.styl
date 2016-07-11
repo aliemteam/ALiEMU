@@ -1,0 +1,83 @@
+// ================== Shadows ==================
+$box-shadow = 0 1px 2px 0 rgba(0, 0, 0, 0.3)            // Default box-shadow used for items with shadows
+$box-shadow-farther = 4px 2px 13px rgba(0, 0, 0, 0.25)  // Box shadows that appear higher up than `$box-shadow`
+
+
+// ================== Borders ==================
+$card-radius = 3px 3px 0 0 // Border radius for card-type items (top only)
+
+
+// ================== Mixins ===================
+
+bordered-button(type, color = false, hovercolor = false)
+    font-size 14px
+    font-family 'Open Sans'
+    background transparent
+    text-decoration none
+    text-align center
+    border solid 2px
+    border-radius 5px
+    outline 0
+    color $primary
+    if color is a 'color'
+        color color
+    &:hover
+        border-color transparent
+        transition 0.1s
+        cursor pointer
+        if hovercolor is a 'color'
+            color hovercolor
+        else
+            color white
+        background-color $primary
+        if color is a 'color'
+            background-color color
+    if type is small
+        padding 5px 8px
+        min-width 80px
+    if type is medium
+        padding 8px 8px
+        min-width 100px
+    if type is large
+        padding 10px 15px
+        min-width 120px
+
+card(primary-color)
+    padding 40px 0
+    margin auto
+    max-width 85%
+    @media (max-width 480px)
+        margin 0 0 20px 0
+        max-width none
+    .au-heading
+        min-height 50px
+        background primary-color
+        text-align center
+        vertical-align middle
+        border-radius 3px 3px 0 0
+        h1
+            color white
+            line-height 25px
+            margin 0
+            padding-top 10px
+    .au-content
+        display flex
+        justify-content center
+        @media (max-width 480px)
+            flex-direction column
+        padding 20px
+        background $gray-light
+        .au-text
+            flex auto
+            a
+                font-weight 600
+                color primary-color
+                &:hover
+                    color lighten(primary-color, 10)
+            @media (max-width 480px)
+                order 2
+                text-align justify
+    .au-image
+        margin 10px
+        img
+            min-width 200px

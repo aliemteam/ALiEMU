@@ -2,21 +2,23 @@
 'use strict';
 
 // General
-const gulp          = require('gulp');
-const browserSync   = require('browser-sync').create();
-const del           = require('del');
-const exec          = require('child_process').exec;
-const replace       = require('gulp-replace');
+const gulp = require('gulp');
+const browserSync = require('browser-sync').create();
+const del = require('del');
+const exec = require('child_process').exec;
+const replace = require('gulp-replace');
+const rename = require('gulp-rename');
+const jade = require('gulp-jade2php');
 // CSS
-const stylus        = require('gulp-stylus');
-const poststylus    = require('poststylus');
-const autoprefixer  = require('autoprefixer')({ browsers: ['last 2 versions'] });
-const rucksack      = require('rucksack-css');
-const sourcemaps    = require('gulp-sourcemaps');
+const stylus = require('gulp-stylus');
+const poststylus = require('poststylus');
+const autoprefixer = require('autoprefixer')({ browsers: ['last 2 versions'] });
+const rucksack = require('rucksack-css');
+const sourcemaps = require('gulp-sourcemaps');
 // JS
-const uglify        = require('gulp-uglify');
+const uglify = require('gulp-uglify');
 // TypeScript
-const webpack       = require('webpack-stream');
+const webpack = require('webpack-stream');
 const webpackConfig = require('./webpack.config.js');
 const webpackDevConfig = Object.assign({}, webpackConfig, {
     devtool: 'eval-source-map',
@@ -29,14 +31,14 @@ const webpackDevConfig = Object.assign({}, webpackConfig, {
 //                 Utility Tasks
 // ==================================================
 
-// Delete all files in dist/aliemu-plugins
-gulp.task('clean', (done) => del(['dist/aliemu-plugins/**/*', 'dist/Divi-child/**/*'], done) );
+// Delete all files in dist/Divi-child/
+gulp.task('clean', (done) => del(['dist/Divi-child/**/*'], done) );
 
 // Take ownership of dist directory
 gulp.task('chown', (done) => {
-    exec('ls -ld dist | awk \'{print $3}\'', (err, stdout, stderr) => {
+    exec('ls -ld dist/Divi-child/ | awk \'{print $3}\'', (err, stdout, stderr) => {
         if (err) throw err;
-        if (stdout === process.env.USER) return done();
+        if (stdout.trim() === process.env.USER) return done();
         exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (err) => {
             if (err) throw err;
             done();
@@ -54,71 +56,138 @@ gulp.task('reload', (done) => {
 //                    Static
 // ==================================================
 
-gulp.task('static:aliemu-plugins', () =>
+gulp.task('static:main', () =>
     gulp.src([
-        'wp-content/plugins/aliemu-plugins/**/*.*',
-        '!wp-content/**/__tests__',
-        '!wp-content/plugins/aliemu-plugins/**/*.{ts,tsx,json,styl,md}',
-    ], { base: 'wp-content/plugins/aliemu-plugins/' })
-    .pipe(gulp.dest('dist/aliemu-plugins'))
-);
-
-gulp.task('static:divi-child', () =>
-    gulp.src([
-        'wp-content/themes/Divi-child/**/*.*',
-        '!wp-content/**/__tests__',
-        '!wp-content/themes/Divi-child/**/*.{ts,tsx,json,styl,md}',
-    ], { base: 'wp-content/themes/Divi-child/' })
+        'aliemu/**/*.*',
+        '!aliemu/templates/**/*.*',
+        '!aliemu/templates',
+        '!aliemu/**/__tests__',
+        '!aliemu/**/*.{ts,tsx,json,styl,md,txt}',
+    ], { base: './aliemu' })
     .pipe(gulp.dest('dist/Divi-child'))
 );
 
+gulp.task('static:templates:pages', () =>
+    gulp.src([
+        'aliemu/templates/pages/*.jade'
+    ], { base: './aliemu/templates/pages' })
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
+    .pipe(rename({
+        extname: '.php',
+        prefix: 'page-'
+    }))
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
 
-gulp.task('static', gulp.parallel('static:aliemu-plugins', 'static:divi-child'));
+gulp.task('static:templates:overrides', () =>
+    gulp.src([
+        'aliemu/templates/overrides/*.jade'
+    ], { base: './aliemu/templates/overrides'})
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
+    .pipe(rename({
+        extname: '.php',
+    }))
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
 
+gulp.task('static:learndash', () =>
+    gulp.src([
+        'aliemu/templates/learndash/*.jade'
+    ], { base: './aliemu/templates'})
+    .pipe(jade({
+        omitPhpRuntime: true,
+        omitPhpExtractor: true,
+        arraysOnly: false,
+        noArraysOnly: true,
+    }))
+    .pipe(rename({
+        extname: '.php',
+    }))
+    .pipe(gulp.dest('dist/Divi-child/'))
+);
+
+gulp.task('static',
+    gulp.parallel(
+        'static:main',
+        'static:templates:pages',
+        'static:templates:overrides',
+        'static:learndash'
+    )
+);
 
 // ==================================================
 //                     Styles
 // ==================================================
 
-gulp.task('stylus:dev', () =>
+gulp.task('stylus:dev:step1', () =>
     gulp.src([
-        'wp-content/plugins/aliemu-plugins/inc/styles/styles.styl',
-    ], { base: 'wp-content/plugins/aliemu-plugins/', })
+        'aliemu/styles/style.styl',
+    ], { base: './aliemu/styles', })
     .pipe(sourcemaps.init())
     .pipe(stylus({
-        use: [ poststylus([rucksack, autoprefixer]), ],
-        compress: true,
+        use: [ poststylus([rucksack, autoprefixer]), ]
     }))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('dist/aliemu-plugins'))
+    .pipe(gulp.dest('dist/Divi-child'))
     .pipe(browserSync.stream({ match: '**/*.css' }))
 );
 
-gulp.task('stylus:prod', () =>
+gulp.task('stylus:prod:step1', () =>
     gulp.src([
-        'wp-content/plugins/aliemu-plugins/inc/styles/styles.styl',
-    ], { base: 'wp-content/plugins/aliemu-plugins/', })
+        'aliemu/styles/style.styl',
+    ], { base: './aliemu', })
     .pipe(stylus({
         use: [ poststylus([rucksack, autoprefixer]), ],
         compress: true,
     }))
-    .pipe(gulp.dest('dist/aliemu-plugins'))
+    .pipe(gulp.dest('dist/Divi-child'))
 );
 
+gulp.task('stylus:step2', (done) => {
+    const header =
+    '/*\n' +
+    ' Theme Name: Divi Child\n' +
+    ' Theme URI: http://www.elegantthemes.com/gallery/divi/\n' +
+    ' Description: Divi Child Theme\n' +
+    ' Author: Elegant Themes\n' +
+    ' Author URI: http://www.elegantthemes.com\n' +
+    ' Template: Divi\n' +
+    ' Version: 1.0.0\n' +
+    ' License: GNU General Public License v2\n' +
+    ' License URI: http://www.gnu.org/licenses/gpl-2.0.html\n' +
+    '*/\n';
+    exec(`echo -en "${header}$(<dist/Divi-child/style.css)" > dist/Divi-child/style.css`, (err) => {
+        if (err) throw err;
+        done();
+    });
+});
+
+gulp.task('stylus:dev', gulp.series('stylus:dev:step1', 'stylus:step2'));
+gulp.task('stylus:prod', gulp.series('stylus:prod:step1', 'stylus:step2'))
 
 // ==================================================
 //                    Javascript
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp.src('wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackDevConfig))
     .pipe(gulp.dest('dist/'))
 );
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('wp-content/plugins/aliemu-plugins/inc/dashboards/educator-dashboard/EducatorDashboard.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
     .pipe(webpack(webpackConfig))
     .pipe(gulp.dest('dist/'))
 );
@@ -168,20 +237,20 @@ gulp.task('default',
             }
 
             gulp.watch([
-                'wp-content/plugins/**/*.styl',
+                'aliemu/**/*.styl',
             ], gulp.series('stylus:dev'));
 
             gulp.watch([
-                'wp-content/**/*.{ts,tsx}',
-                '!wp-content/**/__tests__/',
-                '!wp-content/**/__tests__/*',
+                'aliemu/**/*.{ts,tsx}',
+                '!aliemu/**/__tests__/',
+                '!aliemu/**/__tests__/*',
             ], gulp.series('webpack:dev', 'reload'));
 
             gulp.watch([
-                'wp-content/**/*',
-                '!wp-content/**/*.{ts,tsx,styl}',
-                '!wp-content/**/__tests__/',
-                '!wp-content/**/__tests__/*',
+                'aliemu/**/*',
+                '!aliemu/**/*.{ts,tsx,styl}',
+                '!aliemu/**/__tests__/',
+                '!aliemu/**/__tests__/*',
             ], gulp.series('static', 'reload'));
 
         }
@@ -194,11 +263,11 @@ gulp.task('default',
 
 gulp.task('fix-divi', () => {
     const slackEmailHook = `
-    do_action('slack_email_hook', array(
+    do_action('slack_email_hook', [
         'name' => $contact_name,
         'email' => $contact_email,
-        'message' => stripslashes( wp_strip_all_tags( $message_pattern ) ),
-    ));
+        'message' => stripslashes(wp_strip_all_tags($message_pattern)),
+    ]);
     `;
 
     return gulp.src([

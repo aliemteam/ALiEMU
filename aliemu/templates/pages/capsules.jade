@@ -1,0 +1,12 @@
+- get_header()
+#main-content #[| <?php while (have_posts()) : the_post(); ?>]
+    | <article id="post-<?php the_ID(); ?>" <?php post_class('category-capsules'); ?>>
+    .au-card
+        .au-heading #[h1 Capsules: Practical Pharmacology for the Emergency Medicine Practitioner]
+        .au-content
+            .au-text #[div Welcome to the #[a(href="/about/#au-about-capsules") Capsules series]! This series is a free, online e-curriculum of high-quality, current, and practical pharmacology knowledge for the EM practitioner. About once a month a new course block is released with lessons and brief quizzes to complete. All modules are written by two pharmacist team members and then peer-reviewed by a separate pharmacist and physician. The Capsules series’ primary focus is bringing EM pharmacology education to the bedside. Our expert team distills complex pharmacology principles into easy-to-apply concepts. It’s our version of what-you-need-to-know as an EM practitioner.]
+            .au-image #[img(src="https://www.aliemu.com/wp-content/uploads/2016/06/capsules-badge.png", alt="Capsules Badge")]
+    .au-course.boxes.au-no-scroll
+        != do_shortcode('[ld_course_list category_name="capsules"]')
+    | </article><?php endwhile; ?>
+- get_footer()

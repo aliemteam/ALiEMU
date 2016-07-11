@@ -1,0 +1,23 @@
+#!/bin/bash
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
+FILENAME=$(date +%Y-%m-%d_%H-%M_aliemu)
+
+cd $ROOTDIR/data || exit 1
+
+# Ensure proper file permissions
+chmod 400 aliemu_dsa
+
+# Run ssh-agent and add the ssh private key
+eval "$(ssh-agent -s)"
+ssh-add aliemu_dsa
+
+# SSH into siteground and backup the database and copy to the data directory
+ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
+cd public_html
+wp db export $FILENAME.sql"
+echo '=> Downloading database to local machine...'
+scp -i aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/$FILENAME.sql .
+echo '=> Deleting database copy from server...'
+ssh -i aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm $FILENAME.sql"

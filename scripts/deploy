@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTDIR=$(dirname "${BASH_SOURCE[0]}")
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
 SECRET=$( [ -f $ROOTDIR/data/ftp_pass ] && cat $ROOTDIR/data/ftp_pass || [ ! -z $FTP_PASS ] && echo $FTP_PASS || false)
 
@@ -8,6 +8,7 @@ SECRET=$( [ -f $ROOTDIR/data/ftp_pass ] && cat $ROOTDIR/data/ftp_pass || [ ! -z 
 GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
 CYAN='\033[0;36m'
+BOLD='\E[1m'
 NC='\033[0m'
 
 # Check to see that we have access to the FTP password
@@ -20,30 +21,17 @@ $ROOTDIR/node_modules/.bin/gulp build
 
 cd $ROOTDIR/dist || exit 1
 
-# Create an array containing all filenames within aliemu-plugins
-aliemu_plugins=()
-while read file; do
-    aliemu_plugins+=($file)
-done <<< "$(find aliemu-plugins -type f)"
-
 # Create an array containing all filenames within Divi-child
 divi_child=()
 while read file; do
     divi_child+=($file)
 done <<< "$(find Divi-child -type f)"
 
-# Transfer aliemu-plugins files to server with FTP
-echo -e "${ORANGE}=> Deploying aliemu-plugins:${NC}"
-for i in "${!aliemu_plugins[@]}"; do
-    echo -e "${CYAN}==> ${GREEN}($(($i+1))/${#aliemu_plugins[@]})${NC} ${aliemu_plugins[$i]}"
-    curl -sS -u dsifford@aliemu.com:$SECRET --ftp-create-dirs -T ${aliemu_plugins[$i]} ftp://ftp.aliemu.com/wp-content/plugins/${aliemu_plugins[$i]}
-done
-
 # Transfer Divi-child files to server with FTP
-echo -e "${ORANGE}=> Deploying Divi-child:${NC}"
+echo -e "${ORANGE}${BOLD}==> Deploying...${NC}"
 for i in "${!divi_child[@]}"; do
-    echo -e "${CYAN}==> ${GREEN}($(($i+1))/${#divi_child[@]})${NC} ${divi_child[$i]}"
+    echo -e "${CYAN}${BOLD}  =>${NC} ${GREEN}($(($i+1))/${#divi_child[@]})${NC} ${divi_child[$i]}"
     curl -sS -u dsifford@aliemu.com:$SECRET --ftp-create-dirs -T ${divi_child[$i]} ftp://ftp.aliemu.com/wp-content/themes/${divi_child[$i]}
 done
 
-echo "Deploy Finished."
+echo -e "${ORANGE}${BOLD}==> Deploy Finished.${NC}"

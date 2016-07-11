@@ -1,27 +1,23 @@
-import * as moment from 'moment';
-
 declare namespace ALiEMU {
 
-    namespace Globals {
-        type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
-        interface DOMEvent extends Event {
-            target: HTMLInputElement;
-        }
-        interface Action {
-            type: string;
-            [key: string]: any;
-        }
-        interface CSV {
-            data: string;
-            filename: string;
-        }
+    type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
+    interface DOMEvent extends Event {
+        target: HTMLInputElement;
+    }
+    interface Action {
+        type: string;
+        [key: string]: any;
+    }
+    interface CSV {
+        data: string;
+        filename: string;
     }
 
     namespace EducatorDashboard {
 
         type DateRange = {
-            start: moment.Moment;
-            end: moment.Moment;
+            start: any;
+            end: any;
         };
 
         interface EducatorData {
@@ -204,5 +200,3 @@ declare namespace ALiEMU {
 //     }
 //
 // }
-
-export = ALiEMU;

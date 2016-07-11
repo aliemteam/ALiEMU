@@ -1,4 +1,3 @@
-import * as ALiEMU from '../typings/ALiEMU.d';
 
 export const categories: ALiEMU.EducatorDashboard.CategoryObject = {
     AIR: {
