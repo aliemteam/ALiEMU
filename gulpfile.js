@@ -9,6 +9,8 @@ const exec = require('child_process').exec;
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const jade = require('gulp-jade2php');
+// Assets
+const svgmin = require('gulp-svgmin');
 // CSS
 const stylus = require('gulp-stylus');
 const poststylus = require('poststylus');
@@ -51,6 +53,19 @@ gulp.task('reload', (done) => {
     browserSync.reload();
     done();
 });
+
+// ==================================================
+//                    Assets
+// ==================================================
+
+gulp.task('assets', () =>
+    gulp.src(
+        'aliemu/assets/**.*',
+        { base: './aliemu'}
+    )
+    .pipe(svgmin())
+    .pipe(gulp.dest('dist/Divi-child'))
+);
 
 // ==================================================
 //                    Static
@@ -213,7 +228,7 @@ gulp.task('js', () =>
 
 gulp.task('build', gulp.series(
     'clean',
-    gulp.parallel('static', 'webpack:prod', 'stylus:prod'),
+    gulp.parallel('static', 'assets', 'webpack:prod', 'stylus:prod'),
     'js'
 ));
 
@@ -221,7 +236,7 @@ gulp.task('default',
     gulp.series(
         'chown',
         'clean',
-        gulp.parallel('static', 'webpack:dev', 'stylus:dev'), () => {
+        gulp.parallel('static', 'assets', 'webpack:dev', 'stylus:dev'), () => {
 
             // Tries to connect via docker-machine first, if it fails, then default to
             // docker native (keeping this in the event we get more contributors in the future)
@@ -252,6 +267,10 @@ gulp.task('default',
                 '!aliemu/**/__tests__/',
                 '!aliemu/**/__tests__/*',
             ], gulp.series('static', 'reload'));
+
+            gulp.watch([
+                'aliemu/assets/**/*'
+            ], gulp.series('assets', 'reload'));
 
         }
     )
