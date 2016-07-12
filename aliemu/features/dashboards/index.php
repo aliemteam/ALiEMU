@@ -14,7 +14,8 @@
 // Add Educator Dashboard Tab
 add_filter('um_profile_tabs', 'edudash_tab', 1000);
 function edudash_tab( $tabs ) {
-    $hasEducatorAccess = !empty(get_user_meta(get_current_user_id(), "residency_us_em", true)) && current_user_can('educator_access');
+    $meta = get_user_meta(get_current_user_id(), "residency_us_em", true);
+    $hasEducatorAccess = !empty($meta) && current_user_can('educator_access');
     if (current_user_can('administrator') || $hasEducatorAccess) {
         $tabs['edudash'] = [
             'name' => 'Educator Dashboard',

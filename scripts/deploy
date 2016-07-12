@@ -30,7 +30,7 @@ done <<< "$(find Divi-child -type f)"
 # Transfer Divi-child files to server with FTP
 echo -e "${ORANGE}${BOLD}==> Deploying...${NC}"
 for i in "${!divi_child[@]}"; do
-    echo -e "${CYAN}${BOLD}  =>${NC} ${GREEN}($(($i+1))/${#divi_child[@]})${NC} ${divi_child[$i]}"
+    printf "${CYAN}${BOLD}  ->${NC} ${GREEN}(%02d/${#divi_child[@]})${NC} ${divi_child[$i]}\n" $(($i+1))
     curl -sS -u dsifford@aliemu.com:$SECRET --ftp-create-dirs -T ${divi_child[$i]} ftp://ftp.aliemu.com/wp-content/themes/${divi_child[$i]}
 done
 
