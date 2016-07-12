@@ -128,8 +128,15 @@ class ScriptLoader {
 
         // Not learndash pages
         if (!is_singular(['sfwd-courses', 'sfwd-quiz', 'sfwd-lessons', 'sfwd-topic'])) {
-            array_push($unload[0], ...$this->lessonPageScripts);
-            array_push($unload[1], ...$this->lessonPageStyles);
+            // FIXME: Convert back when we get out of siteground
+            // array_push($unload[0], ...$this->lessonPageScripts);
+            // array_push($unload[1], ...$this->lessonPageStyles);
+            foreach($this->lessonPageScripts as $script) {
+                $unload[0][] = $script;
+            }
+            foreach($this->lessonPageStyles as $style) {
+                $unload[0][] = $style;
+            }
         }
 
         switch ($req) {
@@ -156,8 +163,11 @@ class ScriptLoader {
                 break;
         }
 
-        $this->load(...$load);
-        $this->unload(...$unload);
+        // FIXME: Convert back to this when we ditch siteground
+        // $this->load(...$load);
+        // $this->unload(...$unload);
+        $this->load($load[0], $load[1]);
+        $this->unload($unload[0], $unload[1]);
     }
 
     /**
@@ -168,10 +178,14 @@ class ScriptLoader {
      */
     private function load($scripts, $styles) {
         foreach(array_unique($styles) as $style) {
-            wp_enqueue_style(...$this->styles[$style]);
+            // FIXME: Convert back when we ditch siteground
+            // wp_enqueue_style(...$this->styles[$style]);
+            call_user_func_array('wp_enqueue_style', $this->styles[$style]);
         }
         foreach(array_unique($scripts) as $script) {
-            wp_enqueue_script(...$this->scripts[$script]);
+            // FIXME: Convert back when we ditch siteground
+            // wp_enqueue_script(...$this->scripts[$script]);
+            call_user_func_array('wp_enqueue_script', $this->scripts[$script]);
         }
     }
 
