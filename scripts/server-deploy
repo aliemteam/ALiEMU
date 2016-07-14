@@ -27,9 +27,7 @@ main() {
 
     h2 'Gathering needed information...'
     read -p "$(h3 "Enter machine name:")" machine_name
-    read -p "$(h3 "Enter DigitalOcean access token:")" TOKEN
     read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
-
 
     droplets=$(
         curl -s \
@@ -61,7 +59,6 @@ main() {
 
     exit 0
 }
-
 
 
 init() {
