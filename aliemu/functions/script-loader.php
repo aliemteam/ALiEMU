@@ -149,7 +149,7 @@ class ScriptLoader {
                 array_push($load[1], 'bootstrap-nav-css');
                 break;
             // Ultimate Member Pages / Tabs
-            case "/user/$user->user_login/":
+            case "/user/" . strtolower($user->user_login) . "/":
                 switch ($query) {
                     case '':
                     case 'profiletab=main':
