@@ -25,6 +25,17 @@ if [[ $? == 1 ]]; then
     exit 1
 fi
 
+# Check ownership of wp-content
+owners=$(ls -lR $SCRIPTDIR/wp-content | awk '{print $3}')
+for o in $owners; do
+    if [[ $o != "$USER" ]]; then
+        echo '=> Need sudo priveledges to take ownership of wp-content directory'
+        sudo chown -R $USER $SCRIPTDIR/wp-content
+        break
+    fi
+done;
+
+
 # Exit if the DSA file doesn't exist
 if [[ ! -f ./data/aliemu_dsa ]]; then
     echo '=> Error: You must have the file "aliemu_dsa" located within your data directory'
