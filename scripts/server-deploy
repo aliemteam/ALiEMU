@@ -1,5 +1,6 @@
 #!/bin/bash
 
+TERM=${TERM:-xterm}
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
 
@@ -63,6 +64,10 @@ main() {
 
 init() {
 
+    local docker_compose_version
+
+    docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1)
+
     h2 'Provisioning Docker Machine...'
     docker-machine create \
         -d digitalocean \
@@ -75,22 +80,21 @@ init() {
     eval "$(docker-machine env $machine_name)"
     STATUS
 
-    h2 'Updating kernel and installing dependencies on host machine'
+    h2 'Updating kernel & installing dependencies on host machine'
     docker-machine ssh $machine_name "
     apt-get update && \
-    apt-get purge -y lxc-docker && \
-    apt-cache policy docker-engine && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y vim &&
-    curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+    curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
     "
 
-    h3 'Initializing filesystem'
+    h3 'Initializing filesystem & setting root access password'
     docker-machine ssh $machine_name "
     mkdir -p /app
     chown -R :www-data /app
     chmod -R g+rwx /app
+    echo 'root:$SSHPASS' | chpasswd
     "
     STATUS
 
@@ -104,6 +108,7 @@ init() {
     STATUS
 
     h3 'Setting up SSH'
+    mkdir -p $HOME/.ssh
     rm -f "$HOME/.ssh/DO_${machine_name}_rsa" "$HOME/.ssh/DO_${machine_name}_rsa.pub"
     ssh-keygen -t rsa -N "" -f "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
     cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | docker-machine ssh $machine_name "
@@ -154,7 +159,12 @@ attach() {
     )
     [[ $droplet_ip == 'null' ]] && ERROR "Could not determine droplet IP for $machine_name"
 
+    if [ -z "$(ssh-keygen -F $droplet_ip)" ]; then
+      ssh-keyscan -H $droplet_ip >> ~/.ssh/known_hosts
+    fi
+
     h3 'Setting up root-level SSH for Docker Machine'
+    mkdir -p $HOME/.ssh
     rm -f "$HOME/.ssh/DO_${machine_name}_rsa" "$HOME/.ssh/DO_${machine_name}_rsa.pub"
     ssh-keygen -t rsa -N "" -f "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
     cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | sshpass -p $SSHPASS ssh root@$droplet_ip "

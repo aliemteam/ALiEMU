@@ -48,7 +48,7 @@ add_shortcode('capsules-lessonbox', 'capsules_lessonbox_shortcode');
 function au_course_hours() {
     $course_id = @$_GET['course_id'];
     if (empty($course_id)) return '';
-    $meta = get_post_meta($course_id, '_au-meta', true);
-    return $meta['au-recommended_hours'];
+    $meta = get_post_meta($course_id, '_sfwd-courses', true);
+    return $meta['sfwd-courses_recommendedHours'];
 }
 add_shortcode('course-hours', 'au_course_hours');
