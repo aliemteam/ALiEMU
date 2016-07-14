@@ -2,17 +2,11 @@
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
-# SECRET=$( [ -f $ROOTDIR/data/ftp_pass ] && cat $ROOTDIR/data/ftp_pass || [ ! -z $FTP_PASS ] && echo $FTP_PASS || false)
 
 # Pretty colors
 ORANGE='\033[0;33m'
 BOLD='\E[1m'
 NC='\033[0m'
-
-# Check to see that we have access to the FTP password
-# if [ ! $SECRET ]; then echo "SECRET could not be set!"; exit 1; fi
-
-# cd $ROOTDIR || exit 1
 
 # Compile the code
 $ROOTDIR/node_modules/.bin/gulp build

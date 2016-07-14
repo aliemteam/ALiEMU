@@ -2,8 +2,18 @@ version: '2'
 services:
     wordpress:
         restart: on-failure:10
+        volumes:
+            # Database
+            - /app/data:/data
+            # Plugins
+            - /app/wp-content/plugins/learndash-propanel:/var/www/aliemu.com/htdocs/wp-content/plugins/learndash-propanel
+            - /app/wp-content/plugins/sfwd-lms:/var/www/aliemu.com/htdocs/wp-content/plugins/sfwd-lms
+            # Themes
+            - /app/dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
+            - /app/wp-content/themes/Divi:/var/www/aliemu.com/htdocs/wp-content/themes/Divi
+            # Uploads
+            - /app/wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
         environment:
-            DB_USER: $DB_USER
             DB_PASS: $DB_PASS
             PLUGINS: >-
                 academic-bloggers-toolkit,

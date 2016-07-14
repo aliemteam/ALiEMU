@@ -1,0 +1,250 @@
+#!/bin/bash
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
+
+main() {
+
+    # shellcheck source=../.env
+    source $ROOTDIR/.env
+    [[ ! $SSHPASS ]] && ERROR "Couldn't find 'SSHPASS' variable in .env file"
+    [[ ! $TOKEN ]] && ERROR "Couldn't find 'TOKEN' variable in .env file"
+
+    local droplets droplet
+
+    # Initial dependency check
+    depcheck \
+        cat \
+        docker \
+        docker-machine \
+        jq \
+        rsync \
+        ssh \
+        ssh-add \
+        ssh-keygen \
+        ssh-keyscan \
+        sshpass
+
+    h2 'Gathering needed information...'
+    read -p "$(h3 "Enter machine name:")" machine_name
+    read -p "$(h3 "Enter DigitalOcean access token:")" TOKEN
+    read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
+
+
+    droplets=$(
+        curl -s \
+            -X GET \
+            -H "Authorization: Bearer $TOKEN" \
+            "https://api.digitalocean.com/v2/droplets" \
+        | jq -r '.droplets | map_values(.name) | join(" ")' 2>/dev/null
+    )
+    STATUS fatal "Invalid access token"
+
+    machine_exists=false
+    for droplet in $droplets; do
+        if [[ $droplet == "$machine_name" ]]; then
+            machine_exists=true
+            break
+        fi
+    done
+
+    case $machine_exists in
+        true)
+            attach
+            ;;
+        false)
+            init
+            ;;
+        *)
+            ERROR "Something when wrong when checking if machine exists"
+    esac
+
+    exit 0
+}
+
+
+
+init() {
+
+    h2 'Provisioning Docker Machine...'
+    docker-machine create \
+        -d digitalocean \
+        --digitalocean-access-token=$TOKEN \
+        $machine_name
+
+    h2 'Setting up machine...'
+
+    h3 "Attaching to machine '$machine_name'"
+    eval "$(docker-machine env $machine_name)"
+    STATUS
+
+    h2 'Updating kernel and installing dependencies on host machine'
+    docker-machine ssh $machine_name "
+    apt-get update && \
+    apt-get purge -y lxc-docker && \
+    apt-cache policy docker-engine && \
+    apt-get upgrade -y && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y vim &&
+    curl -L https://github.com/docker/compose/releases/download/1.6.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+    "
+
+    h3 'Initializing filesystem'
+    docker-machine ssh $machine_name "
+    mkdir -p /app
+    chown -R :www-data /app
+    chmod -R g+rwx /app
+    "
+    STATUS
+
+    h3 "Creating user '$USER' with sudo priveledges"
+    docker-machine ssh $machine_name "
+    adduser $USER --gecos '$USER,,,' --disabled-password &>/dev/null
+    usermod -aG www-data,docker $USER
+    echo '$USER:$sudo_pass' | chpasswd
+    sed -i 's/root\tALL=(ALL:ALL) ALL/root\tALL=(ALL:ALL) ALL\n$USER\tALL=(ALL:ALL) ALL/' /etc/sudoers
+    "
+    STATUS
+
+    h3 'Setting up SSH'
+    rm -f "$HOME/.ssh/DO_${machine_name}_rsa" "$HOME/.ssh/DO_${machine_name}_rsa.pub"
+    ssh-keygen -t rsa -N "" -f "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
+    cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | docker-machine ssh $machine_name "
+    sudo -u $USER mkdir -p /home/$USER/.ssh && cat >> /home/$USER/.ssh/authorized_keys
+    chown -R $USER:$USER /home/$USER
+    chmod 700 /home/$USER/.ssh
+    chmod 600 /home/$USER/.ssh/authorized_keys
+    "
+    STATUS
+
+    h2 'Copying files from local directory to machine'
+
+    eval "$(ssh-agent -s)" &>/dev/null
+    ssh-add "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
+
+    if [ -z "$(ssh-keygen -F "$(docker-machine ip $machine_name)")" ]; then
+      ssh-keyscan -H "$(docker-machine ip $machine_name)" >> ~/.ssh/known_hosts
+    fi
+
+    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist" "$(docker-machine ip $machine_name)":/app
+    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/wp-content" "$(docker-machine ip $machine_name)":/app
+    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/data" "$(docker-machine ip $machine_name)":/app
+    rsync --info=progress2 -aOz --chown=$USER:www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" --include="docker-compose*" --include=".env" --exclude="*" "$ROOTDIR/" "$(docker-machine ip $machine_name):/app"
+
+    h2 'Finalizing transfer'
+    h3 'Adjusting file ownership of /app directory'
+    docker-machine ssh $machine_name "
+    chown -R www-data:www-data /app
+    chmod -R g+rwx /app
+    "
+    STATUS
+
+    h2 "Server Deployment Finished"
+}
+
+attach() {
+
+    local droplet_ip
+
+    h2 "Found existing droplet named '$machine_name'"
+    droplet_ip=$(
+        curl -s \
+            -X GET \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $TOKEN" \
+            "https://api.digitalocean.com/v2/droplets?page=1&per_page=1" \
+        | jq -r '.droplets | map(select(.name == "'$machine_name'")) | map(.networks.v4[].ip_address) | .[0]'
+    )
+    [[ $droplet_ip == 'null' ]] && ERROR "Could not determine droplet IP for $machine_name"
+
+    h3 'Setting up root-level SSH for Docker Machine'
+    rm -f "$HOME/.ssh/DO_${machine_name}_rsa" "$HOME/.ssh/DO_${machine_name}_rsa.pub"
+    ssh-keygen -t rsa -N "" -f "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
+    cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | sshpass -p $SSHPASS ssh root@$droplet_ip "
+    cat >> /root/.ssh/authorized_keys
+    chmod 700 /root/.ssh
+    chmod 600 /root/.ssh/authorized_keys
+    "
+    STATUS
+
+    h2 'Provisioning Docker Machine with Generic driver...'
+    docker-machine create \
+        -d generic \
+        --generic-ip-address=$droplet_ip \
+        --generic-ssh-key "$HOME/.ssh/DO_${machine_name}_rsa" \
+        $machine_name
+
+    h2 "Setting up machine for $USER..."
+
+    h3 "Attaching to machine '$machine_name'"
+    eval "$(docker-machine env $machine_name)"
+    STATUS
+
+    h3 "Creating user '$USER' with sudo priveledges"
+    docker-machine ssh $machine_name "
+    adduser $USER --gecos '$USER,,,' --disabled-password &>/dev/null
+    usermod -aG www-data,docker $USER
+    echo '$USER:$sudo_pass' | chpasswd
+    sed -i 's/root\tALL=(ALL:ALL) ALL/root\tALL=(ALL:ALL) ALL\n$USER\tALL=(ALL:ALL) ALL/' /etc/sudoers
+    "
+    STATUS
+
+    h3 'Setting up SSH'
+    cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | docker-machine ssh $machine_name "
+    sudo -u $USER mkdir -p /home/$USER/.ssh && cat >> /home/$USER/.ssh/authorized_keys
+    chown -R $USER:$USER /home/$USER
+    chmod 700 /home/$USER/.ssh
+    chmod 600 /home/$USER/.ssh/authorized_keys
+    "
+    STATUS
+
+    h2 'Restarting Docker Compose services'
+    docker-machine ssh $machine_name "cd /app && docker-compose restart"
+
+    h2 "Server attachment finished"
+
+}
+
+###
+# Helpers
+##
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+ORANGE='\033[0;33m'
+CYAN='\033[0;36m'
+BOLD='\E[1m'
+NC='\033[0m'
+
+h2() {
+  echo -e "${ORANGE}${BOLD}==>${NC}${BOLD} $*${NC}"
+}
+
+h3() {
+  printf "%b " "${CYAN}${BOLD}  ->${NC} $*"
+}
+
+STATUS() {
+  local status=$?
+  if [[ $status != 0 ]]; then
+    [[ $1 == 'fatal' ]] && ERROR "$2"
+    echo -e "${RED}✘${NC}"
+    return
+  fi
+  [[ $1 == 'fatal' ]] && return 0
+  echo -e "${GREEN}✓${NC}"
+}
+
+ERROR() {
+  echo -e "${RED}=> ERROR: $1.${NC}"
+  exit 1
+}
+
+depcheck() {
+    local dep
+    for dep in "$@"; do
+        type $dep &>/dev/null
+        [[ $? == 1 ]] && ERROR "$dep must be installed"
+    done
+}
+
+main
