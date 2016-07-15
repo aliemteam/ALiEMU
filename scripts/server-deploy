@@ -1,8 +1,10 @@
 #!/bin/bash
 
-TERM=${TERM:-xterm}
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
+
+# shellcheck source=./helpers
+source "$SCRIPTDIR/helpers" || exit 1
 
 main() {
 
@@ -210,48 +212,6 @@ attach() {
 
     h2 "Server attachment finished"
 
-}
-
-###
-# Helpers
-##
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-ORANGE='\033[0;33m'
-CYAN='\033[0;36m'
-BOLD='\E[1m'
-NC='\033[0m'
-
-h2() {
-  echo -e "${ORANGE}${BOLD}==>${NC}${BOLD} $*${NC}"
-}
-
-h3() {
-  printf "%b " "${CYAN}${BOLD}  ->${NC} $*"
-}
-
-STATUS() {
-  local status=$?
-  if [[ $status != 0 ]]; then
-    [[ $1 == 'fatal' ]] && ERROR "$2"
-    echo -e "${RED}✘${NC}"
-    return
-  fi
-  [[ $1 == 'fatal' ]] && return 0
-  echo -e "${GREEN}✓${NC}"
-}
-
-ERROR() {
-  echo -e "${RED}=> ERROR: $1.${NC}"
-  exit 1
-}
-
-depcheck() {
-    local dep
-    for dep in "$@"; do
-        type $dep &>/dev/null
-        [[ $? == 1 ]] && ERROR "$dep must be installed"
-    done
 }
 
 main

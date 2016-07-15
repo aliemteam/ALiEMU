@@ -4,16 +4,16 @@ SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
 machine_name=aliemu
 
-# Pretty colors
-ORANGE='\033[0;33m'
-BOLD='\E[1m'
-NC='\033[0m'
+# shellcheck source=./helpers
+source $SCRIPTDIR/helpers || exit 1
 
-type rsync &>/dev/null
-if [[ $? == 1 ]]; then
-    echo '=> Error: rsync must be installed.'
-    exit 1
-fi
+depcheck \
+    rsync \
+    ssh \
+    ssh-agent \
+    ssh-add \
+    ssh-keyscan \
+    ssh-keygen
 
 # Compile the code
 $ROOTDIR/node_modules/.bin/gulp build
@@ -25,6 +25,6 @@ if [ -z "$(ssh-keygen -F "$(docker-machine ip $machine_name)")" ]; then
   ssh-keyscan -H "$(docker-machine ip $machine_name)" >> ~/.ssh/known_hosts
 fi
 
-echo -e "${ORANGE}${BOLD}==> Deploying...${NC}"
-rsync --info=progress2 -aOz --chown=www-data:www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist" "$(docker-machine ip $machine_name)":/app
-echo -e "${ORANGE}${BOLD}==> Deploy Finished.${NC}"
+h2 "Deploying..."
+rsync --info=progress2 -aze --no-p --chown=www-data:www-data "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist" "$(docker-machine ip $machine_name)":/app
+h2 "Deploy Finished."
