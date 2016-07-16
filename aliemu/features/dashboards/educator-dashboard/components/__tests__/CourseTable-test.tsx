@@ -7,7 +7,7 @@ jest.unmock('moment');
 import * as React from 'react';
 import { mount } from 'enzyme';
 import * as sinon from 'sinon';
-import { users, courseData, createMinimalUser } from '../../../../../../test-utils/Fixtures';
+import { users, courseData, createMinimalUser } from '../../../../../../lib/utils/Fixtures';
 import { CSV } from '../../../../utils/DashboardUtils';
 import { CourseTable } from '../CourseTable';
 

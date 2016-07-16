@@ -2,7 +2,7 @@
 
 # Globals
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
+ROOTDIR=$(cd $SCRIPTDIR && cd ../../ && pwd || exit)
 machine_name=aliemu
 PaidPlugins=(learndash-propanel sfwd-lms)
 
@@ -40,19 +40,10 @@ main() {
                 backup)
                     get_database backup;;
                 *)
-                    echo "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', 'database', or 'backup'" && exit 1
-            esac;;
-        update)
-            case "$2" in
-                plugin)
-                    echo "=> Updating plugin: $3"
-                    docker exec "$(docker ps -q --filter "name=aliemu_wordpress")" /bin/bash -c "sudo -u www-data wp plugin update $3"
-                    ;;
-                *)
-                    echo "'update' subcommand must be 'plugin'" && exit 1
+                    h2 "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', 'database', or 'backup'" && exit 0
             esac;;
         *)
-            echo "The only commands available are 'get' and 'update'" && exit 1
+            h2 "The only commands available are 'init' and 'get'" && exit 0
     esac
 }
 
@@ -71,7 +62,7 @@ prechecks() {
     owners=$(ls -lR $ROOTDIR/wp-content | awk '{print $3}')
     for o in $owners; do
         if [[ $o != "$USER" ]]; then
-            echo '=> Need sudo priveledges to take ownership of wp-content directory'
+            h2 'Need sudo priveledges to take ownership of wp-content directory'
             sudo chown -R $USER $ROOTDIR/wp-content
             break
         fi
@@ -91,29 +82,29 @@ prechecks() {
 }
 
 get_uploads() {
-    echo "=> Downloading uploads from server..."
+    h2 "Downloading uploads from server..."
     rsync --ignore-existing --progress -azhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip $machine_name)":/app/wp-content/uploads/ "$ROOTDIR/wp-content/uploads"
-    echo "=> Uploads Synced Successfully!"
+    h2 "Uploads Synced Successfully!"
 }
 
 get_all_plugins() {
     for plugin in "${PaidPlugins[@]}"; do
-        echo "=> Retrieving plugin: $plugin"
-        rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip $machine_name)":/app/wp-content/plugins/"$PLUGIN" "$ROOTDIR/wp-content"
-        echo "=> Plugin $plugin Retrieved Successfully!"
+        h2 "Retrieving plugin: $plugin"
+        rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip $machine_name)":/app/wp-content/plugins/"$plugin" "$ROOTDIR/wp-content"
+        h2 "Plugin $plugin Retrieved Successfully!"
     done
 }
 
 get_plugin() {
-    echo "=> Retrieving plugin: $1"
+    h2 "Retrieving plugin: $1"
     rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip $machine_name)":/app/wp-content/plugins/"$1" "$ROOTDIR/wp-content/plugins"
-    echo "=> Plugin $1 Retrieved Successfully!"
+    h2 "Plugin $1 Retrieved Successfully!"
 }
 
 get_theme() {
-    echo "=> Retrieving Divi Theme"
+    h2 "Retrieving Divi Theme"
     rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip $machine_name)":/app/wp-content/themes/Divi "$ROOTDIR/wp-content/themes"
-    echo "=> Theme Retrieved Successfully!"
+    h2 "Theme Retrieved Successfully!"
 }
 
 get_database() {

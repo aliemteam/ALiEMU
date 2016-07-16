@@ -25,8 +25,6 @@
         @media (max-width 480px)
             #row-1
                 padding-bottom 0
-                // .container .splash
-                //     height 60vh
 
         for i in 2..7
             #row-{i}
@@ -123,9 +121,14 @@
             justify-content space-between
             div
                 background $gray-light
-                justify-content space-between
                 max-width 200px
+                display flex
+                align-items center
+                padding 10px
                 margin-top 20px
             &.alt-logos div
+                display flex
+                padding 10px
+                align-items center
                 margin-top 0
                 background transparent

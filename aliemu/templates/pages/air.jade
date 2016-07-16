@@ -1,11 +1,12 @@
 - get_header()
+| <?php $assets = get_stylesheet_directory_uri() . '/assets' ?>
 #main-content #[| <?php while (have_posts()) : the_post(); ?>]
     | <article id="post-<?php the_ID(); ?>" <?php post_class('category-air'); ?>>
     .au-card
         .au-heading #[h1 ALiEM Approved Instructional Resources (AIR)]
         .au-content
             .au-text #[div Welcome to the #[a(href="/about/#au-about-air") Approved Instructional Resources (AIR) series]! This series curates and grades open-access blog posts and podcasts in the field of emergency medicine (EM) over the previous 12 months to identify high quality, social media-based, educational resources for EM residents. This series is one of the most popular initiatives used by U.S. EM residency programs to to fulfill their #[a(href="/about/#au-about-content") Individualized Interactive Instruction (III)], or asynchronous online learning, conference needs. Below are the AIR blocks along with their suggested number of III conference hour credit. If you are a Program Director and wish to track your residents’ progress, please request Educator Dashboard access.]
-            .au-image #[img(src="https://www.aliemu.com/wp-content/uploads/2016/06/air-badge.png", alt="AIR Badge")]
+            .au-image #[img(src="#{assets}/air-logo.svg", alt="AIR Logo")]
     .au-links-row
         a(href="#year-2016") 2016
         a(href="#year-2015") 2015

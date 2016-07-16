@@ -1,15 +1,13 @@
 module.exports = function (wallaby) {
     return {
         files: [
-            'wp-content/**/*.tsx',
-            'wp-content/**/*.ts',
-            'typings/**/*.d.ts',
-            'test-utils/*',
-            '!wp-content/**/__tests__/*',
+            'aliem/**/*.{ts,tsx}',
+            '!aliem/**/__tests__/*',
+            'node_modules/@types/**/index.d.ts',
+            'lib/**/*.{ts,tsx}',
         ],
         tests: [
-            'wp-content/**/__tests__/*-test.tsx',
-            'wp-content/**/__tests__/*-test.ts',
+            'aliem/**/__tests__/*-test.{ts,tsx}',
         ],
         env: {
             type: 'node',
@@ -32,7 +30,7 @@ module.exports = function (wallaby) {
                   'react-addons-test-utils',
                   'enzyme',
                   'sinon',
-                  '<rootDir>/test-utils/Fixtures',
+                  '<rootDir>/lib/utils/Fixtures',
                 ],
             });
         }
