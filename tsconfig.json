@@ -15,10 +15,8 @@
         "suppressImplicitAnyIndexErrors": true
     },
     "filesGlob": [
-        "{aliemu,test-utils}/**/*.{ts,tsx}",
-        "typings/*.d.ts",
-        "typings/ALiEMU.d.ts",
-        "node_modules/@types/**/*index.d.ts",
+        "{aliemu,lib}/**/*.{ts,tsx}",
+        "node_modules/@types/**/index.d.ts",
         "!dist/**"
     ],
     "compileOnSave": false,
@@ -36,9 +34,9 @@
         "aliemu/features/utils/BrowserDetect.ts",
         "aliemu/features/utils/DashboardUtils.ts",
         "aliemu/features/utils/Pagination.ts",
-        "test-utils/Fixtures.ts",
-        "typings/ALiEMU.d.ts",
-        "typings/react-datepicker.d.ts",
+        "lib/typings/ALiEMU.d.ts",
+        "lib/typings/react-datepicker.d.ts",
+        "lib/utils/Fixtures.ts",
         "node_modules/@types/enzyme/index.d.ts",
         "node_modules/@types/jest/index.d.ts",
         "node_modules/@types/moment/index.d.ts",

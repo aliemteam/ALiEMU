@@ -1,32 +1,14 @@
 version: '2'
 services:
     wordpress:
-        restart: on-failure:10
-        volumes:
-            # Database
-            - /app/data:/data
-            # Plugins
-            - /app/wp-content/plugins/learndash-propanel:/var/www/aliemu.com/htdocs/wp-content/plugins/learndash-propanel
-            - /app/wp-content/plugins/sfwd-lms:/var/www/aliemu.com/htdocs/wp-content/plugins/sfwd-lms
-            # Themes
-            - /app/dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
-            - /app/wp-content/themes/Divi:/var/www/aliemu.com/htdocs/wp-content/themes/Divi
-            # Uploads
-            - /app/wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
-        environment:
-            DB_PASS: $DB_PASS
-            PLUGINS: >-
-                academic-bloggers-toolkit,
-                google-analytics-dashboard-for-wp,
-                rest-api,
-                sendgrid-email-delivery-simplified,
-                tablepress,
-                tinymce-advanced,
-                ultimate-member,
-                wpdiscuz,
-                [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
-                [um-recaptcha]http://bit.ly/um-recaptcha,
+        extends:
+            file: lib/compose.yml
+            service: wordpress_prod
+        links:
+            - db
     db:
-        restart: on-failure:10
-        environment:
-            MYSQL_ROOT_PASSWORD: $DB_PASS
+        extends:
+            file: lib/compose.yml
+            service: db_prod
+volumes:
+    data: {}

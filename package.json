@@ -6,16 +6,14 @@
   "license": "MIT",
   "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
-    "backup": "./scripts/backup",
-    "deploy": "./scripts/deploy",
-    "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
-    "clear-cache": "docker exec aliemu_wordpress_1 /bin/bash -c \"ee clean\"",
+    "backup": "./lib/scripts/backup",
+    "deploy": "./lib/scripts/deploy",
+    "sync": "./lib/scripts/syncup",
     "wp": "wpcmd() { docker exec aliemu_wordpress_1 /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
+    "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "lint": "stylint aliemu/styles -c .stylintrc && tslint 'aliemu/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
-    "test": "jest --silent",
-    "staging:up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.override.yml -f ./docker-compose.staging.yml up -d",
-    "production:up": "docker-compose -f ./docker-compose.yml -f ./docker-compose.prod.yml up -d"
+    "test": "jest --silent"
   },
   "dependencies": {
     "@types/enzyme": "^1.2.29",
@@ -63,7 +61,7 @@
     "webpack-stream": "^3.1.0"
   },
   "jest": {
-    "scriptPreprocessor": "jestPreprocessor.js",
+    "scriptPreprocessor": "./lib/utils/jestPreprocessor.js",
     "testRegex": "__tests__/.*\\.(js|ts|tsx)$",
     "moduleFileExtensions": [
       "ts",
@@ -77,7 +75,7 @@
       "react-addons-test-utils",
       "enzyme",
       "sinon",
-      "<rootDir>/test-utils/Fixtures"
+      "<rootDir>/lib/utils/Fixtures"
     ],
     "verbose": true,
     "collectCoverage": true

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOTDIR=$(cd $SCRIPTDIR && cd ../ && pwd || exit)
+ROOTDIR=$(cd $SCRIPTDIR && cd ../../ && pwd || exit)
 
 # shellcheck source=./helpers
 source "$SCRIPTDIR/helpers" || exit 1
