@@ -18,7 +18,7 @@ if [[ $? == 1 ]]; then
 fi
 
 # Exit if the DSA file doesn't exist
-if [[ ! -f ./data/aliemu_dsa ]]; then
+if [[ ! -f $ROOTDIR/data/aliemu_dsa ]]; then
     echo '=> Error: You must have the file "aliemu_dsa" located within your data directory'
     exit 1
 fi
