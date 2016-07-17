@@ -87,6 +87,7 @@ init() {
     apt-get update && \
     apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y vim &&
+    docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) &&
     curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
     "
@@ -130,10 +131,16 @@ init() {
       ssh-keyscan -H "$(docker-machine ip $machine_name)" >> ~/.ssh/known_hosts
     fi
 
-    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist" "$(docker-machine ip $machine_name)":/app
-    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/wp-content" "$(docker-machine ip $machine_name)":/app
-    rsync --info=progress2 -az -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/data" "$(docker-machine ip $machine_name)":/app
-    rsync --info=progress2 -aOz --chown=$USER:www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" --include="docker-compose*" --include=".env" --exclude="*" "$ROOTDIR/" "$(docker-machine ip $machine_name):/app"
+    rsync --info=progress2 -aOz --chown=$USER:www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" \
+        --include="docker-compose*" \
+        --include=".env" \
+        --include="dist/***" \
+        --include="wp-content/***" \
+        --include="data/***" \
+        --include="lib" \
+        --include="lib/compose.yml" \
+        --exclude="*" \
+    "$ROOTDIR/" "$(docker-machine ip $machine_name):/app"
 
     h2 'Finalizing transfer'
     h3 'Adjusting file ownership of /app directory'
@@ -156,7 +163,7 @@ attach() {
             -X GET \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $TOKEN" \
-            "https://api.digitalocean.com/v2/droplets?page=1&per_page=1" \
+            "https://api.digitalocean.com/v2/droplets" \
         | jq -r '.droplets | map(select(.name == "'$machine_name'")) | map(.networks.v4[].ip_address) | .[0]'
     )
     [[ $droplet_ip == 'null' ]] && ERROR "Could not determine droplet IP for $machine_name"
