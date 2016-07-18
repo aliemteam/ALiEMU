@@ -93,7 +93,7 @@ gulp.task('reload', (done) => {
 
 gulp.task('static', () => {
 
-    const assets = gukp
+    const assets = gulp
         .src('aliemu/assets/**.*', { base: './aliemu' })
         .pipe(svgmin())
         .pipe(gulp.dest('dist/Divi-child'));
@@ -232,11 +232,6 @@ gulp.task('default',
                 '!aliemu/**/__tests__/',
                 '!aliemu/**/__tests__/*',
             ], gulp.series('static', 'reload'));
-
-            gulp.watch([
-                'aliemu/assets/**/*'
-            ], gulp.series('assets', 'reload'));
-
         }
     )
 );

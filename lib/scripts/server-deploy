@@ -97,12 +97,14 @@ init() {
         vim \
         make \
     && curl -L https://git.io/n-install | bash -s -- -y \
-    && . /root/.bashrc \
-    && npm i -g uglify-js csso \
     && docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) \
     && curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
     "
+
+    h3 'Installing global npm packages'
+    docker-machine ssh $machine_name "exec bash &&  npm i -g uglify-js csso"
+    STATUS
 
     h3 'Initializing filesystem & setting root access password'
     docker-machine ssh $machine_name "
