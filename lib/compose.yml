@@ -4,19 +4,19 @@ services:
         image: dsifford/wordpress:nginx
         ports:
             - "22222:22222"
-            - "8080:80"
+            - "80:80"
             - "443:443"
         volumes:
             # Database
             - ../data:/data
             # Plugins
-            - ../wp-content/plugins/learndash-propanel:/var/www/aliemu.com/htdocs/wp-content/plugins/learndash-propanel
-            - ../wp-content/plugins/sfwd-lms:/var/www/aliemu.com/htdocs/wp-content/plugins/sfwd-lms
+            - ../wp-content/plugins/learndash-propanel:/var/www/$SITE_NAME/htdocs/wp-content/plugins/learndash-propanel
+            - ../wp-content/plugins/sfwd-lms:/var/www/$SITE_NAME/htdocs/wp-content/plugins/sfwd-lms
             # Themes
-            - ../dist/Divi-child:/var/www/aliemu.com/htdocs/wp-content/themes/Divi-child
-            - ../wp-content/themes/Divi:/var/www/aliemu.com/htdocs/wp-content/themes/Divi
+            - ../dist/Divi-child:/var/www/$SITE_NAME/htdocs/wp-content/themes/Divi-child
+            - ../wp-content/themes/Divi:/var/www/$SITE_NAME/htdocs/wp-content/themes/Divi
             # Uploads
-            - ../wp-content/uploads:/var/www/aliemu.com/htdocs/wp-content/uploads
+            - ../wp-content/uploads:/var/www/$SITE_NAME/htdocs/wp-content/uploads
         env_file: ../.env
         environment:
             DB_NAME: wordpress
@@ -35,7 +35,6 @@ services:
                 wpdiscuz,
                 [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
-            SITE_NAME: aliemu.com
             WP_DEBUG_DISPLAY: 'false'
             WP_DEBUG_LOG: 'true'
             WP_DEBUG: 'true'

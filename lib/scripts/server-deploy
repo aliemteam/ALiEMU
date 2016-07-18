@@ -30,8 +30,14 @@ main() {
 
     h2 'Gathering needed information...'
     read -p "$(h3 "Enter machine name:")" machine_name
-    read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
+    read -p "$(h3 "Enter site name + TLD (e.g: 'example.com')")" site_name
+    while [ true ]; do
+      read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
+      read -p "$(h3 "Reenter SSH/sudo password:")" -s sudo_pass_confirm && echo ""
+      [[ $sudo_pass == "$sudo_pass_confirm" ]] && unset -v sudo_pass_confirm && break
+    done
 
+    h3 "Connecting to DigitalOcean"
     droplets=$(
         curl -s \
             -X GET \
@@ -74,6 +80,7 @@ init() {
     docker-machine create \
         -d digitalocean \
         --digitalocean-access-token=$TOKEN \
+        --digitalocean-region=nyc1 \
         $machine_name
 
     h2 'Setting up machine...'
@@ -84,11 +91,16 @@ init() {
 
     h2 'Updating kernel & installing dependencies on host machine'
     docker-machine ssh $machine_name "
-    apt-get update && \
-    apt-get upgrade -y && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y vim &&
-    docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) &&
-    curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
+    apt-get update \
+    && apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        vim \
+        make \
+    && curl -L https://git.io/n-install | bash -s -- -y \
+    && . /root/.bashrc \
+    && npm i -g uglify-js csso \
+    && docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) \
+    && curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
     "
 
@@ -139,15 +151,27 @@ init() {
         --include="data/***" \
         --include="lib" \
         --include="lib/compose.yml" \
+        --include="lib/scripts/minify" \
         --exclude="*" \
     "$ROOTDIR/" "$(docker-machine ip $machine_name):/app"
 
+    h3 'Creating package.json'
+    docker-machine ssh $machine_name "echo '{\"scripts\": {\"minify\": \"./lib/scripts/minify\"}}' > /app/package.json"
+    STATUS
+
     h2 'Finalizing transfer'
+
     h3 'Adjusting file ownership of /app directory'
     docker-machine ssh $machine_name "
     chown -R www-data:www-data /app
     chmod -R g+rwx /app
     "
+    STATUS
+
+    h2 'Setting environment variables'
+
+    h3 'SITE_NAME'
+    docker-machine ssh $machine_name "grep -q '^SITE_NAME=' /app/.env && sed -i 's/^SITE_NAME=.*/SITE_NAME=$site_name/' /app/.env || sed -i '$ a\SITE_NAME=$site_name' /app/.env"
     STATUS
 
     h2 "Server Deployment Finished"
