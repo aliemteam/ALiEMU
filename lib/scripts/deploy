@@ -26,5 +26,5 @@ if [ -z "$(ssh-keygen -F "$(docker-machine ip $machine_name)")" ]; then
 fi
 
 h2 "Deploying..."
-rsync --info=progress2 -aze --no-p --chown=www-data:www-data "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist" "$(docker-machine ip $machine_name)":/app
+rsync --info=progress2 --chown=www-data:www-data -aOz --no-p -e "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist/" "$(docker-machine ip $machine_name)":/app/dist
 h2 "Deploy Finished."

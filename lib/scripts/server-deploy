@@ -153,6 +153,7 @@ init() {
         --include="data/***" \
         --include="lib" \
         --include="lib/compose.yml" \
+        --include="lib/scripts" \
         --include="lib/scripts/minify" \
         --exclude="*" \
     "$ROOTDIR/" "$(docker-machine ip $machine_name):/app"
