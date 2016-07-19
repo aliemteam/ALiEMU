@@ -30,7 +30,7 @@ main() {
 
     h2 'Gathering needed information...'
     read -p "$(h3 "Enter machine name:")" machine_name
-    read -p "$(h3 "Enter site name + TLD (e.g: 'example.com')")" site_name
+    read -p "$(h3 "Enter site name + TLD (e.g. 'example.com'):")" site_name
     while [ true ]; do
       read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
       read -p "$(h3 "Reenter SSH/sudo password:")" -s sudo_pass_confirm && echo ""
@@ -94,17 +94,17 @@ init() {
     apt-get update \
     && apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        build-essential \
         vim \
-        make \
-    && curl -L https://git.io/n-install | bash -s -- -y \
     && docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) \
     && curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
+    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
+    chmod +x nodesource_setup.sh && \
+    ./nodesource_setup.sh && \
+    DEBIAN_FRONTEND=noninteractive && apt-get install -y nodejs && \
+    npm i -g uglify-js csso
     "
-
-    h3 'Installing global npm packages'
-    docker-machine ssh $machine_name "exec bash &&  npm i -g uglify-js csso"
-    STATUS
 
     h3 'Initializing filesystem & setting root access password'
     docker-machine ssh $machine_name "
