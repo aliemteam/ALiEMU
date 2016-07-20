@@ -2,10 +2,15 @@
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../../ && pwd || exit)
-machine_name=aliemu
+
+# shellcheck source=../../.env
+source $ROOTDIR/.env
 
 # shellcheck source=./helpers
 source $SCRIPTDIR/helpers || exit 1
+
+machine_name=${machine_name:-}
+[[ ! $machine_name ]] && ERROR "'machine_name' must be set in your .env file"
 
 depcheck \
     rsync \
@@ -26,5 +31,7 @@ if [ -z "$(ssh-keygen -F "$(docker-machine ip $machine_name)")" ]; then
 fi
 
 h2 "Deploying..."
+docker-machine ssh $machine_name "chmod -R g+rwx /app"
 rsync --info=progress2 --chown=www-data:www-data -aOz --no-p -e "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$ROOTDIR/dist/" "$(docker-machine ip $machine_name)":/app/dist
+docker-machine ssh $machine_name "chmod -R g+rwx /app"
 h2 "Deploy Finished."

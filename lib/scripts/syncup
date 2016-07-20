@@ -3,11 +3,18 @@
 # Globals
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd $SCRIPTDIR && cd ../../ && pwd || exit)
-machine_name=aliemu
 PaidPlugins=(learndash-propanel sfwd-lms)
 
 # shellcheck source=./helpers
 source $SCRIPTDIR/helpers || exit 1
+
+# shellcheck source=../../.env
+source $ROOTDIR/.env
+
+machine_name=${machine_name:-}
+site_name=${site_name:-}
+[[ ! $machine_name ]] && ERROR "'machine_name' must be set in your .env file"
+[[ ! $site_name ]] && ERROR "'site_name' must be set in your .env file"
 
 main() {
 
@@ -122,19 +129,16 @@ get_database() {
     [[ -z $container_id ]] && ERROR "WordPress container is not running on host"
 
     h3 "Exporting database..."
-    docker exec $container_id /bin/bash -c "
-    cd /var/www/aliemu.com/
-    sudo -u www-data wp db export database.sql &>/dev/null
-    "
+    docker exec $container_id /bin/bash -c "cd /var/www/$site_name/ && sudo -u www-data wp db export database.sql &>/dev/null"
     STATUS fatal "Export failed"
 
     h3 "Downloading database to local machine..."
-    docker cp $container_id:/var/www/aliemu.com/database.sql "$ROOTDIR/data/$filename.sql"
+    docker cp $container_id:/var/www/$site_name/database.sql "$ROOTDIR/data/$filename.sql"
     STATUS
 
     h3 "Deleting database copy in container..."
-    docker exec $container_id /bin/bash -c "
-    rm /var/www/aliemu.com/database.sql
+    docker exec $container_id /bin/bash -c "\
+    rm /var/www/$site_name/database.sql
     "
     STATUS
 
@@ -157,9 +161,11 @@ get_database() {
     docker exec $dev_container_id /bin/bash -c "wp db import /data/database.sql --allow-root"
 
     # Replace live URL with dev URL
+    # HACK Temporary workaround until http/https is figured out
     h3 "Replacing URLs"
-    docker exec $dev_container_id /bin/bash -c "
-    wp --allow-root search-replace 'https://www.aliemu.com' 'http://localhost:8080' --skip-columns=guid
+    docker exec $dev_container_id /bin/bash -c "\
+    wp --allow-root search-replace 'https://www.$site_name' 'http://$site_name' --skip-columns=guid && \
+    wp --allow-root search-replace 'http://www.$site_name' 'http://localhost:8080' --skip-columns=guid
     "
     STATUS
 

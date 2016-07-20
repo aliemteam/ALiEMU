@@ -10,8 +10,10 @@ main() {
 
     # shellcheck source=../.env
     source $ROOTDIR/.env
-    [[ ! $SSHPASS ]] && ERROR "Couldn't find 'SSHPASS' variable in .env file"
-    [[ ! $TOKEN ]] && ERROR "Couldn't find 'TOKEN' variable in .env file"
+    ssh_pass=${ssh_pass:-}
+    token=${token:-}
+    [[ ! $ssh_pass ]] && ERROR "Couldn't find 'ssh_pass' variable in .env file"
+    [[ ! $token ]] && ERROR "Couldn't find 'token' variable in .env file"
 
     local droplets droplet
 
@@ -32,16 +34,27 @@ main() {
     read -p "$(h3 "Enter machine name:")" machine_name
     read -p "$(h3 "Enter site name + TLD (e.g. 'example.com'):")" site_name
     while [ true ]; do
-      read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
-      read -p "$(h3 "Reenter SSH/sudo password:")" -s sudo_pass_confirm && echo ""
-      [[ $sudo_pass == "$sudo_pass_confirm" ]] && unset -v sudo_pass_confirm && break
+        read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
+        read -p "$(h3 "Reenter SSH/sudo password:")" -s sudo_pass_confirm && echo ""
+        [[ $sudo_pass == "$sudo_pass_confirm" ]] && unset -v sudo_pass_confirm && break
     done
+
+    h3 'Setting machine_name in local .env file'
+    grep -q '^machine_name=' $ROOTDIR/.env && sed -i "s/^machine_name=.*/machine_name=$machine_name/" $ROOTDIR/.env \
+        || sed -i "$ a\machine_name=$machine_name" $ROOTDIR/.env
+    STATUS fatal 'Could not set machine_name in local .env file. Does the file exist?'
+
+    h3 'Setting site_name in local .env file'
+    grep -q '^site_name=' $ROOTDIR/.env && sed -i "s/^site_name=.*/site_name=$site_name/" $ROOTDIR/.env \
+        || sed -i "$ a\site_name=$site_name" $ROOTDIR/.env
+    STATUS fatal 'Could not set site_name in local .env file. Does the file exist?'
+
 
     h3 "Connecting to DigitalOcean"
     droplets=$(
         curl -s \
             -X GET \
-            -H "Authorization: Bearer $TOKEN" \
+            -H "Authorization: Bearer $token" \
             "https://api.digitalocean.com/v2/droplets" \
         | jq -r '.droplets | map_values(.name) | join(" ")' 2>/dev/null
     )
@@ -79,7 +92,7 @@ init() {
     h2 'Provisioning Docker Machine...'
     docker-machine create \
         -d digitalocean \
-        --digitalocean-access-token=$TOKEN \
+        --digitalocean-access-token=$token \
         --digitalocean-region=nyc1 \
         $machine_name
 
@@ -111,7 +124,7 @@ init() {
     mkdir -p /app
     chown -R :www-data /app
     chmod -R g+rwx /app
-    echo 'root:$SSHPASS' | chpasswd
+    echo 'root:$ssh_pass' | chpasswd
     "
     STATUS
 
@@ -171,12 +184,6 @@ init() {
     "
     STATUS
 
-    h2 'Setting environment variables'
-
-    h3 'SITE_NAME'
-    docker-machine ssh $machine_name "grep -q '^SITE_NAME=' /app/.env && sed -i 's/^SITE_NAME=.*/SITE_NAME=$site_name/' /app/.env || sed -i '$ a\SITE_NAME=$site_name' /app/.env"
-    STATUS
-
     h2 "Server Deployment Finished"
 }
 
@@ -189,7 +196,7 @@ attach() {
         curl -s \
             -X GET \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer $TOKEN" \
+            -H "Authorization: Bearer $token" \
             "https://api.digitalocean.com/v2/droplets" \
         | jq -r '.droplets | map(select(.name == "'$machine_name'")) | map(.networks.v4[].ip_address) | .[0]'
     )
@@ -203,7 +210,7 @@ attach() {
     mkdir -p $HOME/.ssh
     rm -f "$HOME/.ssh/DO_${machine_name}_rsa" "$HOME/.ssh/DO_${machine_name}_rsa.pub"
     ssh-keygen -t rsa -N "" -f "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
-    cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | sshpass -p $SSHPASS ssh root@$droplet_ip "
+    cat "$HOME/.ssh/DO_${machine_name}_rsa.pub" | sshpass -p $ssh_pass ssh root@$droplet_ip "
     cat >> /root/.ssh/authorized_keys
     chmod 700 /root/.ssh
     chmod 600 /root/.ssh/authorized_keys
