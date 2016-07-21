@@ -42,6 +42,7 @@
     "enzyme": "^2.4.1",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-csso": "^2.0.0",
+    "gulp-insert": "^0.5.0",
     "gulp-jade2php": "^1.0.3",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",

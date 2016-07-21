@@ -9,6 +9,7 @@ const exec = require('child_process').exec;
 const replace = require('gulp-replace');
 const rename = require('gulp-rename');
 const merge = require('merge-stream');
+const insert = require('gulp-insert');
 // Assets
 const svgmin = require('gulp-svgmin');
 // PHP
@@ -51,6 +52,13 @@ const stylusConfig = {
         ]),
     ],
 };
+
+const styleHeader =
+`/*
+ Theme Name: ALiEMU
+ Template: Divi
+*/
+`;
 
 const uglifyConfig  = {
     compress: {
@@ -133,38 +141,24 @@ gulp.task('static', () => {
 //                     Styles
 // ==================================================
 
-gulp.task('stylus:dev:step1', () =>
+gulp.task('stylus:dev', () =>
     gulp
         .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
         .pipe(sourcemaps.init())
         .pipe(stylus(stylusConfig))
         .pipe(sourcemaps.write('.'))
+        .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
         .pipe(browserSync.stream({ match: '**/*.css' }))
 );
 
-gulp.task('stylus:prod:step1', () =>
+gulp.task('stylus:prod', () =>
     gulp
         .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
         .pipe(stylus(Object.assign({}, stylusConfig, { compress: true })))
+        .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
 );
-
-// FIXME: We can probably pitch this
-gulp.task('stylus:step2', (done) => {
-    const header =
-    '/*\n' +
-    ' Theme Name: ALiEMU\n' +
-    ' Template: Divi\n' +
-    '*/\n';
-    exec(`echo -en "${header}$(<dist/aliemu/style.css)" > dist/aliemu/style.css`, (err) => {
-        if (err) throw err;
-        done();
-    });
-});
-
-gulp.task('stylus:dev', gulp.series('stylus:dev:step1', 'stylus:step2'));
-gulp.task('stylus:prod', gulp.series('stylus:prod:step1', 'stylus:step2'))
 
 // ==================================================
 //                    Javascript
