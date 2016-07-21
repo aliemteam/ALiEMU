@@ -4,7 +4,6 @@ import paginate from '../../../utils/Pagination';
 import * as moment from 'moment';
 import {
     downloadPolyfill,
-    parseCompletionData,
     CSV,
 } from '../../../utils/DashboardUtils';
 import {
@@ -129,7 +128,7 @@ export class CourseTable extends React.Component<Props, State> {
                             disabled={this.state.selections.category === ''}>
                             <option value=''> -- Select a Course -- </option>
                             { this.state.selections.category &&
-                                Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID, i) =>
+                                Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID) =>
                                     <option value={courseID} key={courseID}>
                                         {this.props.courseData.courses[courseID].postTitle}
                                     </option>

@@ -1,7 +1,6 @@
 
 export function browserDetect(): ALiEMU.BrowserType {
     const UA: string = navigator.userAgent;
-    let broswer: ALiEMU.BrowserType;
 
     switch (true) {
         case UA.indexOf('Edge') > -1:

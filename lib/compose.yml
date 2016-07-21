@@ -4,7 +4,6 @@ services:
         image: dsifford/wordpress:nginx
         ports:
             - "22222:22222"
-            - "80:80"
             - "443:443"
         volumes:
             # Database
@@ -13,13 +12,14 @@ services:
             - ../wp-content/plugins/learndash-propanel:/var/www/$site_name/htdocs/wp-content/plugins/learndash-propanel
             - ../wp-content/plugins/sfwd-lms:/var/www/$site_name/htdocs/wp-content/plugins/sfwd-lms
             # Themes
-            - ../dist/Divi-child:/var/www/$site_name/htdocs/wp-content/themes/Divi-child
+            - ../dist/aliemu:/var/www/$site_name/htdocs/wp-content/themes/aliemu
             - ../wp-content/themes/Divi:/var/www/$site_name/htdocs/wp-content/themes/Divi
             # Uploads
             - ../wp-content/uploads:/var/www/$site_name/htdocs/wp-content/uploads
         env_file: ../.env
         environment:
             DB_NAME: wordpress
+            SITE_NAME: $site_name
             DB_PASS: root
             DB_USER: root
             PHP_VERSION: 7.0
@@ -48,6 +48,8 @@ services:
             - data:/var/lib/mysql
     wordpress_prod:
         extends: wordpress
+        ports:
+            - "80:80"
         restart: on-failure:10
         environment:
             DB_PASS: $DB_PASS

@@ -5,8 +5,6 @@ import * as moment from 'moment';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import {
     downloadPolyfill,
-    getCourseCategory,
-    parseCompletionData,
     calculateIIIHours,
     CSV,
 } from '../../../utils/DashboardUtils';

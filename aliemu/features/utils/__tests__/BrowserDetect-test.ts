@@ -3,7 +3,7 @@ jest.unmock('../BrowserDetect');
 import * as sinon from 'sinon';
 import { browserDetect, } from '../BrowserDetect';
 
-const setup = (sandbox: sinon.SinonSandbox, UA: string) => {
+const setup = (_sandbox: sinon.SinonSandbox, UA: string) => {
     return sinon.stub(navigator, 'userAgent', { get: () => UA, });
 };
 

@@ -65,12 +65,12 @@ const uglifyConfig  = {
 //                 Utility Tasks
 // ==================================================
 
-// Delete all files in dist/Divi-child/
-gulp.task('clean', (done) => del(['dist/Divi-child/**/*'], done));
+// Delete all files in dist/aliemu/
+gulp.task('clean', (done) => del(['dist/aliemu/**/*'], done));
 
 // Take ownership of dist directory
 gulp.task('chown', (done) => {
-    exec('ls -ld dist/Divi-child/ | awk \'{print $3}\'', (err, stdout, stderr) => {
+    exec('ls -ld dist/aliemu/ | awk \'{print $3}\'', (err, stdout, stderr) => {
         if (err) throw err;
         if (stdout.trim() === process.env.USER) return done();
         exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (err) => {
@@ -96,7 +96,7 @@ gulp.task('static', () => {
     const assets = gulp
         .src('aliemu/assets/**.*', { base: './aliemu' })
         .pipe(svgmin())
-        .pipe(gulp.dest('dist/Divi-child'));
+        .pipe(gulp.dest('dist/aliemu'));
 
     const main = gulp
         .src([
@@ -106,25 +106,25 @@ gulp.task('static', () => {
             '!aliemu/**/__tests__',
             '!aliemu/**/*.{ts,tsx,json,styl,md,txt}',
         ], { base: './aliemu' })
-        .pipe(gulp.dest('dist/Divi-child'));
+        .pipe(gulp.dest('dist/aliemu'));
 
     const templatePages = gulp
         .src('aliemu/templates/pages/*.jade', { base: './aliemu/templates/pages' })
         .pipe(jade(jadeConfig))
         .pipe(rename({ extname: '.php', prefix: 'page-'}))
-        .pipe(gulp.dest('dist/Divi-child/'));
+        .pipe(gulp.dest('dist/aliemu/'));
 
     const templateOverrides = gulp
         .src('aliemu/templates/overrides/*.jade', { base: './aliemu/templates/overrides'})
         .pipe(jade(jadeConfig))
         .pipe(rename({ extname: '.php' }))
-        .pipe(gulp.dest('dist/Divi-child/'));
+        .pipe(gulp.dest('dist/aliemu/'));
 
     const templateLearndash = gulp
         .src('aliemu/templates/learndash/*.jade', { base: './aliemu/templates' })
         .pipe(jade(jadeConfig))
         .pipe(rename({ extname: '.php' }))
-        .pipe(gulp.dest('dist/Divi-child/'));
+        .pipe(gulp.dest('dist/aliemu/'));
 
     return merge(assets, main, templatePages, templateOverrides, templateLearndash);
 });
@@ -139,7 +139,7 @@ gulp.task('stylus:dev:step1', () =>
         .pipe(sourcemaps.init())
         .pipe(stylus(stylusConfig))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('dist/Divi-child'))
+        .pipe(gulp.dest('dist/aliemu'))
         .pipe(browserSync.stream({ match: '**/*.css' }))
 );
 
@@ -147,24 +147,17 @@ gulp.task('stylus:prod:step1', () =>
     gulp
         .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
         .pipe(stylus(Object.assign({}, stylusConfig, { compress: true })))
-        .pipe(gulp.dest('dist/Divi-child'))
+        .pipe(gulp.dest('dist/aliemu'))
 );
 
 // FIXME: We can probably pitch this
 gulp.task('stylus:step2', (done) => {
     const header =
     '/*\n' +
-    ' Theme Name: Divi Child\n' +
-    ' Theme URI: http://www.elegantthemes.com/gallery/divi/\n' +
-    ' Description: Divi Child Theme\n' +
-    ' Author: Elegant Themes\n' +
-    ' Author URI: http://www.elegantthemes.com\n' +
+    ' Theme Name: ALiEMU\n' +
     ' Template: Divi\n' +
-    ' Version: 1.0.0\n' +
-    ' License: GNU General Public License v2\n' +
-    ' License URI: http://www.gnu.org/licenses/gpl-2.0.html\n' +
     '*/\n';
-    exec(`echo -en "${header}$(<dist/Divi-child/style.css)" > dist/Divi-child/style.css`, (err) => {
+    exec(`echo -en "${header}$(<dist/aliemu/style.css)" > dist/aliemu/style.css`, (err) => {
         if (err) throw err;
         done();
     });

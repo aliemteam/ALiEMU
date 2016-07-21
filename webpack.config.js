@@ -1,6 +1,6 @@
 module.exports = {
     entry: {
-        'Divi-child/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
+        'aliemu/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
     },
     output: {
         filename: '[name].js',
