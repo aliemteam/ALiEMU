@@ -10,13 +10,13 @@ services:
             # Database
             - ../data:/data
             # Plugins
-            - ../wp-content/plugins/learndash-propanel:/var/www/$SITE_NAME/htdocs/wp-content/plugins/learndash-propanel
-            - ../wp-content/plugins/sfwd-lms:/var/www/$SITE_NAME/htdocs/wp-content/plugins/sfwd-lms
+            - ../wp-content/plugins/learndash-propanel:/var/www/$site_name/htdocs/wp-content/plugins/learndash-propanel
+            - ../wp-content/plugins/sfwd-lms:/var/www/$site_name/htdocs/wp-content/plugins/sfwd-lms
             # Themes
-            - ../dist/Divi-child:/var/www/$SITE_NAME/htdocs/wp-content/themes/Divi-child
-            - ../wp-content/themes/Divi:/var/www/$SITE_NAME/htdocs/wp-content/themes/Divi
+            - ../dist/Divi-child:/var/www/$site_name/htdocs/wp-content/themes/Divi-child
+            - ../wp-content/themes/Divi:/var/www/$site_name/htdocs/wp-content/themes/Divi
             # Uploads
-            - ../wp-content/uploads:/var/www/$SITE_NAME/htdocs/wp-content/uploads
+            - ../wp-content/uploads:/var/www/$site_name/htdocs/wp-content/uploads
         env_file: ../.env
         environment:
             DB_NAME: wordpress
