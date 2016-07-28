@@ -31,8 +31,8 @@ main() {
         sshpass
 
     h2 'Gathering needed information...'
-    read -p "$(h3 "Enter machine name:")" machine_name
-    read -p "$(h3 "Enter site name + TLD (e.g. 'example.com'):")" site_name
+    read -p "$(h3 'Enter machine name:')" machine_name
+    read -p "$(h3 'Enter site name + TLD:')" -ei "$machine_name.com" site_name
     while [ true ]; do
         read -p "$(h3 "Enter SSH/sudo password:")" -s sudo_pass && echo ""
         read -p "$(h3 "Reenter SSH/sudo password:")" -s sudo_pass_confirm && echo ""
@@ -86,38 +86,42 @@ main() {
 init() {
 
     local docker_compose_version
-
-    docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1)
+    docker_compose_version=$(curl -s -X GET "https://api.github.com/repos/docker/compose/releases/latest" | jq -r '.tag_name')
 
     h2 'Provisioning Docker Machine...'
     docker-machine create \
         -d digitalocean \
+        --digitalocean-image=ubuntu-16-04-x64 \
         --digitalocean-access-token=$token \
         --digitalocean-region=nyc1 \
         $machine_name
 
     h2 'Setting up machine...'
 
-    h3 "Attaching to machine '$machine_name'"
-    eval "$(docker-machine env $machine_name)"
-    STATUS
-
-    h2 'Updating kernel & installing dependencies on host machine'
+    h2 'Updating kernel & installing dependencies'
     docker-machine ssh $machine_name "
     apt-get update \
     && apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential \
-        vim \
-    && docker_compose_version=$(git ls-remote https://github.com/docker/compose | tail -n8 | awk '{print $2}' | grep -Po 'refs/tags/\K([\d.]{5})(?!-\w+)' | tail -n1) \
-    && curl -L https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose && \
-    chmod +x /usr/local/bin/docker-compose
-    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh && \
-    chmod +x nodesource_setup.sh && \
-    ./nodesource_setup.sh && \
-    DEBIAN_FRONTEND=noninteractive && apt-get install -y nodejs && \
-    npm i -g uglify-js csso
+        vim
     "
+
+    h3 'Installing Docker Compose'
+    docker-machine ssh $machine_name "curl -sL https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
+    "
+    STATUS
+
+    h3 'Installing NodeJS'
+    docker-machine ssh $machine_name "
+    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh \
+    && chmod +x nodesource_setup.sh \
+    && ./nodesource_setup.sh &>/dev/null \
+    && DEBIAN_FRONTEND=noninteractive && apt-get install -y nodejs &>/dev/null \
+    && npm i -g uglify-js csso &>/dev/null
+    "
+    STATUS
 
     h3 'Initializing filesystem & setting root access password'
     docker-machine ssh $machine_name "
@@ -184,7 +188,31 @@ init() {
     "
     STATUS
 
-    h2 "Server Deployment Finished"
+    h2 "Associating domain name '$site_name' with droplet"
+
+    existing_domain=$(curl -s \
+    -X GET \
+    -H "Authorization: Bearer $token" \
+    "https://api.digitalocean.com/v2/domains/$site_name" \
+    | jq -r '.domain')
+
+    if [[ $existing_domain != 'null' ]]; then
+        # domain exists
+        update_domain_records "$(docker-machine ip $machine_name)"
+    else
+        # domain does not exist
+        create_domain_records "$(docker-machine ip $machine_name)"
+    fi
+
+    h2 'Server Deployment Finished. Rebooting...'
+    docker-machine restart $machine_name
+
+    h2 'Deploying site'
+    docker-machine ssh $machine_name "
+    cd /app
+    docker-compose -f docker-compose.prod.yml up -d
+    "
+
 }
 
 attach() {
@@ -226,10 +254,6 @@ attach() {
 
     h2 "Setting up machine for $USER..."
 
-    h3 "Attaching to machine '$machine_name'"
-    eval "$(docker-machine env $machine_name)"
-    STATUS
-
     h3 "Creating user '$USER' with sudo priveledges"
     docker-machine ssh $machine_name "
     adduser $USER --gecos '$USER,,,' --disabled-password &>/dev/null
@@ -248,11 +272,59 @@ attach() {
     "
     STATUS
 
-    h2 'Restarting Docker Compose services'
-    docker-machine ssh $machine_name "cd /app && docker-compose restart"
+    # FIXME: Not sure why I added this in here to begin with
+    # h2 'Restarting Docker Compose services'
+    # docker-machine ssh $machine_name "cd /app && docker-compose restart"
 
     h2 "Server attachment finished"
 
+}
+
+update_domain_records() {
+    local droplet_ip=${1?'IP address must be passed into this function'}
+    local records
+
+    h3 "Domain found. Retrieving list of 'A' records from DigitalOcean"
+    records=$(curl -s \
+        -X GET \
+        -H "Authorization: Bearer $token" \
+        "https://api.digitalocean.com/v2/domains/$site_name/records" \
+        | jq -r '.domain_records | map(select(.type == "A")) | map_values(.id | tostring) | join(" ")'
+    )
+    STATUS
+
+    for id in $records; do
+        h3 "Updating IP for record id $id"
+        curl -s \
+            -X PUT \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $token" \
+            -d "{\"data\":\"$droplet_ip\"}" "https://api.digitalocean.com/v2/domains/$site_name/records/$id" \
+            &>/dev/null
+        STATUS
+    done;
+}
+
+create_domain_records() {
+    local droplet_ip=${1?'IP address must be passed into this function'}
+
+    h3 'Existing domain record not found. Creating new record'
+    curl \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $token" \
+        -d "{\"name\":\"$site_name\",\"ip_address\":\"$droplet_ip\"}" \
+        "https://api.digitalocean.com/v2/domains" &>/dev/null
+    STATUS
+
+    h3 "Creating 'A' record for www"
+    curl \
+        -X POST \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $token" \
+        -d "{\"type\":\"A\",\"name\":\"www\",\"data\":\"$droplet_ip\",\"priority\":null,\"port\":null,\"weight\":null}" \
+        "https://api.digitalocean.com/v2/domains/$site_name/records" &>/dev/null
+    STATUS
 }
 
 main
