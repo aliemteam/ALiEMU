@@ -34,7 +34,7 @@ interface State {
 export class StudentTable extends React.Component<Props, State> {
 
     private totalStudents: number = Object.keys(this.props.users).length;
-    private headerProps = [
+    private headerProps: { content: string, align: 'left'|'right'|'center'}[] = [
         { content: 'Full Name', align: 'left', },
         { content: 'Class', align: 'left', },
         { content: 'Last Activity', align: 'left', },
@@ -170,7 +170,7 @@ export class StudentTable extends React.Component<Props, State> {
                         <select
                             style={{ margin: '0 5px', }}
                             id='row-select'
-                            defaultValue={this.state.visibleRows}
+                            defaultValue={this.state.visibleRows.toString()}
                             onChange={this.actions.bind(this, {type: 'SELECT_VISIBLE_ROWS'})} >
                             <option value={10}>10</option>
                             { this.totalStudents > 25 &&
@@ -185,7 +185,7 @@ export class StudentTable extends React.Component<Props, State> {
                         </select>
                         students
                     </div>
-                    <Flex amount='2'>
+                    <Flex amount={2}>
                         <label
                             htmlFor='search-query'
                             style={{ padding: '0 10px', }}>
@@ -226,7 +226,7 @@ export class StudentTable extends React.Component<Props, State> {
                 {/* Date query row */}
                 { this.state.advancedFilter &&
                     <FilterRow>
-                        <Flex amount='1'>
+                        <Flex amount={1}>
                             <strong
                                 children='Display III hours accrued from'
                                 style={{padding: '0 10px', }} />

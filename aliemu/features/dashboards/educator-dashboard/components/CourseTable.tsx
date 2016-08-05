@@ -34,7 +34,7 @@ export class CourseTable extends React.Component<Props, State> {
 
     public CSV;
     private visibleRows: number;
-    private headerCells = [
+    private headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
         { content: 'User Name', align: 'left' },
         { content: 'Course Completion Date', align: 'left' },
     ];
@@ -104,7 +104,7 @@ export class CourseTable extends React.Component<Props, State> {
             <div className='au-edudash-shadowbox'>
                 <h2 children='Course Overview' />
                 <FilterRow>
-                    <Flex amount='1'>
+                    <Flex amount={1}>
                         <select
                             id='category'
                             style={{width: '95%'}}
@@ -119,7 +119,7 @@ export class CourseTable extends React.Component<Props, State> {
                             }
                         </select>
                     </Flex>
-                    <Flex amount='2'>
+                    <Flex amount={2}>
                         <select
                             id='course'
                             style={{width: '95%'}}
@@ -136,7 +136,7 @@ export class CourseTable extends React.Component<Props, State> {
                             }
                         </select>
                     </Flex>
-                    <Flex amount='1'>
+                    <Flex amount={1}>
                         <a
                             id='course-export'
                             className={
