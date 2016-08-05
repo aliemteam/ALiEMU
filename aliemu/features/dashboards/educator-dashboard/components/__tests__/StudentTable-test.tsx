@@ -51,7 +51,7 @@ describe('<StudentTable />', () => {
     describe('Row visibility manipulation', () => {
         it('should render with only 10 as an option with less than 10 users', () => {
             const { select } = setup();
-            expect(select.props().defaultValue).toBe(10);
+            expect(select.props().defaultValue).toBe('10');
             expect(select.children().length).toBe(1);
         });
 
