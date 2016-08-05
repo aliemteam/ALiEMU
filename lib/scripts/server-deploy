@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOTDIR=$(cd $SCRIPTDIR && cd ../../ && pwd || exit)
+ROOTDIR="$(cd $SCRIPTDIR && cd ../../ && pwd || exit)"
 
 # shellcheck source=./helpers
 source "$SCRIPTDIR/helpers" || exit 1
@@ -40,13 +40,13 @@ main() {
     done
 
     h3 'Setting machine_name in local .env file'
-    grep -q '^machine_name=' $ROOTDIR/.env && sed -i "s/^machine_name=.*/machine_name=$machine_name/" $ROOTDIR/.env \
-        || sed -i "$ a\machine_name=$machine_name" $ROOTDIR/.env
+    grep -q '^machine_name=' $ROOTDIR/.env && sed -i "s/^machine_name=.*/machine_name=$machine_name/" "$ROOTDIR/.env" \
+        || sed -i "$ a\machine_name=$machine_name" "$ROOTDIR/.env"
     STATUS fatal 'Could not set machine_name in local .env file. Does the file exist?'
 
     h3 'Setting site_name in local .env file'
-    grep -q '^site_name=' $ROOTDIR/.env && sed -i "s/^site_name=.*/site_name=$site_name/" $ROOTDIR/.env \
-        || sed -i "$ a\site_name=$site_name" $ROOTDIR/.env
+    grep -q '^site_name=' $ROOTDIR/.env && sed -i "s/^site_name=.*/site_name=$site_name/" "$ROOTDIR/.env" \
+        || sed -i "$ a\site_name=$site_name" "$ROOTDIR/.env"
     STATUS fatal 'Could not set site_name in local .env file. Does the file exist?'
 
 
