@@ -21,6 +21,8 @@ function requested_dashboard_access($id) {
         "bio" => $_POST['description']
     ];
 
+    // FIXME
+    wp_mail('admin@aliemu.com', 'Dashboard access request', print_r($messageData, true));
     slack_message('aliemu/messages/dashboard-access', $messageData);
 }
 add_action('user_register', 'requested_dashboard_access');

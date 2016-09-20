@@ -89,9 +89,9 @@ export const Pager = (props: PagerProps) =>
     <div className='au-edudash-pager' {...props}>
         {
             Array
-            .from({length: props.totalRows, }, (k, v) => v)
+            .from({length: props.totalRows, }, (_k, v) => v)
             .filter((el) => el % props.visibleRows === 0)
-            .map((el, i) =>
+            .map((_el, i) =>
                 <div
                     key={i}
                     className={props.currentPage !== i ? 'au-edudash-pager-btn' : 'au-edudash-pager-btn-active'}

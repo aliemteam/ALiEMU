@@ -19,11 +19,8 @@ Thumbs.db
 .listing
 npm-debug.log
 
-# Editor files
-*.sublime-*
-*.swp
-.c9
-.sass-cache/
+# Temporary Files
+tmp
 
 # Wordpress
 wp-content
@@ -38,6 +35,3 @@ dist
 typings/**
 !typings/ALiEMU.d.ts
 !typings/react-datepicker.d.ts
-
-# Coverage Reports
-coverage

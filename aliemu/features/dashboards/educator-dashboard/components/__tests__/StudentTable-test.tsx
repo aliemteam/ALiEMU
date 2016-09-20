@@ -51,7 +51,7 @@ describe('<StudentTable />', () => {
     describe('Row visibility manipulation', () => {
         it('should render with only 10 as an option with less than 10 users', () => {
             const { select } = setup();
-            expect(select.props().defaultValue).toBe(10);
+            expect(select.props().defaultValue).toBe('10');
             expect(select.children().length).toBe(1);
         });
 
@@ -188,7 +188,7 @@ describe('<StudentTable />', () => {
             for (let i = 0; i < 30; i++) {
                 userdata[i] = createMinimalUser(i, 2016);
             }
-            const { component, pager } = setup(userdata);
+            const { pager } = setup(userdata);
             expect(pager.children().length).toBe(3);
         });
 
@@ -215,7 +215,7 @@ describe('<StudentTable />', () => {
     describe('Export CSV functions', () => {
         it('should call exportCSV for global program export', () => {
             const stub = sinon.stub(CSV.prototype, 'allUsers', () => ({filename: 'test.csv', data: 'test,test,test'}));
-            const { component, exportBtn } = setup();
+            const { exportBtn } = setup();
             exportBtn.simulate('click');
             stub.restore();
         });

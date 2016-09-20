@@ -9,7 +9,7 @@
  * @return A filtered, paginated array.
  */
 export default function paginate(rows: Array<any>, visibleRows: number, currentPage: number): Array<any> {
-    return rows.filter((uid, i: number) =>
+    return rows.filter((_uid, i: number) =>
         (visibleRows * currentPage) <= i && i < (visibleRows * currentPage + visibleRows)
     );
 }

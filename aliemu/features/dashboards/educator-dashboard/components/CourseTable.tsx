@@ -4,7 +4,6 @@ import paginate from '../../../utils/Pagination';
 import * as moment from 'moment';
 import {
     downloadPolyfill,
-    parseCompletionData,
     CSV,
 } from '../../../utils/DashboardUtils';
 import {
@@ -35,7 +34,7 @@ export class CourseTable extends React.Component<Props, State> {
 
     public CSV;
     private visibleRows: number;
-    private headerCells = [
+    private headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
         { content: 'User Name', align: 'left' },
         { content: 'Course Completion Date', align: 'left' },
     ];
@@ -105,7 +104,7 @@ export class CourseTable extends React.Component<Props, State> {
             <div className='au-edudash-shadowbox'>
                 <h2 children='Course Overview' />
                 <FilterRow>
-                    <Flex amount='1'>
+                    <Flex amount={1}>
                         <select
                             id='category'
                             style={{width: '95%'}}
@@ -120,7 +119,7 @@ export class CourseTable extends React.Component<Props, State> {
                             }
                         </select>
                     </Flex>
-                    <Flex amount='2'>
+                    <Flex amount={2}>
                         <select
                             id='course'
                             style={{width: '95%'}}
@@ -129,7 +128,7 @@ export class CourseTable extends React.Component<Props, State> {
                             disabled={this.state.selections.category === ''}>
                             <option value=''> -- Select a Course -- </option>
                             { this.state.selections.category &&
-                                Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID, i) =>
+                                Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID) =>
                                     <option value={courseID} key={courseID}>
                                         {this.props.courseData.courses[courseID].postTitle}
                                     </option>
@@ -137,7 +136,7 @@ export class CourseTable extends React.Component<Props, State> {
                             }
                         </select>
                     </Flex>
-                    <Flex amount='1'>
+                    <Flex amount={1}>
                         <a
                             id='course-export'
                             className={

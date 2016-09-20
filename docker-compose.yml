@@ -6,6 +6,8 @@ services:
             service: wordpress
         links:
             - db
+        ports:
+            - "8080:80"
         environment:
             LOCALHOST: 'true'
             SEARCH_REPLACE: https://www.aliemu.com,http://localhost:8080

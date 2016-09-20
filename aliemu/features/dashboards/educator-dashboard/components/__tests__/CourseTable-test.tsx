@@ -120,7 +120,7 @@ describe('<CourseTable />', () => {
             }
         }
         it('should export data on click', () => {
-            const { component, categorySelect, courseSelect, exportBtn } = setup(userdata);
+            const { categorySelect, courseSelect, exportBtn } = setup(userdata);
             categorySelect.simulate('change', { target: { value: 'AIR'}});
             courseSelect.simulate('change', { target: { value: '100'}});
             exportBtn.simulate('click');

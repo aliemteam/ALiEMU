@@ -12,7 +12,9 @@
         "removeComments": true,
         "noLib": false,
         "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true
     },
     "filesGlob": [
         "{aliemu,lib}/**/*.{ts,tsx}",
@@ -39,7 +41,6 @@
         "lib/utils/Fixtures.ts",
         "node_modules/@types/enzyme/index.d.ts",
         "node_modules/@types/jest/index.d.ts",
-        "node_modules/@types/moment/index.d.ts",
         "node_modules/@types/node/index.d.ts",
         "node_modules/@types/react-addons-test-utils/index.d.ts",
         "node_modules/@types/react-dom/index.d.ts",
