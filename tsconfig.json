@@ -41,7 +41,6 @@
         "lib/utils/Fixtures.ts",
         "node_modules/@types/enzyme/index.d.ts",
         "node_modules/@types/jest/index.d.ts",
-        "node_modules/@types/node/index.d.ts",
         "node_modules/@types/react-addons-test-utils/index.d.ts",
         "node_modules/@types/react-dom/index.d.ts",
         "node_modules/@types/react/index.d.ts",

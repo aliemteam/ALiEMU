@@ -1,7 +1,7 @@
-mixin user(name, img, title, role, twitter)
+mixin team(name, img, title, role, twitter)
     .au-team-member
         .au-photo
-            img(src="/wp-content/uploads/#{img}")
+            img(src="/wp-content/themes/aliemu/assets/team/#{img}")
         .au-about
             .au-name
                 if twitter
@@ -10,7 +10,7 @@ mixin user(name, img, title, role, twitter)
                 h4=name
             .au-title=title
             .au-role=role
-- placeholder_img = '2015/04/placeholder.jpeg'
+- placeholder_img = 'team-placeholder.svg'
 - get_header()
 
 #main-content.au-page-aliem-team
@@ -19,75 +19,85 @@ mixin user(name, img, title, role, twitter)
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header #[h1 Core Team]
         .au-team-container
-            +user("Michelle Lin, MD", "2015/04/michelle-lin.jpg", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Co-Founder, ALiEMU", "mlin")
-            +user("Chris Gaafary, MD", "2015/06/chris-gaafary.jpg", "EM Chief Resident, University of Tennessee Chattanooga", "Co-Founder / Chief of Design and Development, ALiEMU", "cgaafary")
-            +user("Andrew Grock, MD", "2015/04/Andy-Grock.jpg", "Assistant Professor of Emergency Medicine UCLA Department of Emergency Medicine", "Creator and Lead Editor, ALiEM AIR Series", "andygrock")
-            +user("Bryan Hayes, PharmD", "2015/04/mwG3dREX.jpeg", "Clinical Associate Professor, University of Maryland", "Creator and Lead Editor, ALiEM Capsules Series", "pharmertoxguy")
-            +user("Derek Sifford, FP-C, CCP-C", "2015/06/derrick.jpg", "Paramedic. Undergraduate Student. ALiEM CTO", "Chief Technical Officer, ALiEMU", "flightmed1")
-            +user("Jonathan Bronner, MD", "2016/06/jonathan-bronner.jpeg", "Assistant Professor And Assistant Program Director, University of Kentucky Department of EM", "ALiEMU Education Design Officer", "Bronski_EM")
-            +user("Nikita Joshi, MD", "2015/04/nikitajoshi.jpg", "Clinical Instructor, Stanford University, Department of EM", "Member, ALiEMU Advisory Board", "njoshi8")
-            +user("Teresa Chan, MD", "2015/06/teresa-chan.jpg", "Assistant Professor, McMaster University", "Member, ALiEMU Advisory Board", "tchanmd")
-            +user("Brent Thoma, MD", "2015/06/brent-thoma.jpg", "Simulation Fellow, Massachusetts General Hospital", "Member, ALiEMU Advisory Board", "brent_thoma")
+            +team("Michelle Lin, MD", "michelle-lin.png", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Co-Founder, ALiEMU", "mlin")
+            +team("Chris Gaafary, MD", "chris-gaafary.png", "EM Chief Resident, University of Tennessee Chattanooga", "Co-Founder / Chief of Design and Development, ALiEMU", "cgaafary")
+            +team("Andrew Grock, MD", "andy-grock.png", "Assistant Professor of Emergency Medicine UCLA Department of Emergency Medicine", "Creator and Lead Editor, ALiEM AIR Series", "andygrock")
+            +team("Bryan Hayes, PharmD", "bryan-hayes.png", "Clinical Associate Professor, University of Maryland", "Creator and Lead Editor, ALiEM Capsules Series", "pharmertoxguy")
+            +team("Derek Sifford, FP-C, CCP-C", "derek-sifford.png", "Paramedic. Undergraduate Student. ALiEM CTO", "Chief Technical Officer, ALiEMU", "flightmed1")
+            +team("Jonathan Bronner, MD", "jonathan-bronner.png", "Assistant Professor And Assistant Program Director, University of Kentucky Department of EM", "ALiEMU Education Design Officer", "Bronski_EM")
+            +team("Nikita Joshi, MD", "nikita-joshi.png", "Clinical Instructor, Stanford University, Department of EM", "Member, ALiEMU Advisory Board", "njoshi8")
+            +team("Teresa Chan, MD", "teresa-chan.png", "Assistant Professor, McMaster University", "Member, ALiEMU Advisory Board", "tchanmd")
+            +team("Brent Thoma, MD", "brent-thoma.png", "Simulation Fellow, Massachusetts General Hospital", "Member, ALiEMU Advisory Board", "brent_thoma")
 
     // AIR Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header.au-air-team #[h1 Air Team]
         .au-team-container
-            +user("Andrew Grock, MD", "2015/04/Andy-Grock.jpg", "Assistant Professor of Emergency Medicine UCLA Department of Emergency Medicine", "Creator and Lead Editor, ALiEM AIR Series", "andygrock")
-            +user("Michelle Lin, MD", "2015/04/michelle-lin.jpg", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Founder, ALiEMU", "mlin")
-            +user("Nikita Joshi, MD", "2015/04/nikitajoshi.jpg", "Clinical Instructor, Stanford University, Department of EM", "Member, ALiEMU Advisory Board", "njoshi8")
-            +user("Eric Morley, MD", "2015/04/ericmorley.jpg", "Associate Program Director of EM; Stony Brook University", "Associate Director AIR Executive Board", "emericmorley")
-            +user("Felix Ankel, MD", "2015/04/felix-ankel.jpg", "VP & Exec Director of Health Prof Education, HealthPartners Institute; Associate Professor of EM; Univ of Minnesota", "", "felixankel")
-            +user("Jeremy Branzetti, MD", "2015/04/jeremy-branzetti.jpg", "Associate Program Director and Assistant Professor of EM; University of Washington Department of EM", "", "thebranzetti")
-            +user("Jay Khadpe, MD", "2015/04/jaykhadpe.jpg", "Assistant Residency Director at Kings County Hospital Center / SUNY Downstate Medical Center", "", "flatbushem")
-            +user("Kasey Mekonnen, MD", "2016/06/KMphoto.jpg", "Resident, Alameda-Highland Emergency Medicine Residency Program", "", "kmekonnenEM")
-            +user("Allie Min, MD", "2016/06/min-512x512.jpg", "Associate Professor; Associate Residency Director, University of Arizona – University Campus", "", "")
-            +user("Salim Rezaie, MD", "2015/04/salim-rezaie.jpg", "Associate Clinical Professor of EM/IM; University of Texas Health Science Center at San Antonio", "", "srrezaie")
-            +user("Lynn Roppolo, MD", "2015/06/lynnroppollo.jpg", "Associate Professor, Associate Residency Program Director at UT Southwestern Medical Center Dallas", "", "lynnroppolo")
-            +user("Anand Swaminathan MD MPH", "2015/04/Swami.jpg", "Assistant Program Director and Assistant Professor of EM, NYU Medical Center", "", "emswami")
-            +user("Taku Taira, MD", "2015/04/takutaira.jpg", "Associate Program Director and Assistant Professor of EM, USC School of Medicine", "", "takutaira")
-            +user("Lalena Yarris MD MCR", "2015/04/lainieyarris.jpg", "Program Director and Associate Professor of EM; Oregon Health Sciences University", "", "")
+            +team("Andrew Grock, MD", "andy-grock.png", "Assistant Professor of Emergency Medicine UCLA Department of Emergency Medicine", "Creator and Lead Editor, ALiEM AIR Series", "andygrock")
+            +team("Michelle Lin, MD", "michelle-lin.png", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Founder, ALiEMU", "mlin")
+            +team("Nikita Joshi, MD", "nikita-joshi.png", "Clinical Instructor, Stanford University, Department of EM", "Member, ALiEMU Advisory Board", "njoshi8")
+            +team("Eric Morley, MD", "eric-morley.png", "Associate Program Director of EM; Stony Brook University", "Associate Director AIR Executive Board", "emericmorley")
+            +team("Felix Ankel, MD", "felix-ankel.png", "VP & Exec Director of Health Prof Education, HealthPartners Institute; Associate Professor of EM; Univ of Minnesota", "", "felixankel")
+            +team("Jeremy Branzetti, MD", "jeremy-branzetti.png", "Associate Program Director and Assistant Professor of EM; University of Washington Department of EM", "", "thebranzetti")
+            +team("Jay Khadpe, MD", "jay-khadpe.png", "Assistant Residency Director at Kings County Hospital Center / SUNY Downstate Medical Center", "", "flatbushem")
+            +team("Kasey Mekonnen, MD", "kasey-mekonnen.png", "Resident, Alameda-Highland Emergency Medicine Residency Program", "", "kmekonnenEM")
+            +team("Allie Min, MD", "allie-min.png", "Associate Professor; Associate Residency Director, University of Arizona – University Campus", "", "")
+            +team("Salim Rezaie, MD", "salim-rezaie.png", "Associate Clinical Professor of EM/IM; University of Texas Health Science Center at San Antonio", "", "srrezaie")
+            +team("Lynn Roppolo, MD", "lynn-roppollo.png", "Associate Professor, Associate Residency Program Director at UT Southwestern Medical Center Dallas", "", "lynnroppolo")
+            +team("Anand Swaminathan MD MPH", "anand-swaminathan.png", "Assistant Program Director and Assistant Professor of EM, NYU Medical Center", "", "emswami")
+            +team("Taku Taira, MD", "taku-taira.png", "Associate Program Director and Assistant Professor of EM, USC School of Medicine", "", "takutaira")
+            +team("Lalena Yarris MD MCR", "lalena-yarris.png", "Program Director and Associate Professor of EM; Oregon Health Sciences University", "", "")
 
     // Capsules Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header.au-capsules-team #[h1 Capsules Team]
         .au-team-container
-            +user("Bryan Hayes, PharmD", "2015/04/mwG3dREX.jpeg", "Clinical Associate Professor, University of Maryland", "Creator and Lead Editor, ALiEM Capsules Series", "pharmertoxguy")
-            +user("Nadia I. Awad, PharmD, BCPS", "2015/06/nadia-awad-3.jpg", "Emergency Medicine Pharmacist, Robert Wood Johnson University Hospital (New Brunswick, New Jersey)", "", "Nadia_EMPharmD")
-            +user("Craig Cocchio, PharmD, BCPS", "2015/04/craig-coccio.jpg", "Emergency Medicine Pharmacist, Ernest Mario School of Pharmacy (Rutgers), Robert Wood Johnson University Hospital", "", "iEMPharmD")
-            +user("Zlatan Coralic, PharmD, BCPS", "2015/04/zlatan-coralic.jpeg", "Emergency Medicine Pharmacist, Assistant Clinical Professor, University of California San Francisco", "", "ZEDPharm")
-            +user("Chris Edwards, PharmD, BCPS", "2015/06/edwards-portrait.jpg", "Emergency Medicine Pharmacist, University of Arizona Medical Center", "", "emergencypharm")
-            +user("Douglas Gowen, PharmD, BCPS", placeholder_img, "Emergency Medicine Pharmacist, Glens Falls Hospital (Glens Falls, New York)", "", "DougEDPharm")
-            +user("Meghan Groth, PharmD, BCPS", "2015/06/meghan-portrait.jpg", "Emergency Medicine Pharmacist, University of Vermont Medical Center", "", "EMpharmgirl")
-            +user("Michelle Hines, PharmD", "2015/06/michelle-hines-1.jpg", "Emergency Medicine Pharmacist, University of Maryland Medical Center", "", "mEDpharmD")
-            +user("Jill Logan, PharmD, BCPS", "2015/04/jill-logan.jpeg", "Emergency Medicine Pharmacist, Baltimore Washington Medical Center", "", "EMPharm")
-            +user("Glenn Oettinger, PharmD, BCPS", "2015/04/glenn-oettinger.jpeg", "Emergency Medicine Pharmacist, Thomas Jefferson University", "", "glennoettinger")
-            +user("Rob Pugliese, PharmD, BCPS", "2015/04/obert-pugliese.jpg", "Emergency Medicine Pharmacist, Thomas Jefferson University", "", "theEDpharmacist")
-            +user("Adam Spaulding, PharmD, BCPS", "2015/04/adam-spaulding.jpeg", "Emergency Medicine Pharmacist, Waterbury Hospital Health Center", "", "PharmERAtom")
-            +user("Paul Takamoto, PharmD", "2015/04/paul-takamoto.jpeg", "Emergency Medicine Pharmacist, University of California San Francisco", "", "ptakEDRx")
-            +user("Mark Culver, PharmD, BCPS", "2015/06/mark-culver.jpg", "Emergency Medicine Pharmacist, Banner University Medical Center (Phoenix)", "", "EMdruggist")
-            +user("Lewis Nelson, MD, FAACT, FACMT, FACEP", "2015/04/lewis-nelson.png", "Professor of Emergency Medicine, New York University", "", "LNelsonMD")
-            +user("Michael Winters, MD, FAAEM, FACEP", "2015/06/winters-portrait.jpg", "Associate Professor of Emergency Medicine and Internal Medicine, University of Maryland", "", "critcareguys")
-            +user("David Juurlink, BPharm, MD, PhD, FRCPC", "2015/04/david-juurlink.jpeg", "Professor of Medicine, University of Toronto", "", "DavidJuurlink")
+            +team("Bryan Hayes, PharmD", "bryan-hayes.png", "Clinical Associate Professor, University of Maryland", "Creator and Lead Editor, ALiEM Capsules Series", "pharmertoxguy")
+            +team("Nadia I. Awad, PharmD, BCPS", "nadia-awad.png", "Emergency Medicine Pharmacist, Robert Wood Johnson University Hospital (New Brunswick, New Jersey)", "", "Nadia_EMPharmD")
+            +team("Craig Cocchio, PharmD, BCPS", "craig-coccio.png", "Emergency Medicine Pharmacist, Ernest Mario School of Pharmacy (Rutgers), Robert Wood Johnson University Hospital", "", "iEMPharmD")
+            +team("Zlatan Coralic, PharmD, BCPS", "zlatan-coralic.png", "Emergency Medicine Pharmacist, Assistant Clinical Professor, University of California San Francisco", "", "ZEDPharm")
+            +team("Chris Edwards, PharmD, BCPS", "chris-edwards.png", "Emergency Medicine Pharmacist, University of Arizona Medical Center", "", "emergencypharm")
+            +team("Douglas Gowen, PharmD, BCPS", placeholder_img, "Emergency Medicine Pharmacist, Glens Falls Hospital (Glens Falls, New York)", "", "DougEDPharm")
+            +team("Meghan Groth, PharmD, BCPS", "meghan-groth.png", "Emergency Medicine Pharmacist, University of Vermont Medical Center", "", "EMpharmgirl")
+            +team("Michelle Hines, PharmD", "michelle-hines.png", "Emergency Medicine Pharmacist, University of Maryland Medical Center", "", "mEDpharmD")
+            +team("Jill Logan, PharmD, BCPS", "jill-logan.png", "Emergency Medicine Pharmacist, Baltimore Washington Medical Center", "", "EMPharm")
+            +team("Glenn Oettinger, PharmD, BCPS", "glenn-oettinger.png", "Emergency Medicine Pharmacist, Thomas Jefferson University", "", "glennoettinger")
+            +team("Rob Pugliese, PharmD, BCPS", "robert-pugliese.png", "Emergency Medicine Pharmacist, Thomas Jefferson University", "", "theEDpharmacist")
+            +team("Adam Spaulding, PharmD, BCPS", "adam-spaulding.png", "Emergency Medicine Pharmacist, Waterbury Hospital Health Center", "", "PharmERAtom")
+            +team("Paul Takamoto, PharmD", "paul-takamoto.png", "Emergency Medicine Pharmacist, University of California San Francisco", "", "ptakEDRx")
+            +team("Mark Culver, PharmD, BCPS", "mark-culver.png", "Emergency Medicine Pharmacist, Banner University Medical Center (Phoenix)", "", "EMdruggist")
+            +team("Lewis Nelson, MD, FAACT, FACMT, FACEP", "lewis-nelson.png", "Professor of Emergency Medicine, New York University", "", "LNelsonMD")
+            +team("Michael Winters, MD, FAAEM, FACEP", "michael-winters.png", "Associate Professor of Emergency Medicine and Internal Medicine, University of Maryland", "", "critcareguys")
+            +team("David Juurlink, BPharm, MD, PhD, FRCPC", "david-juurlink.png", "Professor of Medicine, University of Toronto", "", "DavidJuurlink")
 
     // AIR-Pro Team
     .au-container-fullwidth
         .au-container-fullwidth.au-team-header.au-airpro-team #[h1 AIR-Pro Team]
         .au-team-container
-            +user("Fareen Zaver, MD FRCPC EM", "2016/06/fareen.jpg", "Clinical Lecturer, University of Calgary", "Creator and Lead Editor, ALiEM AIR-Pro Series", "fzaver")
-            +user("Michelle Lin, MD", "2015/04/michelle-lin.jpg", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Founder, ALiEMU", "mlin")
-            +user("Robert Cooney, MD", "2016/06/rob-cooney.jpg", "Associate Program Director, Geisinger Medical Center", "", "EMEducation")
-            +user("Michael Hansen DO", "2016/06/michael-hansen.jpg", "Chief Resident, Christiana Care", "", "mhansenEM")
-            +user("Evan Leibner MD, Ph.D", "2016/06/evan-leibner.jpg", "Surgical/Trauma Critical Care Fellow Shock Trauma Center/University of Maryland", "", "Evan_Leibner")
-            +user("Lynn Roppolo, MD", "2015/06/lynnroppollo.jpg", "Associate Professor, Associate Residency Program Director at UT Southwestern Medical Center Dallas", "", "lynnroppolo")
-            +user("Salim Rezaie, MD", "2015/04/salim-rezaie.jpg", "Associate Clinical Professor of EM/IM; University of Texas Health Science Center at San Antonio", "", "srrezaie")
-            +user("Jeff Riddell, MD", "2016/06/jeff-riddell.jpg", "Education Fellow, University of Washington; Medical Education Research Fellow, Division of Emergency Medicine, University of Washington", "", "jeff__riddell")
-            +user("Maggie Sheehy MD, MSC", "2016/06/maggie-sheehy.jpg", "", "", "mksheehy")
-            +user("Samuel Zidovetzki MD", placeholder_img, "Chief Resident, University of Wisconsin", "", "")
-            +user("Seth Trueger, MD, MPH", "2016/06/seth-trueger.jpg", "Department of Emergency Medicine, Northwestern University", "", "MDaware")
-            +user("Sam Ghali, MD", placeholder_img, "", "", "em_resus")
-            +user("Rob Bryant, MD", "2016/06/rob-bryant.jpg", "", "", "robjbryant13")
-            +user("J. Scott Weiters, MD", "2016/06/scott-weiters.jpg", "Director of Undergraduate Medical Education; Texas A&M EM Residency Program", "", "EMedCoach")
-
+            +team("Fareen Zaver, MD FRCPC EM", "fareen-zaver.png", "Clinical Lecturer, University of Calgary", "Creator and Lead Editor, ALiEM AIR-Pro Series", "fzaver")
+            +team("Michelle Lin, MD", "michelle-lin.png", "Professor of EM and Academy Endowed Chair for EM Education, UC San Francisco", "Founder, ALiEMU", "mlin")
+            +team("Robert Cooney, MD", "rob-cooney.png", "Associate Program Director, Geisinger Medical Center", "", "EMEducation")
+            +team("Lynn Roppolo, MD", "lynn-roppollo.png", "Associate Professor, Associate Residency Program Director at UT Southwestern Medical Center Dallas", "", "lynnroppolo")
+            +team("Salim Rezaie, MD", "salim-rezaie.png", "Associate Clinical Professor of EM/IM; University of Texas Health Science Center at San Antonio", "", "srrezaie")
+            +team("Jeff Riddell, MD", "jeff-riddell.png", "Education Fellow, University of Washington; Medical Education Research Fellow, Division of Emergency Medicine, University of Washington", "", "jeff__riddell")
+            +team("Seth Trueger, MD, MPH", "seth-trueger.png", "Department of Emergency Medicine, Northwestern University", "", "MDaware")
+            +team("Sam Ghali, MD", placeholder_img, "", "", "em_resus")
+            +team("Rob Bryant, MD", "rob-bryant.png", "", "", "robjbryant13")
+            +team("J. Scott Weiters, MD", "scott-weiters.png", "Director of Undergraduate Medical Education; Texas A&M EM Residency Program", "", "EMedCoach")
+            //- New Chiefs
+            +team("Michael Craddick, MD", "michael-craddick.png", "Chief Resident, University of Illinois COM at Peoria", "", "mdcraddick")
+            +team("Jonathan Giordano, MD", "jonathan-giordano.png", "Chief Resident, Maimonides Medical Center", "", "jongioem")
+            +team("George Hughes, MD", "george-hughes.png", "Chief Resident, University of Illinois at Chicago", "", "ghsmjm")
+            +team("Travis Manasco, MD", "travis-manasco.png", "Chief Resident, Boston Medical Center (Boston University)", "", "EMphaticpause")
+            +team("Sean McGann, MD", "sean-mcgann.png", "Chief Resident, Maimonides Medical Center", "", "seancmcgann")
+            +team("Meg Pusateri, MD", "meg-pusateri.png", "Chief Resident, University of Louisville", "", "meg_pusateri")
+            +team("Audrey Sanford, MD", placeholder_img, "Chief Resident, University of Illinois at Chicago", "", "NCbornandbred")
+            +team("Nana Sefa, MD", placeholder_img, "Chief Resident, William Beaumont Hospital, Royal Oak", "", "nksefa")
+            
+            //- Alums
+            //- +team("Michael Hansen DO", "2016/06/michael-hansen.png", "Chief Resident, Christiana Care", "", "mhansenEM")
+            //- +team("Evan Leibner MD, Ph.D", "2016/06/evan-leibner.png", "Surgical/Trauma Critical Care Fellow Shock Trauma Center/University of Maryland", "", "Evan_Leibner")
+            //- +team("Maggie Sheehy MD, MSC", "2016/06/maggie-sheehy.png", "", "", "mksheehy")
+            //- +team("Samuel Zidovetzki MD", placeholder_img, "Chief Resident, University of Wisconsin", "", "")
 
 - get_footer()

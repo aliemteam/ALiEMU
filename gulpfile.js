@@ -12,6 +12,7 @@ const merge = require('merge-stream');
 const insert = require('gulp-insert');
 // Assets
 const svgmin = require('gulp-svgmin');
+const imagemin = require('gulp-imagemin');
 // PHP
 const jade = require('gulp-jade2php');
 // CSS
@@ -101,9 +102,14 @@ gulp.task('reload', (done) => {
 
 gulp.task('static', () => {
 
-    const assets = gulp
-        .src('aliemu/assets/**.*', { base: './aliemu' })
+    const svg = gulp
+        .src('aliemu/assets/**/*.svg', { base: './aliemu' })
         .pipe(svgmin())
+        .pipe(gulp.dest('dist/aliemu'));
+
+    const images = gulp
+        .src('aliemu/assets/**/*.png', { base: './aliemu' })
+        .pipe(imagemin())
         .pipe(gulp.dest('dist/aliemu'));
 
     const main = gulp
@@ -112,7 +118,7 @@ gulp.task('static', () => {
             '!aliemu/templates/**/*.*',
             '!aliemu/templates',
             '!aliemu/**/__tests__',
-            '!aliemu/**/*.{ts,tsx,json,styl,md,txt}',
+            '!aliemu/**/*.{ts,tsx,json,styl,md,txt,svg,png}',
         ], { base: './aliemu' })
         .pipe(gulp.dest('dist/aliemu'));
 
@@ -134,7 +140,7 @@ gulp.task('static', () => {
         .pipe(rename({ extname: '.php' }))
         .pipe(gulp.dest('dist/aliemu/'));
 
-    return merge(assets, main, templatePages, templateOverrides, templateLearndash);
+    return merge(svg, images, main, templatePages, templateOverrides, templateLearndash);
 });
 
 // ==================================================

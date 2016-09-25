@@ -26,11 +26,11 @@ if [[ $? == 1 ]]; then
 fi
 
 # Check ownership of wp-content
-owners=$(ls -lR $SCRIPTDIR/wp-content | awk '{print $3}')
+owners=$(ls -lR "$SCRIPTDIR"/wp-content | awk '{print $3}')
 for o in $owners; do
     if [[ $o != "$USER" ]]; then
         echo '=> Need sudo priveledges to take ownership of wp-content directory'
-        sudo chown -R $USER $SCRIPTDIR/wp-content
+        sudo chown -R "$USER" "$SCRIPTDIR"/wp-content
         break
     fi
 done;
@@ -46,17 +46,17 @@ fi
 #  and set the CONTAINER_IP accordingly.
 type docker-machine &>/dev/null
 if [[ $? == 0 ]]; then
-    docker-machine ip $DOCKER_MACHINE_NAME &>/dev/null
+    docker-machine ip "$DOCKER_MACHINE_NAME" &>/dev/null
     if [[ $? == 0 ]]; then
-        CONTAINER_IP=$(docker-machine ip $DOCKER_MACHINE_NAME)
+        CONTAINER_IP=$(docker-machine ip "$DOCKER_MACHINE_NAME")
         NATIVE=false
     fi
 fi
 
 # Prepare for SSH
-chmod 400 $SCRIPTDIR/data/aliemu_dsa
+chmod 400 "$SCRIPTDIR"/data/aliemu_dsa
 eval "$(ssh-agent -s)" &>/dev/null
-ssh-add $SCRIPTDIR/data/aliemu_dsa &>/dev/null
+ssh-add "$SCRIPTDIR"/data/aliemu_dsa &>/dev/null
 
 main() {
 
@@ -79,7 +79,7 @@ main() {
                 --all-plugins)
                     get_all_plugins;;
                 plugin)
-                    get_plugin $3;;
+                    get_plugin "$3";;
                 theme)
                     get_theme;;
                 database)
@@ -131,19 +131,19 @@ get_theme() {
 get_database() {
     # SSH into siteground and backup the database and copy to the data directory
     if [[ $NATIVE == true ]]; then
-        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
+        ssh -i "$SCRIPTDIR"/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
         cd public_html
         wp db export database.sql"
         echo '=> Downloading database to local machine...'
-        scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
+        scp -i "$SCRIPTDIR"/data/aliemu_dsa -P 18765 aliemu@c7563.sgvps.net:public_html/database.sql "$SCRIPTDIR"/data
         echo '=> Deleting database copy from server...'
-        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
+        ssh -i "$SCRIPTDIR"/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "cd public_html && rm database.sql"
     else
-        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
+        ssh -i "$SCRIPTDIR"/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "
         cd public_html
         wp db export database.sql"
-        scp -i $SCRIPTDIR/data/aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql $SCRIPTDIR/data
-        ssh -i $SCRIPTDIR/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
+        scp -i "$SCRIPTDIR"/data/aliemu_dsa -P 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" aliemu@c7563.sgvps.net:public_html/database.sql "$SCRIPTDIR"/data
+        ssh -i "$SCRIPTDIR"/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 -o "PubkeyAcceptedKeyTypes ssh-dss" "cd public_html && rm database.sql"
 
         # Machine not running? Start it up!
         if [[ $(docker-machine status "$DOCKER_MACHINE_NAME") != 'Running' ]]; then

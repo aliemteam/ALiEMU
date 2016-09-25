@@ -33,6 +33,7 @@ services:
                 tinymce-advanced,
                 ultimate-member,
                 wpdiscuz,
+                wp-smush,
                 [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
             WP_DEBUG_DISPLAY: 'false'
