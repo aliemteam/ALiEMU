@@ -22,7 +22,7 @@
     "@types/react": "^0.14.37",
     "@types/react-addons-test-utils": "^0.14.15",
     "@types/react-dom": "^0.14.17",
-    "@types/sinon": "^1.16.30",
+    "@types/sinon": "^1.16.31",
     "moment": "^2.15.1",
     "react": "^15.3.2",
     "react-datepicker": "^0.29.0",
