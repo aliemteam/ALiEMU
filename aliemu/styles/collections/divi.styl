@@ -136,24 +136,24 @@ a
 // Header
 #main-header
     height $divi-header-height
+    padding 0
     .container.clearfix.et_menu_container
         width 100%
         height $divi-header-height
         display flex
         justify-content space-between
-        .logo_container
-            position relative
-            flex 1
-            a img
-                max-width none
         @media (max-width 980px)
             a img
                 padding 0 0 0 10px
 
-
+#logo
+.et_fixed_nav #logo
+    max-height 30px
+    padding 10px 0
 
 // Navigation
 #et-top-navigation
+    height $divi-header-height
     padding 0 !important
     display flex !important
     align-items center
@@ -167,17 +167,20 @@ a
 
     // Desktop navigation menu
     nav#top-menu-nav
+        padding 0
         ul#top-menu.nav
             > li
                 width auto
                 height 1em
                 a
+                    box-sizing border-box
                     color $font-color
                     padding-bottom 17px
                     &:hover
                         opacity 1
                 ul.sub-menu
                     width 150px
+                    top $divi-header-height - 15px
                     @extend $divi-navmenu-item
                     left -80px
                     li
@@ -214,9 +217,12 @@ a
     // Search bar
     #et_top_search
         height $divi-header-height
+        margin-top 5px
         #et_search_icon:before
             line-height $divi-header-height
             top 0
+        .et-search-form
+            border-color $primary
     @media (max-width 980px)
         #et_top_search
             margin 0 5px 0 0
