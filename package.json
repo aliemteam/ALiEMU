@@ -16,7 +16,7 @@
     "test": "jest --silent"
   },
   "dependencies": {
-    "@types/enzyme": "^2.4.34",
+    "@types/enzyme": "^2.4.35",
     "@types/jest": "^15.1.32",
     "@types/moment": "^2.13.0",
     "@types/react": "^0.14.37",
@@ -30,7 +30,7 @@
     "typescript": "^2.1.0-dev.20160714"
   },
   "devDependencies": {
-    "autoprefixer": "^6.4.1",
+    "autoprefixer": "^6.5.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
