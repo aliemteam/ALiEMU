@@ -243,7 +243,7 @@ gulp.task('fix-divi', () => {
     `;
 
     const slack = gulp
-        .src('wp-content/themes/Divi/functions.php', { base: './' })
+        .src('wp-content/themes/Divi/includes/builder/main-modules.php', { base: './' })
         .pipe(replace(/wp_mail(.|\n)+?;/, slackEmailHook))
         .pipe(gulp.dest('./'));
 

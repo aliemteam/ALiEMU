@@ -137,26 +137,31 @@ a
 #main-header
     height $divi-header-height
     padding 0
+    .logo_container
+        position relative
+        width auto
+        height auto
     .container.clearfix.et_menu_container
-        width 100%
-        height $divi-header-height
         display flex
-        justify-content space-between
-        @media (max-width 980px)
-            a img
-                padding 0 0 0 10px
+        width auto
+        height auto
+
+.logo_container
+    position relative
+    max-height $divi-header-height
 
 #logo
-.et_fixed_nav #logo
-    max-height 30px
-    padding 10px 0
+    max-height 50px
 
 // Navigation
+.et_fixed-nav #et-top-navigation
 #et-top-navigation
     height $divi-header-height
     padding 0 !important
     display flex !important
+    justify-content flex-end
     align-items center
+    width 100%
 
     .nav
         li ul
@@ -180,7 +185,7 @@ a
                         opacity 1
                 ul.sub-menu
                     width 150px
-                    top $divi-header-height - 15px
+                    top $divi-header-height - 18px
                     @extend $divi-navmenu-item
                     left -80px
                     li
