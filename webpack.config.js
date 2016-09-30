@@ -9,11 +9,11 @@ const devPlugins = [
     }),
     new webpack.NoErrorsPlugin(),
     new ForkCheckerPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks: Infinity,
-        filename: 'vendor/vendor.bundle.js',
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //     name: 'vendor',
+    //     minChunks: Infinity,
+    //     filename: 'aliemu/vendor/vendor.bundle.js',
+    // }),
 ];
 
 const productionPlugins = [
@@ -41,14 +41,14 @@ module.exports = {
     cache: true,
     entry: {
         'aliemu/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
-        vendor: ['react', 'mobx', 'mobx-react'],
+        vendor: ['react'],
     },
     output: {
         filename: '[name].js',
     },
     resolve: {
         modules: [path.resolve(__dirname, 'aliemu'), 'node_modules'],
-        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+        extensions: ['*', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
         mainFiles: ['index'],
         mainFields: ['main', 'browser'],
         descriptionFiles: ['package.json'],

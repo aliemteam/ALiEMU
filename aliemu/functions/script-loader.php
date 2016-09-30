@@ -5,6 +5,7 @@ Available Script Handles (updated 7/7/16)
 ----------------------------------------
 about-nav
 abt_frontend_js
+aliemu-vendors
 comment-reply
 divi-custom-script
 divi-fitvids
@@ -87,13 +88,15 @@ class ScriptLoader {
      */
     public function __construct($request, $query) {
         global $current_user, $ROOT_URI, $TEMPLATE_URI;
+
         $this->scripts = [
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
-            'EducatorDashboard' => ['EducatorDashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/EducatorDashboard.js', false, false, true],
-            'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', false, false, true],
+            'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
+            'EducatorDashboard' => ['EducatorDashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/EducatorDashboard.js', ['aliemu-vendors'], false, true],
+            'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
             'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js'],
-            'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', false, '2.1.2', true],
+            'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', [], '2.1.2', true],
         ];
 
         $this->styles = [
@@ -157,6 +160,7 @@ class ScriptLoader {
                         array_push($load[1], 'toastr-css');
                         break;
                     case 'profiletab=edudash':
+                        array_push($load[0], 'aliemu-vendors');
                         array_push($load[0], 'EducatorDashboard');
                         break;
                 }

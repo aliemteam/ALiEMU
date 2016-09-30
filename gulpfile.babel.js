@@ -1,42 +1,30 @@
-/* eslint-env es6 */
+import autoprefixer from 'autoprefixer';
+import csso from 'gulp-csso';
+import del from 'del';
+import { exec } from 'child_process';
+import gulp from 'gulp';
+import imagemin from 'gulp-imagemin';
+import insert from 'gulp-insert';
+import jade from 'gulp-jade2php';
+import merge from 'merge-stream';
+import poststylus from 'poststylus';
+import rename from 'gulp-rename';
+import replace from 'gulp-replace';
+import rucksack from 'rucksack-css';
+import sourcemaps from 'gulp-sourcemaps';
+import stylus from 'gulp-stylus';
+import svgmin from 'gulp-svgmin';
+import uglify from 'gulp-uglify';
+import webpack from 'webpack-stream';
+import _webpack from 'webpack';
 
-// General
-const gulp = require('gulp');
+import webpackConfig from './webpack.config';
+
 const browserSync = require('browser-sync').create();
-const del = require('del');
-const exec = require('child_process').exec;
-const replace = require('gulp-replace');
-const rename = require('gulp-rename');
-const merge = require('merge-stream');
-const insert = require('gulp-insert');
-// Assets
-const svgmin = require('gulp-svgmin');
-const imagemin = require('gulp-imagemin');
-// PHP
-const jade = require('gulp-jade2php');
-// CSS
-const stylus = require('gulp-stylus');
-const poststylus = require('poststylus');
-const autoprefixer = require('autoprefixer')({ browsers: ['last 2 versions'] });
-const rucksack = require('rucksack-css');
-const sourcemaps = require('gulp-sourcemaps');
-const csso = require('gulp-csso'); // used for Divi and Learndash minification
-// JS
-const uglify = require('gulp-uglify');
-// TypeScript
-const webpack = require('webpack-stream');
-
 
 // ==================================================
 //                Configurations
 // ==================================================
-
-const webpackConfig = require('./webpack.config.js');
-
-const webpackDevConfig = Object.assign({}, webpackConfig, {
-    devtool: 'eval-source-map',
-    cache: true,
-});
 
 const jadeConfig = {
     omitPhpRuntime: true,
@@ -93,10 +81,7 @@ gulp.task('chown', (done) => {
 });
 
 // Trigger a browsersync reload
-gulp.task('reload', (done) => {
-    browserSync.reload();
-    done();
-});
+gulp.task('reload', (done) => { browserSync.reload(); done(); });
 
 
 // ==================================================
@@ -173,16 +158,19 @@ gulp.task('stylus:prod', () =>
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
-    .pipe(webpack(webpackDevConfig))
-    .pipe(gulp.dest('dist/'))
+    gulp
+        .src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
+        .pipe(webpack(webpackConfig, _webpack))
+        .pipe(gulp.dest('dist/'))
+        .pipe(browserSync.stream())
 );
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
-    .pipe(webpack(webpackConfig))
-    .pipe(gulp.dest('dist/'))
+    gulp
+        .src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
+        .pipe(webpack(webpackConfig, _webpack))
+        .pipe(gulp.dest('dist/'))
 );
 
 gulp.task('js', () =>
@@ -195,13 +183,13 @@ gulp.task('js', () =>
 //                 Compound Tasks
 // ==================================================
 
-gulp.task('build', gulp.series(
+gulp.task('_build', gulp.series(
     'clean',
     gulp.parallel('static', 'webpack:prod', 'stylus:prod'),
     'js'
 ));
 
-gulp.task('default',
+gulp.task('_dev',
     gulp.series(
         'chown',
         'clean',

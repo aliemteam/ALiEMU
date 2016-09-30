@@ -11,11 +11,6 @@ interface Props {
 }
 
 class EducatorDashboard extends React.Component<Props, {}> {
-
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div>
