@@ -6,7 +6,7 @@
         "isolatedModules": false,
         "jsx": "react",
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
+        "emitDecoratorMetadata": false,
         "declaration": false,
         "noImplicitAny": false,
         "removeComments": true,
@@ -23,6 +23,26 @@
     ],
     "compileOnSave": false,
     "buildOnSave": false,
+    "awesomeTypescriptLoaderOptions": {
+        "babelOptions": {
+            "presets": [
+                [
+                    "es2015",
+                    {
+                        "modules": false
+                    }
+                ],
+                "react"
+            ]
+        },
+        "forkChecker": true,
+        "useBabel": true,
+        "useCache": true,
+        "cacheDirectory": "tmp/tscache"
+    },
+    "atom": {
+        "rewriteTsconfig": true
+    },
     "files": [
         "aliemu/features/components/TableComponents.tsx",
         "aliemu/features/dashboards/educator-dashboard/components/__tests__/CourseTable-test.tsx",
@@ -45,8 +65,5 @@
         "node_modules/@types/react-dom/index.d.ts",
         "node_modules/@types/react/index.d.ts",
         "node_modules/@types/sinon/index.d.ts"
-    ],
-    "atom": {
-        "rewriteTsconfig": true
-    }
+    ]
 }

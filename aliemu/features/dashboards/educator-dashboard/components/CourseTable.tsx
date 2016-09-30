@@ -35,8 +35,8 @@ export class CourseTable extends React.Component<Props, State> {
     public CSV;
     private visibleRows: number;
     private headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
-        { content: 'User Name', align: 'left' },
-        { content: 'Course Completion Date', align: 'left' },
+        { align: 'left', content: 'User Name' },
+        { align: 'left', content: 'Course Completion Date' },
     ];
 
     constructor(props: Props) {
@@ -46,12 +46,12 @@ export class CourseTable extends React.Component<Props, State> {
         this.state = {
             categories: Object.keys(this.props.courseData.categories)
                 .filter((category) => category !== ''),
+            currentPage: 0,
+            relevantUsers: [],
             selections: {
                 category: '',
                 course: '',
             },
-            currentPage: 0,
-            relevantUsers: [],
         };
     }
 
@@ -68,24 +68,24 @@ export class CourseTable extends React.Component<Props, State> {
             case 'SELECT_CATEGORY': {
                 return this.setState(
                     Object.assign({}, this.state, {
+                        relevantUsers: [],
                         selections: {
                             category: e.target.value,
                             course: '',
                         },
-                        relevantUsers: [],
                     })
                 );
             }
             case 'SELECT_COURSE': {
                 return this.setState(
                     Object.assign({}, this.state, {
+                        relevantUsers: Object.keys(this.props.users)
+                        .filter(id => this.props.users[id].courseCompleted &&
+                            this.props.users[id].courseCompleted.hasOwnProperty(e.target.value))
+                            .map(id => this.props.users[id]),
                         selections: Object.assign({}, this.state.selections, {
                             course: e.target.value,
                         }),
-                        relevantUsers: Object.keys(this.props.users)
-                            .filter(id => this.props.users[id].courseCompleted &&
-                                this.props.users[id].courseCompleted.hasOwnProperty(e.target.value))
-                            .map(id => this.props.users[id]),
                     })
                 );
             }
@@ -96,21 +96,24 @@ export class CourseTable extends React.Component<Props, State> {
                     })
                 );
             }
+            default:
+                return;
         }
     }
 
     render() {
         return (
-            <div className='au-edudash-shadowbox'>
-                <h2 children='Course Overview' />
+            <div className="au-edudash-shadowbox">
+                <h2 children="Course Overview" />
                 <FilterRow>
                     <Flex amount={1}>
                         <select
-                            id='category'
+                            id="category"
                             style={{width: '95%'}}
-                            onChange={this.reducer.bind(this, {type: 'SELECT_CATEGORY'})}
-                            defaultValue=''>
-                            <option value=''> -- Select a Category -- </option>
+                            onChange={this.reducer.bind(this, {type: "SELECT_CATEGORY"})}
+                            defaultValue=""
+                        >
+                            <option value=""> -- Select a Category -- </option>
                             { this.state.categories.map((category: string, i: number) =>
                                     <option value={category} key={i}>
                                         {category}
@@ -121,12 +124,13 @@ export class CourseTable extends React.Component<Props, State> {
                     </Flex>
                     <Flex amount={2}>
                         <select
-                            id='course'
+                            id="course"
                             style={{width: '95%'}}
-                            defaultValue=''
+                            defaultValue=""
                             onChange={this.reducer.bind(this, {type: 'SELECT_COURSE'})}
-                            disabled={this.state.selections.category === ''}>
-                            <option value=''> -- Select a Course -- </option>
+                            disabled={this.state.selections.category === ''}
+                        >
+                            <option value=""> -- Select a Course -- </option>
                             { this.state.selections.category &&
                                 Object.keys(this.props.courseData.categories[this.state.selections.category]).map((courseID) =>
                                     <option value={courseID} key={courseID}>
@@ -138,22 +142,23 @@ export class CourseTable extends React.Component<Props, State> {
                     </Flex>
                     <Flex amount={1}>
                         <a
-                            id='course-export'
+                            id="course-export"
                             className={
                                 this.state.selections.course !== ''
                                 ? 'au-edudash-exportbtn'
                                 : 'au-edudash-exportbtn-disabled'
                             }
-                            children='Export Course Data'
-                            onClick={this.exportCourseData.bind(this)} />
+                            children="Export Course Data"
+                            onClick={this.exportCourseData.bind(this)}
+                        />
                     </Flex>
                 </FilterRow>
                 <Header cells={this.headerCells} />
                 { paginate(this.state.relevantUsers, this.visibleRows, this.state.currentPage)
                     .map((user: ALiEMU.EducatorDashboard.UserMeta, i: number) =>
                         <Row key={user.ID} id={`course-table-row-${i}`}>
-                            <Cell align='left'>{user.displayName}</Cell>
-                            <Cell align='left'>
+                            <Cell align="left">{user.displayName}</Cell>
+                            <Cell align="left">
                             {
                                 moment.unix(user.courseCompleted[this.state.selections.course]).calendar()
                             }

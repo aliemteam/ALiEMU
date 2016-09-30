@@ -88,7 +88,7 @@ class ScriptLoader {
     public function __construct($request, $query) {
         global $current_user, $ROOT_URI, $TEMPLATE_URI;
         $this->scripts = [
-            'about-nav' => ['about-nav', $ROOT_URI . '/js/about-nav.js', ['jquery'], false, true],
+            'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
             'EducatorDashboard' => ['EducatorDashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/EducatorDashboard.js', false, false, true],
             'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', false, false, true],
             'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
@@ -118,12 +118,12 @@ class ScriptLoader {
         // Always load these
         $load = [
             ['nav-helper'],
-            ['parent-style', 'child-style']
+            ['parent-style', 'child-style'],
         ];
         // Always unload these
         $unload = [
             ['divi-fitvids', 'waypoints', 'magnific-popup'],
-            ['wpProQuiz_front_style', 'magnific-popup']
+            ['wpProQuiz_front_style', 'magnific-popup'],
         ];
 
         // Not learndash pages

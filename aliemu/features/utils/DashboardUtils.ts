@@ -6,7 +6,6 @@ type User = ALiEMU.EducatorDashboard.UserMeta;
 type CourseMeta = ALiEMU.EducatorDashboard.CourseMetaObject;
 type Categories = ALiEMU.EducatorDashboard.CategoryObject;
 
-
 /**
  * Either immediately triggers a file download or saves a downloadable file blob
  *   to an HTML anchor element, depending on browser support for the "download"
@@ -41,7 +40,6 @@ export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.B
     }
 };
 
-
 /**
  * Retrieves the category for a given courseID
  * @param {string} courseID       The courseID.
@@ -59,7 +57,6 @@ export const getCourseCategory = (courseID: string, categories: Categories): str
     return category;
 };
 
-
 /**
  * Returns either a formatted date or 'X' based on whether or not the date string
  *   is defined.
@@ -70,18 +67,17 @@ export const getCourseCategory = (courseID: string, categories: Categories): str
  */
 export const parseCompletionData = (date: number|undefined, hours?: string): string => {
     if (!hours) {
-        if (typeof date === 'undefined') {
+        if (date === undefined) {
             return `X`;
         }
         return moment.unix(date).calendar();
     }
 
-    if (typeof date === 'undefined') {
+    if (date === undefined) {
         return `X","0`;
     }
     return `${moment.unix(date).calendar()}","${hours}`;
 };
-
 
 /**
  * Calculates a given user's III hours based on the recommended hours for the course.
@@ -95,7 +91,7 @@ export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange:
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
         const d = moment.unix(user.courseCompleted[curr]);
-        const addedHours: number = parseInt(courseMeta[curr].recommendedHours) + prev;
+        const addedHours: number = parseInt(courseMeta[curr].recommendedHours, 10) + prev;
         switch (true) {
             case !start && !end:
                 return addedHours;
@@ -186,7 +182,7 @@ export class CSV {
         .map(i => `"${i}"`)
         .join(',') + '\n';
 
-        for (let key of Object.keys(courseProgress)) {
+        for (const key of Object.keys(courseProgress)) {
             data += [
                 courses[key].postTitle,
                 `${courseProgress[key].completed} out of ${courseProgress[key].total}`,
@@ -211,7 +207,7 @@ export class CSV {
             'First Name',
             'Course Completed',
             ...this.courses[courseID].lessons
-                .filter((lessonID: string) => typeof this.lessons[lessonID] !== 'undefined')
+                .filter((lessonID: string) => this.lessons[lessonID] !== undefined)
                 .map((lessonID: string) => {
                     lessonIDs.push(lessonID);
                     return `Lesson: ${this.lessons[lessonID].postTitle}`;
@@ -230,7 +226,7 @@ export class CSV {
                 completionData,
                 ...lessonIDs.map((lessonID: string) => {
                     try {
-                        let completed = this.users[userID].courseProgress[courseID].lessons[lessonID];
+                        const completed = this.users[userID].courseProgress[courseID].lessons[lessonID];
                         if (completed === 1) {
                             return 'Completed';
                         }

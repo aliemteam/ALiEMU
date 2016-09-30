@@ -1,5 +1,4 @@
-/*eslint-env es6*/
-'use strict';
+/* eslint-env es6 */
 
 // General
 const gulp = require('gulp');
@@ -33,6 +32,7 @@ const webpack = require('webpack-stream');
 // ==================================================
 
 const webpackConfig = require('./webpack.config.js');
+
 const webpackDevConfig = Object.assign({}, webpackConfig, {
     devtool: 'eval-source-map',
     cache: true,
@@ -61,12 +61,12 @@ const styleHeader =
 */
 `;
 
-const uglifyConfig  = {
+const uglifyConfig = {
     compress: {
-        'dead_code': true,
-        'unused': true,
-        'drop_debugger': true,
-        'drop_console': true,
+        dead_code: true,
+        unused: true,
+        drop_debugger: true,
+        drop_console: true,
     },
 };
 
@@ -75,15 +75,18 @@ const uglifyConfig  = {
 // ==================================================
 
 // Delete all files in dist/aliemu/
-gulp.task('clean', (done) => del(['dist/aliemu/**/*'], done));
+gulp.task('clean', done => del(['dist/aliemu/**/*'], done));
 
 // Take ownership of dist directory
 gulp.task('chown', (done) => {
-    exec('ls -ld dist/aliemu/ | awk \'{print $3}\'', (err, stdout, stderr) => {
+    exec('ls -ld dist/aliemu/ | awk \'{print $3}\'', (err, stdout) => {
         if (err) throw err;
-        if (stdout.trim() === process.env.USER) return done();
-        exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (err) => {
-            if (err) throw err;
+        if (stdout.trim() === process.env.USER) {
+            done();
+            return;
+        }
+        exec(`sudo chown -R ${process.env.USER} dist/ wp-content/`, (e) => {
+            if (e) throw e;
             done();
         });
     });
@@ -101,7 +104,6 @@ gulp.task('reload', (done) => {
 // ==================================================
 
 gulp.task('static', () => {
-
     const svg = gulp
         .src('aliemu/assets/**/*.svg', { base: './aliemu' })
         .pipe(svgmin())
@@ -125,11 +127,11 @@ gulp.task('static', () => {
     const templatePages = gulp
         .src('aliemu/templates/pages/*.jade', { base: './aliemu/templates/pages' })
         .pipe(jade(jadeConfig))
-        .pipe(rename({ extname: '.php', prefix: 'page-'}))
+        .pipe(rename({ extname: '.php', prefix: 'page-' }))
         .pipe(gulp.dest('dist/aliemu/'));
 
     const templateOverrides = gulp
-        .src('aliemu/templates/overrides/*.jade', { base: './aliemu/templates/overrides'})
+        .src('aliemu/templates/overrides/*.jade', { base: './aliemu/templates/overrides' })
         .pipe(jade(jadeConfig))
         .pipe(rename({ extname: '.php' }))
         .pipe(gulp.dest('dist/aliemu/'));
@@ -204,9 +206,8 @@ gulp.task('default',
         'chown',
         'clean',
         gulp.parallel('static', 'webpack:dev', 'stylus:dev'), () => {
-
             browserSync.init({
-                proxy: 'localhost:8080'
+                proxy: 'localhost:8080',
             });
 
             gulp.watch([
@@ -250,15 +251,14 @@ gulp.task('fix-divi', () => {
     const js = gulp
         .src('wp-content/themes/Divi/**/*.js', { base: './' })
         .pipe(uglify(uglifyConfig))
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./'));
 
     const css = gulp
         .src('wp-content/themes/Divi/**/*.css', { base: './' })
         .pipe(csso())
-        .pipe(gulp.dest('./'))
+        .pipe(gulp.dest('./'));
 
     return merge(slack, js, css);
-
 });
 
 gulp.task('fix-learndash', () =>

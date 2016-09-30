@@ -35,11 +35,11 @@ export class StudentTable extends React.Component<Props, State> {
 
     private totalStudents: number = Object.keys(this.props.users).length;
     private headerProps: { content: string, align: 'left'|'right'|'center'}[] = [
-        { content: 'Full Name', align: 'left', },
-        { content: 'Class', align: 'left', },
-        { content: 'Last Activity', align: 'left', },
-        { content: 'Total III Hours', align: 'center', },
-        { content: 'User Export', align: 'center', },
+        { align: 'left', content: 'Full Name' },
+        { align: 'left', content: 'Class' },
+        { align: 'left', content: 'Last Activity' },
+        { align: 'center', content: 'Total III Hours' },
+        { align: 'center', content: 'User Export' },
     ];
     private CSV;
 
@@ -61,15 +61,15 @@ export class StudentTable extends React.Component<Props, State> {
             .map(uid => this.props.users[uid]);
 
         this.state = {
-            currentPage: 0,
-            visibleRows: 10,
-            filteredUsers,
-            filter: '',
             advancedFilter: false,
+            currentPage: 0,
             dateRange: {
-                start: null,
                 end: null,
+                start: null,
             },
+            filter: '',
+            filteredUsers,
+            visibleRows: 10,
         };
     }
 
@@ -85,7 +85,7 @@ export class StudentTable extends React.Component<Props, State> {
         downloadPolyfill(CSV.filename, blob, browserDetect(), e.target.id);
     }
 
-    selectDate(type: 'start'|'end', date: moment.Moment) {
+    selectDate(date: moment.Moment, type: 'start'|'end') {
         this.setState(
             Object.assign({}, this.state, {
                 dateRange: Object.assign({}, this.state.dateRange, {
@@ -168,10 +168,11 @@ export class StudentTable extends React.Component<Props, State> {
                     <div>
                         Show
                         <select
-                            style={{ margin: '0 5px', }}
+                            style={{ margin: '0 5px' }}
                             id='row-select'
                             defaultValue={this.state.visibleRows.toString()}
-                            onChange={this.actions.bind(this, {type: 'SELECT_VISIBLE_ROWS'})} >
+                            onChange={this.actions.bind(this, {type: 'SELECT_VISIBLE_ROWS' })}
+                        >
                             <option value={10}>10</option>
                             { this.totalStudents > 25 &&
                                 <option value={25}>25</option>
@@ -180,46 +181,51 @@ export class StudentTable extends React.Component<Props, State> {
                                 <option value={50}>50</option>
                             }
                             { this.totalStudents > 10 &&
-                                <option value={'all'} data-totalStudents={this.totalStudents}>all</option>
+                                <option value="all" data-totalStudents={this.totalStudents}>all</option>
                             }
                         </select>
                         students
                     </div>
                     <Flex amount={2}>
                         <label
-                            htmlFor='search-query'
-                            style={{ padding: '0 10px', }}>
+                            htmlFor="search-query"
+                            style={{ padding: '0 10px' }}
+                        >
                             <strong>Filter:</strong>
                         </label>
                         <input
-                            type='text'
-                            id='search-query'
+                            type="text"
+                            id="search-query"
                             value={this.state.filter}
-                            onChange={this.filter.bind(this)} />
+                            onChange={this.filter.bind(this)}
+                        />
                         <div
                             style={{
-                                fontSize: '1.3em',
-                                padding: '1px 7px 2px',
                                 border: 'solid rgb(221, 221, 221) 2px',
-                                lineHeight: '33px',
                                 borderLeft: 0,
                                 cursor: 'pointer',
+                                fontSize: '1.3em',
+                                lineHeight: '33px',
+                                padding: '1px 7px 2px',
                             }}
-                            id='advanced-filter-toggle'
+                            id="advanced-filter-toggle"
                             onClick={this.actions.bind(this, {type: 'TOGGLE_ADVANCED_FILTER'})} >
-                            <i className={
-                                this.state.advancedFilter
-                                ? 'um-faicon-caret-up'
-                                : 'um-faicon-caret-down'
-                            } />
+                            <i
+                                className={
+                                    this.state.advancedFilter
+                                    ? 'um-faicon-caret-up'
+                                    : 'um-faicon-caret-down'
+                                }
+                            />
                         </div>
                     </Flex>
                     <div>
                         <a
-                            className='au-edudash-exportbtn'
-                            id='program-export'
-                            children='Export Program Data'
-                            onClick={this.exportCSV.bind(this, null)} />
+                            className="au-edudash-exportbtn"
+                            id="program-export"
+                            children="Export Program Data"
+                            onClick={this.exportCSV.bind(this, null)}
+                        />
                     </div>
                 </FilterRow>
 
@@ -228,20 +234,23 @@ export class StudentTable extends React.Component<Props, State> {
                     <FilterRow>
                         <Flex amount={1}>
                             <strong
-                                children='Display III hours accrued from'
+                                children="Display III hours accrued from"
                                 style={{padding: '0 10px', }} />
                             <Datepicker
-                                ref='datepicker'
-                                id='start-date'
+                                ref="datepicker"
+                                id="start-date"
                                 selected={this.state.dateRange.start}
-                                onChange={this.selectDate.bind(this, 'start')} />
+                                onChange={this.selectDate.bind(this, 'start')}
+                            />
                             <strong
-                                children='to'
-                                style={{padding: '0 10px', }} />
+                                children="to"
+                                style={{padding: '0 10px' }}
+                            />
                             <Datepicker
-                                id='end-date'
+                                id="end-date"
                                 selected={this.state.dateRange.end}
-                                onChange={this.selectDate.bind(this, 'end')} />
+                                onChange={this.selectDate.bind(this, 'end')}
+                            />
                         </Flex>
                     </FilterRow>
                 }
@@ -251,16 +260,17 @@ export class StudentTable extends React.Component<Props, State> {
                 {
                     paginate(this.state.filteredUsers, this.state.visibleRows, this.state.currentPage)
                     .map((user: ALiEMU.EducatorDashboard.UserMeta, i) =>
-                        <Row key={user.ID} id={`student-table-row-${i}`} className='table-row'>
-                            <Cell align='left'>{user.displayName}</Cell>
-                            <Cell align='left'>{!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}</Cell>
-                            <Cell align='left'>{!user.umLastLogin || user.umLastLogin.toString().length !== 10 ? 'No activity found' : moment.unix(user.umLastLogin).fromNow()}</Cell>
-                            <Cell align='center'>{calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}</Cell>
-                            <Cell align='center'>
+                        <Row key={user.ID} id={`student-table-row-${i}`} className="table-row">
+                            <Cell align="left">{user.displayName}</Cell>
+                            <Cell align="left">{!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}</Cell>
+                            <Cell align="left">{!user.umLastLogin || user.umLastLogin.toString().length !== 10 ? 'No activity found' : moment.unix(user.umLastLogin).fromNow()}</Cell>
+                            <Cell align="center">{calculateIIIHours(user, this.props.courseData.courseMeta, this.state.dateRange)}</Cell>
+                            <Cell align="center">
                                 <a
-                                    className='au-edudash-exportbtn'
-                                    children='Export Data'
-                                    onClick={this.exportCSV.bind(this, user.ID)}/>
+                                    className="au-edudash-exportbtn"
+                                    children="Export Data"
+                                    onClick={this.exportCSV.bind(this, user.ID)}
+                                />
                             </Cell>
                         </Row>
                     )
@@ -268,11 +278,12 @@ export class StudentTable extends React.Component<Props, State> {
 
                 {/* Pagination Buttons */}
                 <Pager
-                    id='pager'
+                    id="pager"
                     totalRows={this.state.filteredUsers.length}
                     currentPage={this.state.currentPage}
                     visibleRows={this.state.visibleRows}
-                    onClick={this.actions.bind(this)} />
+                    onClick={this.actions.bind(this)}
+                />
             </div>
         );
     }

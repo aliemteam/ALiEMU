@@ -171,32 +171,3 @@ declare namespace ALiEMU {
 
 
 }
-
-
-// declare namespace BadgeOS {
-//
-//     interface CompletedAchievementsObject {
-//         [i: number]: CompletedAchievement[];
-//     }
-//
-//     interface ActiveAchievementsObject {
-//         [ID: number]: ActiveAchievement;
-//     }
-//
-//     interface Achievement {
-//         points: string;
-//         'post_type': 'step' | 'badges';
-//     }
-//
-//     interface CompletedAchievement extends Achievement {
-//         ID: string;
-//         'date_earned': number;
-//     }
-//
-//     interface ActiveAchievement extends Achievement {
-//         ID: number;
-//         'date_started': number;
-//         'last_activity_date': number;
-//     }
-//
-// }

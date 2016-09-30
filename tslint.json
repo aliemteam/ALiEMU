@@ -1,63 +1,45 @@
 {
+    "extends": ["tslint:latest", "tslint-react", "tslint-microsoft-contrib"],
+    "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
     "rules": {
-        "class-name": true,
-        "comment-format": [true, "check-space"],
-        "indent": [true, "spaces"],
-        "jsdoc-format": true,
-        "forin": true,
-        "no-angle-bracket-type-assertion": true,
-        "no-conditional-assignment": true,
-        "no-duplicate-key": true,
-        "no-duplicate-variable": true,
-        "no-empty": true,
-        "no-eval": true,
-        "no-internal-module": true,
-        "no-reference": true,
-        "no-shadowed-variable": true,
-        "no-trailing-whitespace": true,
-        "no-unreachable": true,
-        "trailing-comma": [
-            true,
-            {
-                "multiline": "always"
-            }
+        "curly": false,
+        "interface-name": false,
+        "member-access": false,
+        "missing-jsdoc": false,
+        "no-for-in-array": false,
+        "no-http-string": false,
+        "no-increment-decrement": false,
+        "no-inner-html": false,
+        "no-multiline-string": false,
+        "no-relative-imports": false,
+        "no-require-imports": false,
+        "no-single-line-block-comment": false,
+        "no-string-literal": false,
+        "no-unused-new": false,
+        "no-var-requires": false,
+        "ordered-imports": false,
+        "restrict-plus-operands": false,
+        "max-func-body-length": false,
+        "react-a11y-anchors": false,
+        "react-a11y-image-button-has-alt": false,
+        "no-backbone-get-set-outside-model": false,
+        "import-name": false,
+        "one-line": [false,
+            "check-open-brace",
+            "check-whitespace"
         ],
-        "no-var-keyword": true,
-        "one-line": [true, "check-open-brace", "check-whitespace" ],
-        "quotemark": [true, "single"],
-        "semicolon": [true, "always"],
-        "triple-equals": [true, "allow-null-check", "allow-undefined-check"],
-        "typedef-whitespace": [
-            true,
-            {
-                "call-signature": "nospace",
-                "index-signature": "nospace",
-                "parameter": "nospace",
-                "property-declaration": "nospace",
-                "variable-declaration": "nospace"
-            },
-            {
-                "call-signature": "onespace",
-                "index-signature": "onespace",
-                "parameter": "onespace",
-                "property-declaration": "onespace",
-                "variable-declaration": "onespace"
-            }
+        "quotemark": [true,
+            "single",
+            "jsx-double"
         ],
-        "variable-name": [
-            true,
-            "ban-keywords",
-            "allow-pascal-case"
+        "triple-equals": [true,
+            "allow-null-check",
+            "allow-undefined-check"
         ],
-        "whitespace": [
-            true,
-            "check-branch",
-            "check-decl",
-            "check-operator",
-            "check-module",
-            "check-separator",
-            "check-type",
-            "check-typecast"
-        ]
+        "variable-name": [true,
+            "ban-keywords"
+        ],
+        "jsx-no-multiline-js": false,
+        "whitespace": [true, "check-branch", "check-decl", "check-module", "check-separator", "check-type", "check-operator"]
     }
 }

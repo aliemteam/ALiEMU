@@ -1,25 +1,70 @@
+const path = require('path');
+const webpack = require('webpack');
+const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+
+const devPlugins = [
+    new webpack.LoaderOptionsPlugin({
+        minimize: true,
+        debug: false,
+    }),
+    new webpack.NoErrorsPlugin(),
+    new ForkCheckerPlugin(),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity,
+        filename: 'vendor/vendor.bundle.js',
+    }),
+];
+
+const productionPlugins = [
+    ...devPlugins,
+    new webpack.optimize.UglifyJsPlugin({
+        compress: {
+            warnings: false,
+        },
+        output: {
+            comments: false,
+        },
+        sourceMap: false,
+    }),
+    new webpack.DefinePlugin({
+        'process.env': {
+            NODE_ENV: JSON.stringify('production'),
+        },
+    }),
+];
+
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
+    devtool: isProduction ? 'hidden-source-map' : 'eval-source-map',
+    cache: true,
     entry: {
         'aliemu/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
+        vendor: ['react', 'mobx', 'mobx-react'],
     },
     output: {
         filename: '[name].js',
-        path: __dirname,
     },
+    resolve: {
+        modules: [path.resolve(__dirname, 'aliemu'), 'node_modules'],
+        extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+        mainFiles: ['index'],
+        mainFields: ['main', 'browser'],
+        descriptionFiles: ['package.json'],
+    },
+    plugins: isProduction ? productionPlugins : devPlugins,
     module: {
         loaders: [
             {
                 test: /\.tsx?$/,
-                exclude: /node_modules/,
-                loader: 'babel?presets[]=es2015,presets[]=react!ts',
+                include: path.resolve(__dirname, 'aliemu'),
+                loaders: ['awesome-typescript'],
             },
             {
                 test: /\.css$/,
-                loader: 'style!css',
+                loaders: ['style', 'css'],
             },
         ],
-    },
-    resolve: {
-        extensions: ['', '.ts', '.tsx', '.js', '.css'],
     },
 };
