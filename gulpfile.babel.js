@@ -11,7 +11,7 @@ import poststylus from 'poststylus';
 import rename from 'gulp-rename';
 import replace from 'gulp-replace';
 import rucksack from 'rucksack-css';
-import sourcemaps from 'gulp-sourcemaps';
+// import sourcemaps from 'gulp-sourcemaps';
 import stylus from 'gulp-stylus';
 import svgmin from 'gulp-svgmin';
 import uglify from 'gulp-uglify';
