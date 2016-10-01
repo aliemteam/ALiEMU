@@ -1,10 +1,11 @@
+// tslint:disable max-line-length
 jest.unmock('../BrowserDetect');
 
 import * as sinon from 'sinon';
-import { browserDetect, } from '../BrowserDetect';
+import { browserDetect } from '../BrowserDetect';
 
 const setup = (_sandbox: sinon.SinonSandbox, UA: string) => {
-    return sinon.stub(navigator, 'userAgent', { get: () => UA, });
+    return sinon.stub(navigator, 'userAgent', { get: () => UA });
 };
 
 describe('BrowserDetect', () => {
@@ -16,12 +17,12 @@ describe('BrowserDetect', () => {
 
     it('should detect Edge correctly', () => {
         const stub = setup(sandbox, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246');
-        let detected = browserDetect();
+        const detected = browserDetect();
         stub.restore();
         expect(detected).toBe('edge');
     });
     it('should detect Safari correctly', () => {
-        let UAstrings = [
+        const UAstrings = [
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A',
             'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2',
@@ -31,15 +32,15 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (Windows; U; Windows NT 6.1; tr-TR) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27',
             'Mozilla/5.0 (Windows; U; Windows NT 6.1; sv-SE) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4',
         ];
-        for (let UA of UAstrings) {
+        for (const UA of UAstrings) {
             const stub = setup(sandbox, UA);
-            let detected = browserDetect();
+            const detected = browserDetect();
             stub.restore();
             expect(detected).toBe('safari');
-        };
+        }
     });
     it('should detect Opera correctly', () => {
-        let UAstrings = [
+        const UAstrings = [
             'Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16',
             'Opera/9.80 (Windows NT 6.0) Presto/2.12.388 Version/12.14',
             'Mozilla/5.0 (Windows NT 6.0; rv:2.0) Gecko/20100101 Firefox/4.0 Opera 12.14',
@@ -51,15 +52,15 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; de) Opera 11.51',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36 OPR/33.0.1990.115',
         ];
-        for (let UA of UAstrings) {
+        for (const UA of UAstrings) {
             const stub = setup(sandbox, UA);
-            let detected = browserDetect();
+            const detected = browserDetect();
             stub.restore();
             expect(detected).toBe('opera');
         }
     });
     it('should detect Firefox correctly', () => {
-        let UAstrings = [
+        const UAstrings = [
             'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1',
             'Mozilla/5.0 (Windows NT 6.3; rv:36.0) Gecko/20100101 Firefox/36.0',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10; rv:33.0) Gecko/20100101 Firefox/33.0',
@@ -72,15 +73,15 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:24.0) Gecko/20100101 Firefox/24.0',
             'Mozilla/5.0 (Windows NT 6.2; rv:22.0) Gecko/20130405 Firefox/23.0',
         ];
-        for (let UA of UAstrings) {
+        for (const UA of UAstrings) {
             const stub = setup(sandbox, UA);
-            let detected = browserDetect();
+            const detected = browserDetect();
             stub.restore();
             expect(detected).toBe('firefox');
         }
     });
     it('should detect Internet Explorer Correctly', () => {
-        let UAstrings = [
+        const UAstrings = [
             'Mozilla/5.0 (compatible; MSIE 10.6; Windows NT 6.1; Trident/5.0; InfoPath.2; SLCC1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 2.0.50727) 3gpp-gba UNTRUSTED/1.0',
             'Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko',
             'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 7.0; InfoPath.3; .NET CLR 3.1.40767; Trident/6.0; en-IN)',
@@ -91,15 +92,15 @@ describe('BrowserDetect', () => {
             'Mozilla/4.0(compatible; MSIE 7.0b; Windows NT 6.0)',
             'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
         ];
-        for (let UA of UAstrings) {
+        for (const UA of UAstrings) {
             const stub = setup(sandbox, UA);
-            let detected = browserDetect();
+            const detected = browserDetect();
             stub.restore();
             expect(detected).toBe('ie');
         }
     });
     it('should detect Chrome correctly', () => {
-        let UAstrings = [
+        const UAstrings = [
             'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.1 Safari/537.36',
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2227.0 Safari/537.36',
@@ -113,9 +114,9 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (X11; OpenBSD i386) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
             'Mozilla/5.0 (X11; OpenBSD i386) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125',
         ];
-        for (let UA of UAstrings) {
+        for (const UA of UAstrings) {
             const stub = setup(sandbox, UA);
-            let detected = browserDetect();
+            const detected = browserDetect();
             stub.restore();
             expect(detected).toBe('chrome');
         }

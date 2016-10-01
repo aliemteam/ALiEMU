@@ -1,13 +1,8 @@
+// tslint:disable no-namespace
 declare namespace ALiEMU {
 
     type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
-    interface DOMEvent extends Event {
-        target: HTMLInputElement;
-    }
-    interface Action {
-        type: string;
-        [key: string]: any;
-    }
+
     interface CSV {
         data: string;
         filename: string;
@@ -168,6 +163,4 @@ declare namespace ALiEMU {
         }
 
     }
-
-
 }

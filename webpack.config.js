@@ -11,7 +11,7 @@ const devPlugins = [
     new ForkCheckerPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //     name: 'vendor',
-    //     minChunks: Infinity,
+    //     minChunks: 2,
     //     filename: 'aliemu/vendor/vendor.bundle.js',
     // }),
 ];
@@ -40,8 +40,8 @@ module.exports = {
     devtool: isProduction ? 'hidden-source-map' : 'eval-source-map',
     cache: true,
     entry: {
-        'aliemu/features/dashboards/educator-dashboard/EducatorDashboard': './aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx',
-        vendor: ['react'],
+        'aliemu/features/dashboards/educator-dashboard/index': './aliemu/features/dashboards/educator-dashboard/index.tsx',
+        // vendor: ['react', 'mobx', 'mobx-react'],
     },
     output: {
         filename: '[name].js',

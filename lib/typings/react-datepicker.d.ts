@@ -17,8 +17,8 @@ declare module 'react-datepicker' {
         minDate?: {};
         name?: string;
         onBlur?(): any;
-        onChange(): any;
         onChange(date?: any): any;
+        onChange(): any;
         onFocus?(): any;
         placeholderText?: string;
         popoverAttachment?: string;

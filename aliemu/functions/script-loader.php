@@ -5,11 +5,11 @@ Available Script Handles (updated 7/7/16)
 ----------------------------------------
 about-nav
 abt_frontend_js
-aliemu-vendors
+aliemu-vendors FIXME: webpack breaks common chunks at the moment -- fix this later
 comment-reply
 divi-custom-script
 divi-fitvids
-EducatorDashboard
+educator-dashboard
 et-builder-modules-script
 et-jquery-touch-mobile
 jquery-masonry
@@ -91,8 +91,8 @@ class ScriptLoader {
 
         $this->scripts = [
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
-            'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
-            'EducatorDashboard' => ['EducatorDashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/EducatorDashboard.js', ['aliemu-vendors'], false, true],
+            // 'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
+            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [/*'aliemu-vendors'*/], false, true],
             'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
             'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js'],
@@ -100,7 +100,7 @@ class ScriptLoader {
         ];
 
         $this->styles = [
-            'bootstrap-nav-css' => ['bootstrap-nav-css', $ROOT_URI .'/styles/vendor/side-nav.css'],
+            'bootstrap-nav-css' => ['bootstrap-nav-css', $ROOT_URI .'/vendor/side-nav.css'],
             'child-style' => ['child-style', $ROOT_URI  . '/style.css', ['parent-style']],
             'parent-style' => ['parent-style', $TEMPLATE_URI . '/style.css'],
             'toastr-css' => ['toastr-css', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css', false, '2.1.2'],
@@ -160,8 +160,8 @@ class ScriptLoader {
                         array_push($load[1], 'toastr-css');
                         break;
                     case 'profiletab=edudash':
-                        array_push($load[0], 'aliemu-vendors');
-                        array_push($load[0], 'EducatorDashboard');
+                        // array_push($load[0], 'aliemu-vendors'); FIXME:
+                        array_push($load[0], 'educator-dashboard');
                         break;
                 }
                 break;

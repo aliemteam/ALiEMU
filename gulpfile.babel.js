@@ -137,9 +137,7 @@ gulp.task('static', () => {
 gulp.task('stylus:dev', () =>
     gulp
         .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
-        .pipe(sourcemaps.init())
         .pipe(stylus(stylusConfig))
-        .pipe(sourcemaps.write('.'))
         .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
         .pipe(browserSync.stream({ match: '**/*.css' }))
@@ -159,7 +157,7 @@ gulp.task('stylus:prod', () =>
 
 gulp.task('webpack:dev', () =>
     gulp
-        .src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
+        .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpack(webpackConfig, _webpack))
         .pipe(gulp.dest('dist/'))
         .pipe(browserSync.stream())
@@ -168,7 +166,7 @@ gulp.task('webpack:dev', () =>
 
 gulp.task('webpack:prod', () =>
     gulp
-        .src('aliemu/features/dashboards/educator-dashboard/EducatorDashboard.tsx')
+        .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpack(webpackConfig, _webpack))
         .pipe(gulp.dest('dist/'))
 );

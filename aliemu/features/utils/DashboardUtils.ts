@@ -17,7 +17,7 @@ type Categories = ALiEMU.EducatorDashboard.CategoryObject;
  * @param {string} ElementID The HTML ID of the target element.
  * @return {void}
  */
-export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.BrowserType, ElementID: string): void  => {
+export function downloadPolyfill(filename: string, blob: Blob, browser: ALiEMU.BrowserType, ElementID: string): void {
     switch (browser) {
         case 'chrome':
         case 'firefox':
@@ -38,7 +38,7 @@ export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.B
             target.setAttribute('download', filename);
             alert('Right click the button and select "save target as" to download CSV file.');
     }
-};
+}
 
 /**
  * Retrieves the category for a given courseID
@@ -46,7 +46,7 @@ export const downloadPolyfill = (filename: string, blob: Blob, browser: ALiEMU.B
  * @param {Categories} categories The entire CategoryObject.
  * @return {string}  The category.
  */
-export const getCourseCategory = (courseID: string, categories: Categories): string => {
+export function getCourseCategory(courseID: string, categories: Categories): string {
     let category: string;
     Object.keys(categories).some(key => {
         if (categories[key].hasOwnProperty(courseID)) {
@@ -55,7 +55,7 @@ export const getCourseCategory = (courseID: string, categories: Categories): str
         }
     });
     return category;
-};
+}
 
 /**
  * Returns either a formatted date or 'X' based on whether or not the date string
@@ -65,7 +65,7 @@ export const getCourseCategory = (courseID: string, categories: Categories): str
  * @param hours The associated hours for the course.
  * @return The parsed date and hours string or X","X. (format allows array join)
  */
-export const parseCompletionData = (date: number|undefined, hours?: string): string => {
+export function parseCompletionData(date: number|undefined, hours?: string): string {
     if (!hours) {
         if (date === undefined) {
             return `X`;
@@ -77,7 +77,7 @@ export const parseCompletionData = (date: number|undefined, hours?: string): str
         return `X","0`;
     }
     return `${moment.unix(date).calendar()}","${hours}`;
-};
+}
 
 /**
  * Calculates a given user's III hours based on the recommended hours for the course.
@@ -86,7 +86,11 @@ export const parseCompletionData = (date: number|undefined, hours?: string): str
  * @param  {CourseMeta} courseMeta The complete CourseMetaObject.
  * @return {number} The user's calculated III hours.
  */
-export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange: {start: moment.Moment, end: moment.Moment}): number => {
+export function calculateIIIHours(
+    user: User,
+    courseMeta: CourseMeta,
+    dateRange: {start: moment.Moment, end: moment.Moment}
+): number {
     if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
@@ -108,7 +112,7 @@ export const calculateIIIHours = (user: User, courseMeta: CourseMeta, dateRange:
                 return prev;
         }
     }, 0);
-};
+}
 
 /* TODO: document this */
 export class CSV {
