@@ -1,7 +1,7 @@
 version: '2'
 services:
     wordpress:
-        image: dsifford/wordpress:nginx
+        image: dsifford/wordpress:apache-next # FIXME
         ports:
             - "22222:22222"
             - "443:443"
@@ -9,13 +9,18 @@ services:
             # Database
             - ../data:/data
             # Plugins
-            - ../wp-content/plugins/learndash-propanel:/var/www/$site_name/htdocs/wp-content/plugins/learndash-propanel
-            - ../wp-content/plugins/sfwd-lms:/var/www/$site_name/htdocs/wp-content/plugins/sfwd-lms
+            - ../wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
+            # - ../wp-content/plugins/learndash-propanel:/var/www/$site_name/htdocs/wp-content/plugins/learndash-propanel
+            - ../wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
+            # - ../wp-content/plugins/sfwd-lms:/var/www/$site_name/htdocs/wp-content/plugins/sfwd-lms
             # Themes
-            - ../dist/aliemu:/var/www/$site_name/htdocs/wp-content/themes/aliemu
-            - ../wp-content/themes/Divi:/var/www/$site_name/htdocs/wp-content/themes/Divi
+            - ../dist/aliemu:/app/wp-content/themes/aliemu
+            # - ../dist/aliemu:/var/www/$site_name/htdocs/wp-content/themes/aliemu
+            - ../wp-content/themes/Divi:/app/wp-content/themes/Divi
+            # - ../wp-content/themes/Divi:/var/www/$site_name/htdocs/wp-content/themes/Divi
             # Uploads
-            - ../wp-content/uploads:/var/www/$site_name/htdocs/wp-content/uploads
+            - ../wp-content/uploads:/app/wp-content/uploads
+            # - ../wp-content/uploads:/var/www/$site_name/htdocs/wp-content/uploads
         env_file: ../.env
         environment:
             DB_NAME: wordpress
@@ -35,6 +40,12 @@ services:
                 wp-smush,
                 [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
+                [local]sfwd-lms,
+                [local]learndash-propanel,
+                [local]aliemu
+            THEMES: >-
+                [local]Divi,
+                [local]aliemu,
             WP_DEBUG_DISPLAY: 'false'
             WP_DEBUG_LOG: 'true'
             WP_DEBUG: 'true'

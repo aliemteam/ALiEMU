@@ -85,9 +85,6 @@ main() {
 
 init() {
 
-    local docker_compose_version
-    docker_compose_version=$(curl -s -X GET "https://api.github.com/repos/docker/compose/releases/latest" | jq -r '.tag_name')
-
     h2 'Provisioning Docker Machine...'
     docker-machine create \
         -d digitalocean \
@@ -106,22 +103,6 @@ init() {
         build-essential \
         vim
     "
-
-    h3 'Installing Docker Compose'
-    docker-machine ssh "$machine_name" "curl -sL https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/docker-compose
-    "
-    STATUS
-
-    h3 'Installing NodeJS'
-    docker-machine ssh "$machine_name" "
-    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh \
-    && chmod +x nodesource_setup.sh \
-    && ./nodesource_setup.sh &>/dev/null \
-    && DEBIAN_FRONTEND=noninteractive && apt-get install -y nodejs &>/dev/null \
-    && npm i -g uglify-js csso &>/dev/null
-    "
-    STATUS
 
     h3 'Initializing filesystem & setting root access password'
     docker-machine ssh "$machine_name" "
@@ -170,14 +151,8 @@ init() {
         --include="data/***" \
         --include="lib" \
         --include="lib/compose.yml" \
-        --include="lib/scripts" \
-        --include="lib/scripts/minify" \
         --exclude="*" \
     "$ROOTDIR/" "$(docker-machine ip "$machine_name"):/app"
-
-    h3 'Creating package.json'
-    docker-machine ssh "$machine_name" "echo '{\"scripts\": {\"minify\": \"./lib/scripts/minify\"}}' > /app/package.json"
-    STATUS
 
     h2 'Finalizing transfer'
 
@@ -206,12 +181,6 @@ init() {
 
     h2 'Server Deployment Finished. Rebooting...'
     docker-machine restart "$machine_name"
-
-    h2 'Deploying site'
-    docker-machine ssh "$machine_name" "
-    cd /app
-    docker-compose -f docker-compose.prod.yml up -d
-    "
 
 }
 
@@ -271,10 +240,6 @@ attach() {
     chmod 600 /home/$USER/.ssh/authorized_keys
     "
     STATUS
-
-    # FIXME: Not sure why I added this in here to begin with
-    # h2 'Restarting Docker Compose services'
-    # docker-machine ssh $machine_name "cd /app && docker-compose restart"
 
     h2 "Server attachment finished"
 
