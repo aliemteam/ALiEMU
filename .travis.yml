@@ -13,6 +13,7 @@ after_script: "cat ./tmp/coverage/lcov.info | ./node_modules/coveralls/bin/cover
 branches:
     only:
         - master
+        - /^greenkeeper-.*$/
 notifications:
     webhooks:
         urls:
