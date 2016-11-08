@@ -51,7 +51,7 @@
     "gulp-stylus": "^2.5.0",
     "gulp-svgmin": "^1.2.3",
     "gulp-uglify": "^2.0.0",
-    "jest-cli": "^15.1.1",
+    "jest-cli": "^17.0.0",
     "merge-stream": "^1.0.0",
     "poststylus": "^0.2.3",
     "react-addons-test-utils": "^15.3.2",
