@@ -161,7 +161,7 @@ gulp.task('webpack:dev', () =>
         .pipe(webpack(webpackConfig, _webpack))
         .pipe(gulp.dest('dist/'))
         .pipe(browserSync.stream())
-);
+    );
 
 
 gulp.task('webpack:prod', () =>
@@ -221,19 +221,6 @@ gulp.task('_dev',
 // ==================================================
 
 gulp.task('fix-divi', () => {
-    const slackEmailHook = `
-    do_action('slack_email_hook', [
-        'name' => $contact_name,
-        'email' => $contact_email,
-        'message' => stripslashes(wp_strip_all_tags($message_pattern)),
-    ]);
-    `;
-
-    const slack = gulp
-        .src('wp-content/themes/Divi/includes/builder/main-modules.php', { base: './' })
-        .pipe(replace(/wp_mail(.|\n)+?;/, slackEmailHook))
-        .pipe(gulp.dest('./'));
-
     const js = gulp
         .src('wp-content/themes/Divi/**/*.js', { base: './' })
         .pipe(uglify(uglifyConfig))
@@ -244,7 +231,7 @@ gulp.task('fix-divi', () => {
         .pipe(csso())
         .pipe(gulp.dest('./'));
 
-    return merge(slack, js, css);
+    return merge(js, css);
 });
 
 gulp.task('fix-learndash', () =>

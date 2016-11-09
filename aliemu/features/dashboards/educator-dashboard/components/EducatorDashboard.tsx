@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StudentTable } from './StudentTable';
 import { CourseTable } from './CourseTable';
-import DevTools from 'mobx-react-devtools';
+// import DevTools from 'mobx-react-devtools';
 
 interface Props {
     data: ALiEMU.EducatorDashboard.EducatorData;
@@ -11,7 +11,7 @@ export class EducatorDashboard extends React.Component<Props, {}> {
     render() {
         return (
             <div>
-                <DevTools position={{right: 50, top: 100}}/>
+                {/* <DevTools position={{right: 50, top: 100}}/> */}
                 <div className="au-edudash-shadowbox">
                     <h1>{this.props.data.currentUser.meta.residencyUsEm}</h1>
                 </div>

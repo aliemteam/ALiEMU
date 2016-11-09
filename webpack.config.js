@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+// const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 
 const devPlugins = [
     new webpack.LoaderOptionsPlugin({
@@ -8,7 +8,7 @@ const devPlugins = [
         debug: false,
     }),
     new webpack.NoErrorsPlugin(),
-    new ForkCheckerPlugin(),
+    // new ForkCheckerPlugin(),
     // new webpack.optimize.CommonsChunkPlugin({
     //     name: 'vendor',
     //     minChunks: 2,
@@ -59,7 +59,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: path.resolve(__dirname, 'aliemu'),
-                loaders: ['awesome-typescript'],
+                loaders: ['babel', 'ts'],
             },
             {
                 test: /\.css$/,

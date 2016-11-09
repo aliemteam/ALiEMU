@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.5.2",
-    "awesome-typescript-loader": "^2.2.4",
+    "awesome-typescript-loader": "^3.0.0-beta.0",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.7",
     "babel-polyfill": "^6.16.0",
@@ -73,6 +73,7 @@
     "sinon": "^1.17.6",
     "style-loader": "^0.13.1",
     "stylint": "^1.5.7",
+    "ts-loader": "^1.1.0",
     "tslint": "^3.15.1",
     "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
     "tslint-react": "^1.1.0",
@@ -120,6 +121,7 @@
     "rules": {
       "no-use-before-define": 0,
       "no-plusplus": 0,
+      "comma-dangle": 0,
       "import/no-extraneous-dependencies": 0,
       "indent": [
         "error",
