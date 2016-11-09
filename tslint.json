@@ -21,6 +21,7 @@
         "only-arrow-functions": false,
         "restrict-plus-operands": false,
         "max-func-body-length": false,
+        "react-tsx-curly-spacing": false,
         "react-a11y-anchors": false,
         "react-a11y-image-button-has-alt": false,
         "no-backbone-get-set-outside-model": false,
