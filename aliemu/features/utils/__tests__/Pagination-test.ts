@@ -1,10 +1,15 @@
 jest.unmock('../Pagination');
 
-import paginate from '../Pagination';
-
-const rows = Array.from(Array(100).keys());
+import { paginate } from '../Pagination';
+const before = beforeAll;
 
 describe('Paginate Function', () => {
+    let rows: number[];
+
+    before(() => {
+        rows = Array.from(Array(100).keys());
+    });
+
     it('should paginate correctly', () => {
         expect(paginate(rows, 10, 5)).toEqual([50, 51, 52, 53, 54, 55, 56, 57, 58, 59]);
         expect(paginate(rows, 3, 2)).toEqual([6, 7, 8]);

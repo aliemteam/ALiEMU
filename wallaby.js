@@ -1,38 +1,24 @@
-module.exports = function (wallaby) {
-    return {
-        files: [
-            'aliem/**/*.{ts,tsx}',
-            '!aliem/**/__tests__/*',
-            'node_modules/@types/**/index.d.ts',
-            'lib/**/*.{ts,tsx}',
-        ],
-        tests: [
-            'aliem/**/__tests__/*-test.{ts,tsx}',
-        ],
-        env: {
-            type: 'node',
-            runner: 'node',
+module.exports = {
+    files: [
+        './aliem/**/*.{ts,tsx}',
+        './lib/typings/*.d.ts',
+        './package.json',
+        {
+            pattern: './lib/utils/*.{ts,js}',
+            instrument: false,
         },
-        testFramework: 'jest',
-        bootstrap: function (wallaby) {
-            wallaby.testFramework.configure({
-                'scriptPreprocessor': 'jestPreprocessor.js',
-                'testRegex': '__tests__/.*\.(js|ts|tsx)$',
-                'moduleFileExtensions': [
-                  'js',
-                  'ts',
-                  'tsx',
-                  'json'
-                ],
-                'unmockedModulePathPatterns': [
-                  'react',
-                  'react-dom',
-                  'react-addons-test-utils',
-                  'enzyme',
-                  'sinon',
-                  '<rootDir>/lib/utils/Fixtures',
-                ],
-            });
-        }
-    };
+        '!./aliemu/**/__tests__/*',
+        '!./aliemu/**/index.{ts,tsx}',
+    ],
+    tests: [
+        './aliemu/**/__tests__/*-test.{ts,tsx}',
+    ],
+    env: {
+        type: 'node',
+        runner: 'node',
+    },
+    testFramework: 'jest',
+    setup(wallaby) {
+        wallaby.testFramework.configure(require('./package.json').jest); // eslint-disable-line
+    },
 };

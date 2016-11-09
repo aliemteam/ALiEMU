@@ -7,39 +7,24 @@
  * @author Chris Gaafary
  */
 
-// Capsules CAPSULE Shortcode
-function capsule_shortcode($atts, $content = null) {
-    $content = do_shortcode($content);
-    return "
-        <div class='lesson-box'>
-            <h2 class='lesson-heading'>CAPSULE</h2>
-            <div class='lesson-body'>
-                <h4>$content</h4>
-            </div>
-        </div>
-    ";
-}
-add_shortcode('capsule', 'capsule_shortcode');
-
-
-//Capsules Lesson Box Shortcode
-function capsules_lessonbox_shortcode($atts, $content = null) {
-    $shortcode = shortcode_atts([
-        'header' => '',
+function au_capsule_shortcode($atts, $content = null) {
+    $a = shortcode_atts([
+        'heading' => 'CAPSULE',
     ], $atts);
-    extract($shortcode);
-    $content = do_shortcode($content);
+    extract($a);
+    $content = ($heading === 'CAPSULE')
+        ? '<h4>' . do_shortcode($content) . '</h4>'
+        : do_shortcode($content);
     return "
         <div class='lesson-box'>
-            <h2 class='lesson-heading'>$header</h2>
+            <h2 class='lesson-heading'>$heading</h2>
             <div class='lesson-body'>
                 $content
             </div>
         </div>
     ";
 }
-add_shortcode('capsules-lessonbox', 'capsules_lessonbox_shortcode');
-
+add_shortcode('capsule', 'au_capsule_shortcode');
 
 /**
  * Shortcode which GETs and returns the recommended III hours for certificates.

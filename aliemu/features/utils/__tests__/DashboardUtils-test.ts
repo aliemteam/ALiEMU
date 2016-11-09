@@ -1,3 +1,4 @@
+// tslint:disable max-line-length
 jest.unmock('../DashboardUtils');
 jest.unmock('moment');
 
@@ -5,6 +6,7 @@ import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
 import * as moment from 'moment';
 import { courseData, users } from '../../../../lib/utils/Fixtures';
+const before = beforeAll;
 
 const D = {
     jan: 1420088400,
@@ -21,7 +23,6 @@ const D = {
     dec: 1448946000,
 };
 
-
 interface TestUserMetaCompleted {
     courseCompleted: {
         [i: number]: number
@@ -34,7 +35,7 @@ interface TestCourseMetaHours {
     };
 }
 
-let testUser: TestUserMetaCompleted = {
+const testUser: TestUserMetaCompleted = {
     courseCompleted: {
         1: D.jan,
         5: D.may,
@@ -42,7 +43,7 @@ let testUser: TestUserMetaCompleted = {
     },
 };
 
-let testMeta: TestCourseMetaHours = {
+const testMeta: TestCourseMetaHours = {
     1: {
         recommendedHours: 1,
     },
@@ -75,8 +76,6 @@ let testMeta: TestCourseMetaHours = {
     },
 };
 
-type CM = ALiEMU.EducatorDashboard.CourseMetaObject
-
 describe('calculateHours', () => {
 
     const setup = (s?: string, e?: string) => {
@@ -91,16 +90,16 @@ describe('calculateHours', () => {
     };
 
     let user;
-    const meta = Object.assign({}, testMeta) as CM;
+    let meta;
 
-    beforeEach(() => {
-        user = Object.assign({}, testUser) as any;
+    before(() => {
+        meta = Object.assign({}, testMeta);
+        user = Object.assign({}, testUser);
     });
 
     afterEach(() => {
-        user = Object.assign({}, testUser) as any;
+        user = Object.assign({}, testUser);
     });
-
 
     it('should calculate total hours with no date range', () => {
         const userTest: TestUserMetaCompleted = {
@@ -111,28 +110,28 @@ describe('calculateHours', () => {
             },
         };
 
-        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(16);
+        expect(utils.calculateIIIHours(<any>userTest, meta, setup())).toEqual(16);
 
         // Add 7
         userTest.courseCompleted[7] = 1231234;
-        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(23);
+        expect(utils.calculateIIIHours(<any>userTest, meta, setup())).toEqual(23);
 
         // Subtract 10
         delete userTest.courseCompleted[10];
-        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(13);
+        expect(utils.calculateIIIHours(<any>userTest, meta, setup())).toEqual(13);
 
         // Subtract 13
         userTest.courseCompleted = {};
-        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(0);
+        expect(utils.calculateIIIHours(<any>userTest, meta, setup())).toEqual(0);
 
         // Add 5
         userTest.courseCompleted[5] = 12341234;
-        expect(utils.calculateIIIHours(userTest as any, meta, setup())).toEqual(5);
+        expect(utils.calculateIIIHours(<any>userTest, meta, setup())).toEqual(5);
 
         // Throw TypeError
         userTest.courseCompleted[100] = 2341234;
         try {
-            utils.calculateIIIHours(userTest as any, meta, setup());
+            utils.calculateIIIHours(<any>userTest, meta, setup());
         } catch (e) {
             expect(e.name).toBe('TypeError');
         }
@@ -187,8 +186,6 @@ describe('parseCompletionDate', () => {
     });
 });
 
-
-
 describe('downloadPolyfill', () => {
 
     const setup = () => {
@@ -200,7 +197,7 @@ describe('downloadPolyfill', () => {
         window.URL.createObjectURL = spyCreateObjectURL;
         window.navigator.msSaveBlob = spyMsSaveBlob;
         const blob = new Blob(
-            ['test,test,test,test\ntest,test,test,test', ], { type: 'text/csv;charset=utf-8', }
+            ['test,test,test,test\ntest,test,test,test'], { type: 'text/csv;charset=utf-8' }
         );
         return {
             blob,
@@ -210,7 +207,7 @@ describe('downloadPolyfill', () => {
     };
 
     it('should call the correct functions based on browser', () => {
-        const { blob, spyMsSaveBlob, spyCreateObjectURL, } = setup();
+        const { blob, spyMsSaveBlob, spyCreateObjectURL } = setup();
         utils.downloadPolyfill('test.csv', blob, 'chrome', 'test');
         utils.downloadPolyfill('test.csv', blob, 'ie', 'test');
         utils.downloadPolyfill('test.csv', blob, 'opera', 'test');
@@ -250,15 +247,19 @@ describe('getCourseCategory', () => {
 });
 
 describe('CSV Class', () => {
+    let CSV;
 
     it('should construct', () => {
         expect(new utils.CSV(users, courseData)).toBeTruthy();
     });
 
-    const CSV = new utils.CSV(users, courseData);
+    before(() => {
+        CSV = new utils.CSV(users, courseData);
+    });
+
     describe('CSV.user()', () => {
         it('should return a properly formatted user CSV', () => {
-            let expected: ALiEMU.CSV = {
+            const expected: ALiEMU.CSV = {
                 filename: 'Maximal_User.csv',
                 data: `"Registered Courses","Steps Completed","Date Completed","Associated III Credit Hours","Category"\n"Course 1","5 out of 5","06/09/2015","1","AIR"\n"Course 3","1 out of 5","X","0","AIR"\n`,
             };

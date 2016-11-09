@@ -1,4 +1,4 @@
-
+// tslint:disable export-name
 export function browserDetect(): ALiEMU.BrowserType {
     const UA: string = navigator.userAgent;
 

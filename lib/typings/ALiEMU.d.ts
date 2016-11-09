@@ -1,13 +1,8 @@
+// tslint:disable no-namespace
 declare namespace ALiEMU {
 
     type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
-    interface DOMEvent extends Event {
-        target: HTMLInputElement;
-    }
-    interface Action {
-        type: string;
-        [key: string]: any;
-    }
+
     interface CSV {
         data: string;
         filename: string;
@@ -98,18 +93,18 @@ declare namespace ALiEMU {
             firstName: string;
             lastActivity?: string;
             lastName: string;
-            medicineExperiencelevel?: string; /** FIXME: is this an enum? */
-            nursingExperiencelevel?: string; /** FIXME: is this an enum? */
+            medicineExperiencelevel?: string;
+            nursingExperiencelevel?: string;
             profilePhoto?: string;
             quizzes?: LearnDash.Quiz[];
             residencyUsEm?: string;
             registerDate: string;
-            role: string; /** FIXME is this an enum? */
+            role: string;
             submitted: string;
             twitter?: string;
             umLastLogin: number;
             userAgreement?: boolean;
-            userDiscipline?: string; /** FIXME: is this an enum? */
+            userDiscipline?: string;
             userUsState?: string;
             username: string;
         }
@@ -168,35 +163,4 @@ declare namespace ALiEMU {
         }
 
     }
-
-
 }
-
-
-// declare namespace BadgeOS {
-//
-//     interface CompletedAchievementsObject {
-//         [i: number]: CompletedAchievement[];
-//     }
-//
-//     interface ActiveAchievementsObject {
-//         [ID: number]: ActiveAchievement;
-//     }
-//
-//     interface Achievement {
-//         points: string;
-//         'post_type': 'step' | 'badges';
-//     }
-//
-//     interface CompletedAchievement extends Achievement {
-//         ID: string;
-//         'date_earned': number;
-//     }
-//
-//     interface ActiveAchievement extends Achievement {
-//         ID: number;
-//         'date_started': number;
-//         'last_activity_date': number;
-//     }
-//
-// }

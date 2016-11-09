@@ -27,18 +27,6 @@ function requested_dashboard_access($id) {
 }
 add_action('user_register', 'requested_dashboard_access');
 
-
-/**
- * Routes contact form messages to Slack
- * @param  array $data  Associative array with message data.
- * @return void
- */
-function slack_contact($data) {
-    slack_message('aliemu/messages/contact-form', $data);
-}
-add_action('slack_email_hook', 'slack_contact');
-
-
 /**
  * Routes all comments to Slack
  * @param  string $commentId The comment ID.

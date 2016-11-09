@@ -432,7 +432,7 @@ class EducatorDashboard {
 $au_dashboard = new EducatorDashboard();
 
 wp_localize_script(
-    'EducatorDashboard',
+    'educator-dashboard',
     'AU_EducatorData',
     [
         'users' => $au_dashboard->user_meta,
@@ -448,7 +448,6 @@ wp_localize_script(
         ]
     ]
 );
-wp_enqueue_script('EducatorDashboard');
 
 ?>
 

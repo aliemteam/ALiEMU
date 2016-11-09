@@ -12,8 +12,10 @@ main() {
     source "$ROOTDIR"/.env
     ssh_pass=${ssh_pass:-}
     token=${token:-}
+    DB_PASS=${DB_PASS:-}
     [[ ! $ssh_pass ]] && ERROR "Couldn't find 'ssh_pass' variable in .env file"
     [[ ! $token ]] && ERROR "Couldn't find 'token' variable in .env file"
+    [[ ! $DB_PASS ]] && ERROR "Couldn't find 'DB_PASS' variable in .env file"
 
     local droplets droplet
 
@@ -85,18 +87,13 @@ main() {
 
 init() {
 
-    local docker_compose_version
-    docker_compose_version=$(curl -s -X GET "https://api.github.com/repos/docker/compose/releases/latest" | jq -r '.tag_name')
-
     h2 'Provisioning Docker Machine...'
     docker-machine create \
         -d digitalocean \
-        --digitalocean-image=ubuntu-16-04-x64 \
+        --digitalocean-image=ubuntu-14-04-x64 \
         --digitalocean-access-token="$token" \
         --digitalocean-region=nyc1 \
         "$machine_name"
-
-    h2 'Setting up machine...'
 
     h2 'Updating kernel & installing dependencies'
     docker-machine ssh "$machine_name" "
@@ -104,31 +101,18 @@ init() {
     && apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential \
+        curl \
+        git \
+        rsync \
+        unzip \
         vim
     "
 
-    h3 'Installing Docker Compose'
-    docker-machine ssh "$machine_name" "curl -sL https://github.com/docker/compose/releases/download/$docker_compose_version/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/docker-compose
-    "
-    STATUS
+    h2 'Setting up machine...'
 
-    h3 'Installing NodeJS'
+    h3 'Setting root access password'
     docker-machine ssh "$machine_name" "
-    curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh \
-    && chmod +x nodesource_setup.sh \
-    && ./nodesource_setup.sh &>/dev/null \
-    && DEBIAN_FRONTEND=noninteractive && apt-get install -y nodejs &>/dev/null \
-    && npm i -g uglify-js csso &>/dev/null
-    "
-    STATUS
-
-    h3 'Initializing filesystem & setting root access password'
-    docker-machine ssh "$machine_name" "
-    mkdir -p /app
-    chown -R :www-data /app
-    chmod -R g+rwx /app
-    echo 'root:$ssh_pass' | chpasswd
+    echo 'root:\"$ssh_pass\"' | chpasswd
     "
     STATUS
 
@@ -153,6 +137,61 @@ init() {
     "
     STATUS
 
+    h2 "Associating domain name '$site_name' with droplet"
+
+    existing_domain=$(curl -s \
+        -X GET \
+        -H "Authorization: Bearer $token" \
+        "https://api.digitalocean.com/v2/domains/$site_name" \
+    | jq -r '.domain')
+
+    if [[ $existing_domain != 'null' ]]; then
+        update_domain_records "$(docker-machine ip "$machine_name")"
+    else
+        create_domain_records "$(docker-machine ip "$machine_name")"
+    fi
+
+    h2 "Installing EasyEngine"
+    docker-machine ssh "$machine_name" "
+    export TERM=xterm && \
+    git config --global user.name \"root\" \
+    && git config --global user.email root@localhost.com \
+    && curl \
+        -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+        -o /ee https://raw.githubusercontent.com/EasyEngine/easyengine/master/install \
+    && chmod +x /ee /usr/local/bin/wp \
+    && /ee
+    "
+
+    h2 "Setting up WordPress"
+    docker-machine ssh "$machine_name" "
+    ee site create $site_name --wpfc --php7 --experimental
+    "
+
+    h3 "Generating wp-cli.yml"
+    docker-machine ssh "$machine_name" "
+    echo path: /var/www/$site_name/htdocs > /wp-cli.yml
+    "
+    STATUS
+
+    h2 "Installing Adminer"
+    docker-machine ssh "$machine_name" "
+    ee stack install --adminer
+    "
+
+    h3 "Setting admin login info"
+    docker-machine ssh "$machine_name" "
+    ee secure --auth admin $DB_PASS
+    "
+    STATUS
+
+    h3 "Adjusting file ownership of /var/www/$site_name directory"
+    docker-machine ssh "$machine_name" "
+    chown -R www-data:www-data /var/www/$site_name && chmod -R g+rwx /var/www/$site_name
+    mkdir /data && chown -R www-data:www-data /data && chmod -R g+rwx /data
+    "
+    STATUS
+
     h2 'Copying files from local directory to machine'
 
     eval "$(ssh-agent -s)" &>/dev/null
@@ -163,56 +202,13 @@ init() {
     fi
 
     rsync --info=progress2 -aOz --chown="$USER":www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" \
-        --include="docker-compose*" \
-        --include=".env" \
-        --include="dist/***" \
-        --include="wp-content/***" \
-        --include="data/***" \
-        --include="lib" \
-        --include="lib/compose.yml" \
-        --include="lib/scripts" \
-        --include="lib/scripts/minify" \
-        --exclude="*" \
-    "$ROOTDIR/" "$(docker-machine ip "$machine_name"):/app"
+        "$ROOTDIR/wp-content/" "$(docker-machine ip "$machine_name"):/var/www/$site_name/htdocs/wp-content/"
 
-    h3 'Creating package.json'
-    docker-machine ssh "$machine_name" "echo '{\"scripts\": {\"minify\": \"./lib/scripts/minify\"}}' > /app/package.json"
-    STATUS
-
-    h2 'Finalizing transfer'
-
-    h3 'Adjusting file ownership of /app directory'
-    docker-machine ssh "$machine_name" "
-    chown -R www-data:www-data /app
-    chmod -R g+rwx /app
-    "
-    STATUS
-
-    h2 "Associating domain name '$site_name' with droplet"
-
-    existing_domain=$(curl -s \
-    -X GET \
-    -H "Authorization: Bearer $token" \
-    "https://api.digitalocean.com/v2/domains/$site_name" \
-    | jq -r '.domain')
-
-    if [[ $existing_domain != 'null' ]]; then
-        # domain exists
-        update_domain_records "$(docker-machine ip "$machine_name")"
-    else
-        # domain does not exist
-        create_domain_records "$(docker-machine ip "$machine_name")"
-    fi
+    rsync --info=progress2 -aOz --chown="$USER":www-data --no-p -e "ssh -i ~/.ssh/DO_${machine_name}_rsa" \
+        "$ROOTDIR/data/" "$(docker-machine ip "$machine_name"):/data/"
 
     h2 'Server Deployment Finished. Rebooting...'
     docker-machine restart "$machine_name"
-
-    h2 'Deploying site'
-    docker-machine ssh "$machine_name" "
-    cd /app
-    docker-compose -f docker-compose.prod.yml up -d
-    "
-
 }
 
 attach() {
@@ -271,10 +267,6 @@ attach() {
     chmod 600 /home/$USER/.ssh/authorized_keys
     "
     STATUS
-
-    # FIXME: Not sure why I added this in here to begin with
-    # h2 'Restarting Docker Compose services'
-    # docker-machine ssh $machine_name "cd /app && docker-compose restart"
 
     h2 "Server attachment finished"
 
