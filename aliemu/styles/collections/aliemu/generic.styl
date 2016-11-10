@@ -1,31 +1,31 @@
 $table-style(category)
     .entry-content table
-        border 1px solid $gray-light
+        border: 1px solid $gray-light
         tr:first-of-type
             if category is 'air-pro'
-                background $airpro-primary
+                background: $airpro-primary
             else if category is 'air'
-                background $air-primary
+                background: $air-primary
             else if category is 'capsules'
-                background $capsules-primary
+                background: $capsules-primary
             else
-                background $primary
+                background: $primary
             td
-                color white
-                text-align center
+                color: white
+                text-align: center
                 *
-                    font 400 1.2em 'Lato'
+                    font: 400 1.2em 'Lato'
         tr:nth-of-type(2n)
             td
-                background-color #f9f9f9 // @stylint ignore
+                background-color: #f9f9f9 // @stylint ignore
         tr:nth-of-type(n + 2):hover
             td
-                background-color #f3f3f3 // @stylint ignore
+                background-color: #f3f3f3 // @stylint ignore
 
 
 +prefix-classes('au-')
     .container-fullwidth
-        width 100%
+        width: 100%
 
 .category-air-pro
     $table-style('air-pro')
