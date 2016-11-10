@@ -88,27 +88,7 @@ gulp.task('reload', (done) => { browserSync.reload(); done(); });
 //                    Static
 // ==================================================
 
-gulp.task('static', () => {
-    const svg = gulp
-        .src('aliemu/assets/**/*.svg', { base: './aliemu' })
-        .pipe(svgmin())
-        .pipe(gulp.dest('dist/aliemu'));
-
-    const images = gulp
-        .src('aliemu/assets/**/*.png', { base: './aliemu' })
-        .pipe(imagemin())
-        .pipe(gulp.dest('dist/aliemu'));
-
-    const main = gulp
-        .src([
-            'aliemu/**/*.*',
-            '!aliemu/templates/**/*.*',
-            '!aliemu/templates',
-            '!aliemu/**/__tests__',
-            '!aliemu/**/*.{ts,tsx,json,styl,md,txt,svg,png}',
-        ], { base: './aliemu' })
-        .pipe(gulp.dest('dist/aliemu'));
-
+gulp.task('jade', () => {
     const templatePages = gulp
         .src('aliemu/templates/pages/*.jade', { base: './aliemu/templates/pages' })
         .pipe(jade(jadeConfig))
@@ -127,7 +107,40 @@ gulp.task('static', () => {
         .pipe(rename({ extname: '.php' }))
         .pipe(gulp.dest('dist/aliemu/'));
 
-    return merge(svg, images, main, templatePages, templateOverrides, templateLearndash);
+    return merge(templatePages, templateOverrides, templateLearndash);
+});
+
+gulp.task('php', () => {
+    const main = gulp
+        .src([
+            'aliemu/**/*.*',
+            '!aliemu/templates/**/*.*',
+            '!aliemu/templates',
+            '!aliemu/**/__tests__',
+            '!aliemu/**/*.{ts,tsx,json,styl,md,txt,svg,png}',
+        ], { base: './aliemu' })
+        .pipe(gulp.dest('dist/aliemu'));
+
+    const templates = gulp
+        .src('aliemu/templates/pages/**/*.php')
+        .pipe(rename({ prefix: 'page-' }))
+        .pipe(gulp.dest('dist/aliemu/'));
+
+    return merge(main, templates);
+});
+
+gulp.task('assets', () => {
+    const svg = gulp
+        .src('aliemu/assets/**/*.svg', { base: './aliemu' })
+        .pipe(svgmin())
+        .pipe(gulp.dest('dist/aliemu'));
+
+    const images = gulp
+        .src('aliemu/assets/**/*.png', { base: './aliemu' })
+        .pipe(imagemin())
+        .pipe(gulp.dest('dist/aliemu'));
+
+    return merge(svg, images);
 });
 
 // ==================================================
@@ -183,7 +196,13 @@ gulp.task('js', () =>
 
 gulp.task('_build', gulp.series(
     'clean',
-    gulp.parallel('static', 'webpack:prod', 'stylus:prod'),
+    gulp.parallel(
+        'php',
+        'assets',
+        'jade',
+        'webpack:prod',
+        'stylus:prod'
+    ),
     'js'
 ));
 
@@ -191,7 +210,7 @@ gulp.task('_dev',
     gulp.series(
         'chown',
         'clean',
-        gulp.parallel('static', 'webpack:dev', 'stylus:dev'), () => {
+        gulp.parallel('php', 'assets', 'jade', 'webpack:dev', 'stylus:dev'), () => {
             browserSync.init({
                 proxy: 'localhost:8080',
             });
@@ -201,17 +220,22 @@ gulp.task('_dev',
             ], gulp.series('stylus:dev'));
 
             gulp.watch([
+                'aliemu/**/*.php',
+            ], gulp.series('php', 'reload'));
+
+            gulp.watch([
+                'aliemu/**/*.{svg,png,jpeg,jpg}'
+            ], gulp.series('assets', 'reload'));
+
+            gulp.watch([
+                'aliemu/**/*.jade'
+            ], gulp.series('jade', 'reload'));
+
+            gulp.watch([
                 'aliemu/**/*.{ts,tsx}',
                 '!aliemu/**/__tests__/',
                 '!aliemu/**/__tests__/*',
             ], gulp.series('webpack:dev', 'reload'));
-
-            gulp.watch([
-                'aliemu/**/*',
-                '!aliemu/**/*.{ts,tsx,styl}',
-                '!aliemu/**/__tests__/',
-                '!aliemu/**/__tests__/*',
-            ], gulp.series('static', 'reload'));
         }
     )
 );

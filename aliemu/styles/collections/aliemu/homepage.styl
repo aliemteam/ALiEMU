@@ -2,133 +2,133 @@
     .homepage
     .faculty-start
         #particles
-            position fixed
-            height calc(100vh - 50px)
-            width 100%
-            background-image url('')
-            background-repeat no-repeat
-            background-size cover
-            background-position 50% 50%
+            position: fixed
+            height: calc(100vh - 50px)
+            width: 100%
+            background-image: url('')
+            background-repeat: no-repeat
+            background-size: cover
+            background-position: 50% 50%
             canvas
-                display block
-                vertical-align bottom
+                display: block
+                vertical-align: bottom
         #row-1
-            display flex
-            margin 0 5%
-            height calc(100vh - 50px)
-            padding-bottom 20vh
-            justify-content center
-            align-items center
+            display: flex
+            margin: 0 5%
+            height: calc(100vh - 50px)
+            padding-bottom: 20vh
+            justify-content: center
+            align-items: center
             .container
-                position relative
-                width 500px
+                position: relative
+                width: 500px
         @media (max-width 480px)
             #row-1
-                padding-bottom 0
+                padding-bottom: 0
 
         for i in 2..7
             #row-{i}
                 @extend .au-homepage #row-1
-                height auto
-                padding 0
+                height: auto
+                padding: 0
                 .container
-                    margin 50px 0
-                    height auto
-                    width 800px
+                    margin: 50px 0
+                    height: auto
+                    width: 800px
 
         .splash
-            display flex
-            height 100%
-            flex-direction column
-            justify-content space-between
+            display: flex
+            height: 100%
+            flex-direction: column
+            justify-content: space-between
             > div
-                margin 5px 0
+                margin: 5px 0
         .general
-            display flex
-            flex auto
-            flex-flow column
-            background $gray-light
-            border-radius 3px
-            text-align center
-            padding 25px 0
+            display: flex
+            flex: auto
+            flex-flow: column
+            background: $gray-light
+            border-radius: 3px
+            text-align: center
+            padding: 25px 0
             div
-                position relative
-                flex auto
-                display flex
-                justify-content center
-                align-items center
-                text-align center
+                position: relative
+                flex: auto
+                display: flex
+                justify-content: center
+                align-items: center
+                text-align: center
                 h1
-                    color $primary
-                    margin 0 0 10px 0
-                    padding 0
+                    color: $primary
+                    margin: 0 0 10px 0
+                    padding: 0
                     &.loggedin
-                        color $gray-dark
+                        color: $gray-dark
                 a
                     bordered-button(large, $primary)
-                    margin 0 5px
+                    margin: 0 5px
         .faculty
             @extend .au-homepage .au-general
-            background $gray-dark
+            background: $gray-dark
             div
                 h1
-                    color white
+                    color: white
                 a
                     bordered-button(large, white, $gray-dark)
 
         .login
-            background $primary
-            display flex
-            flex auto
-            padding 25px 0
-            border-radius 3px
-            text-align center
+            background: $primary
+            display: flex
+            flex: auto
+            padding: 25px 0
+            border-radius: 3px
+            text-align: center
             div
-                display flex
-                justify-content center
-                align-items center
-                flex auto
+                display: flex
+                justify-content: center
+                align-items: center
+                flex: auto
                 a
                     bordered-button(large, white, $primary)
 
         .info-card
-            display flex
-            flex auto
-            flex-flow column
-            border-radius 3px
+            display: flex
+            flex: auto
+            flex-flow: column
+            border-radius: 3px
             .info-header
-                border-radius 3px 3px 0 0
-                background-color $primary
+                border-radius: 3px 3px 0 0
+                background-color: $primary
                 h1
-                    color white
-                    line-height 1.5em
-                    padding 0
-                    text-align center
+                    color: white
+                    line-height: 1.5em
+                    padding: 0
+                    text-align: center
             .info-text
-                background $gray-light
-                padding 15px 20px
-                text-align left
+                background: $gray-light
+                padding: 15px 20px
+                text-align: left
                 p
-                    color $gray-dark
-                    font-weight 300
+                    color: $gray-dark
+                    font-weight: 300
                 ol
-                    padding 1em 0
+                    padding: 1em 0
                 a
-                    font-weight 600
+                    font-weight: 600
 
         .series-logos
-            display flex
-            justify-content space-between
+            display: flex
+            justify-content: space-between
             div
-                background $gray-light
-                max-width 200px
-                display flex
-                align-items center
-                padding 10px
-                margin-top 20px
+                background: $gray-light
+                max-width: 200px
+                display: flex
+                align-items: center
+                padding: 10px
+                margin-top: 20px
             &.alt-logos div
-                display flex
-                padding 10px
-                align-items center
-                margin-top 0
-                background transparent
+                display: flex
+                padding: 10px
+                align-items: center
+                margin-top: 0
+                background: transparent
