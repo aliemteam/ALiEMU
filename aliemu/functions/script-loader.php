@@ -97,7 +97,6 @@ class ScriptLoader {
             'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js'],
             'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', [], '2.1.2', true],
-            'recaptcha' => ['recaptcha', 'https://www.google.com/recaptcha/api.js', [], false, false],
         ];
 
         $this->styles = [
@@ -165,9 +164,6 @@ class ScriptLoader {
                         array_push($load[0], 'educator-dashboard');
                         break;
                 }
-                break;
-            case '/feedback/':
-                array_push($load[0], 'recaptcha');
                 break;
         }
 
