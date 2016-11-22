@@ -30,7 +30,7 @@
     "@types/react-dom": "^0.14.18",
     "@types/sinon": "^1.16.31",
     "mobx": "^2.6.2",
-    "mobx-react": "^3.5.9",
+    "mobx-react": "^4.0.1",
     "moment": "^2.15.2",
     "react": "^15.3.2",
     "react-datepicker": "^0.34.0",
