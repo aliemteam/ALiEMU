@@ -77,7 +77,7 @@
     "ts-loader": "^1.1.0",
     "tslint": "^3.15.1",
     "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
-    "tslint-react": "^1.1.0",
+    "tslint-react": "^2.0.0",
     "webpack": "^2.1.0-beta.25",
     "webpack-stream": "^3.2.0"
   },
