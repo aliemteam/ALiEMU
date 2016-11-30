@@ -19,7 +19,6 @@
     "filesGlob": [
         "{aliemu,lib}/**/*.{ts,tsx}",
         "node_modules/@types/**/index.d.ts",
-        "node_modules/@types/**/react-datepicker.d.ts",
         "!dist/**"
     ],
     "compileOnSave": false,
@@ -66,6 +65,6 @@
         "node_modules/@types/react-dom/index.d.ts",
         "node_modules/@types/react/index.d.ts",
         "node_modules/@types/sinon/index.d.ts",
-        "node_modules/@types/react-datepicker/react-datepicker.d.ts"
+        "node_modules/@types/react-datepicker/index.d.ts"
     ]
 }

@@ -59,11 +59,11 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: path.resolve(__dirname, 'aliemu'),
-                loaders: ['babel', 'ts'],
+                loaders: ['babel-loader', 'ts-loader'],
             },
             {
                 test: /\.css$/,
-                loaders: ['style', 'css'],
+                loaders: ['style-loader', 'css-loader'],
             },
         ],
     },
