@@ -69,7 +69,7 @@ const styles = {
 
 export const Header = ( props: HeaderProps ) =>
     <div style={styles.headerRow}>
-        {props.cells.map((cell, i) =>
+        {props.cells.map((cell, i) => (
             <div
                 key={i}
                 style={{
@@ -79,8 +79,7 @@ export const Header = ( props: HeaderProps ) =>
                 }}
                 children={cell.content}
             />
-            )
-        }
+        ))}
     </div>;
 
 export const Pager = (props: PagerProps) =>
@@ -89,7 +88,7 @@ export const Pager = (props: PagerProps) =>
             Array
             .from({length: props.totalRows }, (_k, v) => v)
             .filter((el) => el % props.visibleRows === 0)
-            .map((_el, i) =>
+            .map((_el, i) => (
                 <div
                     key={i}
                     role="button"
@@ -98,7 +97,7 @@ export const Pager = (props: PagerProps) =>
                     data-page={i}
                     onClick={props.onClick}
                 />
-            )
+            ))
         }
     </div>;
 

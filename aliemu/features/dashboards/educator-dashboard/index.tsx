@@ -10,5 +10,5 @@ useStrict(true);
 
 ReactDOM.render(
     <EducatorDashboard data={AU_EducatorData} />,
-    document.getElementById('educator-dashboard')
+    document.getElementById('educator-dashboard'),
 );

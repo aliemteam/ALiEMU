@@ -37,11 +37,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*":
-  version "0.14.51"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.51.tgz#7bb70a087632a91cc2121dd5aecc2da268b74afe"
-
-"@types/react@^0.14.52":
+"@types/react@*", "@types/react@^0.14.52":
   version "0.14.52"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-0.14.52.tgz#3bdfe5c9fe7aca2c6600ee1b0363f4b7acc69c93"
 
@@ -7558,9 +7554,9 @@ tslint-react@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/tslint-react/-/tslint-react-2.0.0.tgz#ebbd4165ee9978dd0f60e5a73635c4b3eb3a2f5a"
 
-tslint@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.0.2.tgz#d43f24c0c1f826de7f3a097bb7808a8b4325feac"
+tslint@next:
+  version "4.0.0-dev.3"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-4.0.0-dev.3.tgz#bd6ca503392506620b366c90a50d0d2548a6d247"
   dependencies:
     colors "^1.1.2"
     diff "^3.0.1"

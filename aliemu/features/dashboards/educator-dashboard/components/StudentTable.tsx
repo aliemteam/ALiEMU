@@ -153,7 +153,7 @@ export class StudentTable extends React.Component<Props, {}> {
             <div className="au-edudash-shadowbox">
                 <h2>Enrolled Students</h2>
 
-                { /* Main filter row */}
+                {/* Main filter row */}
                 <FilterRow>
                     <div>
                         Show
@@ -268,7 +268,7 @@ export class StudentTable extends React.Component<Props, {}> {
                 <Header cells={this.headerCells} />
                 {
                     paginate(this.filteredUsers, this.visibleRows, this.page)
-                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i) =>
+                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i) => (
                         <Row key={user.ID} id={`student-table-row-${i}`} className="table-row">
                             <Cell
                                 align="left"
@@ -302,7 +302,7 @@ export class StudentTable extends React.Component<Props, {}> {
                                 />
                             </Cell>
                         </Row>
-                    )
+                    ))
                 }
 
                 {/* Pagination Buttons */}

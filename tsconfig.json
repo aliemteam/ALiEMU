@@ -62,9 +62,9 @@
         "node_modules/@types/enzyme/index.d.ts",
         "node_modules/@types/jest/index.d.ts",
         "node_modules/@types/react-addons-test-utils/index.d.ts",
+        "node_modules/@types/react-datepicker/index.d.ts",
         "node_modules/@types/react-dom/index.d.ts",
         "node_modules/@types/react/index.d.ts",
-        "node_modules/@types/sinon/index.d.ts",
-        "node_modules/@types/react-datepicker/index.d.ts"
+        "node_modules/@types/sinon/index.d.ts"
     ]
 }

@@ -18,8 +18,8 @@ declare namespace ALiEMU {
         interface EducatorData {
             courseData: CourseData;
             currentUser: {
-                ID: number
-                meta: UserMeta
+                ID: number;
+                meta: UserMeta;
             };
             users: UserObject;
         }
@@ -33,13 +33,13 @@ declare namespace ALiEMU {
             courseMeta: CourseMetaObject;
             courses: CourseObject;
             lessons: {
-                [i: number]: LearnDash.Lessons
+                [i: number]: LearnDash.Lessons;
             };
         }
 
         interface CategoryObject {
             [categoryName: string]: {
-                [courseOrLessonID: number]: number
+                [courseOrLessonID: number]: number;
             };
         }
 
@@ -77,13 +77,13 @@ declare namespace ALiEMU {
             completed?: string;
             country?: string;
             courseAccessed: {
-                [courseID: number]: number
+                [courseID: number]: number;
             }|number[];
             courseCompleted?: {
-                [courseID: number]: number
+                [courseID: number]: number;
             }|number[];
             courseProgress?: {
-                [courseID: number]: LearnDash.CourseProgress
+                [courseID: number]: LearnDash.CourseProgress;
             };
             description: string;
             displayName: string;
@@ -139,12 +139,12 @@ declare namespace ALiEMU {
         interface CourseProgress {
             completed: number;
             lessons: number[] | {
-                [lessonID: number]: number
+                [lessonID: number]: number;
             };
             topics: {
                 [lessonID: number]: {
-                    [topicID: number]: number
-                }
+                    [topicID: number]: number;
+                };
             };
             total: number;
         }

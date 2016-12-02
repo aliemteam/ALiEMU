@@ -53,9 +53,10 @@ export class CourseTable extends React.PureComponent<Props, {}> {
     get relevantUsers(): ALiEMU.EducatorDashboard.UserMeta[] {
         if (this.courseSelection === '') return [];
         return Object.keys(this.props.users)
-            .filter(id => this.props.users[id].courseCompleted &&
+            .filter(id => (
+                this.props.users[id].courseCompleted &&
                 this.props.users[id].courseCompleted[this.courseSelection]
-            )
+            ))
             .map(id => this.props.users[id]);
     }
 
@@ -99,14 +100,14 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                                 aria-selected={this.categorySelection === ''}
                                 children="-- Select a Category --"
                             />
-                            { this.categories.map((category: string, i: number) =>
+                            { this.categories.map((category: string, i: number) => (
                                     <option
                                         value={category}
                                         key={i}
                                         aria-selected={this.categorySelection === category}
                                         children={category}
                                     />
-                                )
+                                ))
                             }
                         </select>
                     </Flex>
@@ -124,14 +125,14 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                                 aria-selected={this.courseSelection === ''}
                             />
                             { this.categorySelection !== '' &&
-                                Object.keys(this.props.courseData.categories[this.categorySelection]).map((courseID) =>
+                                Object.keys(this.props.courseData.categories[this.categorySelection]).map((courseID) => ( // tslint:disable-line
                                     <option
                                         value={courseID}
                                         key={courseID}
                                         children={this.props.courseData.courses[courseID].postTitle}
                                         aria-selected={this.courseSelection === courseID}
                                     />
-                                )
+                                ))
                             }
                         </select>
                     </Flex>
@@ -151,7 +152,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                 </FilterRow>
                 <Header cells={this.headerCells} />
                 { paginate(this.relevantUsers, this.visibleRows, this.page)
-                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i: number) =>
+                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i: number) => (
                         <Row key={user.ID} id={`course-table-row-${i}`}>
                             <Cell
                                 align="left"
@@ -159,10 +160,10 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                             />
                             <Cell
                                 align="left"
-                                children={ moment.unix(user.courseCompleted[this.courseSelection]).calendar() }
+                                children={moment.unix(user.courseCompleted[this.courseSelection]).calendar()}
                             />
                         </Row>
-                    )
+                    ))
                 }
                 { this.courseSelection !== '' &&
                     <Pager

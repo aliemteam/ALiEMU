@@ -25,13 +25,13 @@ const D = {
 
 interface TestUserMetaCompleted {
     courseCompleted: {
-        [i: number]: number
+        [i: number]: number;
     };
 }
 
 interface TestCourseMetaHours {
     [i: number]: {
-        recommendedHours: number
+        recommendedHours: number;
     };
 }
 
@@ -197,7 +197,8 @@ describe('downloadPolyfill', () => {
         window.URL.createObjectURL = spyCreateObjectURL;
         window.navigator.msSaveBlob = spyMsSaveBlob;
         const blob = new Blob(
-            ['test,test,test,test\ntest,test,test,test'], { type: 'text/csv;charset=utf-8' }
+            ['test,test,test,test\ntest,test,test,test'],
+            { type: 'text/csv;charset=utf-8' },
         );
         return {
             blob,

@@ -89,7 +89,7 @@ export function parseCompletionData(date: number|undefined, hours?: string): str
 export function calculateIIIHours(
     user: User,
     courseMeta: CourseMeta,
-    dateRange: {start: moment.Moment, end: moment.Moment}
+    dateRange: {start: moment.Moment, end: moment.Moment},
 ): number {
     if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
@@ -192,7 +192,7 @@ export class CSV {
                 `${courseProgress[key].completed} out of ${courseProgress[key].total}`,
                 parseCompletionData(
                     this.users[userID].courseCompleted[key],
-                    courseMeta[key].recommendedHours
+                    courseMeta[key].recommendedHours,
                 ),
                 getCourseCategory(key, categories),
             ]
