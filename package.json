@@ -33,7 +33,7 @@
     "mobx-react": "^3.5.9",
     "moment": "^2.15.2",
     "react": "^15.3.2",
-    "react-datepicker": "^0.34.0",
+    "react-datepicker": "^0.37.0",
     "react-dom": "^15.3.2",
     "typescript": "^2.1.0-dev.20161109"
   },
