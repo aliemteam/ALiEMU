@@ -11,30 +11,18 @@
 
 # Globals
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PaidPlugins=(learndash-propanel sfwd-lms)
-NATIVE=true
-CONTAINER_IP=localhost
+paid_plugins=(learndash-propanel sfwd-lms)
+is_native_docker=true
+container_ip=localhost
 
 ###
 # PRECHECKS
 #
 
-type rsync &>/dev/null
-if [[ $? == 1 ]]; then
+if ! type rsync &>/dev/null; then
     echo '=> Error: rsync must be installed.'
     exit 1
 fi
-
-# Check ownership of wp-content
-owners=$(ls -lR "$SCRIPTDIR"/wp-content | awk '{print $3}')
-for o in $owners; do
-    if [[ $o != "$USER" ]]; then
-        echo '=> Need sudo priveledges to take ownership of wp-content directory'
-        sudo chown -R "$USER" "$SCRIPTDIR"/wp-content
-        break
-    fi
-done;
-
 
 # Exit if the DSA file doesn't exist
 if [[ ! -f ./data/aliemu_dsa ]]; then
@@ -42,14 +30,21 @@ if [[ ! -f ./data/aliemu_dsa ]]; then
     exit 1
 fi
 
+# Make sure base directory structure exists
+mkdir -p "$SCRIPTDIR"/wp-content/{plugins,themes,uploads}
+
+# Check ownership of wp-content directories
+if [[ $(find "$SCRIPTDIR"/wp-content \! -user "$USER" | wc -l | awk '{print $1}') != "0" ]]; then
+    echo '=> Need sudo priveledges to take ownership of wp-content directory'
+    sudo chown -R "$USER" "$SCRIPTDIR"/wp-content
+fi
+
 # Check to see if the user is running docker through a virtual machine or natively
-#  and set the CONTAINER_IP accordingly.
-type docker-machine &>/dev/null
-if [[ $? == 0 ]]; then
-    docker-machine ip "$DOCKER_MACHINE_NAME" &>/dev/null
-    if [[ $? == 0 ]]; then
-        CONTAINER_IP=$(docker-machine ip "$DOCKER_MACHINE_NAME")
-        NATIVE=false
+#  and set the container_ip accordingly.
+if type docker-machine &>/dev/null; then
+    if docker-machine ip "$DOCKER_MACHINE_NAME" &>/dev/null; then
+        container_ip=$(docker-machine ip "$DOCKER_MACHINE_NAME")
+        is_native_docker=false
     fi
 fi
 
@@ -109,9 +104,9 @@ get_uploads() {
 }
 
 get_all_plugins() {
-    for plugin in "${PaidPlugins[@]}"; do
+    for plugin in "${paid_plugins[@]}"; do
         echo "=> Retrieving plugin: $plugin"
-        rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$PLUGIN" "$SCRIPTDIR/wp-content"
+        rsync --progress -auz -e "ssh -i $SCRIPTDIR/data/aliemu_dsa -p 18765" aliemu@c7563.sgvps.net:public_html/wp-content/plugins/"$plugin" "$SCRIPTDIR/wp-content/plugins"
         echo "=> Plugin $plugin Retrieved Successfully!"
     done
 }
@@ -130,7 +125,7 @@ get_theme() {
 
 get_database() {
     # SSH into siteground and backup the database and copy to the data directory
-    if [[ $NATIVE == true ]]; then
+    if [[ $is_native_docker == true ]]; then
         ssh -i "$SCRIPTDIR"/data/aliemu_dsa aliemu@c7563.sgvps.net -p 18765 "
         cd public_html
         wp db export database.sql"
@@ -163,7 +158,7 @@ get_database() {
 
     # Replace live URL with dev URL
     echo "=> Replacing URLs..."
-    docker exec -it aliemu_wordpress_1 bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${CONTAINER_IP}:8080' --skip-columns=guid"
+    docker exec -it aliemu_wordpress_1 bash -c "wp  --no-quiet --allow-root search-replace 'https://www.aliemu.com' 'http://${container_ip}:8080' --skip-columns=guid"
     echo "=> Database Successfully Imported!"
 }
 
