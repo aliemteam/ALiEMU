@@ -1,5 +1,3 @@
-jest.unmock('../Pagination');
-
 import { paginate } from '../Pagination';
 const before = beforeAll;
 

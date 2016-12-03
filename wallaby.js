@@ -1,6 +1,6 @@
 module.exports = {
     files: [
-        './aliem/**/*.{ts,tsx}',
+        './aliemu/**/*.{ts,tsx}',
         './lib/typings/*.d.ts',
         './package.json',
         {
@@ -8,7 +8,6 @@ module.exports = {
             instrument: false,
         },
         '!./aliemu/**/__tests__/*',
-        '!./aliemu/**/index.{ts,tsx}',
     ],
     tests: [
         './aliemu/**/__tests__/*-test.{ts,tsx}',

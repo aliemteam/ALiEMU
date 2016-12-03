@@ -1,7 +1,4 @@
 // tslint:disable max-line-length
-jest.unmock('../DashboardUtils');
-jest.unmock('moment');
-
 import * as utils from '../DashboardUtils';
 import * as sinon from 'sinon';
 import * as moment from 'moment';

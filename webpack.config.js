@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
-// const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const devPlugins = [
     new webpack.LoaderOptionsPlugin({
@@ -8,12 +10,19 @@ const devPlugins = [
         debug: false,
     }),
     new webpack.NoErrorsPlugin(),
-    // new ForkCheckerPlugin(),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //     name: 'vendor',
-    //     minChunks: 2,
-    //     filename: 'aliemu/vendor/vendor.bundle.js',
-    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity,
+        filename: 'aliemu/vendor/vendor.bundle.js',
+    }),
+    new webpack.DefinePlugin({
+        __DEV__: JSON.stringify(!isProduction),
+    }),
+    new BundleAnalyzerPlugin({
+        analyzerMode: 'server',
+        analyzerPort: 8888,
+        openAnalyzer: true,
+    }),
 ];
 
 const productionPlugins = [
@@ -21,27 +30,24 @@ const productionPlugins = [
     new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false,
+            unused: true,
+            dead_code: true,
         },
-        output: {
-            comments: false,
-        },
-        sourceMap: false,
-    }),
-    new webpack.DefinePlugin({
-        'process.env': {
-            NODE_ENV: JSON.stringify('production'),
-        },
+        screw_ie8: true,
     }),
 ];
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
     devtool: isProduction ? 'hidden-source-map' : 'eval-source-map',
     cache: true,
     entry: {
         'aliemu/features/dashboards/educator-dashboard/index': './aliemu/features/dashboards/educator-dashboard/index.tsx',
-        // vendor: ['react', 'mobx', 'mobx-react'],
+        vendor: [
+            'react',
+            'mobx',
+            'mobx-react',
+            'moment',
+        ],
     },
     output: {
         filename: '[name].js',
@@ -59,6 +65,7 @@ module.exports = {
             {
                 test: /\.tsx?$/,
                 include: path.resolve(__dirname, 'aliemu'),
+                exclude: /__tests__/,
                 loaders: ['babel-loader', 'ts-loader'],
             },
             {

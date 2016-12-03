@@ -1,6 +1,4 @@
 // tslint:disable max-line-length
-jest.unmock('../BrowserDetect');
-
 import * as sinon from 'sinon';
 import { browserDetect } from '../BrowserDetect';
 

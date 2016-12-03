@@ -5,7 +5,7 @@ Available Script Handles (updated 7/7/16)
 ----------------------------------------
 about-nav
 abt_frontend_js
-aliemu-vendors FIXME: webpack breaks common chunks at the moment -- fix this later
+aliemu-vendors
 comment-reply
 divi-custom-script
 divi-fitvids
@@ -91,7 +91,7 @@ class ScriptLoader {
 
         $this->scripts = [
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
-            // 'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
+            'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
             'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [/*'aliemu-vendors'*/], false, true],
             'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
             'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
@@ -160,7 +160,7 @@ class ScriptLoader {
                         array_push($load[1], 'toastr-css');
                         break;
                     case 'profiletab=edudash':
-                        // array_push($load[0], 'aliemu-vendors'); FIXME:
+                        array_push($load[0], 'aliemu-vendors');
                         array_push($load[0], 'educator-dashboard');
                         break;
                 }

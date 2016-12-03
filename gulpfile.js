@@ -1,25 +1,21 @@
-import autoprefixer from 'autoprefixer';
-import csso from 'gulp-csso';
-import del from 'del';
-import { exec } from 'child_process';
-import gulp from 'gulp';
-import imagemin from 'gulp-imagemin';
-import insert from 'gulp-insert';
-import jade from 'gulp-jade2php';
-import merge from 'merge-stream';
-import poststylus from 'poststylus';
-import rename from 'gulp-rename';
-import replace from 'gulp-replace';
-import rucksack from 'rucksack-css';
-// import sourcemaps from 'gulp-sourcemaps';
-import stylus from 'gulp-stylus';
-import svgmin from 'gulp-svgmin';
-import uglify from 'gulp-uglify';
-import webpack from 'webpack-stream';
-import _webpack from 'webpack';
-
-import webpackConfig from './webpack.config';
-
+const autoprefixer = require('autoprefixer');
+const csso = require('gulp-csso');
+const del = require('del');
+const exec = require('child_process').exec;
+const gulp = require('gulp');
+const imagemin = require('gulp-imagemin');
+const insert = require('gulp-insert');
+const jade = require('gulp-jade2php');
+const merge = require('merge-stream');
+const poststylus = require('poststylus');
+const rename = require('gulp-rename');
+const replace = require('gulp-replace');
+// const sourcemaps = require('gulp-sourcemaps');
+const stylus = require('gulp-stylus');
+const uglify = require('gulp-uglify');
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config');
 const browserSync = require('browser-sync').create();
 
 // ==================================================
@@ -36,7 +32,6 @@ const jadeConfig = {
 const stylusConfig = {
     use: [
         poststylus([
-            rucksack,
             autoprefixer,
         ]),
     ],
@@ -129,19 +124,12 @@ gulp.task('php', () => {
     return merge(main, templates);
 });
 
-gulp.task('assets', () => {
-    const svg = gulp
-        .src('aliemu/assets/**/*.svg', { base: './aliemu' })
-        .pipe(svgmin())
-        .pipe(gulp.dest('dist/aliemu'));
-
-    const images = gulp
-        .src('aliemu/assets/**/*.png', { base: './aliemu' })
+gulp.task('assets', () => (
+    gulp
+        .src('aliemu/assets/**/*.{png,jpg,jpeg,svg}', { base: './aliemu' })
         .pipe(imagemin())
-        .pipe(gulp.dest('dist/aliemu'));
-
-    return merge(svg, images);
-});
+        .pipe(gulp.dest('dist/aliemu'))
+));
 
 // ==================================================
 //                     Styles
@@ -171,7 +159,7 @@ gulp.task('stylus:prod', () =>
 gulp.task('webpack:dev', () =>
     gulp
         .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
-        .pipe(webpack(webpackConfig, _webpack))
+        .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
         .pipe(browserSync.stream())
     );
@@ -180,7 +168,7 @@ gulp.task('webpack:dev', () =>
 gulp.task('webpack:prod', () =>
     gulp
         .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
-        .pipe(webpack(webpackConfig, _webpack))
+        .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
 );
 
@@ -211,10 +199,6 @@ gulp.task('_dev',
         'chown',
         'clean',
         gulp.parallel('php', 'assets', 'jade', 'webpack:dev', 'stylus:dev'), () => {
-            browserSync.init({
-                proxy: 'localhost:8080',
-            });
-
             gulp.watch([
                 'aliemu/**/*.styl',
             ], gulp.series('stylus:dev'));
@@ -224,11 +208,11 @@ gulp.task('_dev',
             ], gulp.series('php', 'reload'));
 
             gulp.watch([
-                'aliemu/**/*.{svg,png,jpeg,jpg}'
+                'aliemu/**/*.{svg,png,jpeg,jpg}',
             ], gulp.series('assets', 'reload'));
 
             gulp.watch([
-                'aliemu/**/*.jade'
+                'aliemu/**/*.jade',
             ], gulp.series('jade', 'reload'));
 
             gulp.watch([
@@ -236,6 +220,11 @@ gulp.task('_dev',
                 '!aliemu/**/__tests__/',
                 '!aliemu/**/__tests__/*',
             ], gulp.series('webpack:dev', 'reload'));
+
+            browserSync.init({
+                proxy: 'localhost:8080',
+                open: false,
+            });
         }
     )
 );

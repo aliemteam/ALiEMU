@@ -6,11 +6,6 @@
   "license": "MIT",
   "repository": "https://github.com/AcademicLifeInEM/ALiEMU",
   "scripts": {
-    "deploy": "./lib/scripts/deploy",
-    "sync": "./lib/scripts/syncup",
-    "minify": "./lib/scripts/minify",
-    "wp": "wpcmd() { docker exec aliemu_wordpress_1 /bin/bash -c \"sudo -u www-data wp $(echo $@)\"; };wpcmd ",
-    "rollback": "if [[ $(git status --porcelain) ]]; then git stash; fi && git checkout master && git fetch && git pull && git revert HEAD --no-edit && npm run deploy && git stash pop",
     "lint": "npm run lint:stylint && npm run lint:tslint && npm run lint:eslint",
     "lint:stylint": "stylint aliemu/styles -c .stylintrc",
     "lint:tslint": "tslint -e \"node_modules/**/*\" \"**/*.+(ts|tsx)\" -t stylish",
@@ -18,7 +13,7 @@
     "build": "NODE_ENV=production node_modules/.bin/gulp _build",
     "start": "NODE_ENV=development node --max_old_space_size=8192 node_modules/.bin/gulp _dev",
     "pretest": "npm run lint",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@types/enzyme": "^2.5.37",
@@ -63,7 +58,6 @@
     "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^2.2.0",
     "gulp-stylus": "^2.6.0",
-    "gulp-svgmin": "^1.2.3",
     "gulp-uglify": "^2.0.0",
     "jest-cli": "^17.0.0",
     "merge-stream": "^1.0.0",
@@ -79,59 +73,27 @@
     "tslint-microsoft-contrib": "git://github.com/Microsoft/tslint-microsoft-contrib.git#releases",
     "tslint-react": "^2.0.0",
     "webpack": "^2.1.0-beta.25",
+    "webpack-bundle-analyzer": "^2.1.1",
     "webpack-stream": "^3.2.0"
-  },
-  "babel": {
-    "presets": [
-      "es2015",
-      "react"
-    ],
-    "compact": true
   },
   "jest": {
     "transform": {
       ".*": "./lib/utils/jestPreprocessor.js"
     },
     "testRegex": "__tests__/.*\\.(js|ts|tsx)$",
-    "automock": true,
+    "automock": false,
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "json"
     ],
-    "unmockedModulePathPatterns": [
-      "react",
-      "react-dom",
-      "react-addons-test-utils",
-      "enzyme",
-      "sinon",
-      "<rootDir>/lib/utils/Fixtures"
-    ],
     "verbose": true,
-    "collectCoverage": true,
     "coverageDirectory": "tmp/coverage",
     "collectCoverageFrom": [
       "aliemu/**/*.{ts,tsx}",
       "!aliemu/**/index.{ts,tsx}",
       "!**/{vendor,__tests__}/**"
     ]
-  },
-  "eslintConfig": {
-    "extends": "airbnb-base",
-    "rules": {
-      "no-use-before-define": 0,
-      "no-plusplus": 0,
-      "comma-dangle": 0,
-      "import/no-extraneous-dependencies": 0,
-      "indent": [
-        "error",
-        4
-      ]
-    },
-    "parserOptions": {
-      "ecmaVersion": 6,
-      "sourceType": "module"
-    }
   }
 }
