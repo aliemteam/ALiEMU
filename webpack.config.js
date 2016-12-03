@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -18,11 +18,11 @@ const devPlugins = [
     new webpack.DefinePlugin({
         __DEV__: JSON.stringify(!isProduction),
     }),
-    new BundleAnalyzerPlugin({
-        analyzerMode: 'server',
-        analyzerPort: 8888,
-        openAnalyzer: true,
-    }),
+    // new BundleAnalyzerPlugin({
+    //     analyzerMode: 'server',
+    //     analyzerPort: 8888,
+    //     openAnalyzer: true,
+    // }),
 ];
 
 const productionPlugins = [
