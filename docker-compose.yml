@@ -5,8 +5,6 @@ services:
         ports:
             - "443:443"
             - "8080:80"
-        links:
-            - db
         volumes:
             # Database
             - ./data:/data
@@ -47,11 +45,9 @@ services:
             WP_DEBUG: 'true'
     db:
         image: mariadb:10
-        expose:
-            - "3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
         volumes:
             - data:/var/lib/mysql
 volumes:
-    data: {}
+    data:
