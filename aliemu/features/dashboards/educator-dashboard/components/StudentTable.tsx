@@ -3,7 +3,7 @@ import { observable, action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import * as Datepicker from 'react-datepicker';
 import { paginate } from '../../../utils/Pagination';
-import * as moment from 'moment';
+import { Moment, unix } from 'moment';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import {
     downloadPolyfill,
@@ -48,10 +48,10 @@ export class StudentTable extends React.Component<Props, {}> {
     page = 0;
 
     @observable
-    startDate: moment.Moment = null;
+    startDate: Moment = null;
 
     @observable
-    endDate: moment.Moment = null;
+    endDate: Moment = null;
 
     @observable
     rowSelection = '10';
@@ -283,7 +283,7 @@ export class StudentTable extends React.Component<Props, {}> {
                                 children={
                                     !user.umLastLogin || user.umLastLogin.toString().length !== 10
                                     ? 'No activity found'
-                                    : moment.unix(user.umLastLogin).fromNow()
+                                    : unix(user.umLastLogin).fromNow()
                                 }
                             />
                             <Cell

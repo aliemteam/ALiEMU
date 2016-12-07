@@ -3,7 +3,7 @@ import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { browserDetect } from '../../../utils/BrowserDetect';
 import { paginate } from '../../../utils/Pagination';
-import * as moment from 'moment';
+import { unix } from 'moment';
 import {
     downloadPolyfill,
     CSV,
@@ -160,7 +160,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                             />
                             <Cell
                                 align="left"
-                                children={moment.unix(user.courseCompleted[this.courseSelection]).calendar()}
+                                children={unix(user.courseCompleted[this.courseSelection]).calendar()}
                             />
                         </Row>
                     ))

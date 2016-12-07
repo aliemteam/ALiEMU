@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { unix, Moment } from 'moment';
 
 type Users = ALiEMU.EducatorDashboard.UserObject;
 type Courses = ALiEMU.EducatorDashboard.CourseData;
@@ -70,13 +70,13 @@ export function parseCompletionData(date: number|undefined, hours?: string): str
         if (date === undefined) {
             return `X`;
         }
-        return moment.unix(date).calendar();
+        return unix(date).calendar();
     }
 
     if (date === undefined) {
         return `X","0`;
     }
-    return `${moment.unix(date).calendar()}","${hours}`;
+    return `${unix(date).calendar()}","${hours}`;
 }
 
 /**
@@ -89,12 +89,12 @@ export function parseCompletionData(date: number|undefined, hours?: string): str
 export function calculateIIIHours(
     user: User,
     courseMeta: CourseMeta,
-    dateRange: {start: moment.Moment, end: moment.Moment},
+    dateRange: {start: Moment, end: Moment},
 ): number {
     if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
-        const d = moment.unix(user.courseCompleted[curr]);
+        const d = unix(user.courseCompleted[curr]);
         const addedHours: number = parseInt(courseMeta[curr].recommendedHours, 10) + prev;
         switch (true) {
             case !start && !end:
