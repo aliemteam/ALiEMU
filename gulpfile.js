@@ -16,6 +16,7 @@ const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');
 const browserSync = require('browser-sync').create();
+const VERSION = require('./package.json').version;
 
 // ==================================================
 //                Configurations
@@ -75,6 +76,13 @@ gulp.task('chown', (done) => {
 // Trigger a browsersync reload
 gulp.task('reload', (done) => { browserSync.reload(); done(); });
 
+gulp.task('bump', () => (
+    gulp.src([
+        'aliemu/functions.php',
+    ], { base: './aliemu' })
+    .pipe(replace(/define\('ALIEMU_VERSION', '.+?'\);/, `define('ALIEMU_VERSION', '${VERSION}');`))
+    .pipe(gulp.dest('./aliemu'))
+));
 
 // ==================================================
 //                    Static
@@ -176,6 +184,7 @@ gulp.task('js', () =>
 
 gulp.task('_build', gulp.series(
     'clean',
+    'bump',
     gulp.parallel(
         'php',
         'assets',
