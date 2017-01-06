@@ -168,27 +168,27 @@ export class StudentTable extends React.Component<Props, {}> {
                                 children="10"
                                 aria-selected={this.rowSelection === '10'}
                             />
-                            { this.totalStudents > 25 &&
+                            { this.totalStudents > 25 && (
                                 <option
                                     value="25"
                                     children="25"
                                     aria-selected={this.rowSelection === '25'}
                                 />
-                            }
-                            { this.totalStudents > 50 &&
+                            )}
+                            { this.totalStudents > 50 && (
                                 <option
                                     value="50"
                                     children="50"
                                     aria-selected={this.rowSelection === '50'}
                                 />
-                            }
-                            { this.totalStudents > 10 &&
+                            )}
+                            { this.totalStudents > 10 && (
                                 <option
                                     value="all"
                                     children="all"
                                     aria-selected={this.rowSelection === 'all'}
                                 />
-                            }
+                            )}
                         </select>
                         students
                     </div>
@@ -239,7 +239,7 @@ export class StudentTable extends React.Component<Props, {}> {
                 </FilterRow>
 
                 {/* Date query row */}
-                { this.advancedFilterVisible &&
+                { this.advancedFilterVisible && (
                     <FilterRow>
                         <Flex amount={1}>
                             <strong
@@ -262,7 +262,7 @@ export class StudentTable extends React.Component<Props, {}> {
                             />
                         </Flex>
                     </FilterRow>
-                }
+                )}
 
                 {/* Table */}
                 <Header cells={this.headerCells} />

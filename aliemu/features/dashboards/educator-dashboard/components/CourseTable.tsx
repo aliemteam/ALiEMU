@@ -165,14 +165,14 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                         </Row>
                     ))
                 }
-                { this.courseSelection !== '' &&
+                { this.courseSelection !== '' && (
                     <Pager
                         visibleRows={this.visibleRows}
                         currentPage={this.page}
                         totalRows={this.relevantUsers.length}
                         onClick={this.paginate}
                     />
-                }
+                )}
             </div>
         );
     }

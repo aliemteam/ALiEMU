@@ -32,7 +32,7 @@ services:
                 ultimate-member,
                 wpdiscuz,
                 wp-smush,
-                [Basic-Auth-master]https://github.com/WP-API/Basic-Auth/archive/master.zip,
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
                 [local]sfwd-lms,
                 [local]learndash-propanel,

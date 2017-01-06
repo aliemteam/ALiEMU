@@ -8,6 +8,7 @@
         "no-for-in-array": false,
         "no-require-imports": false,
         "no-string-literal": false,
+        "no-angle-bracket-type-assertion": false,
         "no-unused-new": false,
         "no-var-requires": false,
         "ordered-imports": false,

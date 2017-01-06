@@ -10,10 +10,10 @@ declare namespace ALiEMU {
 
     namespace EducatorDashboard {
 
-        type DateRange = {
+        interface DateRange {
             start: any;
             end: any;
-        };
+        }
 
         interface EducatorData {
             courseData: CourseData;

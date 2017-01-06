@@ -67,7 +67,7 @@ const styles = {
     },
 };
 
-export const Header = ( props: HeaderProps ) =>
+export const Header = ( props: HeaderProps ) => (
     <div style={styles.headerRow}>
         {props.cells.map((cell, i) => (
             <div
@@ -80,9 +80,10 @@ export const Header = ( props: HeaderProps ) =>
                 children={cell.content}
             />
         ))}
-    </div>;
+    </div>
+);
 
-export const Pager = (props: PagerProps) =>
+export const Pager = (props: PagerProps) => (
     <div className="au-edudash-pager" style={props.style}>
         {
             Array
@@ -99,18 +100,20 @@ export const Pager = (props: PagerProps) =>
                 />
             ))
         }
-    </div>;
+    </div>
+);
 
-export const Cell = ( props: CellProps ) =>
+export const Cell = ( props: CellProps ) => (
     <div
         style={{
             flex: 1,
             textAlign: props.align,
         }}
         children={props.children}
-    />;
+    />
+);
 
-export const Flex = ( props: FlexProps ) =>
+export const Flex = ( props: FlexProps ) => (
     <div
         style={{
             alignItems: 'center',
@@ -120,7 +123,8 @@ export const Flex = ( props: FlexProps ) =>
             padding: '5px 0',
         }}
         children={props.children}
-    />;
+    />
+);
 
 export const Row = (props) =>
     <div style={styles.row} {...props} />;

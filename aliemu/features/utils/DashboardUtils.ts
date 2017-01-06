@@ -22,7 +22,7 @@ export function downloadPolyfill(filename: string, blob: Blob, browser: ALiEMU.B
         case 'chrome':
         case 'firefox':
         case 'edge':
-            let a: HTMLAnchorElement = document.createElement('a');
+            const a: HTMLAnchorElement = document.createElement('a');
             document.body.appendChild(a);
             a.href = URL.createObjectURL(blob);
             a.download = filename;
@@ -33,7 +33,7 @@ export function downloadPolyfill(filename: string, blob: Blob, browser: ALiEMU.B
             window.navigator.msSaveBlob(blob, filename);
             break;
         default:
-            let target = document.getElementById(ElementID);
+            const target = document.getElementById(ElementID);
             target.setAttribute('href', URL.createObjectURL(blob));
             target.setAttribute('download', filename);
             alert('Right click the button and select "save target as" to download CSV file.');
@@ -106,8 +106,8 @@ export function calculateIIIHours(
                 if (d.isAfter(start) || d.isSame(start)) return addedHours;
                 return prev;
             default:
-                let isBetween = d.isBetween(start, end);
-                let isSame = d.isSame(start) || d.isSame(end);
+                const isBetween = d.isBetween(start, end);
+                const isSame = d.isSame(start) || d.isSame(end);
                 if (isBetween || isSame) return addedHours;
                 return prev;
         }
