@@ -1,7 +1,7 @@
 module.exports = {
     files: [
         './aliemu/**/*.{ts,tsx}',
-        './lib/typings/*.d.ts',
+        './lib/types/*.d.ts',
         './package.json',
         {
             pattern: './lib/utils/*.{ts,js}',

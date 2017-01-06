@@ -59,6 +59,9 @@ series-common(colorvar)
 // Lessons
 #content-area
     #left-area
+        .post-meta
+            box-shadow: $shadow-2dp
+            border-radius: 0 0 2px 2px
         .learndash
             h2
                 font-size: 1.75em
@@ -104,13 +107,14 @@ series-common(colorvar)
                 font-family: Lato
                 border: 0
                 margin: 15px 0
-                box-shadow: $box-shadow
+                box-shadow: $shadow-2dp
+                border-radius: 2px
                 .lesson-heading
                 h2
-                    border-radius: $card-radius
                     color: white
                     font: 600 1.25em Lato
                     margin: 0
+                    border-radius: $card-radius
                     padding: 10px
                     text-align: center
                     background-color: $capsules-primary
@@ -175,7 +179,7 @@ series-common(colorvar)
             font: 300 1.5em Lato
             color: $font-color
         h4
-            padding: 0
+            padding: 0 !important
             a
                 font: 300 1em Lato
                 color: $font-color

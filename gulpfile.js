@@ -1,4 +1,4 @@
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer-stylus');
 const csso = require('gulp-csso');
 const del = require('del');
 const exec = require('child_process').exec;
@@ -7,7 +7,6 @@ const imagemin = require('gulp-imagemin');
 const insert = require('gulp-insert');
 const jade = require('gulp-jade2php');
 const merge = require('merge-stream');
-const poststylus = require('poststylus');
 const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 // const sourcemaps = require('gulp-sourcemaps');
@@ -31,9 +30,7 @@ const jadeConfig = {
 
 const stylusConfig = {
     use: [
-        poststylus([
-            autoprefixer,
-        ]),
+        autoprefixer({ browsers: 'last 2 versions' }),
     ],
 };
 
@@ -125,8 +122,7 @@ gulp.task('php', () => {
 });
 
 gulp.task('assets', () => (
-    gulp
-        .src('aliemu/assets/**/*.{png,jpg,jpeg,svg}', { base: './aliemu' })
+    gulp.src('aliemu/assets/**/*.{png,jpg,jpeg,svg}', { base: './aliemu' })
         .pipe(imagemin())
         .pipe(gulp.dest('dist/aliemu'))
 ));
@@ -136,8 +132,7 @@ gulp.task('assets', () => (
 // ==================================================
 
 gulp.task('stylus:dev', () =>
-    gulp
-        .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
+    gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
         .pipe(stylus(stylusConfig))
         .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
@@ -145,8 +140,7 @@ gulp.task('stylus:dev', () =>
 );
 
 gulp.task('stylus:prod', () =>
-    gulp
-        .src('aliemu/styles/style.styl', { base: './aliemu/styles' })
+    gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
         .pipe(stylus(Object.assign({}, stylusConfig, { compress: true })))
         .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
@@ -157,8 +151,7 @@ gulp.task('stylus:prod', () =>
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp
-        .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
         .pipe(browserSync.stream())
@@ -166,16 +159,15 @@ gulp.task('webpack:dev', () =>
 
 
 gulp.task('webpack:prod', () =>
-    gulp
-        .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
 );
 
 gulp.task('js', () =>
     gulp.src('dist/**/*.js', { base: './' })
-    .pipe(uglify(uglifyConfig))
-    .pipe(gulp.dest('./'))
+        .pipe(uglify(uglifyConfig))
+        .pipe(gulp.dest('./'))
 );
 
 // ==================================================

@@ -30,8 +30,3 @@ node_modules
 
 # Local Distribution Files
 dist
-
-# Typings
-typings/**
-!typings/ALiEMU.d.ts
-!typings/react-datepicker.d.ts

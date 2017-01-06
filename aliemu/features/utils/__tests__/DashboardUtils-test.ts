@@ -1,6 +1,5 @@
 // tslint:disable max-line-length
 import * as utils from '../DashboardUtils';
-import * as sinon from 'sinon';
 import * as moment from 'moment';
 import { courseData, users } from '../../../../lib/utils/Fixtures';
 const before = beforeAll;
@@ -189,8 +188,8 @@ describe('downloadPolyfill', () => {
         document.body.innerHTML = `
             <div><a id='test'>Test</a></div>
         `;
-        const spyCreateObjectURL = sinon.spy();
-        const spyMsSaveBlob = sinon.spy();
+        const spyCreateObjectURL = jest.fn();
+        const spyMsSaveBlob = jest.fn();
         window.URL.createObjectURL = spyCreateObjectURL;
         window.navigator.msSaveBlob = spyMsSaveBlob;
         const blob = new Blob(
@@ -209,8 +208,8 @@ describe('downloadPolyfill', () => {
         utils.downloadPolyfill('test.csv', blob, 'chrome', 'test');
         utils.downloadPolyfill('test.csv', blob, 'ie', 'test');
         utils.downloadPolyfill('test.csv', blob, 'opera', 'test');
-        expect(spyCreateObjectURL.callCount).toBe(2);
-        expect(spyMsSaveBlob.callCount).toBe(1);
+        expect(spyCreateObjectURL).toHaveBeenCalledTimes(2);
+        expect(spyMsSaveBlob).toHaveBeenCalledTimes(1);
     });
 });
 

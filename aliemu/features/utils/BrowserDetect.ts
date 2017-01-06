@@ -1,6 +1,6 @@
 // tslint:disable export-name
 export function browserDetect(): ALiEMU.BrowserType {
-    const UA: string = navigator.userAgent;
+    const UA: string = window['__AU_TEST_VARIABLE__'] || navigator.userAgent;
 
     switch (true) {
         case UA.indexOf('Edge') > -1:
