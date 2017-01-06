@@ -155,6 +155,16 @@ input[type=submit].um-button.um-alt
         > span:first-of-type
             color:$red-incorrect
             font-weight: bold
+
+    // Hint box
+    .tipp > div
+        padding: 10px
+        margin: 0 0 20px 0
+        background-color: $gray-light
+        h5
+            color: $font-color
+            padding: 0
+
     .AnswerMessage
         margin: 0 0 20px 0
     .listItem
@@ -198,14 +208,3 @@ input[type=submit].um-button.um-alt
 
 
 // I think this is for tooltips?
-.tipp > div
-    padding: 10px
-    background-color: $gray-light
-    border: 1px dotted $primary
-    border-radius: 10px
-    position: absolute
-    bottom: 5px
-    left: 5px
-    right: 5px
-    box-shadow: $box-shadow
-    z-index: 99999
