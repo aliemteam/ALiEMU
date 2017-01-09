@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const autoprefixer = require('autoprefixer-stylus');
 const csso = require('gulp-csso');
 const del = require('del');
@@ -5,11 +6,9 @@ const exec = require('child_process').exec;
 const gulp = require('gulp');
 const imagemin = require('gulp-imagemin');
 const insert = require('gulp-insert');
-const jade = require('gulp-jade2php');
 const merge = require('merge-stream');
-const rename = require('gulp-rename');
 const replace = require('gulp-replace');
-// const sourcemaps = require('gulp-sourcemaps');
+const sourcemaps = require('gulp-sourcemaps');
 const stylus = require('gulp-stylus');
 const uglify = require('gulp-uglify');
 const webpackStream = require('webpack-stream');
@@ -21,13 +20,6 @@ const VERSION = require('./package.json').version;
 // ==================================================
 //                Configurations
 // ==================================================
-
-const jadeConfig = {
-    omitPhpRuntime: true,
-    omitPhpExtractor: true,
-    arraysOnly: false,
-    noArraysOnly: true,
-};
 
 const stylusConfig = {
     use: [
@@ -88,45 +80,29 @@ gulp.task('bump', () => (
 //                    Static
 // ==================================================
 
-gulp.task('jade', () => {
-    const templatePages = gulp
-        .src('aliemu/templates/pages/*.jade', { base: './aliemu/templates/pages' })
-        .pipe(jade(jadeConfig))
-        .pipe(rename({ extname: '.php', prefix: 'page-' }))
-        .pipe(gulp.dest('dist/aliemu/'));
-
-    const templateOverrides = gulp
-        .src('aliemu/templates/overrides/*.jade', { base: './aliemu/templates/overrides' })
-        .pipe(jade(jadeConfig))
-        .pipe(rename({ extname: '.php' }))
-        .pipe(gulp.dest('dist/aliemu/'));
-
-    const templateLearndash = gulp
-        .src('aliemu/templates/learndash/*.jade', { base: './aliemu/templates' })
-        .pipe(jade(jadeConfig))
-        .pipe(rename({ extname: '.php' }))
-        .pipe(gulp.dest('dist/aliemu/'));
-
-    return merge(templatePages, templateOverrides, templateLearndash);
-});
-
-gulp.task('php', () => {
+gulp.task('static', () => {
     const main = gulp
         .src([
             'aliemu/**/*.*',
-            '!aliemu/templates/**/*.*',
-            '!aliemu/templates',
+            '!aliemu/**/templates',
+            '!aliemu/**/templates/**',
             '!aliemu/**/__tests__',
             '!aliemu/**/*.{ts,tsx,json,styl,md,txt,svg,png}',
         ], { base: './aliemu' })
         .pipe(gulp.dest('dist/aliemu'));
 
-    const templates = gulp
-        .src('aliemu/templates/pages/**/*.php')
-        .pipe(rename({ prefix: 'page-' }))
+    const pages = gulp
+        .src([
+            'aliemu/templates/pages/**/*.php',
+            'aliemu/templates/overrides/**/*.php',
+        ])
         .pipe(gulp.dest('dist/aliemu/'));
 
-    return merge(main, templates);
+    const learndash = gulp
+        .src('aliemu/templates/learndash/**/*.php')
+        .pipe(gulp.dest('dist/aliemu/learndash/'));
+
+    return merge(main, pages, learndash);
 });
 
 gulp.task('assets', () => (
@@ -139,13 +115,15 @@ gulp.task('assets', () => (
 //                     Styles
 // ==================================================
 
-gulp.task('stylus:dev', () =>
+gulp.task('stylus:dev', cb => (
     gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
-        .pipe(stylus(stylusConfig))
+        .pipe(sourcemaps.init())
+        .pipe(stylus(stylusConfig).on('error', (e) => { console.log(e.message); cb(); }))
         .pipe(insert.prepend(styleHeader))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('dist/aliemu'))
         .pipe(browserSync.stream({ match: '**/*.css' }))
-);
+));
 
 gulp.task('stylus:prod', () =>
     gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
@@ -186,9 +164,8 @@ gulp.task('_build', gulp.series(
     'clean',
     'bump',
     gulp.parallel(
-        'php',
+        'static',
         'assets',
-        'jade',
         'webpack:prod',
         'stylus:prod'
     ),
@@ -199,22 +176,18 @@ gulp.task('_dev',
     gulp.series(
         'chown',
         'clean',
-        gulp.parallel('php', 'assets', 'jade', 'webpack:dev', 'stylus:dev'), () => {
+        gulp.parallel('static', 'assets', 'webpack:dev', 'stylus:dev'), () => {
             gulp.watch([
                 'aliemu/**/*.styl',
             ], gulp.series('stylus:dev'));
 
             gulp.watch([
-                'aliemu/**/*.php',
-            ], gulp.series('php', 'reload'));
+                'aliemu/**/*.{php,js}',
+            ], gulp.series('static', 'reload'));
 
             gulp.watch([
                 'aliemu/**/*.{svg,png,jpeg,jpg}',
             ], gulp.series('assets', 'reload'));
-
-            gulp.watch([
-                'aliemu/**/*.jade',
-            ], gulp.series('jade', 'reload'));
 
             gulp.watch([
                 'aliemu/**/*.{ts,tsx}',

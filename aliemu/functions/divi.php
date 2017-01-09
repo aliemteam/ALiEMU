@@ -20,3 +20,14 @@ function remove_sidebar_when_unneeded($classes) {
     return $classes;
 }
 add_filter('body_class', 'remove_sidebar_when_unneeded');
+
+// Stub unnecessary Divi functions
+function et_gf_attach_font() { return null; }
+function et_gf_enqueue_fonts() { return null; }
+function et_get_google_fonts() { return null; }
+function et_divi_fonts_url() { return null; }
+
+function remove_divi_actions() {
+    remove_action('wp_head', 'et_divi_add_customizer_css');
+}
+add_action('after_setup_theme', 'remove_divi_actions', 999);

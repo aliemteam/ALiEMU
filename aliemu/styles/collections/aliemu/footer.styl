@@ -1,0 +1,35 @@
+
+.footer
+    display: flex
+    flex-flow: column
+
+.footer__sponsors
+    display: flex
+    box-shadow: $shadow-3dp
+    justify-content: space-around
+    height: 75px
+    background: white
+    align-items: center
+    z-index: 3
+    text-align: center
+    line-height: 1.4em
+
+.footer__bottom
+    background: $gray-dark
+    z-index: 3
+    display: flex
+    height: 50px
+    justify-content: space-between
+    align-items: center
+    padding: 0 20px
+    > div:first-of-type
+        color: $font-secondary
+    > div:last-of-type
+        display: flex
+        > div
+            margin: 0 5px
+
+@media (max-width: 480px)
+    .footer__bottom > div:first-of-type,
+    .footer__tagline
+        display: none

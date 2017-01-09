@@ -1,15 +1,94 @@
+// Particles -------------------------------------------------------------------
+#particles
+    position: fixed
+    z-index: 1
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    background-color: $secondary
+    background-image: url('')
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: 50% 50%
+    canvas
+        width: 100%
+        height: 100%
+        transform: scale(1)
+        display: block
+        vertical-align: bottom
 
-// ==================================================
-//                 About Page
-// ==================================================
+// Login Page ------------------------------------------------------------------
+.login-box
+    background: white
+    box-shadow: $shadow-2dp
+    padding: 20px
+    border-radius: 2px
 
-#post-1151
-    .et_pb_row
-        display: flex
+// Contact Page ----------------------------------------------------------------
+.contact-form
+    box-shadow: $shadow-2dp
+    background: white
+    border-radius: 2px
+    padding: 20px
+    width: 80%
+    margin: auto
+    margin-top: 0
 
+.contact-form__row
+    min-height: 50px
+    align-items: center
+    justify-content: space-between
+    display: flex
+    width: 100%
+    margin-bottom: $block-margin
+
+.contact-form__row_submit
+    align-items: flex-start
+
+.contact-form__item
+    display: flex
+    flex: auto
+    width: 100%
+    &:first-of-type label
+        padding-left: 0
+    input
+        flex: auto
+    label
+        padding: 0 20px
+
+// Team Page ------------------------------------------------------------
+.team-member
+    display: flex
+    flex-direction: column
+    max-width: 250px
+    margin: 20px
+
+.team-member__photo img
+    max-height: 250px
+    max-width: 250px
+    height: 100%
+    width: 100%
+    border-radius: 250px
+    margin-bottom: 10px
+
+.team-member__info
+    display: flex
+    flex-direction: column
+    flex: auto
+
+.team-member__name
+    display: flex
+    h4
+        display: inline-block
+    div
+        display: inline-block
+        padding-right: 5px
+
+// FIXME: All of below
 +prefix-classes('au-')
     .team-header
-        height: 300px
+        height: 150px
         background: $primary
         &.air-team
             background: $air-primary
@@ -18,7 +97,7 @@
         &.capsules-team
             background: $capsules-primary
         h1
-            font: 600 3em Lato
+            font: 600 3em
             color: white
             line-height: @height
             text-align: center
@@ -55,81 +134,3 @@
     // Circular portraits
     .person-circle img
         border-radius: 100%
-
-// Team member headers
-
-
-
-// ==================================================
-//                 Contact Page
-// ==================================================
-#contact-form
-    max-width: 80%
-    margin: auto
-
-// ==================================================
-//                 User Agreement
-// ==================================================
-#au-terms
-    max-width: 80%
-    margin: 40px auto
-    h1
-        font-weight: 600
-        text-align: center
-        margin: 15px 0
-    h2
-        font-weight: 600
-        margin: 10px 0
-    h4
-        text-decoration: underline
-        margin-left: 20px
-    p, ul, ol
-        margin-left: 40px
-        text-align: justify
-    p:first-of-type
-        margin-left: 0
-
-// ==================================================
-//                     Footer
-// ==================================================
-#main-footer
-    display: flex
-    flex-flow: column
-    background: $gray-dark
-#footer-sponsors
-    display: flex
-    .footer-sponsors-container
-        background: $gray-light
-        padding: 5px
-        width: 100%
-        z-index: 2
-        display: flex
-        justify-content: space-around
-        a>img
-            max-height: 75px
-            opacity: 0.5
-#footer-bottom
-    display: flex
-    padding: 0
-    .footer-bottom-container
-        display: flex
-        z-index: 2
-        background: $gray-dark
-        flex: auto
-        justify-content: space-between
-        padding: 0 20px
-        > div
-            line-height: 50px
-            height: 50px
-        #footer-social-icons
-            display: flex
-            > div
-                padding: 0 5px
-            a::before
-                line-height: 50px
-        #footer-info
-            padding-bottom: 0
-
-@media (max-width: 480px)
-    #footer-info
-        display: none

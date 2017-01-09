@@ -1,8 +1,9 @@
+// Shadows ---------------------------------------------------------------------
 $shadow-key-umbra-opacity = 0.2
 $shadow-key-penumbra-opacity = 0.14
 $shadow-ambient-shadow-opacity = 0.12
 
-$shadow-focus = 0 0 8px rgba(0,0,0,.18),0 8px 16px rgba(0,0,0,.36);
+$shadow-focus = 0 0 8px rgba(0,0,0,.18),0 8px 16px rgba(0,0,0,.36)
 $shadow-2dp = 0 2px 2px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 3px 1px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 1px 5px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity)
 $shadow-3dp = 0 3px 4px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 3px 3px -2px rgba(0, 0, 0, $shadow-key-umbra-opacity), 0 1px 8px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity)
 $shadow-4dp = 0 4px 5px 0 rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 1px 10px 0 rgba(0, 0, 0, $shadow-ambient-shadow-opacity), 0 2px 4px -1px rgba(0, 0, 0, $shadow-key-umbra-opacity)
@@ -11,87 +12,27 @@ $shadow-8dp = 0 8px 10px 1px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 3px 
 $shadow-16dp = 0 16px 24px 2px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0  6px 30px 5px rgba(0, 0, 0, $shadow-ambient-shadow-opacity), 0  8px 10px -5px rgba(0, 0, 0, $shadow-key-umbra-opacity)
 $shadow-24dp = 0 9px 46px  8px rgba(0, 0, 0, $shadow-key-penumbra-opacity), 0 11px 15px -7px rgba(0, 0, 0, $shadow-ambient-shadow-opacity), 0 24px 38px  3px rgba(0, 0, 0, $shadow-key-umbra-opacity)
 
+// Transitions -----------------------------------------------------------------
+$animation-curve-fast-out-slow-in = cubic-bezier(0.4, 0, 0.2, 1)
+$animation-curve-linear-out-slow-in = cubic-bezier(0, 0, 0.2, 1)
+$animation-curve-fast-out-linear-in = cubic-bezier(0.4, 0, 1, 1)
+$animation-curve-default = $animation-curve-fast-out-slow-in
+
 $shadow-transition = all 0.3s cubic-bezier(.25,.8,.25,1)
+$button-transition = box-shadow 0.2s $animation-curve-fast-out-linear-in, background-color 0.2s $animation-curve-default, color 0.2s $animation-curve-default
 
+// Margins / Spacing / Sizing --------------------------------------------------
+$block-margin = 20px
+$header-height = 50px
+$footer-height = 125px
+$admin-bar-height = 32px
 
-// ================== Borders ==================
-$card-radius = 2px 2px 0 0 // Border radius for card-type items (top only)
-
-
-// ================== Mixins ===================
-
-bordered-button(type, color = false, hovercolor = false)
-    font-size: 14px
-    font-family: 'Lato'
-    background: transparent
-    text-decoration: none
-    text-align: center
-    border: solid 2px
-    border-radius: 5px
-    outline: 0
-    color: $primary
-    if color is a 'color'
-        color: color
-    &:hover
-        border-color: transparent
-        transition: 0.1s
-        cursor: pointer
-        if hovercolor is a 'color'
-            color: hovercolor
-        else
-            color: white
-        background-color: $primary
-        if color is a 'color'
-            background-color: color
-    if type is small
-        padding: 5px 8px
-        min-width: 80px
-    if type is medium
-        padding: 8px 8px
-        min-width: 100px
-    if type is large
-        padding: 10px 15px
-        min-width: 120px
-
-card(primary-color)
-    padding: 40px 0
-    margin: auto
-    max-width: 85%
-    @media (max-width: 480px)
-        margin: 0 0 20px 0
-        max-width: none
-    .au-heading
-        display: flex
-        align-items: center
-        justify-content: center
-        border-radius: 2px 2px 0 0
-        height: 50px
-        background: primary-color
-        text-align: center
-        h1
-            color: white
-            line-height: 25px
-            margin: 0
-            padding: 0
-    .au-content
-        display: flex
-        justify-content: center
-        @media (max-width: 480px)
-            flex-direction: column
-        padding: 20px
-        background: $gray-light
-        border-radius: 0 0 2px 2px
-        .au-text
-            flex: auto
-            a
-                font-weight: 600
-                color: primary-color
-                &:hover
-                    color: lighten(primary-color, 10)
-            @media (max-width: 480px)
-                order: 2
-                text-align: justify
-    .au-image
-        margin: 10px
-        img
-            min-width: 200px
+// Mixins ----------------------------------------------------------------------
+noselect()
+    -webkit-appearance: none
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+    -khtml-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none

@@ -141,8 +141,8 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                             id="course-export"
                             className={
                                 this.courseSelection !== ''
-                                ? 'au-edudash-exportbtn'
-                                : 'au-edudash-exportbtn-disabled'
+                                ? 'btn btn--primary'
+                                : 'btn btn--primary btn--disabled'
                             }
                             children="Export Course Data"
                             role="button"

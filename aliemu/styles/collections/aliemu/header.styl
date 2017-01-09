@@ -1,0 +1,86 @@
+.header
+    display: flex
+    justify-content: space-between
+    background-color: white
+    width: 100%
+    height: $header-height
+    align-items: center
+    padding: 0 20px
+    box-shadow: $shadow-3dp
+    z-index: 3
+
+.header__logo
+    position: relative
+    height: 30px
+
+.nav-container,
+.nav,
+.nav li
+    height: $header-height
+    line-height: $header-height
+
+.nav-container
+    font-weight: 500
+    ul
+        list-style: none
+        position: relative
+        margin: 0
+        padding: 0
+        ul
+            display: none
+            position: absolute
+            box-shadow: $shadow-4dp
+            top: 100%
+            height: auto
+            margin: 0
+            right: 0
+            border-top: solid 3px $primary
+            background: white
+            padding: 0
+            ul
+                top: 0
+                left: 100%
+            li
+                float: none
+                width: 150px
+                &:hover
+                    background: $secondary
+                a
+                    margin: 0
+                    padding: 0 10px
+        li
+            font-size: 14px
+            position: relative
+            float: left
+            margin: 0
+            // padding: 0 0 0 20px
+            &:hover > ul
+                display: block
+
+.nav-container>ul>li
+    padding: 0 0 0 20px
+
+#top-menu
+    margin: 0 !important
+
+.mobile_menu_bar_toggle // @stylint ignore
+    padding: 0
+
+// Mobile nav == FIXME: this needs to be completely fixed
+ul.et_mobile_menu
+    border-top: 3px solid $primary
+    display: block
+    padding: 0
+    list-style-type: none
+    margin: 0
+    ul
+        margin: 0
+        li
+            padding: 0
+
+.et_mobile_menu .menu-item-has-children > a
+    background-color: rgba(0, 0, 0, 0.03)
+    font-weight: 500
+
+.mobile-menu--hidden
+    display: none !important

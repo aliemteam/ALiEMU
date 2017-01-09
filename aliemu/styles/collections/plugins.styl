@@ -1,60 +1,15 @@
-// ================== Tablepress ==================
-#content-area
-    #left-area
-        .tablepress-table-name
-            font: 600 1em Lato
-            text-align: center
+// @stylint off
+// ABT -------------------------------------------------------------------------
+.abt-bibliography__heading
+    margin-left: -10px !important
+    &::before
+        top: 8px !important
 
-        h2.tablepress-table-name
-            font-size: 1.5em
+.abt-bibliography__container
+    font-size: 0.8em !important
 
-
-        .tablepress
-            thead
-                th
-                    color: white
-                    font: 400 1.2em Lato
-                    text-align: center
-                    background: $primary
-            tfoot
-                th
-                    @extend #content-area #left-area .tablepress thead th
-                    font-size: 0.8em
-                    text-align: left
-                    a
-                        color: white
-
-        .category-capsules
-        .tag-capsules
-            .tablepress
-                thead, tfoot
-                    th
-                        background-color: $capsules-primary
-
-        .category-air
-        .tag-air
-            .tablepress
-                thead, tfoot,
-                    th
-                        background-color: $air-primary
-
-        .category-air-pro
-        .tag-air-pro
-            .tablepress
-                thead, tfoot,
-                    th
-                        background-color: $airpro-primary
-
-
-#content-area .au-table-needsborders td
-    border: 1px solid $gray-light
-    text-align: center
-    vertical-align: middle
-
-
-
-// ================== Ultimate Member ==================
-
+// TODO: Review all of below
+// Ultimate Member -------------------------------------------------------------
 img.um-avatar
     border-radius: 100px
     width: 25px
@@ -62,29 +17,14 @@ img.um-avatar
     top: 7px
     margin-left: 8px
 
-// Comments
-.category-capsules
-.tag-capsules
-    #wc-comment-header
-        background-color: $capsules-primary
-.category-air
-.tag-air
-    #wc-comment-header
-        background-color: $air-primary
-.category-air-pro
-.tag-air-pro
-    #wc-comment-header
-        background-color: $airpro-primary
-
 #wc-comment-header
     color: white
     background-color: $primary
     text-align: center
     font-weight: 400
     padding: 10px
-    margin-top: 40px
-    border-radius: $card-radius
-
+    margin: 0 !important
+    border-radius: 2px 2px 0 0
 
 // Bio box
 .ts-fab-avatar .avatar
@@ -94,7 +34,6 @@ img.um-avatar
 .ts-fab-wrapper
     padding: 1em 0
     clear: both
-
 
 // Profiles
 .um-profile-body
@@ -117,24 +56,7 @@ input[type=submit].um-button.um-alt
     color: $primary !important
 
 
-// ================== WpProQuiz ==================
-
-
-.category-air
-.tag-air
-    .wpProQuiz_button
-        bordered-button(small, $air-primary)
-
-.category-capsules
-.tag-capsules
-    .wpProQuiz_button
-        bordered-button(small, $capsules-primary)
-
-.category-air-pro
-.tag-air-pro
-    .wpProQuiz_button
-        bordered-button(small, $airpro-primary)
-
+// WpProQuiz -------------------------------------------------------------------
 .quiz_continue_link
     order: 1
     a#quiz_continue_link
@@ -146,6 +68,10 @@ input[type=submit].um-button.um-alt
             transition: .1s !important
 
 +prefix-classes('wpProQuiz_')
+    .button
+        @extends .btn
+        @extends .btn--flat
+        color: $primary
     .correct
         > span:first-of-type
             color: $green-correct
@@ -155,14 +81,17 @@ input[type=submit].um-button.um-alt
         > span:first-of-type
             color:$red-incorrect
             font-weight: bold
+    .spinner,
+    .spinner > div
+        z-index: 10000000
 
     // Hint box
     .tipp > div
         padding: 10px
         margin: 0 0 20px 0
-        background-color: $gray-light
+        background-color: $secondary
         h5
-            color: $font-color
+            color: $font-primary
             padding: 0
 
     .AnswerMessage
@@ -176,12 +105,13 @@ input[type=submit].um-button.um-alt
     .list
         padding-bottom: 0 !important
         .questionList
-            background: $gray-light
+            background: $secondary
             border-radius: 3px
             padding: 20px !important
             margin: 0 0 20px 0
             .questionListItem
                 list-style: none
+                padding-left: 20px
                 .questionInput
                     line-height: 26px
                     margin-left: -20px
@@ -202,9 +132,7 @@ input[type=submit].um-button.um-alt
     .graded_points
         display: none
 
-// WP Discuz
+
+// WP Discuz -------------------------------------------------------------------
 #wpcomm .wc-comment-title
     text-align: center
-
-
-// I think this is for tooltips?

@@ -16,7 +16,7 @@ jquery-masonry
 magnific-popup
 masonry
 nav-helper
-particles-home
+particles
 particlesjs
 toastr
 um_minified
@@ -39,10 +39,8 @@ jquery-dropdown-css
 learndash_style
 learndash_template_style_css
 magnific-popup
-open-sans
 parent-style
 sfwd_front_css
-tablepress-default
 toastr-css
 um-recaptcha
 wpProQuiz_front_style
@@ -70,7 +68,6 @@ class ScriptLoader {
     private $lessonPageStyles = [
         'abt_frontend_styles',
         'et-shortcodes-css',
-        'tablepress-default',
     ];
 
     private $lessonPageScripts = [
@@ -87,23 +84,24 @@ class ScriptLoader {
      * @param string $query   Server query string
      */
     public function __construct($request, $query) {
-        global $current_user, $ROOT_URI, $TEMPLATE_URI;
+        global $current_user, $ROOT_URI;
 
         $this->scripts = [
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
+            'divi-crap-js' => ['divi-crap-js', $ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
             'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
             'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [/*'aliemu-vendors'*/], ALIEMU_VERSION, true],
             'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
-            'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js'],
-            'particles-home' => ['particles-home', $ROOT_URI . '/js/particles-home.js', ['particlesjs'], false, true],
+            'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true],
+            'particles' => ['particles', $ROOT_URI . '/js/particles.js', ['particlesjs'], false, true],
             'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', [], '2.1.2', true],
         ];
 
         $this->styles = [
+            'roboto-font' => ['roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&amp;subset=cyrillic,greek'],
             'bootstrap-nav-css' => ['bootstrap-nav-css', $ROOT_URI .'/vendor/side-nav.css'],
-            'child-style' => ['child-style', $ROOT_URI  . '/style.css', ['parent-style'], ALIEMU_VERSION],
-            'parent-style' => ['parent-style', $TEMPLATE_URI . '/style.css'],
             'toastr-css' => ['toastr-css', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css', false, '2.1.2'],
+            'child-style' => ['child-style', $ROOT_URI  . '/style.css', ALIEMU_VERSION],
         ];
         $this->delegate($request, $query, $current_user);
     }
@@ -120,13 +118,13 @@ class ScriptLoader {
     private function delegate($req, $query, $user) {
         // Always load these
         $load = [
-            ['nav-helper'],
-            ['parent-style', 'child-style'],
+            ['nav-helper', 'divi-crap-js'],
+            ['child-style', 'roboto-font'],
         ];
         // Always unload these
         $unload = [
-            ['divi-fitvids', 'waypoints', 'magnific-popup'],
-            ['wpProQuiz_front_style', 'magnific-popup'],
+            ['divi-fitvids', 'waypoints', 'magnific-popup', 'divi-custom-script'],
+            ['wpProQuiz_front_style', 'magnific-popup', 'theme-customizer', 'divi-style', 'learndash_template_style_css'],
         ];
 
         // Not learndash pages
@@ -145,7 +143,7 @@ class ScriptLoader {
         switch ($req) {
             case '/':
             case '/faculty-start/':
-                array_push($load[0], 'particlesjs', 'particles-home');
+                array_push($load[0], 'particlesjs', 'particles');
                 break;
             case '/about/':
                 array_push($load[0], 'about-nav');
@@ -181,12 +179,12 @@ class ScriptLoader {
      * @return void
      */
     private function load($scripts, $styles) {
-        foreach(array_unique($styles) as $style) {
+        foreach(array_reverse(array_unique($styles)) as $style) {
             // FIXME: Convert back when we ditch siteground
             // wp_enqueue_style(...$this->styles[$style]);
             call_user_func_array('wp_enqueue_style', $this->styles[$style]);
         }
-        foreach(array_unique($scripts) as $script) {
+        foreach(array_reverse(array_unique($scripts)) as $script) {
             // FIXME: Convert back when we ditch siteground
             // wp_enqueue_script(...$this->scripts[$script]);
             call_user_func_array('wp_enqueue_script', $this->scripts[$script]);
@@ -216,25 +214,23 @@ class ScriptLoader {
  * @param  string $tag The entire script tag (eg <script ...>)
  * @return string The entire script tag.
  */
-function scriptAsyncDefer($tag) {
-
-    preg_match('/\/([A-Za-z0-9-]+)(?:\.min)?\.js\?/', $tag, $scriptName);
-    if (!$scriptName) return $tag;
-
-    $asyncScripts = [
-        'particles',
-    ];
-
-    $deferScripts = [];
-
-    if (in_array($scriptName[1], $asyncScripts)) {
-        return str_replace(' src', ' async src', $tag);
-    }
-
-    if (in_array($scriptName[1], $deferScripts)) {
-        return str_replace(' src', ' defer src', $tag);
-    }
-
-    return $tag;
-}
-add_filter('script_loader_tag', 'scriptAsyncDefer', 10);
+// function scriptAsyncDefer($tag) {
+//
+//     preg_match('/\/([A-Za-z0-9-]+)(?:\.min)?\.js\?/', $tag, $scriptName);
+//     if (!$scriptName) return $tag;
+//
+//     $asyncScripts = [];
+//
+//     $deferScripts = [];
+//
+//     if (in_array($scriptName[1], $asyncScripts)) {
+//         return str_replace(' src', ' async src', $tag);
+//     }
+//
+//     if (in_array($scriptName[1], $deferScripts)) {
+//         return str_replace(' src', ' defer src', $tag);
+//     }
+//
+//     return $tag;
+// }
+// add_filter('script_loader_tag', 'scriptAsyncDefer', 10);

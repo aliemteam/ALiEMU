@@ -1,88 +1,19 @@
 @require '../../variables'
 
-body
-    font-family: Lato
+// Order matters with these
+@require 'typography'
+@require 'layout'
 
-p
-    letter-spacing: 0.01em
-    word-spacing: 0.05em
-    color: $font-color
-
-
-a.disabled
-    pointer-events: none
-    cursor: default
-    opacity: 0.5
-
-
-select:disabled
-    opacity: 0.5
-
-input[type='text']
-input[type='email']
-    padding: 0 12px
-    width: 100%
-    border-radius: 2px
-    cursor: text
-    font-size: 1em
-    height: 40px
-    box-sizing: border-box
-    margin: 0
-    outline: 0
-    &:invalid
-        background: #ffddde // @stylint ignore
-
-textarea
-    font-size: 1em
-    border-radius: 2px
-    padding: 12px
-
-input[type='submit']
-    bordered-button('medium')
-
-form:invalid
-    input[type='submit'] // @stylint ignore
-        pointer-events: none
-        opacity: 0.5
-
-
-#left-area ol,
-.comment-content ol,
-.entry-content ol
-    list-style-type: decimal
-    list-style-position: inside
-
-
-// Remove padding on homepage slider
-#post-2 .entry-content
-    padding: 0
-
-
-// WordPress Image Box w/ Caption Formatting
-.wp-caption
-    border: 0
-    text-align: center
-    background-color: $gray-light
-    padding: 4px 8px 8px 8px
-    margin: 20px 0
-    font-family: Lato
-    border-radius: $card-radius
-    box-shadow: $shadow-2dp
-
-    p.wp-caption-text
-        padding: 0 4px 5px
-        margin: 0
-        text-align: justify
-
-@media only screen and (max-width: 768px)
-    h1
-        font-size: 1.5em
-
-@require 'homepage'
-@require 'series-pages'
-@require 'dashboards'
-@require 'courselist'
-@require 'misc'
 @require 'about'
-@require 'generic'
-@require 'feedback'
+@require 'buttons'
+@require 'card'
+@require 'course-list'
+@require 'footer'
+@require 'header'
+@require 'misc'
+@require 'shortcodes'
+@require 'tables'
+
+// Needs work still
+@require 'homepage'
+@require 'dashboards'

@@ -1,28 +1,21 @@
 <?php
-/**
- * Adds ALiEMU Shortcodes
- *
- * @since 1.0.0
- * @version 0.0.1
- * @author Chris Gaafary
- */
 
 function au_capsule_shortcode($atts, $content = null) {
     $a = shortcode_atts([
         'heading' => 'CAPSULE',
     ], $atts);
     extract($a);
-    $content = ($heading === 'CAPSULE')
-        ? '<h4>' . do_shortcode($content) . '</h4>'
-        : do_shortcode($content);
-    return "
-        <div class='lesson-box'>
-            <h2 class='lesson-heading'>$heading</h2>
-            <div class='lesson-body'>
-                $content
+    $bodyClass = $heading === 'CAPSULE'
+        ? 'capsule-box__body capsule-box__body--capsule'
+        : 'capsule-box__body';
+    ?>
+        <div class="capsule-box">
+            <div class="capsule-box__heading"><?php echo $heading; ?></div>
+            <div class="<?php echo $bodyClass; ?>">
+                <?php echo do_shortcode($content); ?>
             </div>
         </div>
-    ";
+    <?php
 }
 add_shortcode('capsule', 'au_capsule_shortcode');
 
