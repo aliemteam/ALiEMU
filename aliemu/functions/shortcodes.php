@@ -8,14 +8,16 @@ function au_capsule_shortcode($atts, $content = null) {
     $bodyClass = $heading === 'CAPSULE'
         ? 'capsule-box__body capsule-box__body--capsule'
         : 'capsule-box__body';
-    ?>
-        <div class="capsule-box">
-            <div class="capsule-box__heading"><?php echo $heading; ?></div>
-            <div class="<?php echo $bodyClass; ?>">
-                <?php echo do_shortcode($content); ?>
-            </div>
+
+    return
+    "<div class='capsule-box'>
+        <div class='capsule-box__heading'>$heading</div>
+        <div class='$bodyClass'>
+            " . do_shortcode($content) . "
         </div>
-    <?php
+    </div>";
+
+
 }
 add_shortcode('capsule', 'au_capsule_shortcode');
 
