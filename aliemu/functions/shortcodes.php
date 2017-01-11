@@ -16,8 +16,6 @@ function au_capsule_shortcode($atts, $content = null) {
             " . do_shortcode($content) . "
         </div>
     </div>";
-
-
 }
 add_shortcode('capsule', 'au_capsule_shortcode');
 
