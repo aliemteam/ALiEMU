@@ -6,6 +6,18 @@
 remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
 
+/**
+ * Load / unload styles from tinymce
+ */
+function aliemu_editor_styles($styles) {
+    $css = array_filter(explode(',', $styles), function($style) {
+        return ! preg_match('/Divi/', $style);
+    });
+    $css[] = 'https://fonts.googleapis.com/css?family=Roboto:300%2C400%2C400i%2C500%2C700&amp;subset=cyrillic%2Cgreek';
+    $css[] = get_stylesheet_directory_uri() . '/editor.css';
+    return join(',', $css);
+}
+add_filter('mce_css', 'aliemu_editor_styles');
 
 /**
  * Toastr notification for Residents who do not have a grad year saved.

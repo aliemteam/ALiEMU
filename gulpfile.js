@@ -116,7 +116,7 @@ gulp.task('assets', () => (
 // ==================================================
 
 gulp.task('stylus:dev', cb => (
-    gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
+    gulp.src(['aliemu/styles/{style,editor}.styl'], { base: './aliemu/styles' })
         .pipe(sourcemaps.init())
         .pipe(stylus(stylusConfig).on('error', (e) => { console.log(e.message); cb(); }))
         .pipe(insert.prepend(styleHeader))
