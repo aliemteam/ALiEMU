@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@types/enzyme": "^2.7.1",
-    "@types/jest": "^16.0.3",
+    "@types/jest": "^16.0.4",
     "@types/moment": "^2.13.0",
     "@types/react": "^15.0.0",
     "@types/react-addons-test-utils": "^0.14.16",
@@ -51,7 +51,7 @@
     "gulp-imagemin": "^3.1.1",
     "gulp-insert": "^0.5.0",
     "gulp-replace": "^0.5.4",
-    "gulp-sourcemaps": "^2.3.1",
+    "gulp-sourcemaps": "^2.4.0",
     "gulp-stylus": "^2.6.0",
     "gulp-uglify": "^2.0.0",
     "jest-cli": "^18.1.0",
