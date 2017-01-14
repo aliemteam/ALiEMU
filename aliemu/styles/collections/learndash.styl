@@ -30,3 +30,32 @@
     @extends .btn
     @extends .btn--primary
     background: $primary
+
+// Content Tables (Lessons, Quizzes, etc)
+.content-table
+    box-shadow: $shadow-2dp
+    margin-bottom: $block-margin
+    border-radius: 2px
+
+.content-table__row
+    height: 50px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    font-weight: 400
+    padding: 0 $block-margin
+    border-bottom: solid $secondary 1px
+    &:last-of-type
+        border-radius: 0 0 2px 2px
+
+.content-table__row--header
+    padding: $block-margin
+    background: $primary
+    color: white
+    font-weight: 500
+    border-radius: 2px 2px 0 0
+
+.content-table__cell
+    display: flex
+    flex-flow: column nowrap
+    justify-content: center

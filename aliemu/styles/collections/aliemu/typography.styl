@@ -109,6 +109,29 @@ sub
 sup
     top: -0.5em
 
+blockquote
+    color: $font-secondary
+    border-left: 4px solid $primary
+    background: $tertiary
+    margin: 0 0 1.5em 0
+    padding: 1.5em 10px 1px 10px
+    img
+        display: inline-block
+
 ::selection
     background: $primary
     color: white
+
+.wp-caption
+    max-width: 100%
+    background: $tertiary
+    padding: 10px
+    border-radius: 2px
+    margin: ($block-margin * 2) 0
+    color: $font-secondary
+    font-style: italic
+    box-shadow: $shadow-2dp
+.wp-caption-text
+    text-align: justify
+    margin: 0 !important
+    padding-top: 5px

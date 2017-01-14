@@ -7129,8 +7129,8 @@ typedarray@~0.0.5:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 typescript@next:
-  version "2.2.0-dev.20170113"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170113.tgz#aad3c1cb95c040e63c51a103a834964fccf409f5"
+  version "2.2.0-dev.20170114"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170114.tgz#cbff198a27561dbaa3c4d85a63d05c2277d8b5de"
 
 ua-parser-js@0.7.12, ua-parser-js@^0.7.9:
   version "0.7.12"

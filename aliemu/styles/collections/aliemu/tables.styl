@@ -1,9 +1,23 @@
 table
+    thead
+        & tr:first-of-type > td, th
+            &:first-of-type
+                border-top-left-radius: 2px
+            &:last-of-type
+                border-top-right-radius: 2px
+    tbody
+        & tr:last-of-type > td, th
+            &:first-of-type
+                border-bottom-left-radius: 2px
+        & tr:last-of-type > td
+            &:last-of-type
+                border-bottom-right-radius: 2px
     border-collapse: collapse
     border-spacing: 0
     width: 100%
     margin-bottom: 1.5em
     border: none
+    border-radius: 2px
     box-shadow: $shadow-2dp
     thead>tr>td,
     tbody>tr>th
