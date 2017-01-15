@@ -18,43 +18,31 @@
                 },
                 shape: {
                     type: 'circle',
-                    stroke: {
-                        width: 0,
-                        color: '#000000',
-                    },
-                    polygon: {
-                        nb_sides: 5,
-                    },
-                    image: {
-                        src: 'img/github.svg',
-                        width: 100,
-                        height: 100,
-                    },
                 },
                 opacity: {
-                    value: 0.5,
-                    random: false,
+                    value: 0.8,
+                    random: true,
                     anim: {
                         enable: false,
                         speed: 1,
-                        opacity_min: 0.1,
+                        opacity_min: 0.4,
                         sync: false,
                     },
                 },
                 size: {
-                    value: 4,
+                    value: 3,
                     random: true,
                     anim: {
                         enable: false,
-                        speed: 19.18081918081918,
-                        size_min: 0.1,
+                        speed: 20,
+                        size_min: 1,
                         sync: false,
                     },
                 },
                 line_linked: {
                     enable: true,
-                    distance: 142.0465754938091,
-                    color: '#666666',
+                    distance: 150,
+                    color: '#345995',
                     opacity: 0.3,
                     width: 1,
                 },
@@ -88,20 +76,20 @@
                 },
                 modes: {
                     grab: {
-                        distance: 179.82017982017982,
+                        distance: 175,
                         line_linked: {
-                            opacity: 0.5747545150609971,
+                            opacity: 0.5,
                         },
                     },
                     bubble: {
                         distance: 400,
-                        size: 40,
+                        size: 4,
                         duration: 2,
                         opacity: 8,
                         speed: 3,
                     },
                     repulse: {
-                        distance: 200,
+                        distance: 80,
                         duration: 0.4,
                     },
                     push: {

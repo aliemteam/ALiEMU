@@ -91,10 +91,9 @@ hr
 
 // Inline elements -------------------------------------------------------------
 a
-    color: $primary
+    color: $accent
+    font-weight: bolder
     text-decoration: none
-    &:not('.btn'):hover
-        color: darken($primary, 15)
 
 strong
     font-weight: 500
@@ -117,6 +116,9 @@ blockquote
     padding: 1.5em 10px 1px 10px
     img
         display: inline-block
+
+label
+    noselect()
 
 ::selection
     background: $primary

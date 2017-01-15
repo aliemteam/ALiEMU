@@ -10,24 +10,15 @@
 
 .abt-bibliography__container
     font-size: 0.8em !important
+    padding: 0 $block-margin
 
 // TODO: Review all of below
 // Ultimate Member -------------------------------------------------------------
 img.um-avatar
     border-radius: 100px
-    width: 25px
     position: relative
     top: 7px
     margin-left: 8px
-
-#wc-comment-header
-    color: white
-    background-color: $primary
-    text-align: center
-    font-weight: 400
-    padding: 10px
-    margin: 0 !important
-    border-radius: 2px 2px 0 0
 
 // Bio box
 .ts-fab-avatar .avatar
@@ -137,5 +128,42 @@ input[type=submit].um-button.um-alt
 
 
 // WP Discuz -------------------------------------------------------------------
-#wpcomm .wc-comment-title
+#wc-comment-header
+    color: $font-secondary
+    background-color: $secondary
     text-align: center
+    font-weight: 400
+    padding: 10px
+    margin: 0 !important
+
+#wpcomm
+    .wc-comment-title
+        text-align: center
+    .wpdiscuz-textarea-wrap
+        border: none !important
+    #wpdiscuz-subscribe-form
+        display: flex
+    .wpdiscuz-subscribe-form-option
+        flex: auto
+        width: 100%
+    .wpdiscuz-subscribe-form-button
+        input[type='submit']
+            @extends .btn
+            @extends .btn--flat
+            font-size: 1.5rem !important
+
+.wc-form-footer .wpd-form-row
+    display: flex
+    .wpd-form-col-left
+        display: none
+    .wpd-form-col-right
+        width: 100%
+        flex: auto
+        .wc-field-submit
+            width: 100%
+            display: flex
+            justify-content: space-between
+            padding: 0 !important
+            .wc_comm_submit
+                @extends .btn
+                @extends .btn--primary
