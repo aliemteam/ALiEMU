@@ -12,20 +12,17 @@
             </a>
         </div>
         <div class="footer__bottom">
-            <div></div>
-            <div>
-                <div class="et-social-icon et-social-facebook">
-                    <a class="icon" href="https://www.facebook.com/academiclifeinem" target="_blank" rel="noopener noreferrer"></a>
-                </div>
-                <div class="et-social-icon et-social-twitter">
-                    <a class="icon" href="https://twitter.com/aliemteam" target="_blank" rel="noopener noreferrer"></a>
-                </div>
-                <div class="et-social-icon et-social-google-plus">
-                    <a class="icon" href="https://plus.google.com/+Academiclifeinem/posts" target="_blank" rel="noopener noreferrer"></a>
-                </div>
-                <div class="et-social-icon et-social-rss">
-                    <a class="icon" href="https://aliem.com/?feed=rss2" target="_blank" rel="noopener noreferrer"></a>
-                </div>
+            <div class="et-social-icon et-social-facebook">
+                <a class="icon" href="https://www.facebook.com/academiclifeinem" target="_blank" rel="noopener noreferrer"></a>
+            </div>
+            <div class="et-social-icon et-social-twitter">
+                <a class="icon" href="https://twitter.com/aliemteam" target="_blank" rel="noopener noreferrer"></a>
+            </div>
+            <div class="et-social-icon et-social-google-plus">
+                <a class="icon" href="https://plus.google.com/+Academiclifeinem/posts" target="_blank" rel="noopener noreferrer"></a>
+            </div>
+            <div class="et-social-icon et-social-rss">
+                <a class="icon" href="https://aliem.com/?feed=rss2" target="_blank" rel="noopener noreferrer"></a>
             </div>
         </div>
     </footer>
