@@ -12,7 +12,7 @@
             </a>
         </div>
         <div class="footer__bottom">
-            <div>Designed by Chris Gaafary</div>
+            <div></div>
             <div>
                 <div class="et-social-icon et-social-facebook">
                     <a class="icon" href="https://www.facebook.com/academiclifeinem" target="_blank" rel="noopener noreferrer"></a>
