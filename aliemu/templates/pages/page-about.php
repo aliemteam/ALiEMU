@@ -190,7 +190,8 @@
             </div>
         </section>
     </div>
-</div>
+    </div>
 </article>
+</div>
 <?php endwhile;
 get_footer();
