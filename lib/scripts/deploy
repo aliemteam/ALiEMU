@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+
+# Change these based on the installation
+server_ip='45.55.40.174'
+server_user='aliemu'
+theme_name='aliemu'
+rsa_filename='DO_aliemu_rsa'
+
+# shellcheck source=./helpers
+source "$SCRIPTDIR"/helpers || exit 1
+
+# Exit if the DSA file doesn't exist
+if [[ ! -f "$HOME/.ssh/$rsa_filename" ]]; then
+    ERROR "You must have the file '$rsa_filename' located within your ~/.ssh directory"
+fi
+
+eval "$(ssh-agent -s)" &>/dev/null
+ssh-add "$HOME/.ssh/$rsa_filename" &>/dev/null
+
+if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
+  ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
+fi
+
+rsync --progress -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"

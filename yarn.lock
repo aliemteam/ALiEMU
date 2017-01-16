@@ -4949,9 +4949,9 @@ mobx-react@^4.1.0:
   dependencies:
     hoist-non-react-statics "^1.2.0"
 
-mobx@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.0.0.tgz#6d9fb326d51bac9994dd8fe6762ace6ba2bef2ac"
+mobx@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.0.1.tgz#b1273871efee368010e2f1e027cde97eed879700"
 
 moment@*, moment@>=2.14.0, moment@^2.13.0, moment@^2.17.1:
   version "2.17.1"
@@ -6695,8 +6695,8 @@ stream-exhaust@^1.0.1:
   resolved "https://registry.yarnpkg.com/stream-exhaust/-/stream-exhaust-1.0.1.tgz#c0c4455e54ce5a179ca8736e73334b4e7fd67553"
 
 stream-http@^2.3.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/stream-http/-/stream-http-2.6.1.tgz#7d20fcdfebc16b16e4174e31dd94cd9c70f10e89"
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/stream-http/-/stream-http-2.6.2.tgz#bdfe40d2ee9262eb6bf2255bb3ad0ec0cdd6526d"
   dependencies:
     builtin-status-codes "^3.0.0"
     inherits "^2.0.1"
@@ -7133,8 +7133,8 @@ typedarray@~0.0.5:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 typescript@next:
-  version "2.2.0-dev.20170115"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170115.tgz#94e92f177079bc7022ab00e700a2270892268bc4"
+  version "2.2.0-dev.20170116"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170116.tgz#768943f755a92760cdcfa5d3860805fae62f5b1d"
 
 ua-parser-js@0.7.12, ua-parser-js@^0.7.9:
   version "0.7.12"
@@ -7513,8 +7513,8 @@ webpack@^1.12.9:
     webpack-core "~0.6.0"
 
 webpack@beta:
-  version "2.2.0-rc.5"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.2.0-rc.5.tgz#ab471ea69b4e21d2dd5f1ba868dbcc4483aac3a0"
+  version "2.2.0-rc.7"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.2.0-rc.7.tgz#08199749827fe2c21e2ddeb1615893b2b6dde40a"
   dependencies:
     acorn "^4.0.4"
     acorn-dynamic-import "^2.0.0"

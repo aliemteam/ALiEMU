@@ -3,18 +3,15 @@
 # Globals
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+
+# Change these based on the installation
+server_ip='45.55.40.174'
+server_user='aliemu'
+theme_name='Divi'
 PaidPlugins=(learndash-propanel sfwd-lms)
 
 # shellcheck source=./helpers
 source "$SCRIPTDIR"/helpers || exit 1
-
-# shellcheck source=../../.env
-source "$ROOTDIR"/.env
-
-machine_name=${machine_name:-}
-site_name=${site_name:-}
-[[ ! $machine_name ]] && ERROR "'machine_name' must be set in your .env file"
-[[ ! $site_name ]] && ERROR "'site_name' must be set in your .env file"
 
 main() {
 
@@ -29,17 +26,15 @@ main() {
     case "$1" in
         init)
             get_theme
-            get_all_plugins
+            get_plugins
             get_uploads
             get_database;;
         get)
             case "$2" in
                 uploads)
                     get_uploads;;
-                --all-plugins)
-                    get_all_plugins;;
-                plugin)
-                    get_plugin "$3";;
+                plugins)
+                    get_plugins;;
                 theme)
                     get_theme;;
                 database)
@@ -47,10 +42,10 @@ main() {
                 backup)
                     get_database backup;;
                 *)
-                    h2 "'get' subcommmand must be either 'uploads', 'plugin', '--all-plugins', 'theme', 'database', or 'backup'" && exit 0
+                    h2 "'get' subcommmand must be either 'uploads', 'plugins', 'theme', or 'database'" && exit 0
             esac;;
         *)
-            h2 "The only commands available are 'init' and 'get'" && exit 0
+            h2 "The only available commands are 'init' and 'get'" && exit 0
     esac
 }
 
@@ -59,8 +54,6 @@ prechecks() {
 
     depcheck \
         rsync \
-        docker \
-        docker-machine \
         ssh \
         ssh-add \
         ssh-keyscan
@@ -76,101 +69,45 @@ prechecks() {
     done;
 
     # Check to make sure the SSH key exists
-    [[ ! -f $HOME/.ssh/DO_${machine_name}_rsa ]] && ERROR "SSH keys have not been added to your SSH directory for this machine"
+    [[ ! -f $HOME/.ssh/DO_aliemu_rsa ]] && ERROR "SSH keys have not been added to your SSH directory for this machine"
 
     # Prepare for SSH transfers
     eval "$(ssh-agent -s)" &>/dev/null
-    ssh-add "$HOME/.ssh/DO_${machine_name}_rsa" &>/dev/null
+    ssh-add "$HOME/.ssh/DO_aliemu_rsa" &>/dev/null
 
-    if [ -z "$(ssh-keygen -F "$(docker-machine ip "$machine_name")")" ]; then
-      ssh-keyscan -H "$(docker-machine ip "$machine_name")" >> ~/.ssh/known_hosts
+    if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
+      ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
     fi
-
 }
 
 get_uploads() {
     h2 "Downloading uploads from server..."
-    rsync --ignore-existing --progress -azhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip "$machine_name")":/app/wp-content/uploads/ "$ROOTDIR/wp-content/uploads"
+    rsync --info=progress2 -auze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/uploads/" "$ROOTDIR/wp-content/uploads"
     h2 "Uploads Synced Successfully!"
 }
 
-get_all_plugins() {
+get_plugins() {
+    local plugin
+    h2 "Retrieving plugins"
     for plugin in "${PaidPlugins[@]}"; do
-        h2 "Retrieving plugin: $plugin"
-        rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip "$machine_name")":/app/wp-content/plugins/"$plugin" "$ROOTDIR/wp-content"
-        h2 "Plugin $plugin Retrieved Successfully!"
+        h3 "Retrieving plugin: $plugin"
+        rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
     done
 }
 
-get_plugin() {
-    h2 "Retrieving plugin: $1"
-    rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip "$machine_name")":/app/wp-content/plugins/"$1" "$ROOTDIR/wp-content/plugins"
-    h2 "Plugin $1 Retrieved Successfully!"
-}
-
 get_theme() {
-    h2 "Retrieving Divi Theme"
-    rsync --progress -auzhe "ssh -i $HOME/.ssh/DO_${machine_name}_rsa" "$(docker-machine ip "$machine_name")":/app/wp-content/themes/Divi "$ROOTDIR/wp-content/themes"
-    h2 "Theme Retrieved Successfully!"
+    h2 "Retrieving Theme"
+    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes/$theme_name" "$ROOTDIR/wp-content/themes"
 }
 
 get_database() {
+    h2 "Exporting database..."
+    ssh "$server_user@$server_ip" "cd ~/app && docker-compose run wordpress /bin/bash wp db export /data/database.sql --allow-root"
 
-    local container_id dev_container_id filename
+    h2 "Downloading database to local machine..."
+    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/data/database.sql" "$ROOTDIR/data/database.sql"
 
-    [[ $1 == 'backup' ]] && \
-        filename="$(date +%Y-%m-%d_%H-%M_aliemu)" || \
-        filename='database'
-
-    h2 "Attaching to machine '$machine_name'"
-    eval "$(docker-machine env "$machine_name")"
-    container_id=$(docker ps -q --filter "name=wordpress")
-
-    [[ -z $container_id ]] && ERROR "WordPress container is not running on host"
-
-    h3 "Exporting database..."
-    docker exec "$container_id" /bin/bash -c "cd /var/www/$site_name/ && sudo -u www-data wp db export database.sql &>/dev/null"
-    STATUS fatal "Export failed"
-
-    h3 "Downloading database to local machine..."
-    docker cp "$container_id":/var/www/"$site_name"/database.sql "$ROOTDIR/data/$filename.sql"
-    STATUS
-
-    h3 "Deleting database copy in container..."
-    docker exec "$container_id" /bin/bash -c "\
-    rm /var/www/$site_name/database.sql
-    "
-    STATUS
-
-    if [[ $1 == 'backup' ]]; then
-        h2 "Backup saved successfully as $filename.sql"
-        return 0
-    fi
-
-    # Detach from machine
-    eval "$(docker-machine env -u)"
-
-    dev_container_id="$(docker ps -q --filter "name=aliemu_wordpress")"
-
-    if [[ ! $dev_container_id ]]; then
-        h2 "Dev environment not running. Skipping import."
-        return 0
-    fi
-
-    h2 "Importing database into dev environment..."
-    docker exec "$dev_container_id" /bin/bash -c "wp db import /data/database.sql --allow-root"
-
-    # Replace live URL with dev URL
-    # HACK Temporary workaround until http/https is figured out
-    h3 "Replacing URLs"
-    docker exec "$dev_container_id" /bin/bash -c "\
-    wp --allow-root search-replace 'https://www.$site_name' 'http://$site_name' --skip-columns=guid && \
-    wp --allow-root search-replace 'http://www.$site_name' 'http://localhost:8080' --skip-columns=guid
-    "
-    STATUS
-
-    h2 "Database Successfully Imported!"
-    return 0
+    h2 "Export complete!"
 }
 
 main "$@"
