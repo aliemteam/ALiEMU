@@ -47,7 +47,7 @@
     border-radius: 2px
 
 .content-table__row
-    line-height: 50px
+    height: 50px
     display: flex
     align-items: center
     justify-content: space-between
@@ -69,6 +69,8 @@
 
 .content-table__cell
     display: flex
+    height: 100%
+    line-height: 50px
     flex-flow: column nowrap
     justify-content: center
 
@@ -77,6 +79,11 @@
 
 .content-table__cell--full-width
     width: 100%
+    min-width: 0
+    a
+        text-overflow: ellipsis
+        overflow: hidden
+        white-space: nowrap
 
 .content-table__link
     width: 100%
