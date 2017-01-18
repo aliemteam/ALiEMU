@@ -1,6 +1,6 @@
 <?php
 
-if (wp_verify_nonce($_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-recaptcha-response'] !== '') {
+if (wp_verify_nonce(@$_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-recaptcha-response'] !== '') {
     $name = $_POST['contact-name'];
     $email = $_POST['contact-email'];
     $message = $_POST['contact-message'];
@@ -31,12 +31,12 @@ get_header();
             <?php wp_nonce_field('contact-form-nonce'); ?>
             <div class="contact-form__row">
                 <div class="contact-form__item">
-                    <label>Full Name:</label>
-                    <input class="um-form-field" type="text" name="contact-name" required>
+                    <label for="contact-name">Full Name:</label>
+                    <input class="um-form-field" type="text" id="contact-name" name="contact-name" required>
                 </div>
                 <div class="contact-form__item">
-                    <label>Email Address:</label>
-                    <input type="email" name="contact-email" required>
+                    <label for="contact-email">Email Address:</label>
+                    <input type="email" id="contact-email" name="contact-email" required>
                 </div>
             </div>
             <div class="contact-form__row">

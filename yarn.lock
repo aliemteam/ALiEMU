@@ -7133,8 +7133,8 @@ typedarray@~0.0.5:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
 typescript@next:
-  version "2.2.0-dev.20170116"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170116.tgz#768943f755a92760cdcfa5d3860805fae62f5b1d"
+  version "2.2.0-dev.20170117"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.2.0-dev.20170117.tgz#6e8f0a306c3b6d26901321333ba9a7a301150379"
 
 ua-parser-js@0.7.12, ua-parser-js@^0.7.9:
   version "0.7.12"
@@ -7513,8 +7513,8 @@ webpack@^1.12.9:
     webpack-core "~0.6.0"
 
 webpack@beta:
-  version "2.2.0-rc.7"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.2.0-rc.7.tgz#08199749827fe2c21e2ddeb1615893b2b6dde40a"
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.2.0.tgz#09246336b5581c9002353f75bcadb598a648f977"
   dependencies:
     acorn "^4.0.4"
     acorn-dynamic-import "^2.0.0"

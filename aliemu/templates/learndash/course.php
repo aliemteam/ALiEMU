@@ -54,11 +54,6 @@ if ($logged_in): ?>
     echo apply_filters('ld_after_course_status_template_container', '', learndash_course_status_idx($course_status), $course_id, $user_id);
     ?>
 
-    <!-- <?php  if (!empty($course_certficate_link)): ?>
-        <div id="learndash_course_certificate">
-            <a href='<?php echo esc_attr($course_certficate_link); ?>' class="btn-blue" target="_blank"><?php echo apply_filters('ld_certificate_link_label', __('Print Certificate', 'learndash'), $user_id, $post->ID); ?></a>
-        </div>
-    <?php endif; ?> -->
 <?php endif; ?>
 
 <?php echo $content; ?>
@@ -99,7 +94,7 @@ if ($logged_in): ?>
                                 <a class="content-table__link" href='<?php echo esc_attr($lesson['permalink']); ?>'><?php echo $lesson['post']->post_title; ?></a>
                             </div>
                             <div class="content-table__cell content-table__cell--padded">
-                                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $lesson['status']; ?>.svg" height="40px" width="40px" />
+                                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $lesson['status']; ?>.svg" height="40px" width="40px" role="presentation"/>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -123,7 +118,7 @@ if ($logged_in): ?>
                                 <a class="content-table__link" href='<?php echo esc_attr($quiz['permalink']); ?>'><?php echo $quiz['post']->post_title; ?></a>
                             </div>
                             <div class="content-table__cell content-table__cell--padded">
-                                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $quiz['status']; ?>.svg" height="40px" width="40px" />
+                                <img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $quiz['status']; ?>.svg" height="40px" width="40px" role="presentation"/>
                             </div>
                         </div>
                     <?php endforeach; ?>

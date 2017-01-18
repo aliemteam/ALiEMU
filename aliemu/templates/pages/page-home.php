@@ -71,7 +71,7 @@ get_header();
                             <h1>What is ALiEMU?</h1>
                         </div>
                         <div class="au-info-text">
-                            ALiEMU is an open-access, on-demand, online school of e-courses for anyone practicing Emergency Medicine worldwide. We serve as a platform where educators can submit e-courses, whereupon each will undergo expert peer review and receive instructional design assistance to optimize online content delivery and learner retention. Only high-quality, vetted courses relevant to the EM community are published as an on-demand course on ALiEMU. <a href="/about">Click here</a> to learn more about ALiEMU and the courses offered.
+                            ALiEMU is an open-access, on-demand, online school of e-courses for anyone practicing Emergency Medicine worldwide. We serve as a platform where educators can submit e-courses, whereupon each will undergo expert peer review and receive instructional design assistance to optimize online content delivery and learner retention. Only high-quality, vetted courses relevant to the EM community are published as an on-demand course on ALiEMU. <a href="/about" aria-label="Click here to learn more">Click here</a> to learn more about ALiEMU and the courses offered.
                         </div>
                     </div>
                 </div>

@@ -221,12 +221,4 @@ gulp.task('fix-divi', () => {
     return merge(js, css);
 });
 
-gulp.task('fix-learndash', () =>
-    gulp
-        .src('wp-content/plugins/sfwd-lms/**/*.{php,po,pot}', { base: './' })
-        .pipe(replace(/PRINT YOUR CERTIFICATE!?/, 'Print Certificate'))
-        .pipe(gulp.dest('./'))
-);
-
-
-gulp.task('fix-files', gulp.parallel('fix-divi', 'fix-learndash'));
+gulp.task('fix-files', gulp.parallel('fix-divi'));

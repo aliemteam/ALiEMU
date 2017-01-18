@@ -1,52 +1,5 @@
 <?php
 
-/*
-Available Script Handles (updated 7/7/16)
-----------------------------------------
-about-nav
-abt_frontend_js
-aliemu-vendors
-comment-reply
-divi-custom-script
-divi-fitvids
-educator-dashboard
-et-builder-modules-script
-et-jquery-touch-mobile
-jquery-masonry
-magnific-popup
-masonry
-nav-helper
-particles
-particlesjs
-toastr
-um_minified
-um_recaptcha
-waypoints
-wp-embed
-
-Available Style Handles (updated 7/7/16)
-----------------------------------------
-abt_frontend_styles
-admin-bar
-bootstrap-nav-css
-child-style
-dashicons
-divi-fonts
-et-gf-lato
-et-shortcodes-css
-et-shortcodes-responsive-css
-jquery-dropdown-css
-learndash_style
-learndash_template_style_css
-magnific-popup
-parent-style
-sfwd_front_css
-toastr-css
-um-recaptcha
-wpProQuiz_front_style
-
-*/
-
 /**
  * Calls the ScriptLoader class at the wp_enqueue_scripts hook.
  * @return void
@@ -68,10 +21,15 @@ class ScriptLoader {
     private $lessonPageStyles = [
         'abt_frontend_styles',
         'et-shortcodes-css',
+        'learndash_style',
+        'sfwd_front_css',
+        'jquery-dropdown-css',
+        'et-shortcodes-responsive-css',
     ];
 
     private $lessonPageScripts = [
         'abt_frontend_js',
+        'abt-bundle',
         'et-builder-modules-script',
     ];
 
@@ -124,7 +82,7 @@ class ScriptLoader {
         // Always unload these
         $unload = [
             ['divi-fitvids', 'waypoints', 'magnific-popup', 'divi-custom-script'],
-            ['wpProQuiz_front_style', 'magnific-popup', 'theme-customizer', 'divi-style', 'learndash_template_style_css'],
+            ['wpProQuiz_front_style', 'magnific-popup', 'theme-customizer', 'divi-style', 'learndash_template_style_css', 'et-gf-lato'],
         ];
 
         // Not learndash pages
@@ -132,12 +90,20 @@ class ScriptLoader {
             // FIXME: Convert back when we get out of siteground
             // array_push($unload[0], ...$this->lessonPageScripts);
             // array_push($unload[1], ...$this->lessonPageStyles);
+
             foreach($this->lessonPageScripts as $script) {
                 $unload[0][] = $script;
             }
             foreach($this->lessonPageStyles as $style) {
-                $unload[0][] = $style;
+                // wp_die($style);
+                $unload[1][] = $style;
             }
+        }
+
+        // Not an Ultimate Member page
+        if (!array_intersect(['um-page-loggedin', 'um-page-loggedout', 'home', 'page-id-3432'], get_body_class())) {
+            array_push($unload[0], 'um_minified');
+            array_push($unload[1], 'um_minified', 'um_recaptcha');
         }
 
         switch ($req) {
@@ -202,6 +168,7 @@ class ScriptLoader {
             wp_dequeue_script($script);
         }
         foreach(array_unique($styles) as $style) {
+            // wp_die($style);
             wp_dequeue_style($style);
         }
     }

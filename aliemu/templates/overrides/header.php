@@ -41,6 +41,7 @@
            height="30px"
            viewBox="0 0 1301.4608 254.09863"
            version="1.1">
+           <title id="aliemu-logo">ALiEMU Logo - Click here to navigate to homepage</title>
           <g
              groupmode="layer"
              id="layer2"
