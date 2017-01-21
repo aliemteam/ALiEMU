@@ -1,23 +1,25 @@
-import * as React from 'react';
-import { observable, action, computed } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as Datepicker from 'react-datepicker';
-import { paginate } from '../../../utils/Pagination';
 import { Moment, unix } from 'moment';
-import { browserDetect } from '../../../utils/BrowserDetect';
+
+import * as React from 'react';
+import * as Datepicker from 'react-datepicker';
+
 import {
-    downloadPolyfill,
-    calculateIIIHours,
-    CSV,
-} from '../../../utils/DashboardUtils';
-import {
-    Header,
-    Row,
     Cell,
-    Pager,
     FilterRow,
     Flex,
+    Header,
+    Pager,
+    Row,
 } from '../../../components/TableComponents';
+import { browserDetect } from '../../../utils/BrowserDetect';
+import {
+    calculateIIIHours,
+    CSV,
+    downloadPolyfill,
+} from '../../../utils/DashboardUtils';
+import { paginate } from '../../../utils/Pagination';
 
 interface Props {
     users: ALiEMU.EducatorDashboard.UserObject;
@@ -213,6 +215,7 @@ export class StudentTable extends React.Component<Props, {}> {
                                 fontSize: '1.3em',
                                 lineHeight: '33px',
                                 padding: '1px 7px 2px',
+                                margin: '0 20px 0 0',
                             }}
                             role="button"
                             id="advanced-filter-toggle"
@@ -229,7 +232,7 @@ export class StudentTable extends React.Component<Props, {}> {
                     </Flex>
                     <div>
                         <a
-                            className="au-edudash-exportbtn"
+                            className="btn btn--primary"
                             role="button"
                             id="program-export"
                             children="Export Program Data"
@@ -294,7 +297,7 @@ export class StudentTable extends React.Component<Props, {}> {
                             />
                             <Cell align="center">
                                 <a
-                                    className="au-edudash-exportbtn"
+                                    className="btn btn--flat"
                                     children="Export Data"
                                     data-user-id={user.ID}
                                     role="button"

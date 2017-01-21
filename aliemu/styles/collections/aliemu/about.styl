@@ -1,90 +1,42 @@
-+prefix-classes('au-')
-    .about
-        display: flex
-        margin: 10px 5%
-        p, li, td
-            font-weight: 300
-        .group
-            margin: 5px 0 45px
-            background: $gray-light
-            h3
-                color: white
-                background: $primary
-                text-align: center
-                border-radius: $card-radius
-                line-height: 1.5em
-                padding: 0
-                font-size: 1.5em
-            div
-                padding: 25px
+.about__sidebar
+    min-width: 320px
 
-        .subgroup
-            background: $gray-light
-            padding: 25px 20px 15px
-            h4
-                font-size: 1.2em
-            div
-                display: flex
-                justify-content: center
-
-    .about-nav
-        width: 300px
-        .nav
-            li
-                margin-left: 20px
-                padding-left: 5px
-                margin-bottom: 7px
-            a
-                font-weight: 600
-            .sub-nav
-                li
-                    padding-left: 20px
-                    margin-bottom: 7px
-                    a
-                        font-weight: 400
-
-    .about-body
-        padding-top: 30px
-        ol
-            list-style: decimal
-            padding-left: 20px
-            li
-                margin-top: 0.5em
-        ul
-            list-style: disc
-            font-weight: 400
-            padding-left: 30px
-            margin-top: 0.5em
-            font-weight: 400
-
-
-    .iii-table
-        margin-top: 1.2em
-        thead
-            background: $primary
-            color: white
-            text-align: center
-            th
-                padding: 7px
-
-        td
-            padding: 10px
-
-    .nav
-        li
-            padding-bottom: 0.5em
-        a
-            line-height: 1.4em
-
-
-
-#about-sidebar
+.about__body
     margin-right: 20px
-    min-width: 300px
-    nav
-        position: fixed
-        top: 100px
+    max-width: 80%
 
-@media (max-width: 768px)
-    #about-sidebar
+.bs-docs-sidebar
+    .au-nav
+        list-style: none
+        & > li > a
+            &:focus,
+            &:hover
+                border: none
+                padding-left: 20px
+        & > li.active > a
+            &:focus,
+            &:hover
+                border-left: solid 2px $primary
+                padding-left: 18px
+        .au-nav > li > a:hover
+            &:focus,
+            &:hover
+                padding-left: 30px
+        .au-nav > li.active > a:hover
+            &:focus,
+            &:hover
+                padding-left: 28px
+
+#magic-sidebar
+    top: $header-height + $block-margin
+    width: 300px
+
+.admin-bar #magic-sidebar
+    top: $admin-bar-height + $header-height + $block-margin
+
+@media (max-width: 480px)
+    .about__sidebar
         display: none
+    .about__body
+        margin-right: 0
+        max-width: 95%

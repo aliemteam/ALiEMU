@@ -9,7 +9,7 @@ const devPlugins = [
         minimize: true,
         debug: false,
     }),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
         minChunks: Infinity,

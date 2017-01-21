@@ -1,7 +1,7 @@
 version: '2'
 services:
     wordpress:
-        image: visiblevc/wordpress
+        image: visiblevc/wordpress:0.13.0-php7.0
         ports:
             - 443:443
             - 8080:80
@@ -24,19 +24,17 @@ services:
             DB_USER: root
             PLUGINS: >-
                 academic-bloggers-toolkit,
-                google-analytics-dashboard-for-wp,
                 query-monitor,
                 rest-api,
                 sendgrid-email-delivery-simplified,
-                tinymce-advanced,
+                mce-table-buttons,
                 ultimate-member,
                 wpdiscuz,
-                wp-smush,
+                wp-smushit,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
                 [local]sfwd-lms,
                 [local]learndash-propanel,
-                [local]aliemu
             THEMES: >-
                 [local]Divi,
                 [local]aliemu,

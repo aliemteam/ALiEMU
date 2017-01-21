@@ -1,0 +1,51 @@
+version: '2'
+services:
+    wordpress:
+        image: visiblevc/wordpress:0.13.0-php7.0
+        ports:
+            - 443:443
+            - 80:80
+        volumes:
+            - ./data:/data
+            - ./wp-content/themes:/app/wp-content/themes
+            - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
+            - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
+            - ./wp-content/uploads:/app/wp-content/uploads
+            - ./letsencrypt:/etc/letsencrypt
+        restart: always
+        environment:
+            DB_NAME: aliemu
+            SITE_NAME: aliemu.com
+            DB_PASS: ${DB_PASS}
+            DB_USER: root
+            PLUGINS: >-
+                academic-bloggers-toolkit,
+                rest-api,
+                sendgrid-email-delivery-simplified,
+                mce-table-buttons,
+                ultimate-member,
+                wpdiscuz,
+                wp-smushit,
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
+                [um-recaptcha]http://bit.ly/um-recaptcha,
+                [local]sfwd-lms,
+                [local]learndash-propanel,
+            THEMES: >-
+                [local]Divi,
+                [local]aliemu,
+    db:
+        image: mariadb:10
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASS}
+        volumes:
+            - data:/var/lib/mysql
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASS}
+        ports:
+            - 22222:80
+volumes:
+    data:

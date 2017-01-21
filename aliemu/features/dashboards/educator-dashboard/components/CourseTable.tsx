@@ -1,21 +1,23 @@
-import * as React from 'react';
 import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { browserDetect } from '../../../utils/BrowserDetect';
-import { paginate } from '../../../utils/Pagination';
 import { unix } from 'moment';
+
+import * as React from 'react';
+
 import {
-    downloadPolyfill,
-    CSV,
-} from '../../../utils/DashboardUtils';
-import {
-    Header,
-    Row,
     Cell,
     FilterRow,
     Flex,
+    Header,
     Pager,
+    Row,
 } from '../../../components/TableComponents';
+import { browserDetect } from '../../../utils/BrowserDetect';
+import {
+    CSV,
+    downloadPolyfill,
+} from '../../../utils/DashboardUtils';
+import { paginate } from '../../../utils/Pagination';
 
 interface Props {
     courseData: ALiEMU.EducatorDashboard.CourseData;
@@ -141,8 +143,8 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                             id="course-export"
                             className={
                                 this.courseSelection !== ''
-                                ? 'au-edudash-exportbtn'
-                                : 'au-edudash-exportbtn-disabled'
+                                ? 'btn btn--primary'
+                                : 'btn btn--primary btn--disabled'
                             }
                             children="Export Course Data"
                             role="button"

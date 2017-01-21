@@ -1,6 +1,6 @@
 <?php
 
-if (wp_verify_nonce($_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-recaptcha-response'] !== '') {
+if (wp_verify_nonce(@$_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-recaptcha-response'] !== '') {
     $name = $_POST['contact-name'];
     $email = $_POST['contact-email'];
     $message = $_POST['contact-message'];
@@ -18,22 +18,25 @@ if (wp_verify_nonce($_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-recap
 
 get_header();
 ?>
-<div id="main-content">
+<div id="main-content" class="main-content--no-margin">
     <div class="au-team-header">
         <h1>Contact Us</h1>
+    </div>
+    <div style="text-align: center; margin: auto; margin-bottom: 20px;">
+        <h1>We &hearts; feedback!</h1>
+        Please contact us regarding anything you think we can do better.
     </div>
     <div class="contact-form">
         <form method="post">
             <?php wp_nonce_field('contact-form-nonce'); ?>
             <div class="contact-form__row">
-                We love feedback! Please contact us regarding anything you think we can do better.
-            </div>
-            <div class="contact-form__row">
                 <div class="contact-form__item">
-                    <input type="text" aria-label="Name" placeholder="Name" name="contact-name" required>
+                    <label for="contact-name">Full Name:</label>
+                    <input class="um-form-field" type="text" id="contact-name" name="contact-name" required>
                 </div>
                 <div class="contact-form__item">
-                    <input type="email" aria-label="Email Address" placeholder="Email Address" name="contact-email" required>
+                    <label for="contact-email">Email Address:</label>
+                    <input type="email" id="contact-email" name="contact-email" required>
                 </div>
             </div>
             <div class="contact-form__row">
@@ -44,7 +47,7 @@ get_header();
             <div class="contact-form__row contact-form__row_submit">
                 <div id="recaptcha" class="g-recaptcha" data-sitekey="6LdukgsUAAAAAF02dhTydX8M6l1fLEiQO6eC1xGC" data-callback="_auEnableSubmit"></div>
                 <div id="submit-btn" style="display: none;">
-                    <input type="submit">
+                    <input type="submit" class="btn btn--primary" value="Send">
                 </div>
             </div>
         </form>

@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# Globals
+SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+
+# Change these based on the installation
+server_ip='45.55.40.174'
+server_user='aliemu'
+theme_name='Divi'
+PaidPlugins=(learndash-propanel sfwd-lms)
+
+# shellcheck source=./helpers
+source "$SCRIPTDIR"/helpers || exit 1
+
+main() {
+
+    prechecks
+
+    if [[ $# == 0 ]]; then
+        get_uploads
+        get_database
+        exit 0
+    fi
+
+    case "$1" in
+        init)
+            get_theme
+            get_plugins
+            get_uploads
+            get_database;;
+        get)
+            case "$2" in
+                uploads)
+                    get_uploads;;
+                plugins)
+                    get_plugins;;
+                theme)
+                    get_theme;;
+                database)
+                    get_database;;
+                *)
+                    h2 "'get' subcommmand must be either 'uploads', 'plugins', 'theme', or 'database'" && exit 0
+            esac;;
+        *)
+            h2 "The only available commands are 'init' and 'get'" && exit 0
+    esac
+}
+
+prechecks() {
+    local owners o
+
+    depcheck \
+        rsync \
+        ssh \
+        ssh-add \
+        ssh-keyscan
+
+    # Check ownership of wp-content
+    owners=$(ls -lR "$ROOTDIR"/wp-content | awk '{print $3}')
+    for o in $owners; do
+        if [[ $o != "$USER" ]]; then
+            h2 'Need sudo priveledges to take ownership of wp-content directory'
+            sudo chown -R "$USER" "$ROOTDIR"/wp-content
+            break
+        fi
+    done;
+
+    # Check to make sure the SSH key exists
+    [[ ! -f $HOME/.ssh/DO_aliemu_rsa ]] && ERROR "SSH keys have not been added to your SSH directory for this machine"
+
+    # Prepare for SSH transfers
+    eval "$(ssh-agent -s)" &>/dev/null
+    ssh-add "$HOME/.ssh/DO_aliemu_rsa" &>/dev/null
+
+    if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
+      ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
+    fi
+}
+
+get_uploads() {
+    h2 "Downloading uploads from server..."
+    rsync --info=progress2 -auze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/uploads/" "$ROOTDIR/wp-content/uploads"
+    h2 "Uploads Synced Successfully!"
+}
+
+get_plugins() {
+    local plugin
+    h2 "Retrieving plugins"
+    for plugin in "${PaidPlugins[@]}"; do
+        h3 "Retrieving plugin: $plugin"
+        rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
+    done
+}
+
+get_theme() {
+    h2 "Retrieving Theme"
+    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes/$theme_name" "$ROOTDIR/wp-content/themes"
+}
+
+get_database() {
+    h2 "Exporting database..."
+    ssh "$server_user@$server_ip" "cd ~/app && docker-compose exec wordpress wp db export /data/database.sql --allow-root"
+
+    h2 "Downloading database to local machine..."
+    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/data/database.sql" "$ROOTDIR/data/database.sql"
+
+    h2 "Export complete!"
+}
+
+main "$@"

@@ -1,18 +1,12 @@
+// TODO: This file and the associated page needs a complete rewrite.
+// ---- No nesting!
+// @stylint off
 +prefix-classes('au-')
     .homepage
     .faculty-start
-        #particles
-            position: fixed
-            height: calc(100vh - 50px)
-            width: 100%
-            background-image: url('')
-            background-repeat: no-repeat
-            background-size: cover
-            background-position: 50% 50%
-            canvas
-                display: block
-                vertical-align: bottom
         #row-1
+            *
+                z-index: 2
             display: flex
             margin: 0 5%
             height: calc(100vh - 50px)
@@ -47,7 +41,8 @@
             display: flex
             flex: auto
             flex-flow: column
-            background: $gray-light
+            background: white
+            box-shadow: $shadow-2dp
             border-radius: 3px
             text-align: center
             padding: 25px 0
@@ -65,7 +60,8 @@
                     &.loggedin
                         color: $gray-dark
                 a
-                    bordered-button(large, $primary)
+                    @extends .btn
+                    @extends .btn--primary
                     margin: 0 5px
         .faculty
             @extend .au-homepage .au-general
@@ -74,7 +70,10 @@
                 h1
                     color: white
                 a
-                    bordered-button(large, white, $gray-dark)
+                    @extends .btn
+                    @extends .btn--primary
+                    background: white
+                    color: $gray-dark
 
         .login
             background: $primary
@@ -89,23 +88,26 @@
                 align-items: center
                 flex: auto
                 a
-                    bordered-button(large, white, $primary)
+                    @extends .btn
+                    @extends .btn--primary
 
         .info-card
             display: flex
             flex: auto
             flex-flow: column
+            box-shadow: $shadow-2dp
             border-radius: 3px
             .info-header
                 border-radius: 3px 3px 0 0
                 background-color: $primary
                 h1
+                    margin: 0
                     color: white
                     line-height: 1.5em
                     padding: 0
                     text-align: center
             .info-text
-                background: $gray-light
+                background: white
                 padding: 15px 20px
                 text-align: left
                 p
@@ -118,17 +120,19 @@
 
         .series-logos
             display: flex
-            justify-content: space-between
+            justify-content: space-around
+            background: white
             div
-                background: $gray-light
                 max-width: 200px
                 display: flex
                 align-items: center
                 padding: 10px
                 margin-top: 20px
-            &.alt-logos div
-                display: flex
-                padding: 10px
-                align-items: center
-                margin-top: 0
+            &.alt-logos
                 background: transparent
+                div
+                    display: flex
+                    padding: 10px
+                    align-items: center
+                    margin-top: 0
+                    background: transparent

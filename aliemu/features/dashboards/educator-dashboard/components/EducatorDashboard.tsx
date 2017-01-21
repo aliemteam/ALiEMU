@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StudentTable } from './StudentTable';
 import { CourseTable } from './CourseTable';
+import { StudentTable } from './StudentTable';
 // import DevTools from 'mobx-react-devtools';
 
 interface Props {

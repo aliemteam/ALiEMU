@@ -84,7 +84,7 @@ export const Header = ( props: HeaderProps ) => (
 );
 
 export const Pager = (props: PagerProps) => (
-    <div className="au-edudash-pager" style={props.style}>
+    <div className="pagination" style={props.style}>
         {
             Array
             .from({length: props.totalRows }, (_k, v) => v)
@@ -93,7 +93,11 @@ export const Pager = (props: PagerProps) => (
                 <div
                     key={i}
                     role="button"
-                    className={props.currentPage !== i ? 'au-edudash-pager-btn' : 'au-edudash-pager-btn-active'}
+                    className={
+                        props.currentPage !== i
+                        ? 'btn btn--flat btn--narrow'
+                        : 'btn btn--flat btn--narrow btn--active'
+                    }
                     children={i + 1}
                     data-page={i}
                     onClick={props.onClick}

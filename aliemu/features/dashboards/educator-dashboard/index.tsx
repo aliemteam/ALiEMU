@@ -1,8 +1,8 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { useStrict } from 'mobx';
-import { EducatorDashboard } from './components/EducatorDashboard';
+import * as React from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+import * as ReactDOM from 'react-dom';
+import { EducatorDashboard } from './components/EducatorDashboard';
 
 declare const AU_EducatorData: ALiEMU.EducatorDashboard.EducatorData;
 

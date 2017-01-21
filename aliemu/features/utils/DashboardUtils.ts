@@ -1,4 +1,4 @@
-import { unix, Moment } from 'moment';
+import { Moment, unix } from 'moment';
 
 type Users = ALiEMU.EducatorDashboard.UserObject;
 type Courses = ALiEMU.EducatorDashboard.CourseData;
