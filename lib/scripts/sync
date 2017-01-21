@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Globals
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -39,8 +39,6 @@ main() {
                     get_theme;;
                 database)
                     get_database;;
-                backup)
-                    get_database backup;;
                 *)
                     h2 "'get' subcommmand must be either 'uploads', 'plugins', 'theme', or 'database'" && exit 0
             esac;;
@@ -102,7 +100,7 @@ get_theme() {
 
 get_database() {
     h2 "Exporting database..."
-    ssh "$server_user@$server_ip" "cd ~/app && docker-compose run wordpress /bin/bash wp db export /data/database.sql --allow-root"
+    ssh "$server_user@$server_ip" "cd ~/app && docker-compose exec wordpress wp db export /data/database.sql --allow-root"
 
     h2 "Downloading database to local machine..."
     rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/data/database.sql" "$ROOTDIR/data/database.sql"
