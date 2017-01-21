@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const autoprefixer = require('autoprefixer-stylus');
-const csso = require('gulp-csso');
 const del = require('del');
 const exec = require('child_process').exec;
 const gulp = require('gulp');
@@ -202,23 +201,3 @@ gulp.task('_dev',
         }
     )
 );
-
-// ==================================================
-//               Plugin/Theme Fixes
-// ==================================================
-
-gulp.task('fix-divi', () => {
-    const js = gulp
-        .src('wp-content/themes/Divi/**/*.js', { base: './' })
-        .pipe(uglify(uglifyConfig))
-        .pipe(gulp.dest('./'));
-
-    const css = gulp
-        .src('wp-content/themes/Divi/**/*.css', { base: './' })
-        .pipe(csso())
-        .pipe(gulp.dest('./'));
-
-    return merge(js, css);
-});
-
-gulp.task('fix-files', gulp.parallel('fix-divi'));
