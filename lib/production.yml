@@ -1,22 +1,25 @@
 version: '2'
 services:
     wordpress:
-        image: visiblevc/wordpress
+        image: visiblevc/wordpress:0.13.0-php7.0
         ports:
             - 443:443
-            - 8080:80
+            - 80:80
         volumes:
             - ./data:/data
-            - ./wp-content:/app/wp-content
+            - ./wp-content/themes:/app/wp-content/themes
+            - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
+            - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
+            - ./wp-content/uploads:/app/wp-content/uploads
+            - ./letsencrypt:/etc/letsencrypt
         restart: always
         environment:
-            DB_NAME: wordpress
+            DB_NAME: aliemu
             SITE_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
             DB_USER: root
             PLUGINS: >-
                 academic-bloggers-toolkit,
-                query-monitor,
                 rest-api,
                 sendgrid-email-delivery-simplified,
                 mce-table-buttons,

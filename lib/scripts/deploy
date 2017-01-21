@@ -24,4 +24,4 @@ if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
   ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
 fi
 
-rsync --progress -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+rsync --info=progress2 -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
