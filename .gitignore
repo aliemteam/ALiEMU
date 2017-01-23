@@ -18,6 +18,7 @@ Thumbs.db
 .fseventsd
 .listing
 npm-debug.log
+.vscode
 
 # Temporary Files
 tmp

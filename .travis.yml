@@ -11,6 +11,6 @@ after_success:
 notifications:
     webhooks:
         urls:
-            - https://aliem-slackbot.herokuapp.com/aliemu/hooks/travis-ci
+            - https://aliem-slackbot.now.sh/aliemu/hooks/travis-ci
         on_success: change
         on_failure: change

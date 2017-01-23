@@ -73,7 +73,7 @@ add_action('comment_post', 'slack_comment');
 function slack_message($route, $data) {
     $key = get_option('ALIEM_API_KEY');
     for ($i = 0; $i < 5; $i++) {
-        $response = wp_remote_post("https://aliem-slackbot.herokuapp.com/$route", [
+        $response = wp_remote_post("https://aliem-slackbot.now.sh/$route", [
             'headers' => [
                 'ALIEM_API_KEY' => $key,
             ],
