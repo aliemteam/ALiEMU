@@ -2,6 +2,15 @@
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+sync_all=false
+
+while getopts "a" o; do
+    case "${o}" in
+        a)
+            sync_all=true
+            ;;
+    esac
+done
 
 # Change these based on the installation
 server_ip='45.55.40.174'
@@ -25,3 +34,9 @@ if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
 fi
 
 rsync --info=progress2 -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+
+if [ "$sync_all" = true ]; then
+    rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/themes/Divi" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+    rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/plugins/sfwd-lms" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins"
+    rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/plugins/learndash-propanel" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins"
+fi

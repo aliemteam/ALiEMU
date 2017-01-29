@@ -31,6 +31,7 @@ services:
                 ultimate-member,
                 wpdiscuz,
                 wp-smushit,
+                w3-total-cache,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
                 [local]sfwd-lms,
