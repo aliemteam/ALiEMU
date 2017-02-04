@@ -24,7 +24,7 @@
     "@types/moment": "^2.13.0",
     "@types/react": "^15.0.6",
     "@types/react-addons-test-utils": "^0.14.17",
-    "@types/react-datepicker": "^0.28.10",
+    "@types/react-datepicker": "^0.40.0",
     "@types/react-dom": "^0.14.22",
     "autoprefixer-stylus": "^0.13.0",
     "mobx": "^3.0.2",
