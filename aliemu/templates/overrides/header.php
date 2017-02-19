@@ -17,6 +17,13 @@
 <?php elegant_keywords(); ?>
 <?php elegant_canonical(); ?>
 
+<script type="text/javascript">
+var _AU_API = {
+    root: '<?php echo esc_url_raw(rest_url()); ?>',
+    nonce: '<?php echo wp_create_nonce('wp_rest'); ?>',
+}
+</script>
+
 <?php do_action( 'et_head_meta' ); ?>
 
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />

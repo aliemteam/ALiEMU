@@ -25,7 +25,6 @@ services:
             PLUGINS: >-
                 academic-bloggers-toolkit,
                 query-monitor,
-                rest-api,
                 sendgrid-email-delivery-simplified,
                 mce-table-buttons,
                 ultimate-member,
