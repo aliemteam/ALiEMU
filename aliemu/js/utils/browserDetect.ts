@@ -1,5 +1,6 @@
-// tslint:disable export-name
-export function browserDetect(): ALiEMU.BrowserType {
+export type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
+
+export function browserDetect(): BrowserType {
     const UA: string = window['__AU_TEST_VARIABLE__'] || navigator.userAgent;
 
     switch (true) {

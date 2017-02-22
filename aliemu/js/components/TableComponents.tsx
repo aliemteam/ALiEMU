@@ -107,7 +107,7 @@ export const Pager = (props: PagerProps) => (
     </div>
 );
 
-export const Cell = ( props: CellProps ) => (
+export const Cell = (props: CellProps) => (
     <div
         style={{
             flex: 1,
@@ -117,7 +117,7 @@ export const Cell = ( props: CellProps ) => (
     />
 );
 
-export const Flex = ( props: FlexProps ) => (
+export const Flex = (props: FlexProps) => (
     <div
         style={{
             alignItems: 'center',

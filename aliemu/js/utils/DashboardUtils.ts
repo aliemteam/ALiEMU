@@ -1,4 +1,5 @@
 import { Moment, unix } from 'moment';
+import { BrowserType } from './browserDetect';
 
 type Users = any;
 type Courses = any;
@@ -17,7 +18,7 @@ type Categories = any;
  * @param {string} ElementID The HTML ID of the target element.
  * @return {void}
  */
-export function downloadPolyfill(filename: string, blob: Blob, browser: ALiEMU.BrowserType, ElementID: string): void {
+export function downloadPolyfill(filename: string, blob: Blob, browser: BrowserType, ElementID: string): void {
     switch (browser) {
         case 'chrome':
         case 'firefox':
@@ -133,7 +134,7 @@ export class CSV {
         this.lessons = courses.lessons;
     }
 
-    allUsers(dateRange: any): ALiEMU.CSV {
+    allUsers(dateRange: any): any {
         const filename = 'ALiEMU_Program_Export.csv';
         let data = [
             'Last Name',
@@ -168,7 +169,7 @@ export class CSV {
         return { filename, data };
     }
 
-    user(userID: string): ALiEMU.CSV|boolean {
+    user(userID: string): any|boolean {
 
         const courseProgress = this.users[userID].courseProgress;
         const { courses, courseMeta, categories } = this.courseData;
@@ -202,7 +203,7 @@ export class CSV {
         return { filename, data };
     }
 
-    course(courseID: string): ALiEMU.CSV {
+    course(courseID: string): any {
         const filename = `${this.courses[courseID].postTitle.replace(/\s/, '_')}.csv`;
         const lessonIDs = [];
 

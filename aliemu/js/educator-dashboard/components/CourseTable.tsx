@@ -2,18 +2,9 @@ import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as moment from 'moment';
 import * as React from 'react';
-import WPGraphQL, { User as U } from 'wp-graphql';
-import {
-    Cell,
-    FilterRow,
-    Flex,
-    Header,
-    Pager,
-    Row,
-} from '../../components/TableComponents';
+import WPGraphQL, { Category as ICategory, Post, User as IUser } from 'wp-graphql';
+import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
 import { paginate } from '../../utils/Pagination';
-
-declare const _AU_API;
 
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,
@@ -23,37 +14,12 @@ const transport = new WPGraphQL(_AU_API.root, {
     ],
 });
 
-interface UserMeta {
-    completedCourses: {
-        [id: number]: {
-            date: number;
-            hours: number;
-        };
-    };
-    graduationYear: number|null;
-    group: {
-        id: string;
-        members: number[];
-    };
-    lastActivity: number;
-}
-
-type User = U<UserMeta>;
-
-interface Category {
-    id: number;
-    name: string;
-    slug: string;
-}
-
-interface Course {
-    id: number;
-    title: string;
-    categories: number[];
-}
+type User = Pick<IUser<UserMeta>, 'id'|'name'|'meta'|'username'>;
+type Category = Pick<ICategory, 'id'|'name'|'slug'>;
+type Course = Pick<Post, 'id'|'title'|'categories'>;
 
 interface Response {
-    users: Pick<User, 'id'|'name'|'meta'|'username'>[];
+    users: User[];
     categories: Category[];
     courses: Course[];
 }
@@ -72,16 +38,16 @@ export class CourseTable extends React.PureComponent<Props, {}> {
 
     categories = observable.shallowArray<Category>([]);
     courses = observable.shallowArray<Course>([]);
-    users = observable.shallowArray<Pick<User, 'id'|'name'|'meta'|'username'>>([]);
+    users = observable.shallowArray<User>([]);
 
     @observable
     page = 0;
 
     @observable
-    categorySelection: number = -1;
+    categorySelection = -1;
 
     @observable
-    courseSelection: number = -1;
+    courseSelection = -1;
 
     async componentDidMount() {
         const data: Response = await transport.send(`
@@ -122,13 +88,13 @@ export class CourseTable extends React.PureComponent<Props, {}> {
         return this.courseSelection === -1
             ? []
             : this.users.filter(user => (
-                Object.keys(user.meta.completedCourses).indexOf(`${this.courseSelection}`) > -1
+                Object.keys(user.meta.completedCourses).includes(`${this.courseSelection}`)
             ));
     }
 
     @computed
     get filteredCourses() {
-        return this.courses.filter(c => c.categories.indexOf(this.categorySelection) > -1);
+        return this.courses.filter(c => c.categories.includes(this.categorySelection));
     }
 
     @action
@@ -144,7 +110,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
 
     @action
     paginate = (e: React.MouseEvent<HTMLElement>): void => {
-        this.page = parseInt(e.currentTarget.dataset['page'], 10);
+        this.page = parseInt(e.currentTarget.dataset.page, 10);
     }
 
     // FIXME:

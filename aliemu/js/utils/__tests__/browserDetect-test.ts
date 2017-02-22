@@ -1,5 +1,5 @@
 // tslint:disable max-line-length
-import { browserDetect } from '../BrowserDetect';
+import { browserDetect } from '../browserDetect';
 
 describe('BrowserDetect', () => {
     it('should detect Edge correctly', () => {

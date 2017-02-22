@@ -3,43 +3,10 @@ import { observer } from 'mobx-react';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
-import WPGraphQL from 'wp-graphql';
-import {
-    Cell,
-    FilterRow,
-    Flex,
-    Header,
-    Pager,
-    Row,
-} from '../../components/TableComponents';
+import WPGraphQL, { User as IUser } from 'wp-graphql';
+import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
 import { paginate } from '../../utils/Pagination';
 
-interface UserMeta {
-    completedCourses: {
-        [id: number]: {
-            date: number;
-            hours: number;
-        };
-    };
-    graduationYear: number|null;
-    group: {
-        id: string;
-        members: number[];
-    };
-    lastActivity: number;
-}
-
-interface User {
-    id: number;
-    name: string;
-    meta: UserMeta;
-};
-
-interface Response {
-    users: User[];
-}
-
-declare const _AU_API;
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,
     postTypes: [
@@ -47,6 +14,12 @@ const transport = new WPGraphQL(_AU_API.root, {
         { name: 'lesson', namePlural: 'lessons', restBase: 'sfwd-lessons' },
     ],
 });
+
+type User = Pick<IUser<UserMeta>, 'id'|'name'|'meta'>;
+
+interface Response {
+    users: User[];
+}
 
 interface Props {
     users: number[];
@@ -84,7 +57,7 @@ export class StudentTable extends React.Component<Props, {}> {
     rowSelection = '10';
 
     async componentDidMount() {
-        const data: Response = await transport.send(`
+        const data: Response = await transport.send<Response>(`
             query getUsers($users: [Int], $n: Int) {
                 users(include: $users, per_page: $n) {
                     id
@@ -147,7 +120,7 @@ export class StudentTable extends React.Component<Props, {}> {
 
     @action
     paginate = (e: React.MouseEvent<HTMLElement>): void => {
-        this.page = parseInt(e.currentTarget.dataset['page'], 10);
+        this.page = parseInt(e.currentTarget.dataset.page, 10);
     }
 
     @action
