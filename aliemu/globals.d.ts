@@ -1,3 +1,4 @@
+declare const __DEV__: boolean;
 declare const _AU_API: {
     root: string;
     nonce: string;

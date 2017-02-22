@@ -5,7 +5,7 @@ import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
 import WPGraphQL, { User as IUser } from 'wp-graphql';
 import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
-import { paginate } from '../../utils/Pagination';
+import { paginate } from '../../utils/pagination';
 
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,

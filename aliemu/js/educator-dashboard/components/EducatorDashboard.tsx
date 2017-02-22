@@ -2,9 +2,12 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 import WPGraphQL, { User } from 'wp-graphql';
+import DevTools, { configureDevTool } from '../../utils/devTools';
 import { CourseTable } from './CourseTable';
 import { StudentTable } from './StudentTable';
-// import DevTools from 'mobx-react-devtools';
+
+const DevTool = DevTools();
+configureDevTool({ logFilter: change => change.type === 'action' });
 
 declare const _AU_API;
 
@@ -53,7 +56,7 @@ export class EducatorDashboard extends React.Component<{}, {}> {
         }
         return (
             <div>
-                {/* <DevTools position={{right: 50, top: 100}}/> */}
+                <DevTool position={{right: 50, top: 100}}/>
                 <div className="au-edudash-shadowbox">
                     <h1>{this.groupName}</h1>
                 </div>

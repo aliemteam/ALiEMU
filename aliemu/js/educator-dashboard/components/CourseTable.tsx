@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 import WPGraphQL, { Category as ICategory, Post, User as IUser } from 'wp-graphql';
 import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
-import { paginate } from '../../utils/Pagination';
+import { paginate } from '../../utils/pagination';
 
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,

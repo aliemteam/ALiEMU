@@ -62,7 +62,7 @@
     "react-addons-test-utils": "^15.4.2",
     "style-loader": "^0.13.1",
     "stylint": "^1.5.9",
-    "ts-loader": "^2.0.0",
+    "ts-loader": "^2.0.1",
     "tslint": "^4.4.2",
     "tslint-microsoft-contrib": "^4.0.0",
     "webpack": "^2.2.1",

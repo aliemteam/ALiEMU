@@ -1,4 +1,4 @@
-import { paginate } from '../Pagination';
+import { paginate } from '../pagination';
 const before = beforeAll;
 
 describe('Paginate Function', () => {
