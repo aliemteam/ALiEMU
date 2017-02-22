@@ -1,7 +1,7 @@
 declare const _AU_API: {
     root: string;
     nonce: string;
-}
+};
 
 declare interface UserMeta {
     completedCourses: {
