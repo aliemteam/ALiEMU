@@ -48,10 +48,10 @@ class ScriptLoader {
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
             'divi-crap-js' => ['divi-crap-js', $ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
             'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
-            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [/*'aliemu-vendors'*/], ALIEMU_VERSION, true],
-            'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
+            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/js/educator-dashboard/index.js', [/*'aliemu-vendors'*/], ALIEMU_VERSION, true],
+            'nav-helper' => ['nav-helper', $ROOT_URI . '/vendor/nav-helper.js', [], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true],
-            'particles' => ['particles', $ROOT_URI . '/js/particles.js', ['particlesjs'], false, true],
+            'particles' => ['particles', $ROOT_URI . '/vendor/particles.js', ['particlesjs'], false, true],
             'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', [], '2.1.2', true],
         ];
 

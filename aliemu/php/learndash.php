@@ -2,8 +2,8 @@
 
 /**
  * Adds "Course Short Description" field to the block meta.
- * @param  [type] $post_args [description] // FIXME: Chris what type is this?
- * @return [type]            [description]
+ * @param  mixed[][] $post   Posts
+ * @return mixed[][]
  */
 function learndash_course_grid_post_args($posts) {
     foreach($posts as $key => $post) {
@@ -27,3 +27,23 @@ function learndash_course_grid_post_args($posts) {
 	return $posts;
 }
 add_filter("learndash_post_args", "learndash_course_grid_post_args", 10, 1);
+
+/**
+ * Add REST API support to learndash custom types / taxonomies
+ */
+add_action( 'init', 'adjust_post_types_for_rest', 25 );
+function adjust_post_types_for_rest() {
+    global $wp_post_types;
+    global $wp_taxonomies;
+
+    $post_types = ['sfwd-courses', 'sfwd-lessons', 'sfwd-quiz'];
+
+    foreach ($post_types as $type_name) {
+        if(isset( $wp_post_types[$type_name])) {
+            $wp_post_types[$type_name]->show_in_rest = true;
+        }
+        if(isset($wp_taxonomies[$type_name])) {
+            $wp_taxonomies[$type_name]->show_in_rest = true;
+        }
+    }
+}

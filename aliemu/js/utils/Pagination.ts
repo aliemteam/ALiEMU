@@ -8,7 +8,7 @@
  * @param currentPage Current selected page.
  * @return A filtered, paginated array.
  */
-export function paginate(rows: any[], visibleRows: number, currentPage: number): any[] {
+export function paginate<T>(rows: T[], visibleRows: number, currentPage: number): T[] {
     return rows.filter((_uid, i: number) => (
         (visibleRows * currentPage) <= i && i < (visibleRows * currentPage + visibleRows)
     ));

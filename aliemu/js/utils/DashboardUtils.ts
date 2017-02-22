@@ -1,10 +1,10 @@
 import { Moment, unix } from 'moment';
 
-type Users = ALiEMU.EducatorDashboard.UserObject;
-type Courses = ALiEMU.EducatorDashboard.CourseData;
-type User = ALiEMU.EducatorDashboard.UserMeta;
-type CourseMeta = ALiEMU.EducatorDashboard.CourseMetaObject;
-type Categories = ALiEMU.EducatorDashboard.CategoryObject;
+type Users = any;
+type Courses = any;
+type User = any;
+type CourseMeta = any;
+type Categories = any;
 
 /**
  * Either immediately triggers a file download or saves a downloadable file blob
@@ -118,10 +118,10 @@ export function calculateIIIHours(
 export class CSV {
 
     private users: Users;
-    private courses: ALiEMU.EducatorDashboard.CourseObject;
-    private courseData: ALiEMU.EducatorDashboard.CourseData;
-    private courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject;
-    private categories: ALiEMU.EducatorDashboard.CategoryObject;
+    private courses: any;
+    private courseData: any;
+    private courseMeta: any;
+    private categories: any;
     private lessons;
 
     constructor(users: Users, courses: Courses) {
@@ -133,7 +133,7 @@ export class CSV {
         this.lessons = courses.lessons;
     }
 
-    allUsers(dateRange: ALiEMU.EducatorDashboard.DateRange): ALiEMU.CSV {
+    allUsers(dateRange: any): ALiEMU.CSV {
         const filename = 'ALiEMU_Program_Export.csv';
         let data = [
             'Last Name',

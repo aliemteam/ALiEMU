@@ -19,8 +19,8 @@
 
 <script type="text/javascript">
 var _AU_API = {
-    root: '<?php echo esc_url_raw(rest_url()); ?>',
     nonce: '<?php echo wp_create_nonce('wp_rest'); ?>',
+    root: '<?php echo esc_url_raw(rest_url()); ?>',
 }
 </script>
 

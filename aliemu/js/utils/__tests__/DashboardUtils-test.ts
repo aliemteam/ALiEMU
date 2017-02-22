@@ -213,7 +213,7 @@ describe('downloadPolyfill', () => {
     });
 });
 
-const categories: ALiEMU.EducatorDashboard.CategoryObject = {
+const categories = {
     'TEST1': {
         100: 100,
         150: 150,

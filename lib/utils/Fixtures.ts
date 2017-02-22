@@ -1,5 +1,5 @@
 
-export const categories: ALiEMU.EducatorDashboard.CategoryObject = {
+export const categories = {
     AIR: {
         100: 100,
         200: 200,
@@ -14,7 +14,7 @@ export const categories: ALiEMU.EducatorDashboard.CategoryObject = {
     },
 };
 
-export const courses: ALiEMU.EducatorDashboard.CourseObject = {
+export const courses = {
     100: {
         ID: 100,
         lessons: ['110', '120', '130', '140'],
@@ -81,7 +81,7 @@ export const courses: ALiEMU.EducatorDashboard.CourseObject = {
     },
 };
 
-export const courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject = {
+export const courseMeta = {
     100: {
         accessList: '',
         certificate: '',
@@ -204,7 +204,7 @@ export const courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject = {
     },
 };
 
-export const users: ALiEMU.EducatorDashboard.UserObject = {
+export const users = {
     1: {
         ID: 1,
         accountStatus: 'approved',

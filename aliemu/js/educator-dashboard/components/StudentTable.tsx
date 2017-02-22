@@ -1,10 +1,9 @@
 import { action, computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import { Moment, unix } from 'moment';
-
+import * as moment from 'moment';
 import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
-
+import WPGraphQL from 'wp-graphql';
 import {
     Cell,
     FilterRow,
@@ -12,24 +11,50 @@ import {
     Header,
     Pager,
     Row,
-} from '../../../components/TableComponents';
-import { browserDetect } from '../../../utils/BrowserDetect';
-import {
-    calculateIIIHours,
-    CSV,
-    downloadPolyfill,
-} from '../../../utils/DashboardUtils';
-import { paginate } from '../../../utils/Pagination';
+} from '../../components/TableComponents';
+import { paginate } from '../../utils/Pagination';
+
+interface UserMeta {
+    completedCourses: {
+        [id: number]: {
+            date: number;
+            hours: number;
+        };
+    };
+    graduationYear: number|null;
+    group: {
+        id: string;
+        members: number[];
+    };
+    lastActivity: number;
+}
+
+interface User {
+    id: number;
+    name: string;
+    meta: UserMeta;
+};
+
+interface Response {
+    users: User[];
+}
+
+declare const _AU_API;
+const transport = new WPGraphQL(_AU_API.root, {
+    nonce: _AU_API.nonce,
+    postTypes: [
+        { name: 'course', namePlural: 'courses', restBase: 'sfwd-courses' },
+        { name: 'lesson', namePlural: 'lessons', restBase: 'sfwd-lessons' },
+    ],
+});
 
 interface Props {
-    users: ALiEMU.EducatorDashboard.UserObject;
-    courseData: ALiEMU.EducatorDashboard.CourseData;
+    users: number[];
 }
 
 @observer
 export class StudentTable extends React.Component<Props, {}> {
 
-    readonly CSV: CSV;
     readonly headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
         { align: 'left', content: 'Full Name' },
         { align: 'left', content: 'Class' },
@@ -37,8 +62,8 @@ export class StudentTable extends React.Component<Props, {}> {
         { align: 'center', content: 'Total III Hours' },
         { align: 'center', content: 'User Export' },
     ];
-    readonly totalStudents: number;
-    readonly users: string[] = [];
+
+    users = observable.array<User>([]);
 
     @observable
     advancedFilterVisible = false;
@@ -50,29 +75,36 @@ export class StudentTable extends React.Component<Props, {}> {
     page = 0;
 
     @observable
-    startDate: Moment = null;
+    startDate: moment.Moment = null;
 
     @observable
-    endDate: Moment = null;
+    endDate: moment.Moment = null;
 
     @observable
     rowSelection = '10';
 
-    constructor(props) {
-        super(props);
-        this.CSV = new CSV(this.props.users, this.props.courseData);
-        this.totalStudents = Object.keys(this.props.users).length;
-        this.users = Object.keys(this.props.users)
-        .sort((uid1, uid2) => {
-            const p1 = this.props.users[uid1].auGraduationYear;
-            const p2 = this.props.users[uid2].auGraduationYear;
-            if (!p1 && !p2) return 0;
-            if (p1 && !p2) return -1;
-            if (!p1 && p2) return 1;
-            if (p1 < p2) return 1;
-            if (p1 > p2) return -1;
+    async componentDidMount() {
+        const data: Response = await transport.send(`
+            query getUsers($users: [Int], $n: Int) {
+                users(include: $users, per_page: $n) {
+                    id
+                    name
+                    meta
+                }
+            }
+        `, { users: this.props.users, n: this.props.users.length });
+        data.users.sort((a, b) => {
+            const u1 = a.meta.graduationYear || 0;
+            const u2 = b.meta.graduationYear || 0;
+            if (u1 < u2) { return 1; }
+            if (u2 > u1) { return -1; }
             return 0;
         });
+        this.init(data.users);
+    }
+
+    @action init(users: User[]) {
+        this.users.replace(users);
     }
 
     @computed
@@ -84,32 +116,43 @@ export class StudentTable extends React.Component<Props, {}> {
     }
 
     @computed
-    get filteredUsers(): ALiEMU.EducatorDashboard.UserMeta[] {
+    get filteredUsers(): User[] {
         return this.users
-            .filter(uid => {
-                const displayName = this.props.users[uid].displayName.toLowerCase();
-                const gradYear = this.props.users[uid].auGraduationYear;
-                if (displayName.search(this.filter.toLowerCase()) > -1) return true;
-                if (gradYear && gradYear.toString().search(this.filter) > -1) return true;
+            .filter(user => {
+                const matchInName = user.name.search(new RegExp(this.filter, 'i')) > -1;
+                const matchInYear = `${user.meta.graduationYear}`.search(this.filter) > -1;
+                if (matchInName || matchInYear) { return true; }
                 return false;
             })
-            .map(uid => this.props.users[uid]);
+            .map(user => ({
+                ...user,
+                meta: {
+                    ...user.meta,
+                    completedCourses: Object.keys(user.meta.completedCourses).reduce((prev, curr) => {
+                        const course = user.meta.completedCourses[curr];
+                        const tooEarly = this.startDate && course.date < this.startDate.valueOf();
+                        const tooLate = this.endDate && course.date > this.endDate.valueOf();
+                        if (tooEarly || tooLate) { return prev; }
+                        return { ...prev, [curr]: course };
+                    }, {}),
+                },
+            }));
     }
 
     @computed
     get visibleRows(): number {
-        if (this.rowSelection === 'all') return this.totalStudents;
+        if (this.rowSelection === 'all') return this.users.length;
         return parseInt(this.rowSelection, 10);
     }
 
     @action
     paginate = (e: React.MouseEvent<HTMLElement>): void => {
-        this.page = parseInt((e.target as HTMLElement).dataset['page'], 10);
+        this.page = parseInt(e.currentTarget.dataset['page'], 10);
     }
 
     @action
     setFilterText = (e: React.FormEvent<HTMLInputElement>): void => {
-        this.filter = (e.target as HTMLInputElement).value;
+        this.filter = e.currentTarget.value;
     }
 
     @action
@@ -119,7 +162,7 @@ export class StudentTable extends React.Component<Props, {}> {
 
     @action
     setRowSelection = (e: React.FormEvent<HTMLSelectElement>): void => {
-        this.rowSelection = (e.target as HTMLSelectElement).value;
+        this.rowSelection = e.currentTarget.value;
         this.page = 0;
     }
 
@@ -133,22 +176,15 @@ export class StudentTable extends React.Component<Props, {}> {
         this.advancedFilterVisible = !this.advancedFilterVisible;
     }
 
-    exportCSV = (e: React.MouseEvent<HTMLAnchorElement>): void => {
-        e.preventDefault();
-        const target = e.target as HTMLElement;
-        const userID = target.dataset['userId'];
-        const CSV = userID !== undefined
-            ? this.CSV.user(userID)
-            : this.CSV.allUsers(this.dateRange);
-
-        if (typeof CSV === 'boolean') {
-            alert('This user has not interacted with any courses');
-            return;
-        }
-
-        const blob = new Blob([CSV.data], { type: 'text/csv;charset=utf-8' });
-        downloadPolyfill(CSV.filename, blob, browserDetect(), target.id);
+    parseHours = (user: User): number => {
+        return Object.keys(user.meta.completedCourses).reduce((total, k) => (
+            total + user.meta.completedCourses[k].hours
+        ), 0);
     }
+
+    // FIXME:
+    // tslint:disable-next-line:no-console
+    todo = () => console.log('TODO!');
 
     render() {
         return (
@@ -170,21 +206,21 @@ export class StudentTable extends React.Component<Props, {}> {
                                 children="10"
                                 aria-selected={this.rowSelection === '10'}
                             />
-                            { this.totalStudents > 25 && (
+                            { this.users.length > 25 && (
                                 <option
                                     value="25"
                                     children="25"
                                     aria-selected={this.rowSelection === '25'}
                                 />
                             )}
-                            { this.totalStudents > 50 && (
+                            { this.users.length > 50 && (
                                 <option
                                     value="50"
                                     children="50"
                                     aria-selected={this.rowSelection === '50'}
                                 />
                             )}
-                            { this.totalStudents > 10 && (
+                            { this.users.length > 10 && (
                                 <option
                                     value="all"
                                     children="all"
@@ -236,7 +272,7 @@ export class StudentTable extends React.Component<Props, {}> {
                             role="button"
                             id="program-export"
                             children="Export Program Data"
-                            onClick={this.exportCSV}
+                            onClick={this.todo}
                         />
                     </div>
                 </FilterRow>
@@ -271,37 +307,35 @@ export class StudentTable extends React.Component<Props, {}> {
                 <Header cells={this.headerCells} />
                 {
                     paginate(this.filteredUsers, this.visibleRows, this.page)
-                    .map((user: ALiEMU.EducatorDashboard.UserMeta, i) => (
-                        <Row key={user.ID} id={`student-table-row-${i}`} className="table-row">
+                    .map((user: User, i) => (
+                        <Row key={user.id} id={`student-table-row-${i}`} className="table-row">
                             <Cell
                                 align="left"
-                                children={user.displayName}
+                                children={user.name}
                             />
                             <Cell
                                 align="left"
-                                children={!user.auGraduationYear ? 'Unspecified' : user.auGraduationYear}
+                                children={! user.meta.graduationYear ? 'Unspecified' : user.meta.graduationYear}
                             />
                             <Cell
                                 align="left"
                                 children={
-                                    !user.umLastLogin || user.umLastLogin.toString().length !== 10
+                                    !user.meta.lastActivity
                                     ? 'No activity found'
-                                    : unix(user.umLastLogin).fromNow()
+                                    : moment(user.meta.lastActivity).fromNow()
                                 }
                             />
                             <Cell
                                 align="center"
-                                children={
-                                    calculateIIIHours(user, this.props.courseData.courseMeta, this.dateRange)
-                                }
+                                children={this.parseHours(user)}
                             />
                             <Cell align="center">
                                 <a
                                     className="btn btn--flat"
                                     children="Export Data"
-                                    data-user-id={user.ID}
+                                    data-user-id={user.id}
                                     role="button"
-                                    onClick={this.exportCSV}
+                                    onClick={this.todo}
                                 />
                             </Cell>
                         </Row>

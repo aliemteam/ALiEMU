@@ -22,8 +22,8 @@ add_filter('mce_css', 'aliemu_editor_styles');
 /**
  * Toastr notification for Residents who do not have a grad year saved.
  *
- * @param  [mixed[]] $post WordPress post object
- * @return [mixed[]]       The post +/- the added js notification
+ * @param  mixed[] $post WordPress post object
+ * @return mixed[]       The post +/- the added js notification
  */
 function program_toast($post) {
     global $current_user;
