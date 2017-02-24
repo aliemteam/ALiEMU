@@ -3,6 +3,8 @@ declare const _AU_API: {
     root: string;
     nonce: string;
 };
+declare const ajaxurl: string;
+declare const jQuery;
 
 declare interface UserMeta {
     completedCourses: {

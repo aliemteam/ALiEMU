@@ -5,7 +5,8 @@ import * as React from 'react';
 import * as Datepicker from 'react-datepicker';
 import WPGraphQL, { User as IUser } from 'wp-graphql';
 import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
-import { paginate } from '../../utils/pagination';
+import downloadPolyfill from '../../utils/downloadPolyfill';
+import paginate from '../../utils/pagination';
 
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,
@@ -28,7 +29,7 @@ interface Props {
 @observer
 export class StudentTable extends React.Component<Props, {}> {
 
-    readonly headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
+    static readonly headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
         { align: 'left', content: 'Full Name' },
         { align: 'left', content: 'Class' },
         { align: 'left', content: 'Last Activity' },
@@ -76,10 +77,6 @@ export class StudentTable extends React.Component<Props, {}> {
         this.init(data.users);
     }
 
-    @action init(users: User[]) {
-        this.users.replace(users);
-    }
-
     @computed
     get dateRange() {
         return {
@@ -119,6 +116,11 @@ export class StudentTable extends React.Component<Props, {}> {
     }
 
     @action
+    init(users: User[]): void {
+        this.users.replace(users);
+    }
+
+    @action
     paginate = (e: React.MouseEvent<HTMLElement>): void => {
         this.page = parseInt(e.currentTarget.dataset.page, 10);
     }
@@ -155,9 +157,44 @@ export class StudentTable extends React.Component<Props, {}> {
         ), 0);
     }
 
-    // FIXME:
-    // tslint:disable-next-line:no-console
-    todo = () => console.log('TODO!');
+    programExport = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const id = e.currentTarget.id;
+        const data = {
+            action: 'export_csv',
+            csv_type: 'program_export',
+            group_id:  this.users[0].meta.group.id,
+            users: this.filteredUsers.map(u => ({
+                ...u,
+                meta: {
+                    ...u.meta,
+                    totalHours: this.parseHours(u),
+                },
+            })),
+        };
+        jQuery.post(ajaxurl, data, (response) => {
+            downloadPolyfill('aliemu_team_export.csv', new Blob([response], { type: 'text/csv' }), id);
+        });
+    }
+
+    userExport = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const id = e.currentTarget.id;
+        const user = this.filteredUsers
+            .filter(u => `${u.id}` === id)
+            .map(u => ({
+                ...u,
+                startDate: this.startDate ? this.startDate.unix() : null,
+                endDate: this.endDate ? this.endDate.unix() : null,
+            }))[0];
+        const data = {
+            action: 'export_csv',
+            csv_type: 'user_export',
+            group_id:  this.users[0].meta.group.id,
+            user,
+        };
+        jQuery.post(ajaxurl, data, (response) => {
+            downloadPolyfill('aliemu_user_export.csv', new Blob([response], { type: 'text/csv' }), id);
+        });
+    }
 
     render() {
         return (
@@ -245,7 +282,7 @@ export class StudentTable extends React.Component<Props, {}> {
                             role="button"
                             id="program-export"
                             children="Export Program Data"
-                            onClick={this.todo}
+                            onClick={this.programExport}
                         />
                     </div>
                 </FilterRow>
@@ -277,7 +314,7 @@ export class StudentTable extends React.Component<Props, {}> {
                 )}
 
                 {/* Table */}
-                <Header cells={this.headerCells} />
+                <Header cells={StudentTable.headerCells} />
                 {
                     paginate(this.filteredUsers, this.visibleRows, this.page)
                     .map((user: User, i) => (
@@ -306,9 +343,9 @@ export class StudentTable extends React.Component<Props, {}> {
                                 <a
                                     className="btn btn--flat"
                                     children="Export Data"
-                                    data-user-id={user.id}
+                                    id={`${user.id}`}
                                     role="button"
-                                    onClick={this.todo}
+                                    onClick={this.userExport}
                                 />
                             </Cell>
                         </Row>

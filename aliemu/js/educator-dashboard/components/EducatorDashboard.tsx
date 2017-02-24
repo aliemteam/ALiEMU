@@ -52,7 +52,7 @@ export class EducatorDashboard extends React.Component<{}, {}> {
 
     render() {
         if (this.loading) {
-            return <h1>Loading...</h1>;
+            return null;
         }
         return (
             <div>

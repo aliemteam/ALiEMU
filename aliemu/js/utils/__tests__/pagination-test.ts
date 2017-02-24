@@ -1,10 +1,9 @@
-import { paginate } from '../pagination';
-const before = beforeAll;
+import paginate from '../pagination';
 
 describe('Paginate Function', () => {
     let rows: number[];
 
-    before(() => {
+    beforeAll(() => {
         rows = Array.from(Array(100).keys());
     });
 

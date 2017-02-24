@@ -4,7 +4,8 @@ import * as moment from 'moment';
 import * as React from 'react';
 import WPGraphQL, { Category as ICategory, Post, User as IUser } from 'wp-graphql';
 import { Cell, FilterRow, Flex, Header, Pager, Row } from '../../components/TableComponents';
-import { paginate } from '../../utils/pagination';
+import downloadPolyfill from '../../utils/downloadPolyfill';
+import paginate from '../../utils/pagination';
 
 const transport = new WPGraphQL(_AU_API.root, {
     nonce: _AU_API.nonce,
@@ -30,9 +31,9 @@ interface Props {
 
 @observer
 export class CourseTable extends React.PureComponent<Props, {}> {
-    readonly visibleRows = 10;
-    readonly headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
-        { align: 'left', content: 'User Name' },
+    static readonly visibleRows = 10;
+    static readonly headerCells: { content: string, align: 'left'|'right'|'center'}[] = [
+        { align: 'left', content: 'Student Name' },
         { align: 'left', content: 'Course Completion Date' },
     ];
 
@@ -113,9 +114,19 @@ export class CourseTable extends React.PureComponent<Props, {}> {
         this.page = parseInt(e.currentTarget.dataset.page, 10);
     }
 
-    // FIXME:
-    // tslint:disable-next-line:no-console
-    todo = () => console.log('todo....');
+    courseExport = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const id = e.currentTarget.id;
+        const data = {
+            action: 'export_csv',
+            csv_type: 'course_export',
+            group_id:  this.users[0].meta.group.id,
+            users: this.users.slice(),
+            course: this.courseSelection,
+        };
+        jQuery.post(ajaxurl, data, (response) => {
+            downloadPolyfill('aliemu_course_export.csv', new Blob([response], { type: 'text/csv' }), id);
+        });
+    }
 
     render() {
         return (
@@ -180,12 +191,12 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                             }
                             children="Export Course Data"
                             role="button"
-                            onClick={this.todo}
+                            onClick={this.courseExport}
                         />
                     </Flex>
                 </FilterRow>
-                <Header cells={this.headerCells} />
-                { paginate(this.relevantUsers, this.visibleRows, this.page)
+                <Header cells={CourseTable.headerCells} />
+                { paginate(this.relevantUsers, CourseTable.visibleRows, this.page)
                     .map((user, i) => (
                         <Row key={user.id} id={`course-table-row-${i}`}>
                             <Cell
@@ -201,7 +212,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                 }
                 { this.courseSelection !== -1 && (
                     <Pager
-                        visibleRows={this.visibleRows}
+                        visibleRows={CourseTable.visibleRows}
                         currentPage={this.page}
                         totalRows={this.relevantUsers.length}
                         onClick={this.paginate}

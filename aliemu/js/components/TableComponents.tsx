@@ -11,7 +11,6 @@ interface PagerProps extends React.HTMLProps<HTMLDivElement> {
     totalRows: number;
     visibleRows: number;
     currentPage: number;
-    onClick(e: React.MouseEvent<HTMLElement>): void;
 }
 
 interface CellProps extends React.HTMLProps<HTMLDivElement> {

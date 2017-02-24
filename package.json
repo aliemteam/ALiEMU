@@ -21,8 +21,7 @@
   "dependencies": {
     "@types/enzyme": "^2.7.4",
     "@types/jest": "^18.1.1",
-    "@types/moment": "^2.13.0",
-    "@types/react": "^15.0.11",
+    "@types/react": "^15.0.12",
     "@types/react-addons-test-utils": "^0.14.17",
     "@types/react-datepicker": "^0.40.0",
     "@types/react-dom": "^0.14.23",
@@ -46,7 +45,7 @@
     "css-loader": "^0.26.1",
     "del": "^2.2.2",
     "enzyme": "^2.7.1",
-    "eslint": "^3.16.0",
+    "eslint": "^3.16.1",
     "eslint-config-airbnb-base": "^11.1.0",
     "eslint-plugin-import": "^2.2.0",
     "gulp": "gulpjs/gulp#4.0",
@@ -65,7 +64,6 @@
     "ts-jest": "^19.0.0",
     "ts-loader": "^2.0.1",
     "tslint": "^4.4.2",
-    "tslint-microsoft-contrib": "^4.0.0",
     "webpack": "^2.2.1",
     "webpack-bundle-analyzer": "^2.3.0",
     "webpack-stream": "^3.2.0"
