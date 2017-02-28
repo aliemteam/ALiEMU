@@ -1,7 +1,7 @@
 export type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
 
 export default function browserDetect(): BrowserType {
-    const UA: string = window['__AU_TEST_VARIABLE__'] || navigator.userAgent;
+    const UA: string = navigator.userAgent;
 
     switch (true) {
         case UA.indexOf('Edge') > -1:

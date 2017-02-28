@@ -86,7 +86,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
 
     @computed
     get relevantUsers() {
-        return this.courseSelection === -1
+        return this.courseSelection === 1
             ? []
             : this.users.filter(user => (
                 Object.keys(user.meta.completedCourses).includes(`${this.courseSelection}`)

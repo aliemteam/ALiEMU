@@ -12,9 +12,9 @@
         "experimentalDecorators": true,
         "declaration": false,
         "noImplicitAny": false,
-        "removeComments": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "sourceMap": true
     },
     "filesGlob": [
         "{aliemu,lib}/**/*.{ts,tsx}",

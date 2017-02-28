@@ -84,6 +84,7 @@
     "coverageDirectory": "lib/tmp/coverage",
     "collectCoverageFrom": [
       "aliemu/**/*.{ts,tsx}",
+      "!aliemu/**/devTools.ts",
       "!aliemu/**/index.{ts,tsx}",
       "!**/{vendor,__tests__}/**",
       "!**/*.d.ts"
