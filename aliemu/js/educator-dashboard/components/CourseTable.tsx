@@ -8,7 +8,7 @@ import downloadPolyfill from '../../utils/downloadPolyfill';
 import paginate from '../../utils/pagination';
 
 const transport = new WPGraphQL(_AU_API.root, {
-    nonce: _AU_API.nonce,
+    auth: _AU_API.nonce,
     postTypes: [
         { name: 'course', namePlural: 'courses', restBase: 'sfwd-courses' },
         { name: 'lesson', namePlural: 'lessons', restBase: 'sfwd-lessons' },
@@ -58,9 +58,11 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                     name
                     slug
                 }
-                courses(per_page: 100) {
+                courses(per_page: 100, context: edit) {
                     id
-                    title
+                    title {
+                        raw
+                    }
                     categories
                 }
                 users(include: $users, per_page: $n) {
@@ -71,9 +73,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                 }
             }
         `, { users: this.props.users.slice(), n: this.props.users.length });
-        data.courses = data.courses
-            .filter(c => c.categories.length > 0)
-            .map(c => ({ ...c, title: c.title.replace('&#8211;', '–') }));
+        data.courses = data.courses.filter(c => c.categories.length > 0);
         this.init(data);
     }
 
@@ -174,7 +174,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                                     <option
                                         value={course.id}
                                         key={course.id}
-                                        children={course.title}
+                                        children={course.title.raw}
                                         aria-selected={this.courseSelection === course.id}
                                     />
                                 ))

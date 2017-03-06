@@ -86,7 +86,7 @@ export const Pager = (props: PagerProps) => (
     <div className="pagination" style={props.style}>
         {
             Array
-            .from({length: props.totalRows }, (_k, v) => v)
+            .from({ length: props.totalRows }, (_k, v) => v)
             .filter((el) => el % props.visibleRows === 0)
             .map((_el, i) => (
                 <div

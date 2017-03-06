@@ -12,7 +12,7 @@ configureDevTool({ logFilter: change => change.type === 'action' });
 declare const _AU_API;
 
 const transport = new WPGraphQL(_AU_API.root, {
-    nonce: _AU_API.nonce,
+    auth: _AU_API.nonce,
     postTypes: [
         { name: 'course', namePlural: 'courses', restBase: 'sfwd-courses' },
         { name: 'lesson', namePlural: 'lessons', restBase: 'sfwd-lessons' },
