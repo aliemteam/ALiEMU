@@ -2,15 +2,6 @@
 
 SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
-sync_all=false
-
-while getopts "a" o; do
-    case "${o}" in
-        a)
-            sync_all=true
-            ;;
-    esac
-done
 
 # Change these based on the installation
 server_ip='45.55.40.174'
@@ -19,24 +10,53 @@ theme_name='aliemu'
 rsa_filename='DO_aliemu_rsa'
 
 # shellcheck disable=SC1091,SC1090
-source "$SCRIPTDIR"/helpers || exit 1
+. "$SCRIPTDIR"/helpers || ERROR "Couldn't source helpers file."
 
 # Exit if the DSA file doesn't exist
-if [[ ! -f "$HOME/.ssh/$rsa_filename" ]]; then
+[[ -f "$HOME/.ssh/$rsa_filename" ]] ||
     ERROR "You must have the file '$rsa_filename' located within your ~/.ssh directory"
-fi
 
 eval "$(ssh-agent -s)" &>/dev/null
 ssh-add "$HOME/.ssh/$rsa_filename" &>/dev/null
 
-if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
-  ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
-fi
+# Add server to known_hosts if it doesn't already exist there
+ssh-keygen -q -F "$server_ip" &>/dev/null ||
+    ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
 
-rsync --info=progress2 -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+deploy_aliemu() {
+    rsync --info=progress2 -aze "ssh" "$ROOTDIR/dist/$theme_name" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+}
 
-if [ "$sync_all" = true ]; then
+deploy_theme() {
     rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/themes/Divi" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes"
+}
+
+deploy_plugins() {
     rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/plugins/sfwd-lms" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins"
     rsync --info=progress2 -aze "ssh" "$ROOTDIR/wp-content/plugins/learndash-propanel" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins"
-fi
+}
+
+main() {
+    case "$1" in
+        all)
+            deploy_aliemu
+            deploy_plugins
+            deploy_theme
+            ;;
+        aliemu)
+            deploy_aliemu
+            ;;
+        plugins)
+            deploy_plugins
+            ;;
+        theme)
+            deploy_theme
+            ;;
+        *)
+            h2 'Must specify one of "all", "aliemu", "plugins", or "theme"'
+            ;;
+    esac
+}
+
+main "$@"
+exit 0
