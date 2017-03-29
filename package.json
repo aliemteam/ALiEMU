@@ -62,7 +62,7 @@
     "style-loader": "^0.13.1",
     "stylint": "^1.5.9",
     "ts-loader": "^2.0.0",
-    "tslint": "^4.4.2",
+    "tslint": "^5.0.0",
     "tslint-microsoft-contrib": "^4.0.0",
     "tslint-react": "^2.3.0",
     "webpack": "^2.2.1",
