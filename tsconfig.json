@@ -1,26 +1,24 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "isolatedModules": false,
+        "target": "es5",
         "jsx": "react",
+        "lib": [
+            "dom",
+            "es5",
+            "scripthost",
+            "es2015",
+            "es2016"
+        ],
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": false,
         "declaration": false,
         "noImplicitAny": false,
-        "removeComments": true,
-        "noLib": false,
-        "preserveConstEnums": true,
-        "suppressImplicitAnyIndexErrors": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "sourceMap": true
     },
     "filesGlob": [
         "{aliemu,lib}/**/*.{ts,tsx}",
         "node_modules/@types/**/index.d.ts",
         "!dist/**"
-    ],
-    "compileOnSave": false,
-    "buildOnSave": false
+    ]
 }
