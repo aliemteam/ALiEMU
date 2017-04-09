@@ -83,7 +83,6 @@
       "json"
     ],
     "verbose": true,
-    "coverageDirectory": "lib/tmp/coverage",
     "collectCoverageFrom": [
       "aliemu/**/*.{ts,tsx}",
       "!aliemu/**/devTools.ts",

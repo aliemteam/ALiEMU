@@ -125,7 +125,7 @@ gulp.task('stylus:dev', cb => (
 ));
 
 gulp.task('stylus:prod', () =>
-    gulp.src('aliemu/styles/style.styl', { base: './aliemu/styles' })
+    gulp.src(['aliemu/styles/{style,editor}.styl'], { base: './aliemu/styles' })
         .pipe(stylus(Object.assign({}, stylusConfig, { compress: true })))
         .pipe(insert.prepend(styleHeader))
         .pipe(gulp.dest('dist/aliemu'))
@@ -144,7 +144,7 @@ gulp.task('webpack:dev', () =>
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('aliemu/features/dashboards/educator-dashboard/index.tsx')
+    gulp.src('aliemu/js/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
 );

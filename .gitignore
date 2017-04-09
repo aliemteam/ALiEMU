@@ -1,13 +1,5 @@
-# ===== SENSITIVE DATA =====
-#  DO NOT COMMIT TO GITHUB
 data
 .env
-
-# ===== COPYWRITTEN FILES =====
-#  DO NOT COMMIT TO GITHUB
-wp-content/themes
-
-# File system junk files
 Desktop.ini
 Thumbs.db
 .DS_Store
@@ -19,15 +11,8 @@ Thumbs.db
 .listing
 npm-debug.log
 .vscode
-
-# Temporary Files
 tmp
-
-# Wordpress
 wp-content
-
-# Gulp stuff
 node_modules
-
-# Local Distribution Files
 dist
+coverage
