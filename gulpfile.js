@@ -144,7 +144,7 @@ gulp.task('webpack:dev', () =>
 
 
 gulp.task('webpack:prod', () =>
-    gulp.src('aliemu/js/educator-dashboard/index.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
 );
