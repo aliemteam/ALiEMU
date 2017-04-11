@@ -41,7 +41,7 @@ module.exports = {
     devtool: isProduction ? 'hidden-source-map' : 'eval-source-map',
     cache: true,
     entry: {
-        'aliemu/js/educator-dashboard/index': './aliemu/js/educator-dashboard/index.tsx',
+        'aliemu/features/dashboards/educator-dashboard/index': './aliemu/features/dashboards/educator-dashboard/index.tsx',
         vendor: [
             'react',
             'mobx',

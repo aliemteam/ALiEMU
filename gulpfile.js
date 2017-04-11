@@ -92,13 +92,13 @@ gulp.task('static', () => {
 
     const pages = gulp
         .src([
-            'aliemu/php/templates/pages/**/*.php',
-            'aliemu/php/templates/overrides/**/*.php',
+            'aliemu/templates/pages/**/*.php',
+            'aliemu/templates/overrides/**/*.php',
         ])
         .pipe(gulp.dest('dist/aliemu/'));
 
     const learndash = gulp
-        .src('aliemu/php/templates/learndash/**/*.php')
+        .src('aliemu/templates/learndash/**/*.php')
         .pipe(gulp.dest('dist/aliemu/learndash/'));
 
     return merge(main, pages, learndash);
@@ -136,7 +136,7 @@ gulp.task('stylus:prod', () =>
 // ==================================================
 
 gulp.task('webpack:dev', () =>
-    gulp.src('aliemu/js/educator-dashboard/index.tsx')
+    gulp.src('aliemu/features/dashboards/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
         .pipe(gulp.dest('dist/'))
         .pipe(browserSync.stream())
