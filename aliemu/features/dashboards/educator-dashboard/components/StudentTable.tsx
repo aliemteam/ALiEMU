@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Moment, unix } from 'moment';
 
 import * as React from 'react';
-import * as Datepicker from 'react-datepicker';
+import Datepicker from 'react-datepicker';
 
 import {
     Cell,
