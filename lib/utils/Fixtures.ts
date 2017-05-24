@@ -393,8 +393,8 @@ export const lessons: {[i: number]: ALiEMU.LearnDash.Lessons} = {
 };
 
 export const courseData = {
-    categories: Object.assign({}, categories),
-    courseMeta: Object.assign({}, courseMeta),
-    courses: Object.assign({}, courses),
-    lessons: Object.assign({}, lessons),
+    categories: { ...categories },
+    courseMeta: { ...courseMeta },
+    courses: { ...courses },
+    lessons: { ...lessons },
 };

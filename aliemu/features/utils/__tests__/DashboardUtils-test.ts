@@ -89,12 +89,12 @@ describe('calculateHours', () => {
     let meta;
 
     before(() => {
-        meta = Object.assign({}, testMeta);
-        user = Object.assign({}, testUser);
+        meta = { ...testMeta };
+        user = { ...testUser };
     });
 
     afterEach(() => {
-        user = Object.assign({}, testUser);
+        user = { ...testUser };
     });
 
     it('should calculate total hours with no date range', () => {
@@ -214,17 +214,17 @@ describe('downloadPolyfill', () => {
 });
 
 const categories: ALiEMU.EducatorDashboard.CategoryObject = {
-    'TEST1': {
+    TEST1: {
         100: 100,
         150: 150,
         175: 175,
     },
-    'TEST2': {
+    TEST2: {
         200: 200,
         250: 250,
         275: 275,
     },
-    'TEST3': {
+    TEST3: {
         300: 300,
         350: 350,
         375: 375,
@@ -295,7 +295,7 @@ describe('CSV Class', () => {
                 data: `"Last Name","First Name","Course Completed","Lesson: Lesson 110","Lesson: Lesson 120","Lesson: Lesson 130","Lesson: Lesson 140"\n"User","Minimal","X","X","X","X","X"\n"User","Maximal","06/09/2015","Completed","Completed","Completed","Completed"\n`,
             };
             expect(CSV.course('100')).toEqual(expected);
-            const newUsers = Object.assign({}, users);
+            const newUsers = { ...users };
             newUsers[2].courseProgress[100].lessons[140] = 0;
             const newCSV = new utils.CSV(newUsers, courseData);
             const newExpected = {

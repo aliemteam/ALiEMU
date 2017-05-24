@@ -1,7 +1,7 @@
-version: '2'
+version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.14.0-php7.0
+        image: dsifford/wordpress:0.15.1-php7.1
         ports:
             - 443:443
             - 8080:80
@@ -18,7 +18,7 @@ services:
             - ./wp-content/uploads:/app/wp-content/uploads
         environment:
             DB_NAME: wordpress
-            SEARCH_REPLACE: https://www.aliemu.com,http://localhost:8080
+            URL_REPLACE: https://www.aliemu.com,http://localhost:8080
             SITE_NAME: aliemu.com
             DB_PASS: root
             DB_USER: root
@@ -34,11 +34,6 @@ services:
                 w3-total-cache,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
-                [local]sfwd-lms,
-                [local]learndash-propanel,
-            THEMES: >-
-                [local]Divi,
-                [local]aliemu,
             WP_DEBUG_LOG: 'true'
             WP_DEBUG_DISPLAY: 'true'
             WP_DEBUG: 'true'

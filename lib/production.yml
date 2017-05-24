@@ -1,7 +1,7 @@
-version: '2'
+version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.14.0-php7.0
+        image: dsifford/wordpress:0.15.1-php7.1
         ports:
             - 443:443
             - 80:80
@@ -29,11 +29,6 @@ services:
                 w3-total-cache,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
-                [local]sfwd-lms,
-                [local]learndash-propanel,
-            THEMES: >-
-                [local]Divi,
-                [local]aliemu,
     db:
         image: mariadb:10
         restart: always
