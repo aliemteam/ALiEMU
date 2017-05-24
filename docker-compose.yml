@@ -24,14 +24,15 @@ services:
             DB_USER: root
             PLUGINS: >-
                 academic-bloggers-toolkit,
+                jetpack,
+                mce-table-buttons,
                 query-monitor,
                 rest-api,
                 sendgrid-email-delivery-simplified,
-                mce-table-buttons,
                 ultimate-member,
-                wpdiscuz,
-                wp-smushit,
                 w3-total-cache,
+                wp-smushit,
+                wpdiscuz,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
             WP_DEBUG_LOG: 'true'
