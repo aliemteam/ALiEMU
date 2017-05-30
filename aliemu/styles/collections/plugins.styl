@@ -1,3 +1,4 @@
+@require './colors'
 // @stylint off
 // ABT -------------------------------------------------------------------------
 .abt-bibliography
@@ -12,13 +13,23 @@
     font-size: 0.8em !important
     padding: 0 $block-margin
 
-// TODO: Review all of below
 // Ultimate Member -------------------------------------------------------------
-img.um-avatar
-    border-radius: 100px
-    position: relative
-    top: 7px
-    margin-left: 8px
+.comment_avatar
+    display: none
+
+.comment-body
+    border-bottom: solid $secondary
+    padding-bottom: 15px
+    margin-bottom: 10px
+
+.comment-content p
+    margin: 0
+
+.comment-form-comment
+    margin: 0
+
+.form-submit
+    margin: 0
 
 // Bio box
 .ts-fab-avatar .avatar

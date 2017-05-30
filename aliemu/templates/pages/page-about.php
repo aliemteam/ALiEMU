@@ -2,7 +2,7 @@
 <div id="main-content">
 <?php while (have_posts()) : the_post(); ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class('au-about'); ?>>
-    <div class="flex-container">
+    <div class="flex-container about">
 
     <!-- Nav Bar -->
     <!-- <div id=""> -->

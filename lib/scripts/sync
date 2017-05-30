@@ -11,7 +11,7 @@ theme_name='Divi'
 PaidPlugins=(learndash-propanel sfwd-lms)
 
 # shellcheck source=./helpers
-source "$SCRIPTDIR"/helpers || exit 1
+. "$SCRIPTDIR"/helpers || exit 1
 
 main() {
 
@@ -48,7 +48,6 @@ main() {
 }
 
 prechecks() {
-    local owners o
 
     depcheck \
         rsync \
@@ -57,14 +56,10 @@ prechecks() {
         ssh-keyscan
 
     # Check ownership of wp-content
-    owners=$(ls -lR "$ROOTDIR"/wp-content | awk '{print $3}')
-    for o in $owners; do
-        if [[ $o != "$USER" ]]; then
-            h2 'Need sudo priveledges to take ownership of wp-content directory'
-            sudo chown -R "$USER" "$ROOTDIR"/wp-content
-            break
-        fi
-    done;
+    if [[ $( find "$ROOTDIR/wp-content" ! -user "$USER" | wc -l ) -ne 0 ]]; then
+        h2 'Need sudo priveledges to take ownership of wp-content directory'
+        sudo chown -R "$USER" "$ROOTDIR"/wp-content
+    fi
 
     # Check to make sure the SSH key exists
     [[ ! -f $HOME/.ssh/DO_aliemu_rsa ]] && ERROR "SSH keys have not been added to your SSH directory for this machine"
@@ -99,6 +94,8 @@ get_theme() {
 }
 
 get_database() {
+    mv "$ROOTDIR/data/database.sql" "$ROOTDIR/data/db_old.sql.bak"
+
     h2 "Exporting database..."
     ssh "$server_user@$server_ip" "cd ~/app && docker-compose exec wordpress wp db export /data/database.sql --allow-root"
 
