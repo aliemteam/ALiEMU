@@ -94,7 +94,8 @@ get_theme() {
 }
 
 get_database() {
-    mv "$ROOTDIR/data/database.sql" "$ROOTDIR/data/db_old.sql.bak"
+    rm -f "$ROOTDIR/data/database.sql.bak"
+    mv "$ROOTDIR/data/database.sql" "$ROOTDIR/data/database.sql.bak"
 
     h2 "Exporting database..."
     ssh "$server_user@$server_ip" "cd ~/app && docker-compose exec wordpress wp db export /data/database.sql --allow-root"

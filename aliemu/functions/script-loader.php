@@ -21,9 +21,6 @@ class ScriptLoader {
     private $lessonPageStyles = [
         'abt_frontend_styles',
         'et-shortcodes-css',
-        'learndash_style',
-        'sfwd_front_css',
-        'jquery-dropdown-css',
         'et-shortcodes-responsive-css',
     ];
 
@@ -46,9 +43,9 @@ class ScriptLoader {
 
         $this->scripts = [
             'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
-            'divi-crap-js' => ['divi-crap-js', $ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
+            'divi-junk-js' => ['divi-junk-js', $ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
             'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
-            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [/*'aliemu-vendors'*/], ALIEMU_VERSION, true],
+            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [], ALIEMU_VERSION, true],
             'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true],
             'particles' => ['particles', $ROOT_URI . '/js/particles.js', ['particlesjs'], false, true],
@@ -76,28 +73,35 @@ class ScriptLoader {
     private function delegate($req, $query, $user) {
         // Always load these
         $load = [
-            ['nav-helper', 'divi-crap-js'],
+            ['nav-helper', 'divi-junk-js'],
             ['child-style', 'roboto-font'],
         ];
         // Always unload these
         $unload = [
-            ['divi-fitvids', 'waypoints', 'magnific-popup', 'divi-custom-script'],
-            ['wpProQuiz_front_style', 'magnific-popup', 'theme-customizer', 'divi-style', 'learndash_template_style_css', 'et-gf-lato'],
+            [
+                'divi-custom-script',
+                'divi-fitvids',
+                'magnific-popup',
+                'waypoints',
+            ],
+            [
+                'divi-style',
+                'et-gf-lato',
+                'jquery-dropdown-css',
+                'learndash_quiz_front_css',
+                'learndash_style',
+                'learndash_template_style_css',
+                'magnific-popup',
+                'sfwd_front_css',
+                'theme-customizer',
+                'wpProQuiz_front_style',
+            ],
         ];
 
         // Not learndash pages
         if (!is_singular(['sfwd-courses', 'sfwd-quiz', 'sfwd-lessons', 'sfwd-topic'])) {
-            // FIXME: Convert back when we get out of siteground
-            // array_push($unload[0], ...$this->lessonPageScripts);
-            // array_push($unload[1], ...$this->lessonPageStyles);
-
-            foreach($this->lessonPageScripts as $script) {
-                $unload[0][] = $script;
-            }
-            foreach($this->lessonPageStyles as $style) {
-                // wp_die($style);
-                $unload[1][] = $style;
-            }
+            array_push($unload[0], ...$this->lessonPageScripts);
+            array_push($unload[1], ...$this->lessonPageStyles);
         }
 
         // Not an Ultimate Member page
@@ -131,11 +135,8 @@ class ScriptLoader {
                 break;
         }
 
-        // FIXME: Convert back to this when we ditch siteground
-        // $this->load(...$load);
-        // $this->unload(...$unload);
-        $this->load($load[0], $load[1]);
-        $this->unload($unload[0], $unload[1]);
+        $this->load(...$load);
+        $this->unload(...$unload);
     }
 
     /**
@@ -146,14 +147,10 @@ class ScriptLoader {
      */
     private function load($scripts, $styles) {
         foreach(array_reverse(array_unique($styles)) as $style) {
-            // FIXME: Convert back when we ditch siteground
-            // wp_enqueue_style(...$this->styles[$style]);
-            call_user_func_array('wp_enqueue_style', $this->styles[$style]);
+            wp_enqueue_style(...$this->styles[$style]);
         }
         foreach(array_reverse(array_unique($scripts)) as $script) {
-            // FIXME: Convert back when we ditch siteground
-            // wp_enqueue_script(...$this->scripts[$script]);
-            call_user_func_array('wp_enqueue_script', $this->scripts[$script]);
+            wp_enqueue_script(...$this->scripts[$script]);
         }
     }
 
@@ -168,7 +165,6 @@ class ScriptLoader {
             wp_dequeue_script($script);
         }
         foreach(array_unique($styles) as $style) {
-            // wp_die($style);
             wp_dequeue_style($style);
         }
     }
