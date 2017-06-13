@@ -30,3 +30,8 @@ if [ "$sync_all" = true ]; then
     docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/sfwd-lms" "$server_user:/home/$server_user/app/wp-content/plugins"
     docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/learndash-propanel" "$server_user:/home/$server_user/app/wp-content/plugins"
 fi
+
+docker-machine ssh "$server_user" "
+cd /home/$server_user/app
+chown -R www-data:$server_user .
+"
