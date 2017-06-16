@@ -1,6 +1,6 @@
 {
   "name": "aliemu",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Development taskrunner pipeline",
   "author": "Derek P Sifford",
   "license": "MIT",
@@ -9,13 +9,14 @@
     "lint": "npm run lint:stylint && npm run lint:tslint",
     "lint:stylint": "stylint aliemu/styles -c .stylintrc",
     "lint:tslint": "tslint -e \"node_modules/**/*\" \"**/*.+(ts|tsx)\" -t codeFrame",
-    "build": "NODE_ENV=production node_modules/.bin/gulp _build",
-    "start": "NODE_ENV=development node --max_old_space_size=8192 node_modules/.bin/gulp _dev",
+    "build": "NODE_ENV=production gulp _build",
+    "start": "NODE_ENV=development node --max_old_space_size=8192 gulp _dev",
     "deploy": "npm run test && npm run build && ./lib/scripts/deploy",
     "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy -a",
     "sync": "./lib/scripts/sync",
     "pretest": "npm run lint",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "version": "gulp bump"
   },
   "dependencies": {
     "@types/enzyme": "^2.8.0",
