@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+SCRIPTDIR="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
+ROOTDIR=$( cd "$SCRIPTDIR" && cd ../../ && pwd || exit )
 sync_all=false
 
 while getopts "a" o; do
@@ -12,26 +12,33 @@ while getopts "a" o; do
     esac
 done
 
-# Change these based on the installation
-server_user='aliemu'
-theme_name='aliemu'
+declare base_theme_name
+declare machine_name
+declare machine_user
+declare theme_name
+declare -a local_plugins
 
-# shellcheck disable=SC1091,SC1090
-source "$SCRIPTDIR"/helpers || exit 1
+# shellcheck disable=1090
+{
+    . "$SCRIPTDIR/helpers" || exit 1
+    . "$SCRIPTDIR/variables" || exit 1
+}
 
-if [[ $(docker-machine ls -q --filter "name=$server_user" | wc -l) == 0 ]]; then
-    ERROR "A Docker machine named $server_user could not be found"
+if [[ $(docker-machine ls -q --filter "name=$machine_name" | wc -l) == 0 ]]; then
+    ERROR "A Docker machine named $machine_name could not be found"
 fi
 
-docker-machine scp -r -d "$ROOTDIR/dist/$theme_name" "$server_user:/home/$server_user/app/wp-content/themes"
+docker-machine scp -r -d "$ROOTDIR/dist/$theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
 
 if [ "$sync_all" = true ]; then
-    docker-machine scp -r -d "$ROOTDIR/wp-content/themes/Divi" "$server_user:/home/$server_user/app/wp-content/themes"
-    docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/sfwd-lms" "$server_user:/home/$server_user/app/wp-content/plugins"
-    docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/learndash-propanel" "$server_user:/home/$server_user/app/wp-content/plugins"
+    docker-machine scp -r -d "$ROOTDIR/wp-content/themes/$base_theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
+    for plugin in "${local_plugins[@]}"; do
+        h3 "Retrieving plugin: $plugin"
+        docker-machine scp -r -d "$machine_name:/home/$machine_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
+    done
 fi
 
-docker-machine ssh "$server_user" "
-cd /home/$server_user/app
-sudo chown -R www-data:$server_user .
+docker-machine ssh "$machine_name" "
+cd /home/$machine_user/app
+sudo chown -R www-data:$machine_user .
 "
