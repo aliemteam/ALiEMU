@@ -8,7 +8,7 @@
     function initDOM() {
         var topMenus = document.querySelectorAll('.et_mobile_menu > li');
         var mobileMenuToggle = document.querySelector(
-            '.mobile_menu_bar_toggle',
+            '.mobile_menu_bar_toggle'
         );
         var mobileMenu = document.querySelector('.et_mobile_menu');
 
