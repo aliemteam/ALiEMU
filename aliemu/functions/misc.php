@@ -22,17 +22,18 @@ add_filter('mce_css', 'aliemu_editor_styles');
 /**
  * Toastr notification for Residents who do not have a grad year saved.
  *
- * @param  [mixed[]] $post WordPress post object
- * @return [mixed[]]       The post +/- the added js notification
+ * @param  [string] $post WordPress post content
+ * @return [string]       The post +/- the added js notification
  */
 function program_toast($post) {
     global $current_user;
-    if (!$_SERVER["REQUEST_URI"] === "/user/$current_user->user_login/") return $post;
+    if ($_SERVER["REQUEST_URI"] !== "/user/$current_user->user_login/") return $post;
 
     $grad_year_is_set = get_user_meta($current_user->ID, 'au_graduation_year', true);
     $is_a_resident = get_user_meta($current_user->ID, 'role', true) == 'em-resident';
-    if (!$grad_year_is_set && $is_a_resident) { ?>
-        <script type="text/javascript">
+    if ((!$grad_year_is_set || $grad_year_is_set == '') && $is_a_resident) {
+        $post .= "
+        <script type='text/javascript'>
             jQuery(document).ready(function($) {
                 toastr.options.positionClass  = 'toast-top-full-width';
                 toastr.options.progressBar = true;
@@ -42,8 +43,8 @@ function program_toast($post) {
                     'To ensure you receive credit from your institution, please set this as soon as possible.'
                 );
             });
-        </script>
-    <?php }
+        </script>";
+    }
     return $post;
 }
 add_filter('the_content', 'program_toast');

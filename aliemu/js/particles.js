@@ -1,10 +1,10 @@
 /* eslint-env browser */
-(function () {
+(function() {
     if (document.readyState !== 'loading') init();
     else document.addEventListener('DOMContentLoaded', init);
 
     function init() {
-        particlesJS('particles', { // eslint-disable-line
+        particlesJS('particles', {
             particles: {
                 number: {
                     value: 150,
@@ -103,4 +103,4 @@
             retina_detect: true,
         });
     }
-}());
+})();
