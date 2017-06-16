@@ -2,7 +2,6 @@
 
 TERM=${TERM:-xterm}
 RED='\033[0;31m'
-GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
 CYAN='\033[0;36m'
 BOLD='\E[1m'
@@ -16,37 +15,7 @@ h3() {
     printf "%b " "${CYAN}${BOLD}  ->${NC} $*"
 }
 
-STATUS() {
-    local status=$?
-    local quiet=false
-    local opt
-
-    getopts "q" opt
-    shift $((OPTIND - 1))
-
-    [[ $opt == q ]] && quiet=true
-
-    if [[ $status != 0 ]]; then
-        [[ $quiet == 'true' ]] && \
-            echo "" || \
-            echo -e "${RED}✘${NC}"
-        [[ $1 == 'fatal' ]] && ERROR "$2"
-    else
-        [[ "$quiet" == "true" ]] && \
-            echo "" || \
-            echo -e "${GREEN}✓${NC}"
-    fi
-}
-
 ERROR() {
   echo -e "${RED}=> ERROR: $1.${NC}"
   exit 1
-}
-
-depcheck() {
-    local dep
-    for dep in "$@"; do
-        type "$dep" &>/dev/null
-        [[ $? == 1 ]] && ERROR "$dep must be installed"
-    done
 }

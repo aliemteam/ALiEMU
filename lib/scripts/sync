@@ -1,21 +1,33 @@
 #!/usr/bin/env bash
 
 # Globals
-SCRIPTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOTDIR=$(cd "$SCRIPTDIR" && cd ../../ && pwd || exit)
+SCRIPTDIR="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
+ROOTDIR="$( cd "$SCRIPTDIR" && cd ../../ && pwd || exit )"
 
 # Change these based on the installation
-server_ip='45.55.40.174'
-server_user='aliemu'
-theme_name='Divi'
-PaidPlugins=(learndash-propanel sfwd-lms)
+declare machine_name
+declare machine_user
+declare base_theme_name
+declare -a local_plugins
 
-# shellcheck source=./helpers
-. "$SCRIPTDIR"/helpers || exit 1
+# shellcheck disable=1090
+{
+    . "$SCRIPTDIR/helpers" || exit 1
+    . "$SCRIPTDIR/variables" || exit 1
+}
+
+ # Does the machine exist?
+if [[ $(docker-machine ls -q --filter "name=$machine_name" | wc -l) == 0 ]]; then
+    ERROR "A Docker machine named $machine_name could not be found"
+fi
+
+# Check ownership of wp-content
+if [[ $( find "$ROOTDIR/wp-content" ! -user "$USER" -print -quit | wc -l ) -ne 0 ]]; then
+    h2 'Need sudo priveledges to take ownership of wp-content directory'
+    sudo chown -R "$USER" "$ROOTDIR"/wp-content
+fi
 
 main() {
-
-    prechecks
 
     if [[ $# == 0 ]]; then
         get_uploads
@@ -47,61 +59,37 @@ main() {
     esac
 }
 
-prechecks() {
-
-    depcheck \
-        rsync \
-        ssh \
-        ssh-add \
-        ssh-keyscan
-
-    # Check ownership of wp-content
-    if [[ $( find "$ROOTDIR/wp-content" ! -user "$USER" | wc -l ) -ne 0 ]]; then
-        h2 'Need sudo priveledges to take ownership of wp-content directory'
-        sudo chown -R "$USER" "$ROOTDIR"/wp-content
-    fi
-
-    # Check to make sure the SSH key exists
-    [[ ! -f $HOME/.ssh/DO_aliemu_rsa ]] && ERROR "SSH keys have not been added to your SSH directory for this machine"
-
-    # Prepare for SSH transfers
-    eval "$(ssh-agent -s)" &>/dev/null
-    ssh-add "$HOME/.ssh/DO_aliemu_rsa" &>/dev/null
-
-    if [ -z "$(ssh-keygen -F \"$server_ip\")" ]; then
-      ssh-keyscan -H "$server_ip" >> ~/.ssh/known_hosts
-    fi
-}
-
 get_uploads() {
     h2 "Downloading uploads from server..."
-    rsync --info=progress2 -auze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/uploads/" "$ROOTDIR/wp-content/uploads"
-    h2 "Uploads Synced Successfully!"
+    docker-machine scp -r -d "$machine_name:/home/$machine_user/app/wp-content/uploads/" "$ROOTDIR/wp-content/uploads"
 }
 
 get_plugins() {
     local plugin
     h2 "Retrieving plugins"
-    for plugin in "${PaidPlugins[@]}"; do
+    for plugin in "${local_plugins[@]}"; do
         h3 "Retrieving plugin: $plugin"
-        rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
+        docker-machine scp -r -d "$machine_name:/home/$machine_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
     done
 }
 
 get_theme() {
     h2 "Retrieving Theme"
-    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/wp-content/themes/$theme_name" "$ROOTDIR/wp-content/themes"
+    docker-machine scp -r -d "$machine_name:/home/$machine_user/app/wp-content/themes/$base_theme_name" "$ROOTDIR/wp-content/themes"
 }
 
 get_database() {
     rm -f "$ROOTDIR/data/database.sql.bak"
-    mv "$ROOTDIR/data/database.sql" "$ROOTDIR/data/database.sql.bak"
+    mv "$ROOTDIR/data/database.sql" "$ROOTDIR/data/database.sql.bak" 2>/dev/null
 
     h2 "Exporting database..."
-    ssh "$server_user@$server_ip" "cd ~/app && docker-compose exec wordpress wp db export /data/database.sql --allow-root"
+    docker-machine ssh "$machine_name" "
+    cd /home/$machine_user/app
+    sudo -u $machine_user docker-compose exec -T wordpress /bin/bash -c 'wp db export /data/database.sql --allow-root'
+    "
 
     h2 "Downloading database to local machine..."
-    rsync --info=progress2 -aze "ssh" "$server_user@$server_ip:/home/$server_user/app/data/database.sql" "$ROOTDIR/data/database.sql"
+    docker-machine scp -r -d "$machine_name:/home/$machine_user/app/data/database.sql" "$ROOTDIR/data/database.sql"
 
     h2 "Export complete!"
 }

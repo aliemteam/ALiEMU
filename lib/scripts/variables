@@ -1,0 +1,9 @@
+# shellcheck shell=bash disable=2034
+machine_name='aliemu'
+machine_user='aliemu'
+base_theme_name='Divi'
+theme_name='aliemu'
+local_plugins=(
+    learndash-propanel
+    sfwd-lms
+)

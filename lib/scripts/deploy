@@ -33,5 +33,5 @@ fi
 
 docker-machine ssh "$server_user" "
 cd /home/$server_user/app
-chown -R www-data:$server_user .
+sudo chown -R www-data:$server_user .
 "
