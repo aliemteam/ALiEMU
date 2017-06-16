@@ -4,6 +4,11 @@
 SCRIPTDIR="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
 ROOTDIR="$( cd "$SCRIPTDIR" && cd ../../ && pwd || exit )"
 
+# Fix for WSL
+if [[ "$(uname -r | grep -Eo '[[:alpha:]]+$')" == 'Microsoft' ]]; then
+    USER='root'
+fi
+
 # Change these based on the installation
 declare machine_name
 declare machine_user
