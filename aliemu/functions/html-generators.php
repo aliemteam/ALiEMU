@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 function sorted_course_list($end_year, $category) {
     $current_year = intval(get_gmt_from_date(null, 'Y'));
     $year = $current_year;

@@ -1,3 +1,3 @@
 <?php
 
-require_once (dirname(__FILE__) . '/dashboards/index.php');
+require_once (__DIR__ . '/dashboards/index.php');

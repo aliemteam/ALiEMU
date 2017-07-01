@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 function au_capsule_shortcode($atts, $content = null) {
     $a = shortcode_atts([
         'heading' => 'CAPSULE',

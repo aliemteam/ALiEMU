@@ -1,4 +1,4 @@
-// tslint:disable max-line-length
+// tslint:disable: max-line-length no-string-literal
 import { browserDetect } from '../BrowserDetect';
 
 describe('BrowserDetect', () => {

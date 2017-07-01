@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Sends message to slack when dashboard access is requested.
  * @param  string $id User ID

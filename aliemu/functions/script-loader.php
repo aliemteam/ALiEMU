@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Calls the ScriptLoader class at the wp_enqueue_scripts hook.
  * @return void
@@ -39,24 +41,24 @@ class ScriptLoader {
      * @param string $query   Server query string
      */
     public function __construct($request, $query) {
-        global $current_user, $ROOT_URI;
+        global $current_user;
 
         $this->scripts = [
-            'about-nav' => ['about-nav', $ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
-            'divi-junk-js' => ['divi-junk-js', $ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
-            'aliemu-vendors' => ['aliemu-vendors', $ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
-            'educator-dashboard' => ['educator-dashboard', $ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [], ALIEMU_VERSION, true],
-            'nav-helper' => ['nav-helper', $ROOT_URI . '/js/nav-helper.js', [], false, true],
+            'about-nav' => ['about-nav', ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true],
+            'divi-junk-js' => ['divi-junk-js', ROOT_URI . '/vendor/divi-custom.js', ['jquery'], ALIEMU_VERSION, true],
+            'aliemu-vendors' => ['aliemu-vendors', ROOT_URI . '/vendor/vendor.bundle.js', [], false, false],
+            'educator-dashboard' => ['educator-dashboard', ROOT_URI . '/features/dashboards/educator-dashboard/index.js', [], ALIEMU_VERSION, true],
+            'nav-helper' => ['nav-helper', ROOT_URI . '/js/nav-helper.js', [], false, true],
             'particlesjs' => ['particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true],
-            'particles' => ['particles', $ROOT_URI . '/js/particles.js', ['particlesjs'], false, true],
+            'particles' => ['particles', ROOT_URI . '/js/particles.js', ['particlesjs'], false, true],
             'toastr' => ['toastr', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js', [], '2.1.2', true],
         ];
 
         $this->styles = [
             'roboto-font' => ['roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&amp;subset=cyrillic,greek'],
-            'bootstrap-nav-css' => ['bootstrap-nav-css', $ROOT_URI .'/vendor/side-nav.css'],
+            'bootstrap-nav-css' => ['bootstrap-nav-css', ROOT_URI .'/vendor/side-nav.css'],
             'toastr-css' => ['toastr-css', 'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css', false, '2.1.2'],
-            'child-style' => ['child-style', $ROOT_URI  . '/style.css', ALIEMU_VERSION],
+            'child-style' => ['child-style', ROOT_URI  . '/style.css', ALIEMU_VERSION],
         ];
         $this->delegate($request, $query, $current_user);
     }

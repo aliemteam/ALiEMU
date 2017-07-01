@@ -1,4 +1,7 @@
 <?php
+
+if (!defined('ABSPATH')) exit(1);
+
 $ld = get_post_meta(get_the_id(), '_sfwd-courses', true);
 $hours = $ld['sfwd-courses_recommendedHours'];
 $description = $ld['sfwd-courses_course_short_description'];

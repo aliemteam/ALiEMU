@@ -1,4 +1,3 @@
-// tslint:disable export-name
 /**
  * Takes an array and returns an array containing the object params that should
  *   be visible on the current page.

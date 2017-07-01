@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Ultimate Member Profile Display Name Integration
  * @param  string $authorName The author's name.

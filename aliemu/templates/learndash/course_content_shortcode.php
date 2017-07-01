@@ -1,4 +1,7 @@
 <?php
+
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Displays content of course
  *
@@ -26,9 +29,8 @@
  *
  * @package LearnDash\Course
  */
-?>
 
-<?php
+
 /**
  * Show Course Status
  */

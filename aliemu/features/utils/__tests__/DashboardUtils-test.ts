@@ -1,4 +1,4 @@
-// tslint:disable max-line-length
+// tslint:disable: max-line-length no-inner-html
 import * as moment from 'moment';
 import { courseData, users } from '../../../../lib/utils/Fixtures';
 import * as utils from '../DashboardUtils';
@@ -75,8 +75,8 @@ const testMeta: TestCourseMetaHours = {
 describe('calculateHours', () => {
 
     const setup = (s?: string, e?: string) => {
-        let start: moment.Moment = null;
-        let end: moment.Moment = null;
+        let start: moment.Moment | null = null;
+        let end: moment.Moment | null = null;
         if (s) start = moment(s, 'YYYY-MM-DD');
         if (e) end = moment(e, 'YYYY-MM-DD');
         return {
@@ -142,10 +142,10 @@ describe('calculateHours', () => {
     });
 
     it('should calculate total hours with an end date only', () => {
-        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-05-02'))).toBe(6);
-        expect(utils.calculateIIIHours(user, meta, setup(null, '2015-04-30'))).toBe(1);
-        expect(utils.calculateIIIHours(user, meta, setup(null, '2014-01-24'))).toBe(0);
-        expect(utils.calculateIIIHours(user, meta, setup(null, '2016-01-24'))).toBe(16);
+        expect(utils.calculateIIIHours(user, meta, setup(undefined, '2015-05-02'))).toBe(6);
+        expect(utils.calculateIIIHours(user, meta, setup(undefined, '2015-04-30'))).toBe(1);
+        expect(utils.calculateIIIHours(user, meta, setup(undefined, '2014-01-24'))).toBe(0);
+        expect(utils.calculateIIIHours(user, meta, setup(undefined, '2016-01-24'))).toBe(16);
     });
 
     it('should calculate total hours with a full date range', () => {
@@ -296,7 +296,7 @@ describe('CSV Class', () => {
             };
             expect(CSV.course('100')).toEqual(expected);
             const newUsers = { ...users };
-            newUsers[2].courseProgress[100].lessons[140] = 0;
+            newUsers[2].courseProgress![100].lessons[140] = 0;
             const newCSV = new utils.CSV(newUsers, courseData);
             const newExpected = {
                 filename: 'Course_1.csv',

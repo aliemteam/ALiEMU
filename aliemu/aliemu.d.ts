@@ -70,7 +70,7 @@ declare namespace ALiEMU {
         interface UserMeta {
             ID: number;
             accountStatus: string;
-            auGraduationYear: number;
+            auGraduationYear?: number;
             badgeosAchievements?: any;
             badgeosActiveAchievements?: any;
             badgeosPoints?: number;
@@ -80,7 +80,7 @@ declare namespace ALiEMU {
                 [courseID: number]: number;
             }|number[];
             courseCompleted?: {
-                [courseID: number]: number;
+                [courseID: string]: number;
             }|number[];
             courseProgress?: {
                 [courseID: number]: LearnDash.CourseProgress;

@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Adds class 'et_full_width_page' to all pages that aren't category capsules
  *   to remove the sidebar.
@@ -26,8 +28,10 @@ function et_gf_attach_font() { return null; }
 function et_gf_enqueue_fonts() { return null; }
 function et_get_google_fonts() { return null; }
 function et_divi_fonts_url() { return null; }
+function et_sync_custom_css_options() { return null; }
 
 function remove_divi_actions() {
     remove_action('wp_head', 'et_divi_add_customizer_css');
+    remove_action( 'wp_head', ['ET_Core_PageResource', 'head_late_output_cb'], 103 );
 }
 add_action('after_setup_theme', 'remove_divi_actions', 999);

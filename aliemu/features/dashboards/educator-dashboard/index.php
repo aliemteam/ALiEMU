@@ -1,4 +1,7 @@
 <?php
+
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Adds Educator Dashboard Functionality
  *
@@ -6,7 +9,6 @@
  * @version 0.1.1
  * @author Chris Gaafary
  */
-
 
 /**
  * Holds all the logic required for the Educator dashboard
@@ -120,12 +122,30 @@ class EducatorDashboard {
      * @return mixed[] Associative array of users within the current user's Institution
      */
     private function getCurrentUsers() {
+        $compare_date = date('Y');
+
+        // If the month is june, exclude users who have their graduation year
+        // set as the current year from the dashboard
+        if (date('n') >= 7) {
+            $compare_date += 1;
+        }
+
         $graduatedUsers = get_users([
-            'meta_key' => 'au_graduation_year',
-            'meta_value' => date('Y'),
-            'meta_compare' => '<',
+            'meta_query' => [
+                'relation' => 'AND',
+                [
+                    'key' => 'au_graduation_year',
+                    'compare' => '<',
+                    'value' => $compare_date,
+                ],
+                [
+                    'key' => 'residency_us_em',
+                    'compare' => '=',
+                    'value' => $this->current_user->residency_us_em,
+                ],
+            ],
             'exclude' => $this->current_user->ID,
-            'fields' => 'ID'
+            'fields' => 'ID',
         ]);
 
         $users = get_users([

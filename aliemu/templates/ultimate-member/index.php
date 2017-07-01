@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 function init_custom_tabs($tabs) {
     $meta = get_user_meta(get_current_user_id(), "residency_us_em", true);
 
@@ -26,7 +28,7 @@ add_filter('um_profile_tabs', 'init_custom_tabs', 1000);
 
 // Educator dashboard tab
 function render_educator_dashboard_tab() {
-    require_once(__DIR__ . '/educator-dashboard/index.php');
+    require_once(dirname(__FILE__) . '/educator-dashboard/index.php');
 }
 add_action('um_profile_content_edudash', 'render_educator_dashboard_tab');
 

@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) exit(1);
+
 /**
  * Adds "Course Short Description" field to the block meta.
  * @param  [type] $post_args [description] // FIXME: Chris what type is this?

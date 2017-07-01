@@ -208,7 +208,7 @@ export const users: ALiEMU.EducatorDashboard.UserObject = {
     1: {
         ID: 1,
         accountStatus: 'approved',
-        auGraduationYear: null,
+        // auGraduationYear: null,
         courseAccessed: [],
         description: '',
         displayName: 'Minimal User',
