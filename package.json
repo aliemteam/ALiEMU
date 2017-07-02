@@ -11,7 +11,7 @@
     "lint:tslint": "tslint -p . -t codeFrame",
     "build": "NODE_ENV=production gulp",
     "start": "node --max_old_space_size=8192 ./node_modules/.bin/gulp",
-    "deploy": "npm run test && npm run build && ./lib/scripts/deploy",
+    "deploy": "yarn test && yarn build && ./lib/scripts/deploy",
     "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy -a",
     "sync": "./lib/scripts/sync",
     "pretest": "yarn lint",

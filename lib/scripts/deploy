@@ -41,14 +41,14 @@ if [ "$sync_all" = true ]; then
         rm -rf /home/$machine_user/app/wp-content/themes/$base_theme_name/*
     "
 
-    h2 "Deployin $base_theme_name"
+    h2 "Deploying $base_theme_name"
     docker-machine scp -r -d "$ROOTDIR/wp-content/themes/$base_theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
 
     h2 "Deploying plugins"
     for plugin in "${local_plugins[@]}"; do
         h3 "Removing old version of $plugin"
         docker-machine ssh "$machine_name" "
-            rm -rf /home/$machine_user/app/wp-content/plugins/$plugin
+            rm -rf /home/$machine_user/app/wp-content/plugins/$plugin/*
         "
         h3 "Deploying $plugin"
         docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/$plugin" "$machine_name:/home/$machine_user/app/wp-content/plugins"
