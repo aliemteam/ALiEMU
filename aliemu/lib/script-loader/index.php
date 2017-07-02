@@ -11,6 +11,7 @@ class Loader {
     private $localized;
 
     public function __construct() {
+        $this->prepare_localizers();
         add_action('admin_enqueue_scripts', [$this, 'init_admin']);
         add_action('wp_enqueue_scripts', [$this, 'init'], 999);
     }
@@ -23,7 +24,6 @@ class Loader {
 
     public function init() {
         global $current_user, $post;
-        $this->prepare_localizers();
 
         wp_register_script('about-nav', ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true);
         wp_register_script('aliemu-vendor-bundle', ROOT_URI . '/js/vendor.bundle.js', ALIEMU_VERSION, false, false);
