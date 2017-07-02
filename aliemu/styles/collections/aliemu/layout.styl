@@ -1,5 +1,14 @@
 html, body
     height: 100%
+    width: 100%
+    padding: 0
+    margin: 0
+
+img
+    max-width: 100%
+
+#wpadminbar
+    position: fixed
 
 #sidebar
     display: none
@@ -11,7 +20,7 @@ html, body
     min-height: 100%
 
 #main-content
-    margin-top: $block-margin
+    margin-top: $header-height
     flex: 1
     display: flex
     height: 100%
@@ -19,9 +28,6 @@ html, body
     flex-direction: column
     justify-content: center
     margin-bottom: $block-margin
-
-#main-content.main-content--no-margin
-    margin-top: 0
 
 #content-area,
 .content-area
@@ -44,7 +50,11 @@ html, body
     width: 80%
     max-width: 1080px
     margin: auto
+    margin-top: $block-margin
 
 @media screen and (max-width: 400px)
     .container
         width: 95%
+@media screen and ( max-width: 782px )
+    html
+        margin-top: 0

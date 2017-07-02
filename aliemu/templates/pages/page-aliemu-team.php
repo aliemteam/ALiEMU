@@ -3,7 +3,7 @@ $placeholder_img = 'team-placeholder.svg';
 get_header();
 ?>
 
-<div id="main-content" class="main-content--no-margin">
+<div id="main-content">
     <!-- Core Team -->
     <div>
         <div class="au-team-header">

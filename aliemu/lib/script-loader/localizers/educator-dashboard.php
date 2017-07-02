@@ -1,5 +1,7 @@
 <?php
 
+namespace ALIEMU\Scripts\Localizers;
+
 if (!defined('ABSPATH')) exit(1);
 
 /**
@@ -449,12 +451,9 @@ class EducatorDashboard {
 
 }
 
-$au_dashboard = new EducatorDashboard();
-
-wp_localize_script(
-    'educator-dashboard',
-    'AU_EducatorData',
-    [
+function educator_dashboard() {
+    $au_dashboard = new EducatorDashboard();
+    return [
         'users' => $au_dashboard->user_meta,
         'currentUser' => [
             'ID' => $au_dashboard->current_user->ID,
@@ -466,9 +465,5 @@ wp_localize_script(
             'lessons' => $au_dashboard->lessons,
             'categories' => $au_dashboard->unique_categories,
         ]
-    ]
-);
-
-?>
-
-<div id="educator-dashboard"></div>
+    ];
+}

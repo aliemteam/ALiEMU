@@ -104,9 +104,9 @@ export function styles(cb) {
 
 export function bundler() {
     let bundle = gulp
-        .src('aliemu/features/dashboards/educator-dashboard/index.tsx')
+        .src('aliemu/js/educator-dashboard/index.tsx')
         .pipe(webpackStream(webpackConfig, webpack))
-        .pipe(gulp.dest('dist/'));
+        .pipe(gulp.dest('dist/aliemu/js'));
     if (process.env.NODE_ENV !== 'production') {
         bundle = bundle.pipe(browserSync.stream());
     }
@@ -128,7 +128,8 @@ const main = gulp.series(
 
         gulp.watch(['aliemu/**/*.styl'], gulp.series(styles));
 
-        gulp.watch(['aliemu/**/*.{php,js}'], gulp.series(staticFiles, reload));
+        gulp.watch(['aliemu/**/*.php'], gulp.series(staticFiles, reload));
+        gulp.watch(['aliemu/**/*.js'], gulp.series(js, reload));
 
         gulp.watch(
             ['aliemu/**/*.{svg,png,jpeg,jpg}'],

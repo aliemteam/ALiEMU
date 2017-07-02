@@ -4,8 +4,6 @@ if (!defined('ABSPATH')) exit(1);
 
 /**
  * Adds "Course Short Description" field to the block meta.
- * @param  [type] $post_args [description] // FIXME: Chris what type is this?
- * @return [type]            [description]
  */
 function learndash_course_grid_post_args($posts) {
     foreach($posts as $key => $post) {

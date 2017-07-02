@@ -3,21 +3,10 @@ import { observer } from 'mobx-react';
 import { Moment, unix } from 'moment';
 import * as React from 'react';
 import Datepicker from 'react-datepicker';
-import {
-    Cell,
-    FilterRow,
-    Flex,
-    Header,
-    Pager,
-    Row,
-} from '../../../components/TableComponents';
-import { browserDetect } from '../../../utils/BrowserDetect';
-import {
-    calculateIIIHours,
-    CSV,
-    downloadPolyfill,
-} from '../../../utils/DashboardUtils';
-import { paginate } from '../../../utils/Pagination';
+import { Cell, FilterRow, Flex, Header, Pager, Row } from '../components/TableComponents';
+import { browserDetect } from '../utils/BrowserDetect';
+import { calculateIIIHours, CSV, downloadPolyfill } from '../utils/DashboardUtils';
+import { paginate } from '../utils/Pagination';
 
 interface Props {
     users: ALiEMU.EducatorDashboard.UserObject;

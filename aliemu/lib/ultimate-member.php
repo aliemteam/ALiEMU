@@ -2,7 +2,7 @@
 
 if (!defined('ABSPATH')) exit(1);
 
-function init_custom_tabs($tabs) {
+add_filter('um_profile_tabs', function($tabs) {
     $meta = get_user_meta(get_current_user_id(), "residency_us_em", true);
 
     // Course Progress Tab -- Show for all users.
@@ -23,17 +23,10 @@ function init_custom_tabs($tabs) {
     }
 
     return $tabs;
-}
-add_filter('um_profile_tabs', 'init_custom_tabs', 1000);
+}, 1000);
 
 // Educator dashboard tab
-function render_educator_dashboard_tab() {
-    require_once(dirname(__FILE__) . '/educator-dashboard/index.php');
-}
-add_action('um_profile_content_edudash', 'render_educator_dashboard_tab');
+add_action('um_profile_content_edudash', function() { echo "<div id='educator-dashboard'></div>"; });
 
 // User course progress tab
-function render_user_progress_tab() {
-    echo do_shortcode('[ld_profile]');
-}
-add_action('um_profile_content_progress', 'render_user_progress_tab');
+add_action('um_profile_content_progress', function() { echo do_shortcode('[ld_profile]'); });

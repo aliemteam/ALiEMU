@@ -18,11 +18,11 @@ if (wp_verify_nonce(@$_POST['_wpnonce'], 'contact-form-nonce') && $_POST['g-reca
 
 get_header();
 ?>
-<div id="main-content" class="main-content--no-margin">
+<div id="main-content">
     <div class="au-team-header">
         <h1>Contact Us</h1>
     </div>
-    <div style="text-align: center; margin: auto; margin-bottom: 20px;">
+    <div style="text-align: center; margin: auto; margin-bottom: 20px; margin-top: 20px">
         <h1>We &hearts; feedback!</h1>
         Please contact us regarding anything you think we can do better.
     </div>
@@ -41,7 +41,8 @@ get_header();
             </div>
             <div class="contact-form__row">
                 <div class="contact-form__item">
-                    <textarea style="width: 100%;" aria-label="Message" placeholder="Message" name="contact-message" rows="8" required></textarea>
+                    <label for="contact-message">Message:</label>
+                    <textarea style="width: 100%;" id="contact-message" name="contact-message" rows="8" required></textarea>
                 </div>
             </div>
             <div class="contact-form__row contact-form__row_submit">

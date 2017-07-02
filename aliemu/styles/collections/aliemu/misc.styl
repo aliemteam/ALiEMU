@@ -57,22 +57,29 @@
     align-items: center
     justify-content: space-between
     display: flex
+    flex-wrap: wrap
     width: 100%
-    margin-bottom: $block-margin
+
 
 .contact-form__row_submit
     align-items: flex-start
 
+@media screen and (max-width: 600px)
+    #recaptcha
+        transform: scale(0.8)
+    .contact-form__row_submit
+        justify-content: center
+
 .contact-form__item
     display: flex
     flex: auto
-    width: 100%
-    &:first-of-type label
-        padding-left: 0
+    flex-wrap: wrap
+    padding: 5px
     input
         flex: auto
     label
-        padding: 0 20px
+        white-space: nowrap
+        padding-right: 20px
 
 // Team Page ------------------------------------------------------------
 .team-member
@@ -105,7 +112,7 @@
 // FIXME: All of below
 +prefix-classes('au-')
     .team-header
-        height: 150px
+        height: h = 150px
         background: $primary
         &.air-team
             background: $air-primary
@@ -114,9 +121,10 @@
         &.capsules-team
             background: $capsules-primary
         h1
-            font: 600 3em
+            font-size: 2em
+            font-weight: 600
             color: white
-            line-height: @height
+            line-height: h
             text-align: center
     .team-container
         display: flex

@@ -28,21 +28,34 @@ if [[ $(docker-machine ls -q --filter "name=$machine_name" | wc -l) == 0 ]]; the
     ERROR "A Docker machine named $machine_name could not be found"
 fi
 
+docker-machine ssh "$machine_name" "
+    rm -rf /home/$machine_user/app/wp-content/themes/$theme_name/*
+"
+
 h2 "Deploying $theme_name"
 docker-machine scp -r -d "$ROOTDIR/dist/$theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
 
 if [ "$sync_all" = true ]; then
-    h2 "Deploying $base_theme_name"
+    h2 "Removing old version of $base_theme_name"
+    docker-machine ssh "$machine_name" "
+        rm -rf /home/$machine_user/app/wp-content/themes/$base_theme_name/*
+    "
+
+    h2 "Deployin $base_theme_name"
     docker-machine scp -r -d "$ROOTDIR/wp-content/themes/$base_theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
+
     h2 "Deploying plugins"
     for plugin in "${local_plugins[@]}"; do
-        h3 "Retrieving plugin: $plugin"
-        docker-machine scp -r -d "$machine_name:/home/$machine_user/app/wp-content/plugins/$plugin" "$ROOTDIR/wp-content/plugins"
+        h3 "Removing old version of $plugin"
+        docker-machine ssh "$machine_name" "
+            rm -rf /home/$machine_user/app/wp-content/plugins/$plugin
+        "
+        h3 "Deploying $plugin"
+        docker-machine scp -r -d "$ROOTDIR/wp-content/plugins/$plugin" "$machine_name:/home/$machine_user/app/wp-content/plugins"
     done
 fi
 
 h2 "Adjusting filesystem permissions on remote host"
 docker-machine ssh "$machine_name" "
-cd /home/$machine_user/app
-sudo chown -R www-data:$machine_user .
+    sudo chown -R www-data:$machine_user /home/$machine_user/app
 "

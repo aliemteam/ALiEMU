@@ -9,10 +9,10 @@ import {
     Header,
     Pager,
     Row,
-} from '../../../components/TableComponents';
-import { browserDetect } from '../../../utils/BrowserDetect';
-import { CSV, downloadPolyfill } from '../../../utils/DashboardUtils';
-import { paginate } from '../../../utils/Pagination';
+} from '../components/TableComponents';
+import { browserDetect } from '../utils/BrowserDetect';
+import { CSV, downloadPolyfill } from '../utils/DashboardUtils';
+import { paginate } from '../utils/Pagination';
 
 interface Props {
     courseData: ALiEMU.EducatorDashboard.CourseData;

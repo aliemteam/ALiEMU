@@ -57,6 +57,13 @@
             &:hover > ul
                 display: block
 
+.et_mobile_menu li a
+    display: block
+    padding: 10px 5%
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03)
+    color: #666
+
+
 .nav-container>ul>li
     padding: 0 0 0 20px
 
@@ -66,17 +73,21 @@
 .mobile_menu_bar_toggle // @stylint ignore
     padding: 0
 
-// Mobile nav == FIXME: this needs to be completely fixed
 ul.et_mobile_menu
     border-top: 3px solid $primary
     display: block
+    background: white
+    box-shadow: $shadow-3dp
+    position: absolute
+    width: 100%
+    z-index: 1000
     padding: 0
-    list-style-type: none
     margin: 0
+    margin-top: $header-height
     ul
         margin: 0
-        li
-            padding: 0
+        padding: 0
+        list-style-type: none
 
 .et_mobile_menu .menu-item-has-children > a
     background-color: rgba(0, 0, 0, 0.03)
