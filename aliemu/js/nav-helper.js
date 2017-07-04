@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function clickHandler(e) {
+        if (e.currentTarget.innerText === 'Login') {
+            return;
+        }
         e.preventDefault();
         var sibling = e.currentTarget.nextElementSibling;
         if (sibling.style.display === '') {

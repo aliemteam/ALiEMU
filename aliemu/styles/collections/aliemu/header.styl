@@ -61,7 +61,7 @@
     display: block
     padding: 10px 5%
     border-bottom: 1px solid rgba(0, 0, 0, 0.03)
-    color: #666
+    color: #666 // @stylint ignore
 
 
 .nav-container>ul>li
@@ -72,6 +72,8 @@
 
 .mobile_menu_bar_toggle // @stylint ignore
     padding: 0
+    &:before
+        line-height: 50px
 
 ul.et_mobile_menu
     border-top: 3px solid $primary
@@ -89,9 +91,9 @@ ul.et_mobile_menu
         padding: 0
         list-style-type: none
 
-.et_mobile_menu .menu-item-has-children > a
-    background-color: rgba(0, 0, 0, 0.03)
-    font-weight: 500
+    .menu-item-has-children > a
+        background-color: rgba(0, 0, 0, 0.03)
+        font-weight: 500
 
 .mobile-menu--hidden
     display: none !important
