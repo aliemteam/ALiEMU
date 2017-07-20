@@ -77,10 +77,10 @@ export class CourseTable extends React.PureComponent<Props, {}> {
 
     exportCourseData = (e: React.MouseEvent<HTMLAnchorElement>): void => {
         const courseID = this.courseSelection;
-        const CSV = this.CSV.course(courseID);
-        const blob = new Blob([CSV.data], { type: 'text/csv;charset=utf-8' });
+        const csv = this.CSV.course(courseID);
+        const blob = new Blob([csv.data], { type: 'text/csv;charset=utf-8' });
         downloadPolyfill(
-            CSV.filename,
+            csv.filename,
             blob,
             browserDetect(),
             (e.target as HTMLAnchorElement).id

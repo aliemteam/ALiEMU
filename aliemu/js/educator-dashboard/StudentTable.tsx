@@ -124,18 +124,18 @@ export class StudentTable extends React.Component<Props, {}> {
         e.preventDefault();
         const target = e.target as HTMLElement;
         const userID = target.dataset.userId;
-        const CSV =
+        const csv =
             userID !== undefined
                 ? this.CSV.user(userID)
                 : this.CSV.allUsers(this.dateRange);
 
-        if (typeof CSV === 'boolean') {
+        if (typeof csv === 'boolean') {
             alert('This user has not interacted with any courses');
             return;
         }
 
-        const blob = new Blob([CSV.data], { type: 'text/csv;charset=utf-8' });
-        downloadPolyfill(CSV.filename, blob, browserDetect(), target.id);
+        const blob = new Blob([csv.data], { type: 'text/csv;charset=utf-8' });
+        downloadPolyfill(csv.filename, blob, browserDetect(), target.id);
     };
 
     render() {

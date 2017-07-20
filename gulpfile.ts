@@ -42,7 +42,7 @@ export function bump() {
 }
 
 export function staticFiles() {
-    const main = gulp
+    const misc = gulp
         .src(
             [
                 'aliemu/**/*.{php,css}',
@@ -63,7 +63,7 @@ export function staticFiles() {
         .src('aliemu/templates/learndash/**/*.php')
         .pipe(gulp.dest('dist/aliemu/learndash'));
 
-    return merge(main, pages, learndash);
+    return merge(misc, pages, learndash);
 }
 
 export function assets() {
