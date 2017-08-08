@@ -111,9 +111,10 @@ export function calculateIIIHours(
     if (!user.courseCompleted) return 0;
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
-        const d = unix(user.courseCompleted![curr]);
+        const completionDate = (<{[id: string]: number}>user.courseCompleted)![curr];
+        const d = unix(completionDate);
         const addedHours: number =
-            parseFloat(courseMeta[curr].recommendedHours) + prev;
+            parseFloat((<any>courseMeta)[curr].recommendedHours) + prev;
         switch (true) {
             case !start && !end:
                 return addedHours;
@@ -138,7 +139,7 @@ export class CSV {
     private courseData: ALiEMU.EducatorDashboard.CourseData;
     private courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject;
     private categories: ALiEMU.EducatorDashboard.CategoryObject;
-    private lessons;
+    private lessons: ALiEMU.EducatorDashboard.Lessons;
 
     constructor(users: Users, courses: Courses) {
         this.users = users;
@@ -164,20 +165,21 @@ export class CSV {
                 .join(',') + '\n';
 
         Object.keys(this.users).forEach((uid: string) => {
-            const inProgress: number = this.users[uid].courseProgress
-                ? Object.keys(this.users[uid].courseProgress).length
+            const id = parseInt(uid, 10);
+            const inProgress: number = this.users[id].courseProgress
+                ? Object.keys(this.users[id].courseProgress).length
                 : 0;
 
-            const completed: number = this.users[uid].courseCompleted
-                ? Object.keys(this.users[uid].courseCompleted).length
+            const completed: number = this.users[id].courseCompleted
+                ? Object.keys(this.users[id].courseCompleted).length
                 : 0;
             data +=
                 [
-                    this.users[uid].lastName,
-                    this.users[uid].firstName,
-                    this.users[uid].auGraduationYear || '',
+                    this.users[id].lastName,
+                    this.users[id].firstName,
+                    this.users[id].auGraduationYear || '',
                     calculateIIIHours(
-                        this.users[uid],
+                        this.users[id],
                         this.courseMeta,
                         dateRange
                     ),
@@ -191,12 +193,13 @@ export class CSV {
     }
 
     user(userID: string): ALiEMU.CSV | boolean {
-        const courseProgress = this.users[userID].courseProgress;
+        const id = parseInt(userID, 10);
+        const courseProgress = this.users[id].courseProgress;
         const { courses, courseMeta, categories } = this.courseData;
 
         if (!courseProgress) return false;
 
-        const filename = `${this.users[userID].displayName.replace(
+        const filename = `${this.users[id].displayName.replace(
             /\s/,
             '_'
         )}.csv`;
@@ -212,15 +215,16 @@ export class CSV {
                 .join(',') + '\n';
 
         for (const key of Object.keys(courseProgress)) {
+            const k = parseInt(key, 10);
             data +=
                 [
-                    courses[key].postTitle,
-                    `${courseProgress[key].completed} out of ${courseProgress[
-                        key
+                    courses[k].postTitle,
+                    `${courseProgress[k].completed} out of ${courseProgress[
+                        k
                     ].total}`,
                     parseCompletionData(
-                        this.users[userID].courseCompleted[key],
-                        courseMeta[key].recommendedHours
+                        (<any>this.users[id]).courseCompleted![k],
+                        (<any>courseMeta[k]).recommendedHours
                     ),
                     getCourseCategory(key, categories),
                 ]
@@ -231,7 +235,8 @@ export class CSV {
     }
 
     course(courseID: string): ALiEMU.CSV {
-        const filename = `${this.courses[courseID].postTitle.replace(
+        const id = parseInt(courseID, 10);
+        const filename = `${this.courses[id].postTitle.replace(
             /\s/,
             '_'
         )}.csv`;
@@ -242,35 +247,36 @@ export class CSV {
                 'Last Name',
                 'First Name',
                 'Course Completed',
-                ...this.courses[courseID].lessons
+                ...this.courses[id].lessons
                     .filter(
                         (lessonID: string) =>
-                            this.lessons[lessonID] !== undefined
+                            this.lessons[parseInt(lessonID, 10)] !== undefined
                     )
                     .map((lessonID: string) => {
                         lessonIDs.push(lessonID);
-                        return `Lesson: ${this.lessons[lessonID].postTitle}`;
+                        return `Lesson: ${this.lessons[parseInt(lessonID, 10)].postTitle}`;
                     }),
             ]
                 .map(i => `"${i}"`)
                 .join(',') + '\n';
 
         Object.keys(this.users).forEach((userID: string) => {
-            const completionData = this.users[userID].courseCompleted
+            const uid = parseInt(userID, 10);
+            const completionData = this.users[uid].courseCompleted
                 ? parseCompletionData(
-                      this.users[userID].courseCompleted[courseID]
+                      (<any>this.users[uid]).courseCompleted![courseID]
                   )
                 : 'X';
             data +=
                 [
-                    this.users[userID].lastName,
-                    this.users[userID].firstName,
+                    this.users[uid].lastName,
+                    this.users[uid].firstName,
                     completionData,
                     ...lessonIDs.map((lessonID: string) => {
                         try {
-                            const completed = this.users[userID].courseProgress[
-                                courseID
-                            ].lessons[lessonID];
+                            const completed = this.users[uid].courseProgress![
+                                id
+                            ].lessons[parseInt(lessonID, 10)];
                             if (completed === 1) {
                                 return 'Completed';
                             }

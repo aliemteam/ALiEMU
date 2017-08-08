@@ -1,9 +1,9 @@
 // tslint:disable:no-typeof-undefined
 import DevTool from 'mobx-react-devtools';
 import * as React from 'react';
-declare const __DEV__;
+declare const __DEV__: boolean | undefined;
 
-export default function devtool(props): JSX.Element | null {
+export default function devtool(props: any): JSX.Element | null {
     if (typeof __DEV__ !== 'undefined') {
         return <DevTool {...props} />;
     }

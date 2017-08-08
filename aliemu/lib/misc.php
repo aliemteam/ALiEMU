@@ -14,8 +14,10 @@ remove_action('wp_print_styles', 'print_emoji_styles');
 add_action('after_setup_theme', function() {
     remove_action('wp_head', 'et_divi_add_customizer_css');
     remove_action('wp_head', ['ET_Core_PageResource', 'head_late_output_cb'], 103);
+    remove_action('wp', 'et_divi_add_customizer_css');
 }, 999);
 function et_divi_fonts_url() { return null; }
+// function et_core_page_resource_get() { return null; }
 
 /**
  * Adds class 'et_full_width_page' to all pages that aren't category capsules

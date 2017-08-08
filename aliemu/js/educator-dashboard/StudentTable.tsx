@@ -41,13 +41,13 @@ export class StudentTable extends React.Component<Props, {}> {
 
     @observable rowSelection = '10';
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         this.CSV = new CSV(this.props.users, this.props.courseData);
         this.totalStudents = Object.keys(this.props.users).length;
         this.users = Object.keys(this.props.users).sort((uid1, uid2) => {
-            const p1 = this.props.users[uid1].auGraduationYear;
-            const p2 = this.props.users[uid2].auGraduationYear;
+            const p1: any = (this.props.users as any)[uid1].auGraduationYear;
+            const p2: any = (this.props.users as any)[uid2].auGraduationYear;
             if (!p1 && !p2) return 0;
             if (p1 && !p2) return -1;
             if (!p1 && p2) return 1;
@@ -69,17 +69,18 @@ export class StudentTable extends React.Component<Props, {}> {
     get filteredUsers(): ALiEMU.EducatorDashboard.UserMeta[] {
         return this.users
             .filter(uid => {
+                const id = parseInt(uid, 10);
                 const displayName = this.props.users[
-                    uid
+                    id
                 ].displayName.toLowerCase();
-                const gradYear = this.props.users[uid].auGraduationYear;
+                const gradYear = this.props.users[id].auGraduationYear;
                 if (displayName.search(this.filter.toLowerCase()) > -1)
                     return true;
                 if (gradYear && gradYear.toString().search(this.filter) > -1)
                     return true;
                 return false;
             })
-            .map(uid => this.props.users[uid]);
+            .map(uid => this.props.users[parseInt(uid, 10)]);
     }
 
     @computed
@@ -100,7 +101,7 @@ export class StudentTable extends React.Component<Props, {}> {
     };
 
     @action
-    setEndDate = (d): void => {
+    setEndDate = (d: any): void => {
         this.endDate = d;
     };
 
@@ -111,7 +112,7 @@ export class StudentTable extends React.Component<Props, {}> {
     };
 
     @action
-    setStartDate = (d): void => {
+    setStartDate = (d: any): void => {
         this.startDate = d;
     };
 

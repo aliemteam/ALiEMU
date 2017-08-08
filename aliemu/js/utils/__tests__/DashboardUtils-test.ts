@@ -85,8 +85,8 @@ describe('calculateHours', () => {
         };
     };
 
-    let user;
-    let meta;
+    let user: any;
+    let meta: any;
 
     before(() => {
         meta = { ...testMeta };
@@ -244,7 +244,7 @@ describe('getCourseCategory', () => {
 });
 
 describe('CSV Class', () => {
-    let CSV;
+    let CSV: any;
 
     it('should construct', () => {
         expect(new utils.CSV(users, courseData)).toBeTruthy();

@@ -28,13 +28,15 @@ declare namespace ALiEMU {
             [userID: number]: UserMeta;
         }
 
+        interface Lessons {
+            [i: number]: LearnDash.Lessons;
+        }
+
         interface CourseData {
             categories: CategoryObject;
             courseMeta: CourseMetaObject;
             courses: CourseObject;
-            lessons: {
-                [i: number]: LearnDash.Lessons;
-            };
+            lessons: Lessons;
         }
 
         interface CategoryObject {

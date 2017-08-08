@@ -1,7 +1,7 @@
 
 export function browserDetect(): ALiEMU.BrowserType {
     // tslint:disable-next-line:no-string-literal
-    const UA: string = window['__AU_TEST_VARIABLE__'] || navigator.userAgent;
+    const UA: string = (<any>window)['__AU_TEST_VARIABLE__'] || navigator.userAgent;
 
     switch (true) {
         case UA.indexOf('Edge') > -1:

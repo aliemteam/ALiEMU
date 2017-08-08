@@ -3,7 +3,7 @@ import { browserDetect } from '../BrowserDetect';
 
 describe('BrowserDetect', () => {
     it('should detect Edge correctly', () => {
-        window['__AU_TEST_VARIABLE__'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246';
+        (<any>window)['__AU_TEST_VARIABLE__'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246';
         const detected = browserDetect();
         expect(detected).toBe('edge');
     });
@@ -19,7 +19,7 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (Windows; U; Windows NT 6.1; sv-SE) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4',
         ];
         for (const UA of UAstrings) {
-            window['__AU_TEST_VARIABLE__'] = UA;
+            (<any>window)['__AU_TEST_VARIABLE__'] = UA;
             const detected = browserDetect();
             expect(detected).toBe('safari');
         }
@@ -38,7 +38,7 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.86 Safari/537.36 OPR/33.0.1990.115',
         ];
         for (const UA of UAstrings) {
-            window['__AU_TEST_VARIABLE__'] = UA;
+            (<any>window)['__AU_TEST_VARIABLE__'] = UA;
             const detected = browserDetect();
             expect(detected).toBe('opera');
         }
@@ -58,7 +58,7 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (Windows NT 6.2; rv:22.0) Gecko/20130405 Firefox/23.0',
         ];
         for (const UA of UAstrings) {
-            window['__AU_TEST_VARIABLE__'] = UA;
+            (<any>window)['__AU_TEST_VARIABLE__'] = UA;
             const detected = browserDetect();
             expect(detected).toBe('firefox');
         }
@@ -76,7 +76,7 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko',
         ];
         for (const UA of UAstrings) {
-            window['__AU_TEST_VARIABLE__'] = UA;
+            (<any>window)['__AU_TEST_VARIABLE__'] = UA;
             const detected = browserDetect();
             expect(detected).toBe('ie');
         }
@@ -97,7 +97,7 @@ describe('BrowserDetect', () => {
             'Mozilla/5.0 (X11; OpenBSD i386) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125',
         ];
         for (const UA of UAstrings) {
-            window['__AU_TEST_VARIABLE__'] = UA;
+            (<any>window)['__AU_TEST_VARIABLE__'] = UA;
             const detected = browserDetect();
             expect(detected).toBe('chrome');
         }

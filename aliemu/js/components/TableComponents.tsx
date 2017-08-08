@@ -123,7 +123,6 @@ export const Flex = (props: FlexProps) =>
         children={props.children}
     />;
 
-export const Row = props => <div style={styles.row} {...props} />;
+export const Row = (props: any) => <div style={styles.row} {...props} />;
 
-export const FilterRow = props =>
-    <div style={styles.flex.container} {...props} />;
+export const FilterRow = (props: any) => <div style={styles.flex.container} {...props} />;

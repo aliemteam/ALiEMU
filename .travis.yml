@@ -5,8 +5,10 @@ branches:
     only:
         - master
         - /^greenkeeper-.*$/
-cache: yarn
-script: yarn test -- --coverage
+cache:
+    directories:
+        - "node_modules"
+script: npm test -- --runInBand
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:

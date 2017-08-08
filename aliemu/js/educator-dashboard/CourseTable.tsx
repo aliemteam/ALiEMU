@@ -38,7 +38,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
 
     @observable courseSelection = '';
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         this.CSV = new CSV(this.props.users, this.props.courseData);
         this.categories = Object.keys(this.props.courseData.categories).filter(
@@ -52,10 +52,10 @@ export class CourseTable extends React.PureComponent<Props, {}> {
         return Object.keys(this.props.users)
             .filter(
                 id =>
-                    this.props.users[id].courseCompleted &&
-                    this.props.users[id].courseCompleted[this.courseSelection]
+                    (this.props.users as any)[id].courseCompleted &&
+                    (this.props.users as any)[id].courseCompleted[this.courseSelection]
             )
-            .map(id => this.props.users[id]);
+            .map(id => this.props.users[parseInt(id, 10)]);
     }
 
     @action
@@ -141,7 +141,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                                         key={courseID}
                                         children={
                                             this.props.courseData.courses[
-                                                courseID
+                                                parseInt(courseID, 10)
                                             ].postTitle
                                         }
                                         aria-selected={
@@ -176,7 +176,7 @@ export class CourseTable extends React.PureComponent<Props, {}> {
                         <Cell
                             align="left"
                             children={unix(
-                                user.courseCompleted![this.courseSelection]
+                                (user.courseCompleted as any)[this.courseSelection]
                             ).calendar()}
                         />
                     </Row>

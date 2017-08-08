@@ -1,10 +1,13 @@
-import * as path from 'path';
+import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
+import { resolve } from 'path';
 import * as webpack from 'webpack';
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-const isProduction = process.env.NODE_ENV === 'production';
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
-const commonPlugins: webpack.Plugin[] = [
+const sharedPlugins: webpack.Plugin[] = [
+    new webpack.NoEmitOnErrorsPlugin(),
+    // new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
         filename: 'vendor.bundle.js',
         minChunks: Infinity,
@@ -14,55 +17,64 @@ const commonPlugins: webpack.Plugin[] = [
 ];
 
 const devPlugins: webpack.Plugin[] = [
-    ...commonPlugins,
-    new webpack.NoEmitOnErrorsPlugin(),
+    ...sharedPlugins,
     new webpack.DefinePlugin({
-        __DEV__: JSON.stringify(!isProduction),
+        __DEV__: JSON.stringify(!IS_PRODUCTION),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
     // new BundleAnalyzerPlugin({ analyzerMode: 'server', analyzerPort: 8888, openAnalyzer: true }),
 ];
 
 const productionPlugins: webpack.Plugin[] = [
-    ...commonPlugins,
+    ...sharedPlugins,
+    new webpack.optimize.UglifyJsPlugin({
+        beautify: false,
+        mangle: {
+            screw_ie8: true,
+            keep_fnames: true,
+        },
+        compress: {
+            screw_ie8: true,
+        },
+        comments: false,
+    }),
     new webpack.LoaderOptionsPlugin({
         minimize: true,
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+        debug: false,
     }),
 ];
 
 const config: webpack.Configuration = {
-    cache: true,
-    devtool: isProduction ? 'hidden-source-map' : 'eval-source-map',
+    watch: !IS_PRODUCTION,
+    watchOptions: {
+        ignored: /(node_modules|gulpfile|dist|lib|webpack.config)/,
+    },
+    devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
     entry: {
         'educator-dashboard': './aliemu/js/educator-dashboard/',
         vendor: ['react', 'mobx', 'mobx-react'],
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist/aliemu/js'),
+        path: resolve(__dirname, 'dist/aliemu/js'),
     },
     resolve: {
-        modules: [path.resolve(__dirname, 'aliemu'), 'node_modules'],
+        modules: [resolve(__dirname, 'aliemu'), 'node_modules'],
         extensions: ['*', '.ts', '.tsx', '.js'],
-        mainFiles: ['index'],
-        mainFields: ['main', 'browser'],
-        descriptionFiles: ['package.json'],
+        plugins: [new TsConfigPathsPlugin()],
     },
-    plugins: isProduction ? productionPlugins : devPlugins,
+    plugins: IS_PRODUCTION ? productionPlugins : devPlugins,
     module: {
         loaders: [
+            {
+                test: /\.tsx?$/,
+                exclude: /(?:__tests__|node_modules)/,
+                use: ['awesome-typescript-loader'],
+            },
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: ['babel-loader'],
-            },
-            {
-                test: /\.tsx?$/,
-                exclude: /node_modules/,
-                use: ['babel-loader', 'ts-loader'],
             },
             {
                 test: /\.css$/,
