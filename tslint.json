@@ -17,6 +17,7 @@
         "no-reference": false,
         "no-string-literal": false,
         "no-string-throw": false,
+        "no-submodule-imports": false,
         "no-unused-expression": [false],
         "no-var-requires": false,
         "object-literal-key-quotes": [false],
