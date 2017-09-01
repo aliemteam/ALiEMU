@@ -167,11 +167,11 @@ export class CSV {
         Object.keys(this.users).forEach((uid: string) => {
             const id = parseInt(uid, 10);
             const inProgress: number = this.users[id].courseProgress
-                ? Object.keys(this.users[id].courseProgress).length
+                ? Object.keys(this.users[id].courseProgress!).length
                 : 0;
 
             const completed: number = this.users[id].courseCompleted
-                ? Object.keys(this.users[id].courseCompleted).length
+                ? Object.keys(this.users[id].courseCompleted!).length
                 : 0;
             data +=
                 [

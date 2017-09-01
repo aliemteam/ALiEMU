@@ -25,7 +25,7 @@ get_header();
                         </div>
                         <div class="au-faculty">
                             <div>
-                                <h1>EM Residency Faculty</h1>
+                                <h1>EM Residency Program Directors</h1>
                             </div>
                             <div>
                                 <a href="/faculty-start">Register Here</a>

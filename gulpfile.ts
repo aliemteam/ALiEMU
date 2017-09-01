@@ -143,6 +143,7 @@ const main = gulp.series(clean, gulp.parallel(staticFiles, assets, bundle, style
         proxy: 'localhost:8080',
         open: false,
         reloadDebounce: 2000,
+        notify: false,
     });
 });
 export default main;
