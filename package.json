@@ -59,7 +59,7 @@
     "react-addons-test-utils": "^15.6.0",
     "style-loader": "^0.18.2",
     "stylint": "^1.5.9",
-    "ts-jest": "^20.0.13",
+    "ts-jest": "^21.0.0",
     "ts-node": "^3.2.0",
     "tslint": "^5.7.0",
     "tslint-microsoft-contrib": "^5.0.1",
