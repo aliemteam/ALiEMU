@@ -39,9 +39,9 @@ if (!defined('ABSPATH')) exit(1);
  */
 if ($logged_in): ?>
     <div class="course-status">
-        <div>
+        <span>
             <strong><?php printf(_x('%s Status:', 'Course Status Label', 'learndash'), LearnDash_Custom_Label::get_label('course')); ?></strong> <?php echo $course_status; ?>
-        </div>
+        </span>
         <?php  if (!empty($course_certficate_link)): ?>
             <a href='<?php echo esc_attr($course_certficate_link); ?>' class="btn btn--primary" target="_blank"><?php echo apply_filters('ld_certificate_link_label', __('Print Certificate', 'learndash'), $user_id, $post->ID); ?></a>
         <?php endif; ?>

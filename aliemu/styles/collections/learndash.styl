@@ -34,11 +34,18 @@
 // Course status line
 .course-status
     display: flex
+    flex-wrap: wrap
     justify-content: space-between
-    align-items: center
     margin-bottom: $block-margin
+    align-items: baseline
     background: $secondary
     padding: 10px
+    span
+        text-align: center
+
+@media screen and (max-width: 650px)
+    .course-status
+        justify-content: space-around
 
 // Content Tables (Lessons, Quizzes, etc)
 .content-table

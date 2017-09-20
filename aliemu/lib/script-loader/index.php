@@ -26,8 +26,7 @@ class Loader {
         global $current_user, $post;
 
         wp_register_script('about-nav', ROOT_URI . '/vendor/about-nav.js', ['jquery'], false, true);
-        wp_register_script('aliemu-vendor-bundle', ROOT_URI . '/js/vendor.bundle.js', ALIEMU_VERSION, false, false);
-        wp_register_script('educator-dashboard', ROOT_URI . '/js/educator-dashboard.js', ['aliemu-vendor-bundle'], ALIEMU_VERSION, true);
+        wp_register_script('educator-dashboard', ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true);
         wp_register_script('nav-helper', ROOT_URI . '/js/nav-helper.js', [], false, true);
         wp_register_script('particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true);
         wp_register_script('particles', ROOT_URI . '/js/particles.js', ['particlesjs'], false, true);
@@ -119,7 +118,6 @@ class Loader {
                         array_push($load[1], 'toastr-css');
                         break;
                     case 'profiletab=edudash':
-                        array_push($load[0], 'aliemu-vendor-bundle');
                         array_push($load[0], 'educator-dashboard');
                         break;
                 }

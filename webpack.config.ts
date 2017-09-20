@@ -8,11 +8,6 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const sharedPlugins: webpack.Plugin[] = [
     new webpack.NoEmitOnErrorsPlugin(),
     // new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.CommonsChunkPlugin({
-        filename: 'vendor.bundle.js',
-        minChunks: Infinity,
-        name: 'vendor',
-    }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 ];
 
@@ -52,7 +47,8 @@ const config: webpack.Configuration = {
     devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
     entry: {
         'educator-dashboard': './aliemu/js/educator-dashboard/',
-        vendor: ['react', 'mobx', 'mobx-react'],
+        // vendor: ['react', 'mobx', 'mobx-react'],
+        'nav-helper': ['babel-polyfill', './aliemu/js/nav-helper'],
     },
     output: {
         filename: '[name].js',
