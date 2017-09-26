@@ -89,10 +89,10 @@ get_header();
                                 <a href="/air"><img src="<?php echo $assets; ?>/air-logo.svg" alt="AIR Button"/></a>
                             </div>
                             <div>
-                                <a href="/air"><img src="<?php echo $assets; ?>/air-pro-logo.svg" alt="AIR-Pro Button"/></a>
+                                <a href="/air-pro"><img src="<?php echo $assets; ?>/air-pro-logo.svg" alt="AIR-Pro Button"/></a>
                             </div>
                             <div>
-                                <a href="/air"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
+                                <a href="/capsules"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
                             </div>
                         </div>
                     </div>
