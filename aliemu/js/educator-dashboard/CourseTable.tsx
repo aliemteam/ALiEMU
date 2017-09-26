@@ -20,7 +20,7 @@ interface Props {
 }
 
 @observer
-export class CourseTable extends React.PureComponent<Props, {}> {
+export class CourseTable extends React.Component<Props, {}> {
     readonly categories: string[];
     readonly CSV: CSV;
     readonly visibleRows = 10;
