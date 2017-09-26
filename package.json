@@ -48,7 +48,7 @@
     "babel-preset-react": "^6.22.0",
     "browser-sync": "^2.18.12",
     "css-loader": "^0.28.7",
-    "enzyme": "^2.9.1",
+    "enzyme": "^3.0.0",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-imagemin": "^3.3.0",
     "gulp-sourcemaps": "^2.6.1",
