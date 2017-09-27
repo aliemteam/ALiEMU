@@ -25,10 +25,10 @@
     "react": "^16.0.0",
     "react-datepicker": "^0.55.0",
     "react-dom": "^16.0.0",
-    "typescript": "^2.5.2"
+    "typescript": "^2.5.3"
   },
   "devDependencies": {
-    "@types/enzyme": "^2.8.8",
+    "@types/enzyme": "^2.8.9",
     "@types/gulp": "^4.0.4",
     "@types/gulp-sourcemaps": "0.0.31",
     "@types/jest": "^21.1.1",
@@ -37,7 +37,7 @@
     "@types/react": "^16.0.7",
     "@types/react-addons-test-utils": "^0.14.20",
     "@types/react-datepicker": "^0.55.0",
-    "@types/react-dom": "^15.5.4",
+    "@types/react-dom": "^15.5.5",
     "@types/webpack": "^3.0.12",
     "autoprefixer-stylus": "^0.14.0",
     "awesome-typescript-loader": "^3.2.3",
