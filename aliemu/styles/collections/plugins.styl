@@ -69,12 +69,8 @@ input[type=submit].um-button.um-alt
 .quiz_continue_link
     order: 1
     a#quiz_continue_link
-        bordered-button(small)
-        color: $primary !important
-        transition: .1s !important
-        &:hover
-            color: white !important
-            transition: .1s !important
+        @extends .btn
+        @extends .btn--primary
 
 +prefix-classes('wpProQuiz_')
     .button

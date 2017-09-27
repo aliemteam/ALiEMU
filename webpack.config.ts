@@ -47,8 +47,7 @@ const config: webpack.Configuration = {
     devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
     entry: {
         'educator-dashboard': './aliemu/js/educator-dashboard/',
-        // vendor: ['react', 'mobx', 'mobx-react'],
-        'nav-helper': ['babel-polyfill', './aliemu/js/nav-helper'],
+        'nav-helper': ['./aliemu/js/nav-helper'],
     },
     output: {
         filename: '[name].js',
