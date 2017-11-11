@@ -1,9 +1,8 @@
-version: '3'
+version: '3.4'
 services:
     wordpress:
         image: visiblevc/wordpress:0.16.0-php7.1
         ports:
-            - 443:443
             - 8080:80
         volumes:
             # Database

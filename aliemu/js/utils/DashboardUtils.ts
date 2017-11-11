@@ -138,7 +138,6 @@ export class CSV {
     private courses: ALiEMU.EducatorDashboard.CourseObject;
     private courseData: ALiEMU.EducatorDashboard.CourseData;
     private courseMeta: ALiEMU.EducatorDashboard.CourseMetaObject;
-    private categories: ALiEMU.EducatorDashboard.CategoryObject;
     private lessons: ALiEMU.EducatorDashboard.Lessons;
 
     constructor(users: Users, courses: Courses) {
@@ -146,7 +145,6 @@ export class CSV {
         this.courses = courses.courses;
         this.courseData = courses;
         this.courseMeta = courses.courseMeta;
-        this.categories = courses.categories;
         this.lessons = courses.lessons;
     }
 

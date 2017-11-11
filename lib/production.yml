@@ -1,4 +1,4 @@
-version: '3'
+version: '3.4'
 services:
     wordpress:
         image: visiblevc/wordpress:0.16.0-php7.1

@@ -3,10 +3,15 @@
 SCRIPTDIR="$( cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
 ROOTDIR=$( cd "$SCRIPTDIR" && cd ../../ && pwd || exit )
 sync_all=false
+initial_deploy=false
 
-while getopts "a" o; do
+while getopts "ai" o; do
     case "${o}" in
         a)
+            sync_all=true
+            ;;
+        i)
+            initial_deploy=true
             sync_all=true
             ;;
     esac
@@ -34,6 +39,25 @@ docker-machine ssh "$machine_name" "
 
 h2 "Deploying $theme_name"
 docker-machine scp -r -d "$ROOTDIR/dist/$theme_name" "$machine_name:/home/$machine_user/app/wp-content/themes"
+
+if [ "$initial_deploy" = true ]; then
+    # Make sure files exist
+    # [ ! -f "$ROOTDIR/.env" ] && ERROR '.env file cannot be located.'
+    [ ! -f "$ROOTDIR/lib/production.yml" ] && ERROR 'production.yml file cannot be located.'
+    [ ! -f "$ROOTDIR/data/database.sql" ] && ERROR 'database.sql file cannot be located.'
+
+    # docker-compose file
+    docker-machine scp -r -d "$ROOTDIR/lib/production.yml" "$machine_name:/home/$machine_user/app/docker-compose.yml"
+
+    # database export
+    docker-machine scp -r -d "$ROOTDIR/data/database.sql" "$machine_name:/home/$machine_user/app/data/database.sql"
+
+    # env file
+    # docker-machine scp -r -d "$ROOTDIR/.env" "$machine_name:/home/$machine_user/app/.env"
+
+    # uploads
+    docker-machine scp -r -d "$ROOTDIR/wp-content/uploads" "$machine_name:/home/$machine_user/app/wp-content"
+fi
 
 if [ "$sync_all" = true ]; then
     h2 "Removing old version of $base_theme_name"
