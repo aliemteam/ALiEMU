@@ -12,15 +12,16 @@
     ]
   },
   "scripts": {
-    "lint": "npm run lint:stylint && npm run lint:tslint",
+    "build": "NODE_ENV=production gulp",
+    "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy -a",
+    "deploy": "npm run test && npm run build && ./lib/scripts/deploy",
     "lint:stylint": "stylint aliemu/styles -c .stylintrc",
     "lint:tslint": "tslint -p . -t codeFrame",
-    "build": "NODE_ENV=production gulp",
-    "start": "gulp",
-    "deploy": "npm run test && npm run build && ./lib/scripts/deploy",
-    "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy -a",
-    "sync": "./lib/scripts/sync",
+    "lint": "npm run lint:stylint && npm run lint:tslint",
     "pretest": "npm run lint",
+    "pull-subtree": "git subtree pull --squash -P lib/scripts devops master",
+    "start": "gulp",
+    "sync": "./lib/scripts/sync",
     "test": "jest --coverage",
     "version": "gulp bump"
   },
