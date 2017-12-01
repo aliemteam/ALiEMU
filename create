@@ -7,7 +7,7 @@ from os import getenv
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 
-from shared import CommandRunner, prechecks
+from shared import CommandRunner, Has
 
 
 def docker_compose_version() -> str:
@@ -52,7 +52,9 @@ def create_machine() -> None:
 
 def main() -> None:
     """Main entrypoint."""
-    prechecks(True)
+    Has.env('DIGITALOCEAN_ACCESS_TOKEN') \
+       .executable('rsync') \
+       .executable('docker-machine')
     create_machine()
 
 

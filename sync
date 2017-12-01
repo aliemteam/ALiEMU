@@ -9,7 +9,7 @@ No deletions occur at any point
 from argparse import ArgumentParser
 from os import remove, rename
 
-from shared import CommandRunner, prechecks
+from shared import CommandRunner, Has
 
 
 def parse_args():
@@ -96,7 +96,7 @@ class Sync(object):
 def main():
     """Main entrypoint."""
     args = parse_args()
-    prechecks()
+    Has.executable('docker-machine').executable('rsync')
     sync = Sync()
     if args.init:
         return sync.database().plugins().theme().uploads()
