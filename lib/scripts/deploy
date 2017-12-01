@@ -10,7 +10,7 @@ pushing new ones to ensure the removal of stale files.
 from argparse import ArgumentParser
 from os.path import isfile
 
-from shared import CommandRunner, prechecks
+from shared import CommandRunner, Has
 
 
 def parse_args():
@@ -115,7 +115,7 @@ class Deploy(object):
 def main():
     """Main entrypoint."""
     args = parse_args()
-    prechecks()
+    Has.executable('docker-machine').executable('rsync')
     deploy = Deploy()
     if args.initial:
         deploy.initial()

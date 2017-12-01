@@ -17,5 +17,6 @@ package_reboot_if_required: true
 runcmd:
 - sudo -H -u {name} bash -c 'mkdir -p ~/app/{{data,wp-content/{{plugins,themes,uploads}}}}'
 - curl -L https://github.com/docker/compose/releases/download/{docker_compose_version}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+- curl -sSL https://agent.digitalocean.com/install.sh | sh
 - echo alias d='docker' >> /home/{name}/.bashrc
 - echo alias dc='docker-compose' >> /home/{name}/.bashrc
