@@ -104,7 +104,7 @@ class CommandRunner(object):
                 HostName <ip-address-of-server>
                 Port 22
                 User {name}
-                IdentityFile ~/.ssh/<name-of-our-private-key-file>
+                IdentityFile ~/.ssh/<name-of-your-private-key-file>
 
             """.format(**self.meta)))
             sys_exit(1)
