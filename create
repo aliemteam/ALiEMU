@@ -7,7 +7,7 @@ from os import getenv
 from tempfile import NamedTemporaryFile
 from urllib.request import urlopen
 
-from shared import CommandRunner, Has
+from shared import CommandRunner, Has, Provider
 
 
 def docker_compose_version() -> str:
@@ -17,7 +17,7 @@ def docker_compose_version() -> str:
     return docker_compose[0]['tag_name']
 
 
-def create_machine() -> None:
+def create_machine() -> str:
     """Create docker-machine on DigitalOcean."""
     name = input('--> Droplet name: ')
     size = input('--> Droplet size [2gb]: ') or '2gb'
@@ -48,14 +48,18 @@ def create_machine() -> None:
                        userdata_file=tmp.name,
                        machine_name=name)
         CommandRunner.run(command)
+    return name
 
 
 def main() -> None:
     """Main entrypoint."""
     Has.env('DIGITALOCEAN_ACCESS_TOKEN') \
-       .executable('rsync') \
-       .executable('docker-machine')
-    create_machine()
+       .executable('docker-machine', 'rsync')
+
+    provider = Provider(getenv('DIGITALOCEAN_ACCESS_TOKEN'))
+
+    machine_name = create_machine()
+    provider.add_dns_records(machine_name)
 
 
 if __name__ == '__main__':

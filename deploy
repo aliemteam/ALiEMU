@@ -115,7 +115,7 @@ class Deploy(object):
 def main():
     """Main entrypoint."""
     args = parse_args()
-    Has.executable('docker-machine').executable('rsync')
+    Has.executable('docker-machine', 'rsync')
     deploy = Deploy()
     if args.initial:
         deploy.initial()
