@@ -21,16 +21,18 @@ class Has(object):  # pylint: disable=too-few-public-methods
     def env(cls, *varnames) -> 'Has':
         """Assert an environment variable {name} is set."""
         for name in varnames:
-            assert getenv(name), \
-                'Missing required environment variable {}'.format(name)
+            assert getenv(name), (
+                'Missing required environment variable {v}'.format(v=name))
         return cls
 
     @classmethod
     def executable(cls, *exes) -> 'Has':
         """Assert that an executable binary {name} is in PATH."""
         for name in exes:
-            assert getstatusoutput('command -v {}'.format(name))[0] == 0, \
-                '{} must be installed to run this script'.format(name)
+            assert getstatusoutput(
+                'command -v {cmd}'.format(cmd=name))[0] == 0, (
+                    '"{cmd}" must be installed to run this script'.format(
+                        cmd=name))
         return cls
 
 
@@ -55,18 +57,18 @@ class Project(object):  # pylint: disable=too-few-public-methods
             current_path = self.script
             root = ''
             while not root:
-                if path.isfile('{}/package.json'.format(current_path)):
+                if path.isfile('{path}/package.json'.format(path=current_path)):
                     root = current_path
                 if current_path == '/':
                     raise FileNotFoundError
                 current_path = path.dirname(
-                    path.realpath('{}../'.format(current_path)))
+                    path.realpath('{path}../'.format(path=current_path)))
             return root
 
     @property
     def meta(self) -> Optional[Mapping[str, T]]:
         """Return a mapping of the "server" properties defined in the project's package.json."""
-        with open('{}/package.json'.format(self.dirs.root)) as pkg:
+        with open('{path}/package.json'.format(path=self.dirs.root)) as pkg:
             file = json.load(pkg)
             server_meta = file['server']
         return server_meta
@@ -144,7 +146,7 @@ class Provider(object):  # pylint: disable=too-few-public-methods
         assert token, 'API token required'
         self.__baseurl = 'https://api.digitalocean.com/v2'
         self.__headers = {
-            'Authorization': 'Bearer {}'.format(token),
+            'Authorization': 'Bearer {token}'.format(token=token),
             'Content-Type': 'application/json',
         }
 
@@ -159,7 +161,7 @@ class Provider(object):  # pylint: disable=too-few-public-methods
         droplet = next(
             (dplt for dplt in res['droplets'] if dplt['name'] == name), None)
         assert droplet, \
-            'Droplet for "{}" could not be located'.format(name)
+            'Droplet for "{name}" could not be located'.format(name=name)
 
         ipv4 = droplet['networks']['v4'][0]['ip_address']
         records = [{
@@ -171,16 +173,19 @@ class Provider(object):  # pylint: disable=too-few-public-methods
             'name': 'www',
             'data': ipv4,
         }]
-        domain_name = input('--> Enter domain name [{}.com]: '
-                            .format(name)) or '{}.com'.format(name)
+        domain_name = input(
+            '--> Enter domain name [{name}.com]: '
+            .format(name=name)) or '{name}.com'.format(name=name)
 
         # Check to see if domain name already exists (err == does not exist)
-        res, err = self.__get('/domains/{}'.format(domain_name))
+        res, err = self.__get('/domains/{domain}'.format(domain=domain_name))
         if err is None:
             # Fetch existing records
-            res, err = self.__get('/domains/{}/records'.format(domain_name))
-            assert err is None, \
-                'An error occured while attempting to fetch DNS records for {}'.format(domain_name)
+            res, err = self.__get('/domains/{domain}/records'
+                                  .format(domain=domain_name))
+            assert err is None, (
+                'An error occured while attempting to fetch DNS records for "{domain}"'
+                .format(domain=domain_name))
 
             # Weed out A records and also remove the id property from each
             old_records = [{k: x[k]
@@ -192,7 +197,8 @@ class Provider(object):  # pylint: disable=too-few-public-methods
             records = [*old_records, *records]
 
             # Delete existing domain (and records)
-            res, err = self.__delete('/domains/{}'.format(domain_name))
+            res, err = self.__delete('/domains/{domain}'
+                                     .format(domain=domain_name))
             assert err is None, \
                 'An error occurred while attempting to delete old domain entry'
 
@@ -201,12 +207,14 @@ class Provider(object):  # pylint: disable=too-few-public-methods
             'name': domain_name,
             'ip_address': ipv4,
         })
-        assert err is None, \
-            'An error occurred while attempting to create domain "{}.com"'.format(name)
+        assert err is None, (
+            'An error occurred while attempting to create domain "{domain}"'
+            .format(domain=domain_name))
 
         # Add new records to domain
         for record in records:
-            res, err = self.__post('/domains/{}/records', record)
+            res, err = self.__post(
+                '/domains/{domain}/records'.format(domain=domain_name), record)
             if err:
                 print(('[{code}] An error occurred while attempting '
                        'to create the following record: {data}').format(
