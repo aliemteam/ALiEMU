@@ -18,17 +18,19 @@ class Has(object):  # pylint: disable=too-few-public-methods
     """Helper for making assertions about the running user's machine."""
 
     @classmethod
-    def env(cls, name) -> 'Has':
+    def env(cls, *varnames) -> 'Has':
         """Assert an environment variable {name} is set."""
-        assert getenv(name), \
-            'Missing required environment variable {}'.format(name)
+        for name in varnames:
+            assert getenv(name), \
+                'Missing required environment variable {}'.format(name)
         return cls
 
     @classmethod
-    def executable(cls, name) -> 'Has':
+    def executable(cls, *exes) -> 'Has':
         """Assert that an executable binary {name} is in PATH."""
-        assert getstatusoutput('command -v {}'.format(name))[0] == 0, \
-            '{} must be installed to run this script'.format(name)
+        for name in exes:
+            assert getstatusoutput('command -v {}'.format(name))[0] == 0, \
+                '{} must be installed to run this script'.format(name)
         return cls
 
 
