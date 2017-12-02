@@ -73,9 +73,15 @@ class Sync(object):
 
     def database(self) -> 'Sync':
         """Rotate backup database and pull database."""
-        remove('{root}/data/database.sql.bak'.format(**self.meta))
-        rename('{root}/data/database.sql'.format(**self.meta),
-               '{root}/data/database.sql.bak'.format(**self.meta))
+        try:
+            remove('{root}/data/database.sql.bak'.format(**self.meta))
+        except FileNotFoundError:
+            pass
+        try:
+            rename('{root}/data/database.sql'.format(**self.meta),
+                   '{root}/data/database.sql.bak'.format(**self.meta))
+        except FileNotFoundError:
+            pass
 
         print('Exporting database...')
         self.cmd.ssh((
