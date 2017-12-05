@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) exit(1);
 /**
  * Globals
  */
-define('ALIEMU_VERSION', '1.5.1');
+define('ALIEMU_VERSION', '1.6.0');
 define('ROOT_URI', get_stylesheet_directory_uri());
 
 require_once(__DIR__ . '/lib/script-loader/index.php');
