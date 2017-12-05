@@ -10,7 +10,6 @@ services:
             # Plugins
             - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
-            - ./wp-content/plugins/ultimate-member:/app/wp-content/plugins/ultimate-member
             # Themes
             - ./dist/aliemu:/app/wp-content/themes/aliemu
             - ./wp-content/themes/Divi:/app/wp-content/themes/Divi

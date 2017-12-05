@@ -145,25 +145,3 @@ function sorted_course_list($end_year, $category) {
     </div>
     <?php
 }
-
-function aliemu_team_member($name, $img, $title, $role, $twitter) {
-    ?>
-    <div class="team-member">
-        <div class="team-member__photo">
-            <img src="/wp-content/themes/aliemu/assets/team/<?php echo $img; ?>" alt="Photograph of <?php echo $name; ?>"/>
-        </div>
-        <div class="team-member__info">
-            <div class="team-member__name">
-                <?php if ($twitter): ?>
-                    <div>
-                        <a href="https://twitter.com/<?php echo $twitter; ?>" class="et_pb_font_icon et_pb_twitter_icon" aria-label="View Twitter profile"></a>
-                    </div>
-                <?php endif; ?>
-                <?php echo $name; ?>
-            </div>
-            <div><?php echo $title; ?></div>
-            <div><?php echo $role; ?></div>
-        </div>
-    </div>
-    <?php
-}

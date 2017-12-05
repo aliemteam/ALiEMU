@@ -4,8 +4,7 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class('au-about'); ?>>
     <div class="flex-container about">
 
-    <!-- Nav Bar -->
-    <!-- <div id=""> -->
+    <?php // Nav Bar  ?>
     <div class="about__sidebar">
         <nav id="magic-sidebar" class="bs-docs-sidebar affix">
             <ul class="au-nav bs-docs-sidenav">
@@ -38,9 +37,8 @@
             </ul>
         </nav>
     </div>
-    <!-- </div> -->
 
-    <!-- Main Content -->
+    <?php // Main Content ?>
     <div class="about__body">
         <section id="about-content" class="card">
             <div class="card__heading">
@@ -84,7 +82,7 @@
             </div>
         </section>
 
-        <!-- ALiEMU Courses Eligible for III or Asynchronous Learning Credit -->
+        <?php // ALiEMU Courses Eligible for III or Asynchronous Learning Credit ?>
         <section id="about-iii-courses" class="card">
             <div class="card__heading">
                 ALiEMU Courses Eligible for III or Asynchronous Learning Credit
@@ -98,7 +96,7 @@
             </div>
         </section>
 
-        <!-- AIR Series -->
+        <?php // AIR Series ?>
         <section id="about-air" class="card">
             <div class="card__heading">
                 AIR Series
@@ -122,7 +120,7 @@
             </div>
         </section>
 
-        <!-- AIR-Pro Series -->
+        <?php // AIR-Pro Series ?>
         <section id="about-air-pro" class="card">
             <div class="card__heading">
                 AIR-Pro Series
@@ -157,7 +155,7 @@
                         <li>On the scoring instrument, the Educational Utility domain specifically targets senior residents and not just residents in general in order to identify more advanced level educational content.</li>
                     </ol>
                     <p>
-                        <!-- FIXME: This should be in assets -->
+                        <?php // FIXME: This should be in assets ?>
                         <img src="/wp-content/uploads/2016/06/AIR-vs-AIR-Pro-Series.png" alt="AIR vs AIR-Pro" />
                     </p>
                 </div>
@@ -168,7 +166,7 @@
             </div>
         </section>
 
-        <!-- Capsules -->
+        <?php // Capsules ?>
         <section id="about-capsules" class="card">
             <div class="card__heading">
                 Capsules
@@ -181,7 +179,7 @@
                 <div id="about-capsules-creation" class="au-subgroup">
                     <h4>Why create the Capsules series?</h4>
                     <p>The Capsules series was conceived in response to an observed deficiency of EM pharmacology information in Free Open Access Meducation (FOAM) resources, as perceived by learners.</p>
-                    <!-- FIXME: This should be in assets -->
+                    <?php // FIXME: This should be in assets ?>
                     <p>
                         <img src="https://pbs.twimg.com/media/B4FjicsCEAAPYDE.png" alt="twitter poll" />
                     </p>

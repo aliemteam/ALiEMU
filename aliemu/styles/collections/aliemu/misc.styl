@@ -88,7 +88,7 @@
     max-width: 250px
     margin: 20px
 
-.team-member__photo img
+.team-member__photo
     max-height: 250px
     max-width: 250px
     height: 100%
@@ -96,18 +96,18 @@
     border-radius: 250px
     margin-bottom: 10px
 
-.team-member__info
-    display: flex
-    flex-direction: column
-    flex: auto
-
 .team-member__name
     display: flex
-    h4
-        display: inline-block
-    div
-        display: inline-block
-        padding-right: 5px
+    align-items: center
+
+.team-member__name a
+    @extend .team-member__name
+    margin-right: 10px
+
+.team-member__title,
+.team-member__role
+    font-size: 0.8em
+
 
 // FIXME: All of below
 +prefix-classes('au-')
