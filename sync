@@ -40,6 +40,9 @@ class Sync(object):
             'root': self.cmd.dirs.root,
         }
         self.calls = 0
+        self.cmd.run(
+            'mkdir -p {root}/{{data,wp-content/{{plugins,themes,uploads}}}}'.
+            format(**self.meta))
 
     def uploads(self) -> 'Sync':
         """Pull all uploads."""

@@ -12,7 +12,6 @@ users:
 
 package_update: true
 package_upgrade: true
-package_reboot_if_required: true
 
 runcmd:
 - sudo -H -u {name} bash -c 'mkdir -p ~/app/{{data,wp-content/{{plugins,themes,uploads}}}}'
