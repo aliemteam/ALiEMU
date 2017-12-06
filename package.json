@@ -19,7 +19,7 @@
     "lint:tslint": "tslint -p . -t codeFrame",
     "lint": "npm run lint:stylint && npm run lint:tslint",
     "pretest": "npm run lint",
-    "pull-subtree": "git subtree pull --squash -P lib/scripts devops master",
+    "pull-subtree": "git subtree pull -P lib/scripts --squash devops master",
     "start": "gulp",
     "sync": "./lib/scripts/sync",
     "test": "jest --coverage",
