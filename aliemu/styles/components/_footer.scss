@@ -1,0 +1,41 @@
+@import '../colors';
+@import '../variables';
+
+.footer {
+    display: flex;
+    flex-flow: column;
+}
+
+.footer__sponsors {
+    display: flex;
+    box-shadow: map-get($shadows, 'depth-3');
+    justify-content: space-around;
+    height: 75px;
+    background: white;
+    align-items: center;
+    z-index: 3;
+    text-align: center;
+    line-height: 1.4em;
+    a {
+        height: 50px;
+    }
+}
+
+.footer__bottom {
+    background: $gray-dark;
+    z-index: 3;
+    display: flex;
+    height: 50px;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 $block-margin;
+    & > div {
+        padding-left: $block-margin;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer__tagline {
+        display: none;
+    }
+}

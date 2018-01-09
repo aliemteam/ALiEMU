@@ -80,7 +80,7 @@ class Loader {
                 'jquery-dropdown-css',
                 'learndash_quiz_front_css',
                 'learndash_style',
-                'learndash_template_style_css',
+                // 'learndash_template_style_css',
                 'magnific-popup',
                 'sfwd_front_css',
                 'theme-customizer',

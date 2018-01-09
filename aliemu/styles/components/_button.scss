@@ -1,0 +1,51 @@
+@import '../mixins';
+@import '../variables';
+@import '../colors';
+@import '../typography';
+
+.btn {
+    @include button;
+}
+
+.btn--primary {
+    @include button($primary);
+}
+
+.btn--primary-alt {
+    @include button($accent);
+}
+
+.btn--flat {
+    @include button($modifiers: flat);
+}
+
+.btn--narrow {
+    min-width: 32px;
+    padding: 0;
+}
+
+.btn--active {
+    color: $primary;
+}
+
+.btn--air-pro {
+    color: $airpro-primary;
+}
+
+.btn--air {
+    color: $air-primary;
+}
+
+.btn--capsules {
+    color: $capsules-primary;
+}
+
+.et_pb_button.submit {
+    @extend .btn;
+    @extend .btn--primary;
+}
+
+.comment-reply-link.et_pb_button {
+    @extend .btn;
+    @extend .btn--flat;
+}

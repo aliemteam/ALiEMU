@@ -1,0 +1,17 @@
+@import '../variables';
+
+.abt-bibliography {
+    margin-bottom: $block-margin;
+}
+
+.abt-bibliography__heading {
+    margin-left: -10px !important;
+    &::before {
+        top: 8px !important;
+    }
+}
+
+.abt-bibliography__container {
+    font-size: 0.8em !important;
+    padding: 0 $block-margin;
+}

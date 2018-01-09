@@ -1,0 +1,217 @@
+@import '../colors';
+@import '../mixins';
+@import '../variables';
+
+$green-correct: #5cb85c !default;
+$red-incorrect: #ef001d !default;
+
+// Center the "Mark Complete" button
+#sfwd-mark-complete {
+    text-align: center;
+    margin-bottom: $block-margin;
+}
+
+#learndash_mark_complete_button {
+    @include button($primary);
+}
+
+.prev-link,
+.next-link {
+    @include button($primary);
+    margin-bottom: $block-margin;
+    > span {
+        display: none;
+    }
+}
+
+// Next/Prev buttons
+#learndash_next_prev_link {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.learndash_join_button {
+    margin-bottom: $block-margin;
+    text-align: center;
+}
+
+.btn-join {
+    @include button($primary);
+}
+
+// Course status line
+.course-status {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: $block-margin;
+    align-items: baseline;
+    background: $secondary;
+    padding: 10px;
+    span {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .course-status {
+        justify-content: space-around;
+    }
+}
+
+// Content Tables (Lessons, Quizzes, etc)
+.content-table {
+    box-shadow: map-get($shadows, 'depth-2');
+    margin-bottom: $block-margin;
+    border-radius: 2px;
+}
+
+.content-table__row {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 400;
+    border-bottom: solid $secondary 1px;
+    &:last-of-type {
+        border-radius: 0 0 2px 2px;
+    }
+    &:hover {
+        background: rgba(0, 0, 0, 0.02);
+    }
+}
+
+.content-table__row--header {
+    padding: 0 $block-margin;
+    background: $accent;
+    color: white;
+    font-weight: 500;
+    border-radius: 2px 2px 0 0;
+    &:hover {
+        background: $accent;
+    }
+}
+
+.content-table__cell {
+    display: flex;
+    height: 100%;
+    line-height: 50px;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+.content-table__cell--padded {
+    padding: 0 $block-margin;
+}
+
+.content-table__cell--full-width {
+    width: 100%;
+    min-width: 0;
+    a {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+.content-table__link {
+    width: 100%;
+    color: $accent;
+    height: 100%;
+    padding: 0 $block-margin;
+}
+
+// WpProQuiz ------------------------------------------------
+
+.quiz_continue_link {
+    order: 1;
+    a#quiz_continue_link {
+        @include button($primary);
+    }
+}
+
+.wpProQuiz_button {
+    @include button($primary);
+}
+.wpProQuiz_correct > span:first-of-type {
+    color: $green-correct;
+    font-weight: bold;
+}
+
+.wpProQuiz_incorrect > span:first-of-type {
+    color: $red-incorrect;
+    font-weight: bold;
+}
+.wpProQuiz_spinner,
+.wpProQuiz_spinner > div {
+    z-index: 10000000;
+}
+
+// Hint box
+.wpProQuiz_tipp > div {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background-color: $secondary;
+    h5 {
+        color: $font-primary;
+        padding: 0;
+    }
+}
+
+.wpProQuiz_QuestionButton {
+    margin: 0 !important;
+}
+
+.wpProQuiz_AnswerMessage {
+    margin: 0 0 20px 0;
+}
+.wpProQuiz_listItem {
+    list-style-type: none;
+    &:before {
+        content: '';
+    }
+}
+
+.wpProQuiz_question_text {
+    margin: 0 0 20px 0;
+}
+
+.wpProQuiz_list {
+    padding-bottom: 0 !important;
+    margin: 0 0 20px 0;
+    .wpProQuiz_questionList {
+        background: $secondary;
+        border-radius: 3px;
+        border-color: darken($secondary, 5);
+        padding: 20px !important;
+        margin: 0 0 20px 0;
+        .wpProQuiz_questionListItem {
+            list-style: none;
+            padding-left: 20px;
+            .wpProQuiz_questionInput {
+                line-height: 26px;
+                margin-left: -20px;
+                vertical-align: text-top;
+            }
+        }
+    }
+}
+
+.wpProQuiz_results > div:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wpProQuiz_certificate {
+    text-align: center;
+}
+
+.wpProQuiz_resultsList,
+.wpProQuiz_quiz_time,
+.wpProQuiz_time_limit_expired,
+.wpProQuiz_points,
+.wpProQuiz_graded_points {
+    display: none;
+}

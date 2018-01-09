@@ -1,11 +1,11 @@
 // tslint:disable:no-console
-import * as autoprefixer from 'autoprefixer-stylus';
 import { exec as cp_exec, spawn } from 'child_process';
 import * as fs from 'fs';
 import * as gulp from 'gulp';
+import * as autoprefixer from 'gulp-autoprefixer';
 import * as imagemin from 'gulp-imagemin';
+import * as sass from 'gulp-sass';
 import * as sourcemaps from 'gulp-sourcemaps';
-import * as stylus from 'gulp-stylus';
 import * as composer from 'gulp-uglify/composer';
 import * as merge from 'merge-stream';
 import * as uglifyEs from 'uglify-es';
@@ -63,26 +63,23 @@ export function assets() {
         .pipe(gulp.dest('dist/aliemu/assets'));
 }
 
-export function styles(cb: () => void) {
-    let stream = gulp.src(['aliemu/styles/{style,editor}.styl']);
+export function styles() {
+    let stream = gulp.src('aliemu/**/*.scss', { base: 'aliemu' });
 
     if (!IS_PRODUCTION) {
         stream = stream.pipe(sourcemaps.init());
     }
 
-    stream = stream.pipe(
-        stylus({
-            use: [autoprefixer({ browsers: ['last 2 versions'] })],
-            compress: IS_PRODUCTION,
-        }).on('error', (e: Error) => {
-            console.error(e.message);
-            if (IS_PRODUCTION) throw e;
-            cb();
-        })
-    );
+    stream = stream
+        .pipe(
+            sass({
+                outputStyle: IS_PRODUCTION ? 'compressed' : 'nested',
+            }).on('error', sass.logError)
+        )
+        .pipe(autoprefixer({ browsers: ['last 2 versions'] }));
 
     if (!IS_PRODUCTION) {
-        stream = stream.pipe(sourcemaps.write('.'));
+        stream = stream.pipe(sourcemaps.write('.', undefined));
     }
 
     stream = stream.pipe(gulp.dest('dist/aliemu'));
@@ -134,7 +131,7 @@ export function js() {
 const main = gulp.series(clean, gulp.parallel(staticFiles, assets, bundle, styles, js), cb => {
     if (IS_PRODUCTION) return cb();
 
-    gulp.watch(['aliemu/**/*.styl'], gulp.series(styles));
+    gulp.watch(['aliemu/**/*.scss'], gulp.series(styles));
     gulp.watch(['aliemu/**/*.php'], gulp.series(staticFiles, reload));
     gulp.watch(['aliemu/**/*.js'], gulp.series(js, reload));
     gulp.watch(['aliemu/**/*.{svg,png,jpeg,jpg}'], gulp.series(assets, reload));

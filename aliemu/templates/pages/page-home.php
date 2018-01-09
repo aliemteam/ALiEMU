@@ -47,6 +47,9 @@ get_header();
                             </div>
                         </div>
                         <div class="au-series-logos au-alt-logos">
+                            <!-- <div>
+                                <a href="/capsules"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
+                            </div> -->
                             <div>
                                 <a href="/air"><img src="<?php echo $assets; ?>/air-logo.svg" alt="AIR Button"/></a>
                             </div>
@@ -85,6 +88,9 @@ get_header();
                             <h1>Click a series to learn more</h1>
                         </div>
                         <div class="au-series-logos">
+                            <!-- <div>
+                                <a href="/capsules"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
+                            </div> -->
                             <div>
                                 <a href="/air"><img src="<?php echo $assets; ?>/air-logo.svg" alt="AIR Button"/></a>
                             </div>

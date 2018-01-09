@@ -1,4 +1,5 @@
 <?php get_header(); ?>
+<link rel="stylesheet" href="<?= ROOT_URI . '/templates/pages/page-about.css' ?>" />
 <div id="main-content">
 <?php while (have_posts()) : the_post(); ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class('au-about'); ?>>

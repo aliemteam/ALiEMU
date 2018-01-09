@@ -75,7 +75,7 @@ export class CourseTable extends React.Component<Props, {}> {
         this.page = parseInt(page, 10);
     };
 
-    exportCourseData = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+    exportCourseData = (e: React.MouseEvent<HTMLButtonElement>): void => {
         const courseID = this.courseSelection;
         const csv = this.CSV.course(courseID);
         const blob = new Blob([csv.data], { type: 'text/csv;charset=utf-8' });
@@ -152,13 +152,15 @@ export class CourseTable extends React.Component<Props, {}> {
                         </select>
                     </Flex>
                     <Flex amount={1}>
-                        <a
+                        <button
                             id="course-export"
-                            className={
-                                this.courseSelection !== ''
-                                    ? 'btn btn--primary'
-                                    : 'btn btn--primary btn--disabled'
-                            }
+                            // className={
+                            //     this.courseSelection !== ''
+                            //         ? 'btn btn--primary'
+                            //         : 'btn btn--primary btn--disabled'
+                            // }
+                            className="btn btn--primary"
+                            disabled={this.courseSelection === ''}
                             children="Export Course Data"
                             role="button"
                             onClick={this.exportCourseData}

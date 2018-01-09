@@ -1,0 +1,87 @@
+@import 'colors';
+@import 'variables';
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+}
+
+.ie9 img[src$='.svg'] {
+    width: 100%;
+}
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    img[src$='.svg'] {
+        width: 100%;
+    }
+}
+
+#wpadminbar {
+    position: fixed;
+}
+
+#sidebar {
+    display: none;
+}
+
+#page-container {
+    background: $secondary;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#main-content {
+    margin-top: $header-height;
+    flex: auto;
+    display: flex;
+    min-height: calc(100vh - 215px);
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: $block-margin;
+}
+
+#content-area,
+.content-area {
+    background: white;
+    padding: 20px;
+    border-radius: 2px;
+    box-shadow: map-get($shadows, 'depth-2');
+}
+
+.flex-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-container--column {
+    flex-direction: column;
+}
+
+.container {
+    width: 80%;
+    max-width: 1080px;
+    margin: auto;
+    margin-top: $block-margin;
+}
+
+@media screen and (max-width: 400px) {
+    .container {
+        width: 95%;
+    }
+}
+@media screen and (max-width: 782px) {
+    html {
+        margin-top: 0;
+    }
+}
