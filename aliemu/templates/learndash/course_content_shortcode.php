@@ -1,6 +1,6 @@
 <?php
 
-if (!defined('ABSPATH')) exit(1);
+defined('ABSPATH') || exit;
 
 /**
  * Displays content of course
@@ -36,89 +36,89 @@ if (!defined('ABSPATH')) exit(1);
  */
 ?>
 <?php if ( $has_course_content ) : ?>
-    <div id='learndash_course_content'>
-        <h1 id='learndash_course_content_title'><?php printf( _x( '%s Content', 'Course Content Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?></h1>
+	<div id='learndash_course_content'>
+		<h1 id='learndash_course_content_title'><?php printf( _x( '%s Content', 'Course Content Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?></h1>
 
-        <?php /* Show Lesson List */ ?>
-        <?php if ( ! empty( $lessons ) ) : ?>
+		<?php /* Show Lesson List */ ?>
+		<?php if ( ! empty( $lessons ) ) : ?>
 
-            <?php if ( $has_topics ) : ?>
-                <div class='expand_collapse'>
-                    <a href='#' onClick='jQuery("#learndash_post_<?php echo $course_id; ?> .learndash_topic_dots").slideDown(); return false;'><?php _e( 'Expand All', 'learndash' ); ?></a> | <a href='#' onClick='jQuery("#learndash_post_<?php echo $course_id; ?> .learndash_topic_dots").slideUp(); return false;'><?php _e( 'Collapse All', 'learndash' ); ?></a>
-                </div>
-            <?php endif; ?>
+			<?php if ( $has_topics ) : ?>
+				<div class='expand_collapse'>
+					<a href='#' onClick='jQuery("#learndash_post_<?php echo $course_id; ?> .learndash_topic_dots").slideDown(); return false;'><?php _e( 'Expand All', 'learndash' ); ?></a> | <a href='#' onClick='jQuery("#learndash_post_<?php echo $course_id; ?> .learndash_topic_dots").slideUp(); return false;'><?php _e( 'Collapse All', 'learndash' ); ?></a>
+				</div>
+			<?php endif; ?>
 
-            <div id='learndash_lessons'>
+			<div id='learndash_lessons'>
 
-                <div id='lesson_heading'>
-                    <span><?php echo LearnDash_Custom_Label::get_label( 'lessons' ) ?></span>
-                    <span class='right'><?php _e( 'Status', 'learndash' ); ?></span>
-                </div>
+				<div id='lesson_heading'>
+					<span><?php echo LearnDash_Custom_Label::get_label( 'lessons' ) ?></span>
+					<span class='right'><?php _e( 'Status', 'learndash' ); ?></span>
+				</div>
 
-                <div id='lessons_list'>
+				<div id='lessons_list'>
 
-                    <?php foreach ( $lessons as $lesson ) : ?>
-                        <div id='post-<?php echo $lesson['post']->ID; ?>' class='<?php echo $lesson['sample'];?>'>
-                            <div class='list-count'><?php echo $lesson['sno']; ?></div>
-                            <h4>
-                                <a class='<?php echo $lesson['status']; ?>' href='<?php echo $lesson['permalink']?>'><?php echo $lesson['post']->post_title; ?></a>
+					<?php foreach ( $lessons as $lesson ) : ?>
+						<div id='post-<?php echo $lesson['post']->ID; ?>' class='<?php echo $lesson['sample'];?>'>
+							<div class='list-count'><?php echo $lesson['sno']; ?></div>
+							<h4>
+								<a class='<?php echo $lesson['status']; ?>' href='<?php echo $lesson['permalink']?>'><?php echo $lesson['post']->post_title; ?></a>
 
-                                <?php  /* Not available message for drip feeding lessons */ ?>
-                                <?php if ( ! empty( $lesson['lesson_access_from'] ) ) : ?>
-                                    <small class='notavailable_message'>
-                                        <?php echo sprintf( __( 'Available on: %s ', 'learndash' ), learndash_adjust_date_time_display($lesson['lesson_access_from'] ) ); ?>
-                                    </small>
-                                <?php endif; ?>
+								<?php  /* Not available message for drip feeding lessons */ ?>
+								<?php if ( ! empty( $lesson['lesson_access_from'] ) ) : ?>
+									<small class='notavailable_message'>
+										<?php echo sprintf( __( 'Available on: %s ', 'learndash' ), learndash_adjust_date_time_display( $lesson['lesson_access_from']  ) ); ?>
+									</small>
+								<?php endif; ?>
 
-                                <?php /* Lesson Topis */ ?>
-                                <?php $topics = @$lesson_topics[ $lesson['post']->ID ]; ?>
+								<?php /* Lesson Topis */ ?>
+								<?php $topics = @$lesson_topics[ $lesson['post']->ID ]; ?>
 
-                                <?php if ( ! empty( $topics ) ) : ?>
-                                    <div id='learndash_topic_dots-<?php echo $lesson['post']->ID; ?>' class='learndash_topic_dots type-list'>
-                                        <ul>
-                                            <?php $odd_class = ''; ?>
-                                            <?php foreach ( $topics as $key => $topic ) : ?>
-                                                <?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
-                                                <?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
-                                                <li class='<?php echo $odd_class; ?>'>
-                                                    <span class='topic_item'>
-                                                        <a class='<?php echo $completed_class; ?>' href='<?php echo get_permalink( $topic->ID ); ?>' title='<?php echo $topic->post_title; ?>'>
-                                                            <span><?php echo $topic->post_title; ?></span>
-                                                        </a>
-                                                    </span>
-                                                </li>
-                                            <?php endforeach; ?>
-                                        </ul>
-                                    </div>
-                                <?php endif; ?>
+								<?php if ( ! empty( $topics ) ) : ?>
+									<div id='learndash_topic_dots-<?php echo $lesson['post']->ID; ?>' class='learndash_topic_dots type-list'>
+										<ul>
+											<?php $odd_class = ''; ?>
+											<?php foreach ( $topics as $key => $topic ) : ?>
+												<?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
+												<?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
+												<li class='<?php echo $odd_class; ?>'>
+													<span class='topic_item'>
+														<a class='<?php echo $completed_class; ?>' href='<?php echo get_permalink( $topic->ID ); ?>' title='<?php echo $topic->post_title; ?>'>
+															<span><?php echo $topic->post_title; ?></span>
+														</a>
+													</span>
+												</li>
+											<?php endforeach; ?>
+										</ul>
+									</div>
+								<?php endif; ?>
 
-                            </h4>
-                        </div>
-                    <?php endforeach; ?>
+							</h4>
+						</div>
+					<?php endforeach; ?>
 
-                </div>
-            </div>
-        <?php endif; ?>
+				</div>
+			</div>
+		<?php endif; ?>
 
 
-        <?php /* Show Quiz List */	?>
-        <?php if ( ! empty( $quizzes ) ) : ?>
-            <div id='learndash_quizzes'>
-                <div id='quiz_heading'>
-                    <span><?php echo LearnDash_Custom_Label::get_label( 'quizzes' ); ?></span><span class='right'><?php _e( 'Status', 'learndash' ); ?></span>
-                </div>
-                <div id='quiz_list'>
-                <?php foreach ( $quizzes as $quiz ) : ?>
-                    <div id='post-<?php echo $quiz['post']->ID; ?>' class='<?php echo $quiz['sample'];?>'>
-                        <div class='list-count'><?php echo $quiz['sno']; ?></div>
-                        <h4>
-                            <a class='<?php echo $quiz['status']; ?>' href='<?php echo $quiz['permalink']?>'><?php echo $quiz['post']->post_title; ?></a>
-                        </h4>
-                    </div>
-                <?php endforeach; ?>
-                </div>
-            </div>
-        <?php endif; ?>
+		<?php /* Show Quiz List */	?>
+		<?php if ( ! empty( $quizzes ) ) : ?>
+			<div id='learndash_quizzes'>
+				<div id='quiz_heading'>
+					<span><?php echo LearnDash_Custom_Label::get_label( 'quizzes' ); ?></span><span class='right'><?php _e( 'Status', 'learndash' ); ?></span>
+				</div>
+				<div id='quiz_list'>
+				<?php foreach ( $quizzes as $quiz ) : ?>
+					<div id='post-<?php echo $quiz['post']->ID; ?>' class='<?php echo $quiz['sample'];?>'>
+						<div class='list-count'><?php echo $quiz['sno']; ?></div>
+						<h4>
+							<a class='<?php echo $quiz['status']; ?>' href='<?php echo $quiz['permalink']?>'><?php echo $quiz['post']->post_title; ?></a>
+						</h4>
+					</div>
+				<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
 
-    </div>
+	</div>
 <?php endif; ?>
