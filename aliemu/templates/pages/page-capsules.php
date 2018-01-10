@@ -18,7 +18,7 @@ $assets = get_stylesheet_directory_uri() . '/assets';
 			</div>
 		</div>
 	</div>
-	<div class="content-area course-list">
+	<div class="content-area course-list course-list--transparent">
 		<div class="course-boxes">
 			<?php echo do_shortcode( '[ld_course_list category_name="capsules"]' ); ?>
 		</div>

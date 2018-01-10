@@ -1,9 +1,28 @@
-// FIXME: This should be imported only on the page it's needed.
+// FIXME: This file should be imported only on the page it's needed.
 @import 'colors';
 @import 'variables';
 
 .course-list {
     padding: 0;
+}
+
+.course-list--transparent {
+    $margin-size: 10px;
+    background: transparent;
+    box-shadow: unset;
+    .course-boxes {
+        padding: 0;
+        margin: -#{$margin-size};
+        margin-bottom: $margin-size;
+        justify-content: flex-start;
+        .course-box {
+            flex: auto;
+            min-width: 200px;
+            max-width: 350px;
+            width: 250px;
+            margin: $margin-size;
+        }
+    }
 }
 
 .course-list__year-links {
@@ -112,6 +131,7 @@
 .course-box__description {
     flex: auto;
     font-size: 0.9em;
+    overflow: hidden;
 }
 
 .course-box__link {

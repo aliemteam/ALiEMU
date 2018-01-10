@@ -55,7 +55,8 @@
             margin: 5px 0;
         }
     }
-    .au-general, .au-faculty {
+    .au-general,
+    .au-faculty {
         display: flex;
         flex: auto;
         flex-flow: column;
@@ -161,8 +162,10 @@
             margin-top: 20px;
         }
         &.au-alt-logos {
+            flex-wrap: wrap;
             background: transparent;
             div {
+                max-width: 100px;
                 display: flex;
                 padding: 10px;
                 align-items: center;

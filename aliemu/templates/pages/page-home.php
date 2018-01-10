@@ -47,9 +47,9 @@ get_header();
 							</div>
 						</div>
 						<div class="au-series-logos au-alt-logos">
-							<!-- <div>
-								<a href="/capsules"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
-							</div> -->
+							<div>
+								<a href="/in-training-exam"><img src="/wp-content/uploads/2018/01/ALiEM-In-Training-Exam-Prep-Quiz-Sets-1-5-2nd-ed-cover-231x300.png" alt="In Training Exam Prep Button"/></a>
+							</div>
 							<div>
 								<a href="/air"><img src="<?php echo $assets; ?>/air-logo.svg" alt="AIR Button"/></a>
 							</div>
@@ -88,9 +88,9 @@ get_header();
 							<h1>Click a series to learn more</h1>
 						</div>
 						<div class="au-series-logos">
-							<!-- <div>
-								<a href="/capsules"><img src="<?php echo $assets; ?>/capsules-logo.svg" alt="Capsules Button"/></a>
-							</div> -->
+							<div>
+								<a href="/in-training-exam"><img src="/wp-content/uploads/2018/01/ALiEM-In-Training-Exam-Prep-Quiz-Sets-1-5-2nd-ed-cover-231x300.png" alt="In Training Exam Prep Button"/></a>
+							</div>
 							<div>
 								<a href="/air"><img src="<?php echo $assets; ?>/air-logo.svg" alt="AIR Button"/></a>
 							</div>
