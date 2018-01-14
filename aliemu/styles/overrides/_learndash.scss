@@ -124,84 +124,90 @@ $red-incorrect: #ef001d !default;
 
 // WpProQuiz ------------------------------------------------
 
-.quiz_continue_link {
-    order: 1;
-    a#quiz_continue_link {
-        @include button($primary);
+// Outermost shell
+.wpProQuiz_content {
+    margin-bottom: 20px;
+    ol[class] {
+        margin: 0;
     }
 }
 
-.wpProQuiz_button {
-    @include button($primary);
-}
-.wpProQuiz_correct > span:first-of-type {
-    color: $green-correct;
-    font-weight: bold;
-}
-
-.wpProQuiz_incorrect > span:first-of-type {
-    color: $red-incorrect;
-    font-weight: bold;
-}
-.wpProQuiz_spinner,
-.wpProQuiz_spinner > div {
-    z-index: 10000000;
-}
-
-// Hint box
-.wpProQuiz_tipp > div {
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background-color: $secondary;
-    h5 {
-        color: $font-primary;
-        padding: 0;
-    }
-}
-
-.wpProQuiz_QuestionButton {
+// The question and answer choices container
+.wpProQuiz_question {
+    // Separates the question from the buttons below (overwrites inlines style)
+    // margin: 0 0 10px 0 !important;
     margin: 0 !important;
 }
 
-.wpProQuiz_AnswerMessage {
-    margin: 0 0 20px 0;
+// The answer choices container
+.wpProQuiz_questionList {
+    background: $secondary;
+    border-radius: 3px;
+    border: 1px solid darken($secondary, 5);
+    padding: 10px;
+    margin: 0 0 10px 0;
 }
+
+// Hint box
+.wpProQuiz_tipp {
+    @extend .wpProQuiz_questionList;
+    > div p {
+        margin: 0.5em 0;
+    }
+}
+
+// Each individual question item
+.wpProQuiz_questionListItem {
+    list-style: none;
+    label {
+        display: block;
+        cursor: pointer;
+    }
+    &:nth-last-of-type(n + 2) {
+        margin-bottom: 5px;
+    }
+    &.wpProQuiz_answerIncorrect {
+        background: rgba(219, 55, 55, 0.15);
+    }
+    &.wpProQuiz_answerCorrect {
+        background: rgba(15, 153, 96, 0.15);
+    }
+}
+
+// Misc edge cases & overrides
+// ----------------------
+
+// Buttons
+.wpProQuiz_button,
+.wpProQuiz_QuestionButton {
+    @include button($primary);
+    margin: 0 !important;
+}
+
+// The word "Incorrect" or "Correct" in the results panel
+@each $status, $color in (correct, $green-correct), (incorrect, $red-incorrect) {
+    .wpProQuiz_#{$status} > span:first-of-type {
+        display: block;
+        color: $color;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+}
+
+// Edge case. Hard to explain, but necessary
+.wpProQuiz_results > div:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// Disable ordered list for questions
 .wpProQuiz_listItem {
     list-style-type: none;
     &:before {
         content: '';
     }
-}
-
-.wpProQuiz_question_text {
-    margin: 0 0 20px 0;
-}
-
-.wpProQuiz_list {
-    padding-bottom: 0 !important;
-    margin: 0 0 20px 0;
-    .wpProQuiz_questionList {
-        background: $secondary;
-        border-radius: 3px;
-        border-color: darken($secondary, 5);
-        padding: 20px !important;
-        margin: 0 0 20px 0;
-        .wpProQuiz_questionListItem {
-            list-style: none;
-            padding-left: 20px;
-            .wpProQuiz_questionInput {
-                line-height: 26px;
-                margin-left: -20px;
-                vertical-align: text-top;
-            }
-        }
-    }
-}
-
-.wpProQuiz_results > div:last-of-type {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .wpProQuiz_certificate {
@@ -212,6 +218,8 @@ $red-incorrect: #ef001d !default;
 .wpProQuiz_quiz_time,
 .wpProQuiz_time_limit_expired,
 .wpProQuiz_points,
-.wpProQuiz_graded_points {
+.wpProQuiz_reviewDiv,
+.wpProQuiz_graded_points,
+.quiz_continue_link {
     display: none;
 }
