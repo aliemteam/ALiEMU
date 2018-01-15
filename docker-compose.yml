@@ -11,9 +11,7 @@ services:
             - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
             # Themes
-            - ./dist/aliemu:/app/wp-content/themes/aliemu
-            # - ./wp-content/themes/Divi:/app/wp-content/themes/Divi
-            # - ./src:/app/wp-content/themes/aliemu-new
+            - ./dist:/app/wp-content/themes/aliemu
             # Uploads
             - ./wp-content/uploads:/app/wp-content/uploads
         environment:

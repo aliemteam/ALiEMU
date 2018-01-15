@@ -23,18 +23,18 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 process.env.FORCE_COLOR = '1';
 
 const reload = (cb: () => void) => [browserSync.reload, cb].forEach(f => f());
-const clean = () => exec(`rm -rf ${__dirname}/dist/aliemu/*`);
+const clean = () => exec(`rm -rf ${__dirname}/dist/*`);
 export { clean, reload };
 
 export const bump = () =>
-    readFile(`${__dirname}/aliemu/functions.php`, 'utf-8')
+    readFile(`${__dirname}/src/functions.php`, 'utf-8')
         .then(file =>
             file.replace(
                 /(define\('ALIEMU_VERSION', ')(.+?)('\);)/,
                 `$1${VERSION}$3`
             )
         )
-        .then(file => writeFile(`${__dirname}/aliemu/functions.php`, file))
+        .then(file => writeFile(`${__dirname}/src/functions.php`, file))
         .catch(e => {
             console.log(e);
             throw e;
@@ -43,32 +43,32 @@ export const bump = () =>
 export function staticFiles() {
     const misc = gulp
         .src([
-            'aliemu/**/*.{php,css}',
-            '!aliemu/lib/templates/{pages,learndash}',
-            '!aliemu/lib/templates/{pages,learndash}/*',
+            'src/**/*.{php,css}',
+            '!src/lib/templates/{pages,learndash}',
+            '!src/lib/templates/{pages,learndash}/*',
         ])
-        .pipe(gulp.dest('dist/aliemu'));
+        .pipe(gulp.dest('dist'));
 
     const pages = gulp
-        .src(['aliemu/lib/templates/pages/**/*.php'])
-        .pipe(gulp.dest('dist/aliemu'));
+        .src(['src/lib/templates/pages/**/*.php'])
+        .pipe(gulp.dest('dist'));
 
     const learndash = gulp
-        .src('aliemu/lib/templates/learndash/**/*.php')
-        .pipe(gulp.dest('dist/aliemu/learndash'));
+        .src('src/lib/templates/learndash/**/*.php')
+        .pipe(gulp.dest('dist/learndash'));
 
     return merge(misc, pages, learndash);
 }
 
 export function assets() {
     return gulp
-        .src('aliemu/assets/**/*.{png,jpg,jpeg,svg}')
+        .src('src/assets/**/*.{png,jpg,jpeg,svg}')
         .pipe(imagemin())
-        .pipe(gulp.dest('dist/aliemu/assets'));
+        .pipe(gulp.dest('dist/assets'));
 }
 
 export function styles() {
-    let stream = gulp.src('aliemu/**/*.scss', { base: 'aliemu' });
+    let stream = gulp.src('src/**/*.scss', { base: 'src' });
 
     if (!IS_PRODUCTION) {
         stream = stream.pipe(sourcemaps.init());
@@ -86,7 +86,7 @@ export function styles() {
         stream = stream.pipe(sourcemaps.write('.', undefined));
     }
 
-    stream = stream.pipe(gulp.dest('dist/aliemu'));
+    stream = stream.pipe(gulp.dest('dist'));
 
     if (!IS_PRODUCTION) {
         stream = stream.pipe(browserSync.stream({ match: '**/*.css' }));
@@ -128,9 +128,9 @@ export function bundle(cb: () => void) {
 }
 
 export function js() {
-    let stream = gulp.src(['aliemu/**/*.js']);
+    let stream = gulp.src(['src/**/*.js']);
     if (IS_PRODUCTION) stream = stream.pipe(uglify());
-    stream = stream.pipe(gulp.dest('./dist/aliemu'));
+    stream = stream.pipe(gulp.dest('dist'));
     return stream;
 }
 
@@ -140,11 +140,11 @@ const main = gulp.series(
     cb => {
         if (IS_PRODUCTION) return cb();
 
-        gulp.watch(['aliemu/**/*.scss'], gulp.series(styles));
-        gulp.watch(['aliemu/**/*.php'], gulp.series(staticFiles, reload));
-        gulp.watch(['aliemu/**/*.js'], gulp.series(js, reload));
+        gulp.watch(['src/**/*.scss'], gulp.series(styles));
+        gulp.watch(['src/**/*.php'], gulp.series(staticFiles, reload));
+        gulp.watch(['src/**/*.js'], gulp.series(js, reload));
         gulp.watch(
-            ['aliemu/**/*.{svg,png,jpeg,jpg}'],
+            ['src/**/*.{svg,png,jpeg,jpg}'],
             gulp.series(assets, reload)
         );
 

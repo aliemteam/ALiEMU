@@ -46,15 +46,15 @@ const config: webpack.Configuration = {
     },
     devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
     entry: {
-        'educator-dashboard': './aliemu/js/educator-dashboard/',
-        'nav-helper': ['./aliemu/js/nav-helper'],
+        'educator-dashboard': './src/js/educator-dashboard/',
+        'nav-helper': ['./src/js/nav-helper'],
     },
     output: {
         filename: '[name].js',
-        path: resolve(__dirname, 'dist/aliemu/js'),
+        path: resolve(__dirname, 'dist/js'),
     },
     resolve: {
-        modules: [resolve(__dirname, 'aliemu'), 'node_modules'],
+        modules: [resolve(__dirname, 'src'), 'node_modules'],
         extensions: ['*', '.ts', '.tsx', '.js'],
         plugins: [new TsConfigPathsPlugin()],
     },
