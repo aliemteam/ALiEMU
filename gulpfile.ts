@@ -28,7 +28,12 @@ export { clean, reload };
 
 export const bump = () =>
     readFile(`${__dirname}/aliemu/functions.php`, 'utf-8')
-        .then(file => file.replace(/(define\('ALIEMU_VERSION', ')(.+?)('\);)/, `$1${VERSION}$3`))
+        .then(file =>
+            file.replace(
+                /(define\('ALIEMU_VERSION', ')(.+?)('\);)/,
+                `$1${VERSION}$3`
+            )
+        )
         .then(file => writeFile(`${__dirname}/aliemu/functions.php`, file))
         .catch(e => {
             console.log(e);
@@ -39,17 +44,17 @@ export function staticFiles() {
     const misc = gulp
         .src([
             'aliemu/**/*.{php,css}',
-            '!aliemu/templates/{pages,overrides,learndash}',
-            '!aliemu/templates/{pages,overrides,learndash}/*',
+            '!aliemu/lib/templates/{pages,learndash}',
+            '!aliemu/lib/templates/{pages,learndash}/*',
         ])
         .pipe(gulp.dest('dist/aliemu'));
 
     const pages = gulp
-        .src(['aliemu/templates/pages/**/*.php', 'aliemu/templates/overrides/**/*.php'])
+        .src(['aliemu/lib/templates/pages/**/*.php'])
         .pipe(gulp.dest('dist/aliemu'));
 
     const learndash = gulp
-        .src('aliemu/templates/learndash/**/*.php')
+        .src('aliemu/lib/templates/learndash/**/*.php')
         .pipe(gulp.dest('dist/aliemu/learndash'));
 
     return merge(misc, pages, learndash);
@@ -100,7 +105,9 @@ export function bundle(cb: () => void) {
     });
     child.on('exit', (code, signal) => {
         if (code !== 0) {
-            console.error(`Exited with non-zero exit code (${code}): ${signal}`);
+            console.error(
+                `Exited with non-zero exit code (${code}): ${signal}`
+            );
             process.exit(1);
         }
         cb();
@@ -127,19 +134,26 @@ export function js() {
     return stream;
 }
 
-const main = gulp.series(clean, gulp.parallel(staticFiles, assets, bundle, styles, js), cb => {
-    if (IS_PRODUCTION) return cb();
+const main = gulp.series(
+    clean,
+    gulp.parallel(staticFiles, assets, bundle, styles, js),
+    cb => {
+        if (IS_PRODUCTION) return cb();
 
-    gulp.watch(['aliemu/**/*.scss'], gulp.series(styles));
-    gulp.watch(['aliemu/**/*.php'], gulp.series(staticFiles, reload));
-    gulp.watch(['aliemu/**/*.js'], gulp.series(js, reload));
-    gulp.watch(['aliemu/**/*.{svg,png,jpeg,jpg}'], gulp.series(assets, reload));
+        gulp.watch(['aliemu/**/*.scss'], gulp.series(styles));
+        gulp.watch(['aliemu/**/*.php'], gulp.series(staticFiles, reload));
+        gulp.watch(['aliemu/**/*.js'], gulp.series(js, reload));
+        gulp.watch(
+            ['aliemu/**/*.{svg,png,jpeg,jpg}'],
+            gulp.series(assets, reload)
+        );
 
-    browserSync.init({
-        proxy: 'localhost:8080',
-        open: false,
-        reloadDebounce: 2000,
-        notify: false,
-    });
-});
+        browserSync.init({
+            proxy: 'localhost:8080',
+            open: false,
+            reloadDebounce: 2000,
+            notify: false,
+        });
+    }
+);
 export default main;

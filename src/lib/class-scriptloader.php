@@ -12,14 +12,7 @@ class ScriptLoader {
 
 	public function __construct() {
 		$this->prepare_localizers();
-		add_action( 'admin_enqueue_scripts', [ $this, 'init_admin' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'init' ], 999 );
-	}
-
-	public function init_admin( $hook ) {
-		if ( in_array( $hook, [ 'post-new.php', 'post.php', 'page-new.php', 'page.php' ], true ) ) {
-			wp_enqueue_style( 'aliem_admin_style', ROOT_URI . '/admin.css' );
-		}
 	}
 
 	public function init() {
@@ -76,6 +69,11 @@ class ScriptLoader {
 				'wpProQuiz_front_style',
 			],
 		];
+
+		// TODO: Check to see if we even need this.
+		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
+			array_push( $load[0], 'comment-reply' );
+		}
 
 		// Not an Ultimate Member page.
 		if ( ! array_intersect( [ 'um-page-loggedin', 'um-page-loggedout', 'home', 'page-id-3432' ], get_body_class() ) ) {

@@ -12,8 +12,8 @@ services:
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
             # Themes
             - ./dist/aliemu:/app/wp-content/themes/aliemu
-            - ./wp-content/themes/Divi:/app/wp-content/themes/Divi
-            - ./src:/app/wp-content/themes/aliemu-new
+            # - ./wp-content/themes/Divi:/app/wp-content/themes/Divi
+            # - ./src:/app/wp-content/themes/aliemu-new
             # Uploads
             - ./wp-content/uploads:/app/wp-content/uploads
         environment:

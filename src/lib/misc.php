@@ -13,7 +13,7 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
  */
 add_filter(
 	'mce_css', function( $styles ) {
-		$css   = explore( ',', $styles );
+		$css   = explode( ',', $styles );
 		$css[] = 'https://fonts.googleapis.com/css?family=Roboto:300%2C400%2C400i%2C500%2C700&amp;subset=cyrillic%2Cgreek';
 		$css[] = ROOT_URI . '/editor.css';
 		return join( ',', $css );
