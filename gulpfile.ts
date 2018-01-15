@@ -22,8 +22,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 process.env.FORCE_COLOR = '1';
 
-// prettier-ignore
-const reload = (cb: () => void) => { browserSync.reload(); cb(); };
+const reload = (cb: () => void) => [browserSync.reload, cb].forEach(f => f());
 const clean = () => exec(`rm -rf ${__dirname}/dist/aliemu/*`);
 export { clean, reload };
 

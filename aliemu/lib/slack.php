@@ -1,40 +1,44 @@
 <?php
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Sends message to slack when dashboard access is requested.
- * @param  string $id User ID
+ *
+ * @param  string $id User ID.
  * @return void
  */
 function requested_dashboard_access( $id ) {
-	if ( !isset( $_POST['au_requested_educator_access'] ) || !$_POST['au_requested_educator_access'][0] === 'Yes' ) return;
+	if ( ! isset( $_POST['au_requested_educator_access'] ) || ! 'Yes' === $_POST['au_requested_educator_access'][0] ) {
+		return;
+	}
 
-	$formid = $_POST['form_id'];
-	$username = $_POST["user_login-$formid"];
+	$formid   = $_POST['form_id'];
+	$username = $_POST[ "user_login-$formid" ];
 
-	$messageData = [
-		"id" => $id,
-		"name" => $_POST["first_name-$formid"] . ' ' . $_POST["last_name-$formid"],
-		"username" => $username,
-		"email" => $_POST["user_email-$formid"],
-		"program" => $_POST['residency_us_em'],
-		"role" => $_POST['role'] == 'em-resident' ? 'Resident' : 'Faculty',
-		"bio" => $_POST['description']
+	$message_data = [
+		'id'       => $id,
+		'name'     => $_POST[ "first_name-$formid" ] . ' ' . $_POST[ "last_name-$formid" ],
+		'username' => $username,
+		'email'    => $_POST[ "user_email-$formid" ],
+		'program'  => $_POST['residency_us_em'],
+		'role'     => 'em-resident' === $_POST['role'] ? 'Resident' : 'Faculty',
+		'bio'      => $_POST['description'],
 	];
 
-	slack_message( 'aliemu/messages/dashboard-access', $messageData );
+	slack_message( 'aliemu/messages/dashboard-access', $message_data );
 }
 add_action( 'user_register', 'requested_dashboard_access' );
 
 /**
  * Routes all comments to Slack
- * @param  string $commentId The comment ID.
+ *
+ * @param  string $comment_id The comment ID.
  * @return void
  */
-function slack_comment( $commentId ) {
-	$comment = get_comment( $commentId );
-	$post = get_post( $comment->comment_post_ID );
+function slack_comment( $comment_id ) {
+	$comment  = get_comment( $comment_id );
+	$post     = get_post( $comment->comment_post_ID );
 	$category = get_the_category( $post->ID )[0]->slug;
 
 	switch ( $category ) {
@@ -52,13 +56,15 @@ function slack_comment( $commentId ) {
 			break;
 	}
 
-	slack_message( $endpoint, [
-		'name' => $comment->comment_author,
-		'email' => $comment->comment_author_email,
-		'content' => $comment->comment_content,
-		'postUrl' => $post->guid,
-		'postName' => $post->post_title,
-	] );
+	slack_message(
+		$endpoint, [
+			'name'     => $comment->comment_author,
+			'email'    => $comment->comment_author_email,
+			'content'  => $comment->comment_content,
+			'postUrl'  => $post->guid,
+			'postName' => $post->post_title,
+		]
+	);
 }
 add_action( 'comment_post', 'slack_comment' );
 
@@ -67,21 +73,26 @@ add_action( 'comment_post', 'slack_comment' );
  *
  * Tries a total of five times to send the message to slack. If the message is
  *  posted successfully (eg, if the HTTP response is 200), then functoin exits.
+ *
  * @param  string $route Enpoint to hit.
- * @param  array $data   Associative array of data to send.
+ * @param  array  $data   Associative array of data to send.
  * @return void
  */
 function slack_message( $route, $data ) {
 	$key = get_option( 'ALIEM_API_KEY' );
 	for ( $i = 0; $i < 5; $i++ ) {
-		$response = wp_remote_post( "https://aliem-slackbot.now.sh/$route", [
-			'headers' => [
-				'ALIEM_API_KEY' => $key,
-			],
-			'body' => [
-				'data' => json_encode($data),
-			],
-		] );
-		if ( !is_wp_error( $response ) ) break;
+		$response = wp_remote_post(
+			"https://aliem-slackbot.now.sh/$route", [
+				'headers' => [
+					'ALIEM_API_KEY' => $key,
+				],
+				'body'    => [
+					'data' => wp_json_encode( $data ),
+				],
+			]
+		);
+		if ( ! is_wp_error( $response ) ) {
+			break;
+		}
 	}
 }
