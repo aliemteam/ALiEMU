@@ -68,7 +68,7 @@
     "merge-stream": "^1.0.0",
     "mobx-react-devtools": "^4.2.15",
     "react-addons-test-utils": "^15.6.2",
-    "style-loader": "^0.19.1",
+    "style-loader": "^0.20.0",
     "ts-jest": "^22.0.1",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
