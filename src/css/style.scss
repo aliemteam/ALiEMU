@@ -1,0 +1,43 @@
+/**
+Theme Name: ALiEMU
+Author: ALiEM
+Description: Theme for ALiEMU.com
+Version: 1.7.0
+License: MIT
+License URI: https://opensource.org/licenses/MIT
+Text Domain: aliemu
+*/
+
+@import '~normalize.css';
+html {
+    box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+@import 'overrides/academic-bloggers-toolkit';
+@import 'overrides/learndash';
+@import 'overrides/ultimate-member';
+
+@import 'layout';
+@import 'typography';
+@import 'elements';
+@import 'forms';
+
+@import 'components/button';
+@import 'components/capsule-box';
+@import 'components/card';
+@import 'components/comments';
+@import 'components/course-navigation-widget';
+@import 'components/footer';
+@import 'components/header';
+@import 'components/table';
+
+// FIXME: Fix files below
+@import 'FIXME';
+@import 'FIXME-course-list';
+@import 'FIXME-dashboard';
+@import 'FIXME-homepage';

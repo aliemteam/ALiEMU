@@ -1,0 +1,98 @@
+@import 'colors';
+@import 'variables';
+@import 'mixins';
+
+html {
+    font-size: 100%;
+}
+
+body {
+    color: $text-color;
+    font: {
+        family: $font-family;
+        size: 18px;
+        weight: 400;
+    }
+    line-height: 2em;
+}
+
+//
+// Headings --------------------------------------------------------------------
+//
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 0.75em;
+    line-height: 1.4;
+    font-family: $font-serif;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    &.entry-title {
+        font-weight: bolder;
+    }
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 1.25rem;
+}
+
+h5 {
+    font-size: 1rem;
+}
+
+h6 {
+    font-size: 0.9375rem;
+}
+
+//
+// Inline Text -----------------------------------------------------------------
+//
+
+a {
+    color: $secondary;
+    text-decoration: none;
+    font-weight: 500;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+strong {
+    font-weight: 500;
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+sub {
+    bottom: -0.25em;
+}
+sup {
+    top: -0.5em;
+}
+
+pre,
+code {
+    font-family: $font-mono;
+}

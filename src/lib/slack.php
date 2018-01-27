@@ -79,6 +79,10 @@ add_action( 'comment_post', 'slack_comment' );
  * @return void
  */
 function slack_message( $route, $data ) {
+	// Don't message slack when developing / testing.
+	if ( WP_DEBUG ) {
+		return;
+	}
 	$key = get_option( 'ALIEM_API_KEY' );
 	for ( $i = 0; $i < 5; $i++ ) {
 		$response = wp_remote_post(

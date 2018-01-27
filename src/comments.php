@@ -20,53 +20,34 @@ if ( post_password_required() ) {
 }
 ?>
 
-<div id="comments" class="comments-area">
+<section id="comments">
+	<div class="comments-area">
+		<h2 class="comments-title"><?php esc_html_e( 'Join the discussion', 'aliemu' ); ?></h2>
 
-	<?php
-	// You can start editing here -- including this comment!
-	if ( have_comments() ) : ?>
-		<h2 class="comments-title">
-			<?php
-			$comment_count = get_comments_number();
-			if ( 1 === $comment_count ) {
-				printf(
-					/* translators: 1: title. */
-					esc_html_e( 'One thought on &ldquo;%1$s&rdquo;', 'aliemu' ),
-					'<span>' . get_the_title() . '</span>'
-				);
-			} else {
-				printf( // WPCS: XSS OK.
-					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s thought on &ldquo;%2$s&rdquo;', '%1$s thoughts on &ldquo;%2$s&rdquo;', $comment_count, 'comments title', 'aliemu' ) ),
-					number_format_i18n( $comment_count ),
-					'<span>' . get_the_title() . '</span>'
-				);
-			}
-			?>
-		</h2><!-- .comments-title -->
+		<?php comment_form(); ?>
 
-		<?php the_comments_navigation(); ?>
+		<?php if ( have_comments() ) : ?>
 
-		<ol class="comment-list">
-			<?php
-				wp_list_comments( array(
-					'style'      => 'ol',
-					'short_ping' => true,
-				) );
-			?>
-		</ol><!-- .comment-list -->
+			<?php the_comments_navigation(); ?>
 
-		<?php the_comments_navigation();
+			<ol class="comment-list">
+				<?php
+					wp_list_comments(
+						array(
+							'style'      => 'ol',
+							'short_ping' => true,
+						)
+					);
+				?>
+			</ol>
 
-		// If comments are closed and there are comments, let's leave a little note, shall we?
-		if ( ! comments_open() ) : ?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'aliemu' ); ?></p>
-		<?php
-		endif;
+			<?php the_comments_navigation(); ?>
 
-	endif; // Check for have_comments().
+			<?php if ( ! comments_open() ) : ?>
+				<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'aliemu' ); ?></p>
+			<?php endif; ?>
 
-	comment_form();
-	?>
+		<?php endif; ?>
 
-</div><!-- #comments -->
+	</div>
+</section>

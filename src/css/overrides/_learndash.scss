@@ -1,0 +1,264 @@
+@import '../colors';
+@import '../mixins';
+@import '../variables';
+
+// Center the "Mark Complete" button
+#sfwd-mark-complete {
+    text-align: center;
+    margin-bottom: $block-margin;
+}
+
+#learndash_mark_complete_button {
+    @include button($primary);
+}
+
+.prev-link,
+.next-link {
+    @include button($primary);
+    margin-bottom: $block-margin;
+    > span {
+        display: none;
+    }
+}
+
+// Next/Prev buttons
+#learndash_next_prev_link {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.learndash_join_button {
+    margin-bottom: $block-margin;
+    text-align: center;
+}
+
+.btn-join {
+    @include button($primary);
+}
+
+// Course status line
+.course-status {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: $block-margin;
+    align-items: baseline;
+    background: $gray-light;
+    padding: 10px;
+    span {
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .course-status {
+        justify-content: space-around;
+    }
+}
+
+// Content Tables (Lessons, Quizzes, etc)
+.content-table {
+    box-shadow: map-get($shadows, 'depth-2');
+    margin-bottom: $block-margin;
+    border-radius: 2px;
+}
+
+.content-table__row {
+    @include hard-boundary(bottom);
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 400;
+    &:last-of-type {
+        border-radius: 0 0 2px 2px;
+        box-shadow: unset;
+    }
+    &:hover {
+        background: rgba(0, 0, 0, 0.02);
+    }
+}
+
+.content-table__row--header {
+    padding: 0 $block-margin;
+    background: $secondary;
+    color: white;
+    font-weight: 500;
+    border-radius: 2px 2px 0 0;
+    &:hover {
+        background: $secondary;
+    }
+}
+
+.content-table__cell {
+    display: flex;
+    height: 100%;
+    line-height: 50px;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+.content-table__cell--padded {
+    padding: 0 $block-margin;
+}
+
+.content-table__cell--full-width {
+    width: 100%;
+    min-width: 0;
+    a {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+.content-table__link {
+    width: 100%;
+    color: $secondary;
+    height: 100%;
+    padding: 0 $block-margin;
+}
+
+// WpProQuiz ------------------------------------------------
+
+// Outermost shell
+.wpProQuiz_content {
+    margin-bottom: 20px;
+    ol[class] {
+        margin: 0;
+    }
+}
+
+// The question and answer choices container
+.wpProQuiz_question {
+    // Separates the question from the buttons below (overwrites inlines style)
+    // margin: 0 0 10px 0 !important;
+    margin: 0 !important;
+}
+
+// The answer choices container
+.wpProQuiz_questionList {
+    background: $gray-light;
+    border-radius: 3px;
+    border: 1px solid $border-color;
+    padding: 10px;
+    margin: 0 0 10px 0;
+}
+
+// Hint box
+.wpProQuiz_tipp {
+    @extend .wpProQuiz_questionList;
+    > div p {
+        margin: 0.5em 0;
+    }
+}
+
+// Each individual question item
+.wpProQuiz_questionListItem {
+    list-style: none;
+    label {
+        display: block;
+        cursor: pointer;
+    }
+    &:nth-last-of-type(n + 2) {
+        margin-bottom: 5px;
+    }
+    &.wpProQuiz_answerIncorrect {
+        background: rgba($intent-danger, 0.15);
+    }
+    &.wpProQuiz_answerCorrect {
+        background: rgba($intent-success, 0.15);
+    }
+}
+
+// Misc edge cases & overrides
+// ----------------------
+
+// "Progress" loading bar (they use <dd> here instead of <progress> for god
+// knows what reason...
+dd.course_progress {
+    display: block;
+    margin: 10px auto;
+    padding: 0;
+    position: relative;
+    width: 90%;
+    background-color: $gray-light;
+    border: medium none;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    height: 20px;
+    overflow: hidden;
+    .sending_progress_bar {
+        display: block;
+        position: relative;
+        text-align: right;
+        width: 75%;
+        background-color: $intent-primary;
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+        color: white;
+        float: left;
+        font-size: 12px;
+        height: 100%;
+        transition: width 0.6s ease 0s;
+    }
+}
+
+// Buttons
+.wpProQuiz_button,
+.wpProQuiz_QuestionButton,
+.quiz_continue_link a {
+    @include button($primary);
+    margin: 0 !important;
+    // Hides the "View Questions" button because it's not
+    // necessary and arguably confusing.
+    &[name='reShowQuestion'] {
+        display: none;
+    }
+    // Makes the "Restart Quiz" button come before the "Continue" button
+    // because that makes the most sense.
+    &[name='restartQuiz'] {
+        order: -1;
+    }
+}
+
+// The word "Incorrect" or "Correct" in the results panel
+@each $status,
+    $color in (correct, $intent-success),
+    (incorrect, $intent-danger) {
+    .wpProQuiz_#{$status} > span:first-of-type {
+        display: block;
+        color: $color;
+        font-weight: bold;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+}
+
+// Edge case. Hard to explain, but necessary
+.wpProQuiz_results > div:last-of-type {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+// Disable ordered list for questions
+.wpProQuiz_listItem {
+    list-style-type: none;
+    &:before {
+        content: '';
+    }
+}
+
+.wpProQuiz_certificate {
+    text-align: center;
+}
+
+.wpProQuiz_resultsList,
+.wpProQuiz_quiz_time,
+.wpProQuiz_time_limit_expired,
+.wpProQuiz_points,
+.wpProQuiz_reviewDiv,
+.wpProQuiz_graded_points {
+    display: none;
+}

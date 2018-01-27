@@ -1,0 +1,66 @@
+@import '../colors';
+@import '../variables';
+@import '../mixins';
+
+table {
+    thead > tr > td,
+    tbody > tr > th {
+        background-color: $primary;
+        text-align: left;
+        font-weight: bold;
+        color: white;
+    }
+    thead {
+        & tr:first-of-type > td,
+        th {
+            &:first-of-type {
+                border-top-left-radius: 2px;
+            }
+            &:last-of-type {
+                border-top-right-radius: 2px;
+            }
+        }
+    }
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: $block-margin;
+    border: none;
+    border-radius: 2px;
+    box-shadow: map-get($shadows, 'depth-2');
+    tr {
+        &:nth-child(odd) {
+            background-color: $gray-light;
+        }
+        td,
+        th {
+            padding: 0.8em;
+            vertical-align: top;
+        }
+    }
+    tfoot {
+        font-size: 0.8em;
+        tr {
+            @include hard-boundary(top);
+            background-color: white !important;
+        }
+        td {
+            text-align: justify;
+            padding: 0 0.8em;
+            color: $text-color-light;
+        }
+        p {
+            margin: 10px 0 !important;
+            line-height: 1.5em;
+        }
+    }
+}
+
+@media (max-width: 800px) {
+    table {
+        position: relative;
+        display: block;
+        max-width: 100%;
+        overflow-x: scroll;
+    }
+}

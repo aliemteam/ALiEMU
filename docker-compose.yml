@@ -29,12 +29,11 @@ services:
                 sendgrid-email-delivery-simplified,
                 w3-total-cache,
                 wp-smushit,
-                wpdiscuz,
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 ultimate-member,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
 
-            # Temporary until ultimate member 2.x lands on wordpress.org
+            # wpdiscuz,
             WP_DEBUG_LOG: 'true'
             WP_DEBUG_DISPLAY: 'true'
             WP_DEBUG: 'true'

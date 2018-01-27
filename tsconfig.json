@@ -1,29 +1,16 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": [
-        "dom",
-        "dom.iterable",
-        "esnext"
-    ],
-    "jsx": "preserve",
-    "sourceMap": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "experimentalDecorators": true
-  },
-  "awesomeTypescriptLoaderOptions": {
-    "useBabel": true
-  },
-  "include": [
-      "aliemu/**/*",
-      "lib/**/*",
-      "webpack.config.ts",
-      "gulpfile.ts"
-  ]
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "jsx": "preserve",
+        "sourceMap": true,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "experimentalDecorators": true
+    },
+    "include": ["src/**/*", "lib/**/*", "webpack.config.ts", "gulpfile.ts"]
 }

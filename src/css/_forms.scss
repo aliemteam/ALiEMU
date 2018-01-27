@@ -1,0 +1,22 @@
+@import 'mixins';
+
+input {
+    @extend body;
+}
+
+select {
+    @extend body;
+    &:disabled {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+textarea {
+    @extend body;
+    line-height: normal;
+}
+
+label {
+    @include noselect();
+}

@@ -13,22 +13,29 @@ class ScriptLoader {
 	public function __construct() {
 		$this->prepare_localizers();
 		add_action( 'wp_enqueue_scripts', [ $this, 'init' ], 999 );
+		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
 	}
 
 	public function init() {
 		global $current_user, $post;
 
-		wp_register_script( 'about-nav', ROOT_URI . '/vendor/about-nav.js', [ 'jquery' ], false, true );
-		wp_register_script( 'educator-dashboard', ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
-		wp_register_script( 'nav-helper', ROOT_URI . '/js/nav-helper.js', [], false, true );
-		wp_register_script( 'particlesjs', 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js', false, true );
-		wp_register_script( 'particles', ROOT_URI . '/js/particles.js', [ 'particlesjs' ], false, true );
+		$fonts = add_query_arg(
+			[
+				'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
+				'subset' => 'greek,greek-ext,latin-ext',
+			], 'https://fonts.googleapis.com/css'
+		);
+		wp_register_style( 'aliemu-fonts', $fonts );
+		wp_register_style( 'aliemu', ALIEMU_ROOT_URI . '/style.css', ALIEMU_VERSION );
 
-		wp_register_style( 'roboto-font', 'https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700&amp;subset=cyrillic,greek' );
-		wp_register_style( 'bootstrap-nav-css', ROOT_URI . '/vendor/side-nav.css' );
-		wp_register_style( 'aliemu', ROOT_URI . '/style.css', ALIEMU_VERSION );
+		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
+		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
 		$this->delegate( $post, $current_user );
+	}
+
+	public function add_editor_styles() {
+		add_editor_style( [ ALIEMU_ROOT_URI . '/css/editor.css' ] );
 	}
 
 	private function prepare_localizers() {
@@ -55,22 +62,21 @@ class ScriptLoader {
 
 		// Always load these.
 		$load = [
-			[ 'nav-helper' ],
-			[ 'aliemu', 'roboto-font' ],
+			[ 'mobile-nav-menu-helper' ],
+			[ 'aliemu', 'aliemu-fonts' ],
 		];
 		// Always unload these.
 		$unload = [
 			[],
 			[
 				'learndash_quiz_front_css',
+				'learndash_template_style_css',
 				'learndash_style',
-				// 'learndash_template_style_css',
 				'sfwd_front_css',
 				'wpProQuiz_front_style',
 			],
 		];
 
-		// TODO: Check to see if we even need this.
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			array_push( $load[0], 'comment-reply' );
 		}
@@ -82,26 +88,21 @@ class ScriptLoader {
 		}
 
 		switch ( $req ) {
-			case '/':
-			case '/faculty-start/':
-				array_push( $load[0], 'particlesjs', 'particles' );
-				break;
-			case '/about/':
-				array_push( $load[0], 'about-nav' );
-				array_push( $load[1], 'bootstrap-nav-css' );
-				break;
 			// Ultimate Member Pages / Tabs.
 			case '/user/' . strtolower( $user->user_login ) . '/':
 				switch ( $query ) {
 					case 'profiletab=edudash':
 						array_push( $load[0], 'educator-dashboard' );
 						break;
+					case 'profiletab=progress':
+						array_push( $load[1], 'learndash_template_style_css' );
+						break;
 				}
 				break;
 		}
 
-		$this->load( ...$load );
 		$this->unload( ...$unload );
+		$this->load( ...$load );
 		$this->localize( $load[0] );
 	}
 
