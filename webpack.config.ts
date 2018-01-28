@@ -72,8 +72,8 @@ const plugins: Set<webpack.Plugin> = new Set([
                     default:
                         throw new Error(
                             `Need to install imagemin plugin for ${path.extname(
-                                pathname
-                            )}`
+                                pathname,
+                            )}`,
                         );
                 }
             },
@@ -88,7 +88,7 @@ if (!IS_PRODUCTION) {
             open: false,
             reloadDebounce: 2000,
             notify: false,
-        })
+        }),
     );
 }
 
@@ -142,7 +142,7 @@ export default <webpack.Configuration>{
                             useCache: !IS_PRODUCTION,
                             cacheDirectory: path.resolve(
                                 __dirname,
-                                'node_modules/.cache/awesome-typescript-loader'
+                                'node_modules/.cache/awesome-typescript-loader',
                             ),
                             babelCore: '@babel/core',
                             reportFiles: ['src/**/*.{ts,tsx}'],
@@ -170,11 +170,13 @@ export default <webpack.Configuration>{
                                     loader: 'sass-loader',
                                     options: {
                                         sourceMap: !IS_PRODUCTION,
-                                        outputStyle: IS_PRODUCTION ? 'compressed' : 'expanded',
+                                        outputStyle: IS_PRODUCTION
+                                            ? 'compressed'
+                                            : 'expanded',
                                         includePaths: [
                                             path.resolve(
                                                 __dirname,
-                                                'src/styles'
+                                                'src/styles',
                                             ),
                                         ],
                                     },
@@ -202,11 +204,13 @@ export default <webpack.Configuration>{
                                     loader: 'sass-loader',
                                     options: {
                                         sourceMap: !IS_PRODUCTION,
-                                        outputStyle: IS_PRODUCTION ? 'compressed' : 'expanded',
+                                        outputStyle: IS_PRODUCTION
+                                            ? 'compressed'
+                                            : 'expanded',
                                         includePaths: [
                                             path.resolve(
                                                 __dirname,
-                                                'src/styles'
+                                                'src/styles',
                                             ),
                                         ],
                                     },
@@ -216,32 +220,6 @@ export default <webpack.Configuration>{
                         }),
                     },
                 ],
-                // use: ExtractTextPlugin.extract({
-                //     use: [
-                //         {
-                //             loader: 'css-loader',
-                //             options: {
-                //                 importLoaders: 1,
-                //                 modules: true,
-                //                 minimize: IS_PRODUCTION,
-                //                 sourceMap: !IS_PRODUCTION,
-                //                 camelCase: 'only',
-                //                 localIdentName:
-                //                     '[name]__[local]___[hash:base64:5]',
-                //             },
-                //         },
-                //         {
-                //             loader: 'sass-loader',
-                //             options: {
-                //                 sourceMap: !IS_PRODUCTION,
-                //                 includePaths: [
-                //                     path.resolve(__dirname, 'src/styles'),
-                //                 ],
-                //             },
-                //         },
-                //     ],
-                //     allChunks: true,
-                // }),
             },
             {
                 test: /\.css$/,

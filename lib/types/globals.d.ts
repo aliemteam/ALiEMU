@@ -1,7 +1,5 @@
 declare module 'browser-sync-webpack-plugin';
 declare module 'extract-text-webpack-plugin';
-declare module 'gulp-uglify/composer';
-declare module 'uglify-es';
 declare module 'uglifyjs-webpack-plugin';
 declare module '*.scss' {
     const content: {

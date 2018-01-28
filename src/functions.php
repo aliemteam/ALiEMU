@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Globals
  */
-define( 'ALIEMU_VERSION', '1.7.0' );
+define( 'ALIEMU_VERSION', wp_get_theme()->get( 'Version' ) );
 define( 'ALIEMU_ROOT', __DIR__ );
 define( 'ALIEMU_ROOT_URI', get_template_directory_uri() );
 
