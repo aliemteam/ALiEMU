@@ -19,10 +19,10 @@ process.env.FORCE_COLOR = '1';
 
 const reload = (cb: () => void): void =>
     [browserSync.reload, cb].forEach(f => f());
-const clean = (): Promise<any> => exec(`rm -rf ${__dirname}/dist/*`);
+const clean = async (): Promise<any> => exec(`rm -rf ${__dirname}/dist/*`);
 export { clean, reload };
 
-export const bump = (): Promise<any> =>
+export const bump = async (): Promise<any> =>
     readFile(`${__dirname}/src/functions.php`, 'utf-8')
         .then(file =>
             file.replace(
@@ -30,7 +30,7 @@ export const bump = (): Promise<any> =>
                 `$1${VERSION}$3`
             )
         )
-        .then(file => writeFile(`${__dirname}/src/functions.php`, file))
+        .then(async (file) => writeFile(`${__dirname}/src/functions.php`, file))
         .catch(e => {
             console.log(e);
             throw e;

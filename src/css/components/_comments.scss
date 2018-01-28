@@ -24,6 +24,7 @@
 .comment-respond {
     padding: 0 10px;
     margin: $block-margin 0;
+    // stylelint-disable-next-line no-descending-specificity
     > a {
         font-size: 0.8em;
     }
@@ -65,6 +66,7 @@
 
 .comment-metadata {
     font-size: 0.7em;
+    // stylelint-disable-next-line no-descending-specificity
     > a {
         margin-right: 10px;
     }

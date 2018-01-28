@@ -8,11 +8,9 @@ html {
 
 body {
     color: $text-color;
-    font: {
-        family: $font-family;
-        size: 18px;
-        weight: 400;
-    }
+    font-family: $font-family;
+    font-size: 18px;
+    font-weight: 400;
     line-height: 2em;
 }
 

@@ -3,9 +3,20 @@ import { observer } from 'mobx-react';
 import { Moment, unix } from 'moment';
 import * as React from 'react';
 import Datepicker from 'react-datepicker';
-import { Cell, FilterRow, Flex, Header, Pager, Row } from '../components/TableComponents';
+import {
+    Cell,
+    FilterRow,
+    Flex,
+    Header,
+    Pager,
+    Row,
+} from '../components/TableComponents';
 import { browserDetect } from '../utils/BrowserDetect';
-import { calculateIIIHours, CSV, downloadPolyfill } from '../utils/DashboardUtils';
+import {
+    calculateIIIHours,
+    CSV,
+    downloadPolyfill,
+} from '../utils/DashboardUtils';
 import { paginate } from '../utils/Pagination';
 
 interface Props {
@@ -48,17 +59,27 @@ export class StudentTable extends React.Component<Props, {}> {
         this.users = Object.keys(this.props.users).sort((uid1, uid2) => {
             const p1: any = (this.props.users as any)[uid1].auGraduationYear;
             const p2: any = (this.props.users as any)[uid2].auGraduationYear;
-            if (!p1 && !p2) return 0;
-            if (p1 && !p2) return -1;
-            if (!p1 && p2) return 1;
-            if (p1 < p2) return 1;
-            if (p1 > p2) return -1;
+            if (!p1 && !p2) {
+                return 0;
+            }
+            if (p1 && !p2) {
+                return -1;
+            }
+            if (!p1 && p2) {
+                return 1;
+            }
+            if (p1 < p2) {
+                return 1;
+            }
+            if (p1 > p2) {
+                return -1;
+            }
             return 0;
         });
     }
 
     @computed
-    get dateRange() {
+    get dateRange(): ALiEMU.EducatorDashboard.DateRange {
         return {
             start: this.startDate,
             end: this.endDate,
@@ -74,10 +95,12 @@ export class StudentTable extends React.Component<Props, {}> {
                     id
                 ].displayName.toLowerCase();
                 const gradYear = this.props.users[id].auGraduationYear;
-                if (displayName.search(this.filter.toLowerCase()) > -1)
+                if (displayName.search(this.filter.toLowerCase()) > -1) {
                     return true;
-                if (gradYear && gradYear.toString().search(this.filter) > -1)
+                }
+                if (gradYear && gradYear.toString().search(this.filter) > -1) {
                     return true;
+                }
                 return false;
             })
             .map(uid => this.props.users[parseInt(uid, 10)]);
@@ -85,7 +108,9 @@ export class StudentTable extends React.Component<Props, {}> {
 
     @computed
     get visibleRows(): number {
-        if (this.rowSelection === 'all') return this.totalStudents;
+        if (this.rowSelection === 'all') {
+            return this.totalStudents;
+        }
         return parseInt(this.rowSelection, 10);
     }
 
@@ -139,7 +164,7 @@ export class StudentTable extends React.Component<Props, {}> {
         downloadPolyfill(csv.filename, blob, browserDetect(), target.id);
     };
 
-    render() {
+    render(): JSX.Element {
         return (
             <div className="au-edudash-shadowbox">
                 <h2>Enrolled Students</h2>
@@ -159,24 +184,27 @@ export class StudentTable extends React.Component<Props, {}> {
                                 children="10"
                                 aria-selected={this.rowSelection === '10'}
                             />
-                            {this.totalStudents > 25 &&
+                            {this.totalStudents > 25 && (
                                 <option
                                     value="25"
                                     children="25"
                                     aria-selected={this.rowSelection === '25'}
-                                />}
-                            {this.totalStudents > 50 &&
+                                />
+                            )}
+                            {this.totalStudents > 50 && (
                                 <option
                                     value="50"
                                     children="50"
                                     aria-selected={this.rowSelection === '50'}
-                                />}
-                            {this.totalStudents > 10 &&
+                                />
+                            )}
+                            {this.totalStudents > 10 && (
                                 <option
                                     value="all"
                                     children="all"
                                     aria-selected={this.rowSelection === 'all'}
-                                />}
+                                />
+                            )}
                         </select>
                         students
                     </div>
@@ -228,7 +256,7 @@ export class StudentTable extends React.Component<Props, {}> {
                 </FilterRow>
 
                 {/* Date query row */}
-                {this.advancedFilterVisible &&
+                {this.advancedFilterVisible && (
                     <FilterRow>
                         <Flex amount={1}>
                             <strong
@@ -250,56 +278,55 @@ export class StudentTable extends React.Component<Props, {}> {
                                 onChange={this.setEndDate as any}
                             />
                         </Flex>
-                    </FilterRow>}
+                    </FilterRow>
+                )}
 
                 {/* Table */}
                 <Header cells={this.headerCells} />
-                {paginate(
-                    this.filteredUsers,
-                    this.visibleRows,
-                    this.page
-                ).map((user: ALiEMU.EducatorDashboard.UserMeta, i) =>
-                    <Row
-                        key={user.ID}
-                        id={`student-table-row-${i}`}
-                        className="table-row"
-                    >
-                        <Cell align="left" children={user.displayName} />
-                        <Cell
-                            align="left"
-                            children={
-                                !user.auGraduationYear
-                                    ? 'Unspecified'
-                                    : user.auGraduationYear
-                            }
-                        />
-                        <Cell
-                            align="left"
-                            children={
-                                !user.umLastLogin ||
-                                user.umLastLogin.toString().length !== 10
-                                    ? 'No activity found'
-                                    : unix(user.umLastLogin).fromNow()
-                            }
-                        />
-                        <Cell
-                            align="center"
-                            children={calculateIIIHours(
-                                user,
-                                this.props.courseData.courseMeta,
-                                this.dateRange
-                            )}
-                        />
-                        <Cell align="center">
-                            <a
-                                className="btn btn--flat"
-                                children="Export Data"
-                                data-user-id={user.ID}
-                                role="button"
-                                onClick={this.exportCSV}
+                {paginate(this.filteredUsers, this.visibleRows, this.page).map(
+                    (user: ALiEMU.EducatorDashboard.UserMeta, i) => (
+                        <Row
+                            key={user.ID}
+                            id={`student-table-row-${i}`}
+                            className="table-row"
+                        >
+                            <Cell align="left" children={user.displayName} />
+                            <Cell
+                                align="left"
+                                children={
+                                    !user.auGraduationYear
+                                        ? 'Unspecified'
+                                        : user.auGraduationYear
+                                }
                             />
-                        </Cell>
-                    </Row>
+                            <Cell
+                                align="left"
+                                children={
+                                    !user.umLastLogin ||
+                                    user.umLastLogin.toString().length !== 10
+                                        ? 'No activity found'
+                                        : unix(user.umLastLogin).fromNow()
+                                }
+                            />
+                            <Cell
+                                align="center"
+                                children={calculateIIIHours(
+                                    user,
+                                    this.props.courseData.courseMeta,
+                                    this.dateRange
+                                )}
+                            />
+                            <Cell align="center">
+                                <a
+                                    className="btn btn--flat"
+                                    children="Export Data"
+                                    data-user-id={user.ID}
+                                    role="button"
+                                    onClick={this.exportCSV}
+                                />
+                            </Cell>
+                        </Row>
+                    )
                 )}
 
                 {/* Pagination Buttons */}

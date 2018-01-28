@@ -2,6 +2,7 @@
 @import '../variables';
 @import '../mixins';
 
+/* stylelint-disable */
 table {
     thead > tr > td,
     tbody > tr > th {
@@ -64,3 +65,4 @@ table {
         overflow-x: scroll;
     }
 }
+/* stylelint-enable */

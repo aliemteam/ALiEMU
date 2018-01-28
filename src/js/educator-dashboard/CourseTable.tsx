@@ -48,12 +48,16 @@ export class CourseTable extends React.Component<Props, {}> {
 
     @computed
     get relevantUsers(): ALiEMU.EducatorDashboard.UserMeta[] {
-        if (this.courseSelection === '') return [];
+        if (this.courseSelection === '') {
+            return [];
+        }
         return Object.keys(this.props.users)
             .filter(
                 id =>
                     (this.props.users as any)[id].courseCompleted &&
-                    (this.props.users as any)[id].courseCompleted[this.courseSelection]
+                    (this.props.users as any)[id].courseCompleted[
+                        this.courseSelection
+                    ]
             )
             .map(id => this.props.users[parseInt(id, 10)]);
     }
@@ -87,7 +91,7 @@ export class CourseTable extends React.Component<Props, {}> {
         );
     };
 
-    render() {
+    render(): JSX.Element {
         return (
             <div className="au-edudash-shadowbox">
                 <h2 children="Course Overview" />
@@ -105,7 +109,7 @@ export class CourseTable extends React.Component<Props, {}> {
                                 children="-- Select a Category --"
                             />
                             {this.categories.map(
-                                (category: string, i: number) =>
+                                (category: string, i: number) => (
                                     <option
                                         value={category}
                                         key={i}
@@ -114,6 +118,7 @@ export class CourseTable extends React.Component<Props, {}> {
                                         }
                                         children={category}
                                     />
+                                )
                             )}
                         </select>
                     </Flex>
@@ -135,7 +140,7 @@ export class CourseTable extends React.Component<Props, {}> {
                                     this.props.courseData.categories[
                                         this.categorySelection
                                     ]
-                                ).map(courseID =>
+                                ).map(courseID => (
                                     <option
                                         value={courseID}
                                         key={courseID}
@@ -148,7 +153,7 @@ export class CourseTable extends React.Component<Props, {}> {
                                             this.courseSelection === courseID
                                         }
                                     />
-                                )}
+                                ))}
                         </select>
                     </Flex>
                     <Flex amount={1}>
@@ -168,28 +173,29 @@ export class CourseTable extends React.Component<Props, {}> {
                     </Flex>
                 </FilterRow>
                 <Header cells={this.headerCells} />
-                {paginate(
-                    this.relevantUsers,
-                    this.visibleRows,
-                    this.page
-                ).map((user: ALiEMU.EducatorDashboard.UserMeta, i: number) =>
-                    <Row key={user.ID} id={`course-table-row-${i}`}>
-                        <Cell align="left" children={user.displayName} />
-                        <Cell
-                            align="left"
-                            children={unix(
-                                (user.courseCompleted as any)[this.courseSelection]
-                            ).calendar()}
-                        />
-                    </Row>
+                {paginate(this.relevantUsers, this.visibleRows, this.page).map(
+                    (user: ALiEMU.EducatorDashboard.UserMeta, i: number) => (
+                        <Row key={user.ID} id={`course-table-row-${i}`}>
+                            <Cell align="left" children={user.displayName} />
+                            <Cell
+                                align="left"
+                                children={unix(
+                                    (user.courseCompleted as any)[
+                                        this.courseSelection
+                                    ]
+                                ).calendar()}
+                            />
+                        </Row>
+                    )
                 )}
-                {this.courseSelection !== '' &&
+                {this.courseSelection !== '' && (
                     <Pager
                         visibleRows={this.visibleRows}
                         currentPage={this.page}
                         totalRows={this.relevantUsers.length}
                         onClick={this.paginate}
-                    />}
+                    />
+                )}
             </div>
         );
     }

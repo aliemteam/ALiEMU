@@ -1,6 +1,6 @@
 // tslint:disable: max-line-length no-inner-html
 import * as moment from 'moment';
-import { courseData, users } from '../../../../lib/utils/Fixtures';
+import { courseData, users } from '../../../../lib/utils/fixtures';
 import * as utils from '../DashboardUtils';
 const before = beforeAll;
 

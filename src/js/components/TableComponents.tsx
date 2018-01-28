@@ -67,7 +67,7 @@ const styles = {
     },
 };
 
-export const Header = (props: HeaderProps) =>
+export const Header = (props: HeaderProps): JSX.Element =>
     <div style={styles.headerRow}>
         {props.cells.map((cell, i) =>
             <div
@@ -82,7 +82,7 @@ export const Header = (props: HeaderProps) =>
         )}
     </div>;
 
-export const Pager = (props: PagerProps) =>
+export const Pager = (props: PagerProps): JSX.Element =>
     <div className="pagination" style={props.style}>
         {Array.from({ length: props.totalRows }, (_k, v) => v)
             .filter(el => el % props.visibleRows === 0)
@@ -102,7 +102,7 @@ export const Pager = (props: PagerProps) =>
             )}
     </div>;
 
-export const Cell = (props: CellProps) =>
+export const Cell = (props: CellProps): JSX.Element =>
     <div
         style={{
             flex: 1,
@@ -111,7 +111,7 @@ export const Cell = (props: CellProps) =>
         children={props.children}
     />;
 
-export const Flex = (props: FlexProps) =>
+export const Flex = (props: FlexProps): JSX.Element =>
     <div
         style={{
             alignItems: 'center',
@@ -123,6 +123,6 @@ export const Flex = (props: FlexProps) =>
         children={props.children}
     />;
 
-export const Row = (props: any) => <div style={styles.row} {...props} />;
+export const Row = (props: any): JSX.Element => <div style={styles.row} {...props} />;
 
-export const FilterRow = (props: any) => <div style={styles.flex.container} {...props} />;
+export const FilterRow = (props: any): JSX.Element => <div style={styles.flex.container} {...props} />;

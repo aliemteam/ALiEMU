@@ -1,3 +1,6 @@
+// temporary until this file can be scrutinized further
+// tslint:disable:no-unnecessary-type-assertion
+
 import { Moment, unix } from 'moment';
 
 type Users = ALiEMU.EducatorDashboard.UserObject;
@@ -108,10 +111,12 @@ export function calculateIIIHours(
     courseMeta: CourseMeta,
     dateRange: { start: Moment | null; end: Moment | null }
 ): number {
-    if (!user.courseCompleted) return 0;
+    if (!user.courseCompleted) {
+        return 0;
+    }
     return Object.keys(user.courseCompleted).reduce((prev, curr) => {
         const { start, end } = dateRange;
-        const completionDate = (<{[id: string]: number}>user.courseCompleted)![curr];
+        const completionDate = (<any>user.courseCompleted)![curr];
         const d = unix(completionDate);
         const addedHours: number =
             parseFloat((<any>courseMeta)[curr].recommendedHours) + prev;
@@ -119,15 +124,21 @@ export function calculateIIIHours(
             case !start && !end:
                 return addedHours;
             case !start && end !== null:
-                if (d.isBefore(end!) || d.isSame(end!)) return addedHours;
+                if (d.isBefore(end!) || d.isSame(end!)) {
+                    return addedHours;
+                }
                 return prev;
             case start !== null && !end:
-                if (d.isAfter(start!) || d.isSame(start!)) return addedHours;
+                if (d.isAfter(start!) || d.isSame(start!)) {
+                    return addedHours;
+                }
                 return prev;
             default:
                 const isBetween = d.isBetween(start!, end!);
                 const isSame = d.isSame(start!) || d.isSame(end!);
-                if (isBetween || isSame) return addedHours;
+                if (isBetween || isSame) {
+                    return addedHours;
+                }
                 return prev;
         }
     }, 0);
@@ -195,12 +206,11 @@ export class CSV {
         const courseProgress = this.users[id].courseProgress;
         const { courses, courseMeta, categories } = this.courseData;
 
-        if (!courseProgress) return false;
+        if (!courseProgress) {
+            return false;
+        }
 
-        const filename = `${this.users[id].displayName.replace(
-            /\s/,
-            '_'
-        )}.csv`;
+        const filename = `${this.users[id].displayName.replace(/\s/, '_')}.csv`;
         let data: string =
             [
                 'Registered Courses',
@@ -217,9 +227,9 @@ export class CSV {
             data +=
                 [
                     courses[k].postTitle,
-                    `${courseProgress[k].completed} out of ${courseProgress[
-                        k
-                    ].total}`,
+                    `${courseProgress[k].completed} out of ${
+                        courseProgress[k].total
+                    }`,
                     parseCompletionData(
                         (<any>this.users[id]).courseCompleted![k],
                         (<any>courseMeta[k]).recommendedHours
@@ -234,10 +244,7 @@ export class CSV {
 
     course(courseID: string): ALiEMU.CSV {
         const id = parseInt(courseID, 10);
-        const filename = `${this.courses[id].postTitle.replace(
-            /\s/,
-            '_'
-        )}.csv`;
+        const filename = `${this.courses[id].postTitle.replace(/\s/, '_')}.csv`;
         const lessonIDs: string[] = [];
 
         let data: string =
@@ -252,7 +259,9 @@ export class CSV {
                     )
                     .map((lessonID: string) => {
                         lessonIDs.push(lessonID);
-                        return `Lesson: ${this.lessons[parseInt(lessonID, 10)].postTitle}`;
+                        return `Lesson: ${
+                            this.lessons[parseInt(lessonID, 10)].postTitle
+                        }`;
                     }),
             ]
                 .map(i => `"${i}"`)

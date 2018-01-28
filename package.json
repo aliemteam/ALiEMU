@@ -4,8 +4,7 @@
   "license": "MIT",
   "repository": "https://github.com/aliemteam/ALiEMU",
   "server": {
-    "name": "aliemu",
-    "base_theme": "Divi",
+    "name": "emintro",
     "plugins": [
       "learndash-propanel",
       "sfwd-lms"
@@ -45,6 +44,7 @@
     "@babel/preset-react": "^7.0.0-beta.37",
     "@types/copy-webpack-plugin": "^4.0.1",
     "@types/enzyme": "^3.1.8",
+    "@types/enzyme-adapter-react-16": "^1.0.1",
     "@types/gulp": "^4.0.5",
     "@types/jest": "^22.1.0",
     "@types/jquery": "^3.3.0",
@@ -62,6 +62,7 @@
     "copy-webpack-plugin": "^4.3.1",
     "css-loader": "^0.28.9",
     "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "gulp": "^4.0.0",
     "gulp-uglify": "^3.0.0",
@@ -74,6 +75,7 @@
     "react-addons-test-utils": "^15.6.2",
     "react-svg-loader": "^2.1.0",
     "sass-loader": "^6.0.6",
+    "snapshot-diff": "^0.2.2",
     "style-loader": "^0.20.1",
     "stylelint": "^8.4.0",
     "stylelint-config-recommended-scss": "^3.0.0",
@@ -90,17 +92,11 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "aliemu/**/*.{ts,tsx}",
-      "!aliemu/aliemu.d.ts",
-      "!aliemu/**/index.{ts,tsx}",
+      "src/**/*.{ts,tsx}",
+      "!src/**/index.{ts,tsx}",
       "!**/{vendor,__tests__}/**"
     ],
     "coverageDirectory": "lib/tmp/coverage",
-    "globals": {
-      "ts-jest": {
-        "useBabelrc": true
-      }
-    },
     "mapCoverage": true,
     "moduleFileExtensions": [
       "ts",
@@ -108,9 +104,13 @@
       "js",
       "json"
     ],
-    "testRegex": "__tests__/.*\\.(js|ts|tsx)$",
+    "setupFiles": [
+      "./lib/utils/before-test.ts"
+    ],
+    "setupTestFrameworkScriptFile": "./lib/utils/setup-test.ts",
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      ".(ts|tsx)": "ts-jest"
     }
   }
 }

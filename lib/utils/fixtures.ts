@@ -1,4 +1,3 @@
-
 export const categories: ALiEMU.EducatorDashboard.CategoryObject = {
     AIR: {
         100: 100,
@@ -304,28 +303,29 @@ export const users: ALiEMU.EducatorDashboard.UserObject = {
     },
 };
 
-export const createMinimalUser = (id: number, gradYear: number) => (
-    {
-        ID: id,
-        accountStatus: 'approved',
-        auGraduationYear: gradYear,
-        courseAccessed: [],
-        courseProgress: {},
-        description: '',
-        displayName: `User ${id}`,
-        email: 'minimaluser@gmail.com',
-        firstName: `fname${id}`,
-        lastName: `lname${id}`,
-        registerDate: '2016-01-01 01:01:01',
-        residencyUsEm: 'Hawaii - ALiEM University',
-        role: 'admin',
-        submitted: '',
-        umLastLogin: 1462832070,
-        username: `username${id}`,
-    }
-);
+export const createMinimalUser = (
+    id: number,
+    gradYear: number
+): ALiEMU.EducatorDashboard.UserMeta => ({
+    ID: id,
+    accountStatus: 'approved',
+    auGraduationYear: gradYear,
+    courseAccessed: [],
+    courseProgress: {},
+    description: '',
+    displayName: `User ${id}`,
+    email: 'minimaluser@gmail.com',
+    firstName: `fname${id}`,
+    lastName: `lname${id}`,
+    registerDate: '2016-01-01 01:01:01',
+    residencyUsEm: 'Hawaii - ALiEM University',
+    role: 'admin',
+    submitted: '',
+    umLastLogin: 1462832070,
+    username: `username${id}`,
+});
 
-export const lessons: {[i: number]: ALiEMU.LearnDash.Lessons} = {
+export const lessons: { [i: number]: ALiEMU.LearnDash.Lessons } = {
     110: {
         ID: 110,
         menuOrder: 0,

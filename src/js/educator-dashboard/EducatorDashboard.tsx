@@ -8,7 +8,7 @@ interface Props {
 }
 
 export class EducatorDashboard extends React.Component<Props, {}> {
-    render() {
+    render(): JSX.Element {
         return (
             <div>
                 <DevTools position={{ right: 50, top: 100 }} />

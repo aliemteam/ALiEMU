@@ -39,11 +39,9 @@
     box-shadow: map-get($shadows, 'depth-2');
     color: inherit;
     font-weight: inherit;
-    transition: {
-        property: box-shadow, transform;
-        timing-function: ease;
-        duration: 0.15s;
-    }
+    transition-property: box-shadow, transform;
+    transition-timing-function: ease;
+    transition-duration: 0.15s;
     &:hover {
         text-decoration: none;
         box-shadow: map-get($shadows, 'depth-4');
