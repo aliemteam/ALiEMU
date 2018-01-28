@@ -69,6 +69,10 @@ class Sync(object):
 
     def theme(self) -> 'Sync':
         """Pull base theme."""
+        if not self.meta['base_theme']:
+            print('No base theme defined. Skipping...')
+            return self
+
         print('Downloading theme from server...')
         self.cmd.rsync('{name}:/home/{name}/app/wp-content/themes/{base_theme}'
                        .format(**self.meta),
@@ -110,7 +114,8 @@ def main():
     Has.executable('docker-machine', 'rsync')
     sync = Sync()
     if args.init:
-        return sync.database().plugins().theme().uploads()
+        sync.database().plugins().theme().uploads()
+        return
     if args.uploads:
         sync.uploads()
     if args.plugins:

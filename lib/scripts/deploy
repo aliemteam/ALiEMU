@@ -48,7 +48,7 @@ class Deploy(object):
 
         print('Deploying {name}...'.format(**self.meta))
         self.cmd.rsync(
-            '{root}/dist/{name}'.format(**self.meta),
+            '{root}/dist'.format(**self.meta),
             '{name}:/home/{name}/app/wp-content/themes'.format(**self.meta))
 
     def initial(self) -> None:
@@ -81,7 +81,11 @@ class Deploy(object):
                        '{name}:/home/{name}/app/wp-content'.format(**self.meta))
 
     def theme(self) -> None:
-        """Deploy base theme."""
+        """Deploy base theme if one exists."""
+        if not self.meta['base_theme']:
+            print('No base theme defined. Skipping...')
+            return
+
         print('Removing old version of {base_theme}...'.format(**self.meta))
         self.cmd.ssh('rm -rf /home/{name}/app/wp-content/themes/{base_theme}/*'
                      .format(**self.meta))
