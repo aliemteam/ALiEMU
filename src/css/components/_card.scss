@@ -1,0 +1,19 @@
+@import '../colors';
+@import '../variables';
+
+.card {
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: map-get($shadows, 'depth-2');
+    padding: $block-padding;
+}
+
+.card__heading {
+    background: $secondary;
+    color: white;
+    margin: -20px -20px 20px -20px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    text-align: center;
+    line-height: 60px;
+}

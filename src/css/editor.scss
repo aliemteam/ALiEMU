@@ -1,0 +1,139 @@
+
+@import 'colors';
+@import 'variables';
+@import 'typography';
+@import 'components/table';
+
+@import '~normalize.css';
+
+html {
+    box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700&subset=greek,greek-ext,latin-ext');
+
+body {
+    background-color: white;
+    color: $text-color;
+    margin: 20px 40px;
+    max-width: 1040px;
+}
+
+blockquote.alignleft,
+blockquote.alignright {
+    font-size: 0.875rem;
+    width: 34%;
+}
+
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+embed,
+iframe,
+object {
+    max-width: 100%;
+}
+
+// Embed preview containers
+.mce-preview-object,
+.mce-object-iframe {
+    margin: $block-margin 0;
+}
+
+// Soundcloud player
+span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
+    display: block;
+}
+
+.wpview {
+    text-align: center;
+}
+
+.mejs-container {
+    margin-bottom: $block-margin;
+}
+
+.mejs-controls {
+    a.mejs-horizontal-volume-slider,
+    a.mejs-horizontal-volume-slider:focus,
+    a.mejs-horizontal-volume-slider:hover {
+        background: transparent;
+        border: 0;
+    }
+}
+
+.wp-playlist-current-item {
+    .wp-playlist-item-title {
+        font-weight: 700;
+    }
+    .wp-playlist-item-album {
+        font-style: normal;
+    }
+    .wp-playlist-item-artist {
+        font-size: 0.625rem;
+        font-weight: 800;
+        letter-spacing: 0.1818em;
+        text-transform: uppercase;
+    }
+}
+
+.wp-playlist-item {
+    padding: 0 0.3125em;
+    cursor: pointer;
+    &:last-of-type {
+        border-bottom: none;
+    }
+    a {
+        padding: 0.3125em 0;
+        border-bottom: none;
+        box-shadow: none;
+        &:focus,
+        &:hover {
+            box-shadow: none;
+            background: transparent;
+        }
+    }
+}
+
+.wp-playlist-light {
+    border-color: $gray-light;
+    color: $text-color;
+    .wp-playlist-current-item {
+        .wp-playlist-item-album {
+            color: $text-color;
+        }
+        .wp-playlist-item-artist {
+            color: $text-color-light;
+        }
+    }
+    .wp-playlist-item {
+        border-bottom: 1px dotted $gray-light;
+        transition: background-color 0.2s ease-in-out,
+            border-color 0.2s ease-in-out, color 0.3s ease-in-out;
+        &:hover,
+        &:focus {
+            border-bottom-color: transparent;
+            background-color: $gray-light;
+            color: white;
+        }
+    }
+    a.wp-playlist-caption:hover,
+    .wp-playlist-item:hover a,
+    .wp-playlist-item:focus a {
+        color: white;
+    }
+}
+
+.wp-playlist {
+    padding: 0.625em 0.625em 0.3125em;
+}
+.wp-playlist-item-length {
+    top: 5px;
+}

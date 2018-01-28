@@ -1,0 +1,46 @@
+@import '../colors';
+@import '../variables';
+
+//
+// Ultimate Member Templated Pages
+//
+.um-page-password-reset,
+.um-page-login,
+.um-page-account {
+    .um {
+        background: white;
+        padding: 20px;
+        border-radius: $border-radius;
+        box-shadow: map-get($shadows, 'depth-2');
+    }
+}
+
+.um-page-account .um {
+    padding: 40px 20px;
+}
+
+.um-profile-nav-item i {
+    height: unset;
+    line-height: inherit;
+    top: unset;
+}
+
+.um-account {
+    max-width: 900px;
+    &-side {
+        width: 35%;
+        flex: auto;
+    }
+    &-main {
+        width: 65%;
+        flex: auto;
+    }
+    form {
+        display: flex;
+    }
+}
+
+// Profiles
+.um-profile-body {
+    max-width: 100% !important;
+}

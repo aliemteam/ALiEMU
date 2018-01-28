@@ -1,0 +1,132 @@
+@import '../variables';
+@import '../colors';
+
+.header {
+    display: flex;
+    height: $header-height;
+    padding: 0 20px;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    box-shadow: map-get($shadows, 'depth-3');
+}
+
+.header__logo {
+    height: 30px;
+}
+
+.nav {
+    font-size: 0.8em;
+    font-weight: 500;
+    white-space: nowrap;
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    a {
+        text-decoration: none;
+        color: $gray;
+    }
+    .menu-item-type-custom > a {
+        cursor: default;
+    }
+
+    .menu {
+        display: flex;
+        > .menu-item {
+            position: relative;
+            margin: 0 20px;
+            height: $header-height;
+            > a {
+                display: block;
+                height: $header-height;
+                line-height: $header-height;
+            }
+        }
+    }
+    .menu-item-has-children {
+        > ul {
+            display: none;
+        }
+        &:hover {
+            > ul {
+                display: block;
+            }
+        }
+    }
+    .sub-menu {
+        position: absolute;
+        min-width: 150px;
+        background: white;
+        box-shadow: map-get($shadows, 'depth-6');
+        border-top: solid 3px $secondary;
+        right: -20px;
+        z-index: 2;
+        > .menu-item > a {
+            display: block;
+            width: 100%;
+            padding: 8px 10px;
+            &:hover {
+                background: $gray-light;
+            }
+        }
+    }
+
+    @include device-mobile {
+        .menu {
+            display: none;
+            &.menu--open {
+                display: flex;
+            }
+            background: $secondary;
+            flex-direction: column;
+            position: absolute;
+            left: 0;
+            margin: 7px 0 0 0;
+            width: 100%;
+            box-shadow: map-get($shadows, 'depth-6');
+            > .menu-item {
+                margin: unset;
+                height: unset;
+                > a {
+                    color: white;
+                }
+                a {
+                    height: auto;
+                    line-height: normal;
+                    padding: 8px;
+                }
+            }
+        }
+        .sub-menu {
+            display: block !important;
+            position: relative;
+            background: white;
+            box-shadow: unset;
+            right: 0;
+        }
+    }
+}
+
+.nav__toggle-button {
+    display: none;
+    &:before {
+        font-family: Dashicons, sans-serif;
+        content: '\f333';
+        $icon-height: 35px;
+        display: block;
+        font-size: $icon-height;
+        line-height: $icon-height;
+        height: $icon-height;
+        width: $icon-height;
+    }
+    &.nav__toggle-button--open:before {
+        content: '\f335';
+    }
+    min-width: unset;
+    padding: 0 4px;
+    @include device-mobile {
+        display: initial;
+    }
+}

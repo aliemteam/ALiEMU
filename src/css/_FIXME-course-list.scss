@@ -1,0 +1,101 @@
+@import 'colors';
+@import 'variables';
+
+//
+// Course list -----------------------------------------------------------------
+//
+
+.course-list {
+    max-width: 100%;
+    width: 1000px;
+    margin: ($block-margin * 2) auto;
+    background: transparent;
+}
+
+.course-list__year-heading {
+    text-align: center;
+    font-size: 2rem;
+}
+
+//
+// Course Boxes ----------------------------------------------------------------
+//
+
+.course-boxes {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin: $block-margin 0;
+}
+
+//
+// Course Box ------------------------------------------------------------------
+//
+
+.course-box {
+    display: block;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: map-get($shadows, 'depth-2');
+    color: inherit;
+    font-weight: inherit;
+    transition: {
+        property: box-shadow, transform;
+        timing-function: ease;
+        duration: 0.15s;
+    }
+    &:hover {
+        text-decoration: none;
+        box-shadow: map-get($shadows, 'depth-4');
+        transform: translateY(-2px);
+    }
+}
+
+.course-box__heading {
+    text-align: right;
+    font-size: 20px;
+    color: white;
+    background: $primary;
+    font-weight: 500;
+    border-radius: 2px 2px 0 0;
+    box-shadow: map-get($shadows, 'depth-2');
+    height: 50px;
+    line-height: 50px;
+    padding: 0 20px;
+    &--air {
+        background: $air-primary;
+    }
+    &--air-pro {
+        background: $airpro-primary;
+    }
+    &--capsules {
+        background: $capsules-primary;
+    }
+}
+
+.course-box__body {
+    display: flex;
+    border-radius: 0 0 2px 2px;
+    flex-flow: column;
+    height: 300px;
+    padding: 10px;
+    code {
+        font-size: 16px;
+    }
+    h3 {
+        height: 60px;
+        font-size: 20px;
+    }
+}
+
+.course-box__description {
+    flex: auto;
+    height: 33%;
+    font-size: 14px;
+    line-height: 2;
+    overflow: hidden;
+}
+
+.course-box__link {
+    text-align: right;
+}

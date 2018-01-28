@@ -1,0 +1,28 @@
+$black: #10161a !default;
+
+$primary: #00b092 !default;
+$primary-light: #58e3c2 !default;
+$primary-dark: #008064 !default;
+
+$secondary: #345995 !default;
+$secondary-light: #6785c6 !default;
+$secondary-dark: #003067 !default;
+
+$gray-light: #f5f5f5 !default;
+$gray: #444243 !default;
+$gray-dark: #182026 !default;
+
+$text-color: #182026 !default;
+$text-color-light: #666 !default;
+
+$border-color: rgba($black, 0.15) !default;
+
+$intent-primary: $secondary !default;
+$intent-success: #0f9960 !default;
+$intent-danger: #db3737 !default;
+$intent-warning: #d9822b !default;
+
+// NOTE: These will be deprecated soon
+$air-primary: #b91215 !default;
+$airpro-primary: #fc980d !default;
+$capsules-primary: #4a90e2 !default;

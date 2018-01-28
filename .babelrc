@@ -1,3 +1,4 @@
 {
-    "presets": ["env", "react"]
+    "plugins": ["@babel/transform-runtime"],
+    "presets": ["@babel/env", "@babel/react"]
 }

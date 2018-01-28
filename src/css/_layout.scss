@@ -1,0 +1,105 @@
+@import 'colors';
+@import 'variables';
+@import 'mixins';
+
+body {
+    background: white;
+    &.home,
+    &.um-page-account,
+    &.um-page-login,
+    &.um-page-password-reset,
+    &.page-id-1248 {
+        background: $gray-light;
+    }
+}
+
+#content {
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+main[role='main'] {
+    $sep: $block-margin * 2;
+    min-height: calc(100vh - #{$header-height});
+    max-width: 100%;
+    width: 800px;
+    padding: 0 $sep;
+    margin: $sep 0;
+    flex: auto;
+
+    // &:only-child {
+    //     padding: 0;
+    // }
+    @include device-tablet {
+        padding: 0 $block-margin;
+    }
+    @include device-mobile {
+        padding: 0 $block-margin;
+    }
+
+    // .single has a sidebar
+    .single & {
+        max-width: 1000px;
+        @include device-tablet {
+            max-width: 100%;
+        }
+        @include device-mobile {
+            max-width: 100%;
+        }
+    }
+
+    // Admin bar fix
+    .admin-bar & {
+        min-height: calc(100vh - #{$header-height} - #{$admin-bar-height});
+    }
+
+    > article {
+        max-width: 800px;
+        margin: auto;
+        // Ultimate member user page
+        .um-page-user & {
+            max-width: 100%;
+        }
+    }
+
+    // Absolutely-centered content on select pages
+    .um-page-login &,
+    .um-page-password-reset &,
+    .page-id-1248 & {
+        display: flex;
+        article {
+            max-width: 100%;
+            width: auto;
+        }
+    }
+
+    .um-page-account & {
+        display: flex;
+        article {
+            max-width: 900px;
+            width: 100%;
+        }
+    }
+}
+
+#sidebar {
+    $sep: $block-margin * 2;
+    @include hard-boundary(left);
+    max-width: 250px;
+    margin: $sep $sep $sep 0;
+    padding-left: $sep;
+    .widget-content--sticky {
+        position: sticky;
+        top: $sep + $header-height;
+        @at-root .admin-bar & {
+            top: $sep + $header-height + $admin-bar-height;
+        }
+    }
+    @include device-tablet {
+        display: none;
+    }
+    @include device-mobile {
+        display: none;
+    }
+}

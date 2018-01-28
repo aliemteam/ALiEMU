@@ -1,0 +1,127 @@
+@import 'mixins';
+
+summary {
+    @include noselect;
+    @extend h3;
+}
+
+// Lists -----------------------------------------------------------------------
+ul {
+    padding: 0;
+    margin: 0 0 $block-margin $block-margin * 2;
+    list-style: disc;
+}
+
+// Exclude comments from this
+.content-area > main {
+    ol {
+        padding: 0;
+        margin: 0 0 $block-margin 25px;
+        counter-reset: item;
+        > li {
+            display: block;
+            position: relative;
+            &:before {
+                content: counter(item) '.';
+                counter-increment: item;
+                font-weight: 500;
+                left: -$block-margin;
+                position: absolute;
+            }
+        }
+    }
+
+    li > ul,
+    li > ol {
+        margin-bottom: 0;
+        margin-left: $block-margin;
+    }
+}
+
+// Block elements --------------------------------------------------------------
+p {
+    // FIXME: Can this be both top and bottom?
+    margin: 0 0 $block-margin;
+    padding: 0;
+    &:last-child {
+        margin: 0;
+    }
+    &:empty {
+        display: none;
+    }
+}
+
+hr {
+    @include hard-boundary(bottom);
+    margin: $block-margin 0;
+    height: 1px;
+    border: 0;
+}
+
+img[src$='.svg'],
+svg {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+}
+
+// Inline elements -------------------------------------------------------------
+img {
+    &.aligncenter {
+        display: block;
+        margin: auto;
+    }
+    &.alignleft {
+        float: left;
+    }
+    &.alignright {
+        float: right;
+    }
+    blockquote & {
+        display: inline-block;
+    }
+    .content-area & {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+blockquote {
+    color: $text-color-light;
+    border-left: 4px solid $primary;
+    background: $gray-light;
+    // FIXME: Can this be both top and bottom?
+    margin: 0 0 $block-margin 0;
+    padding: $block-margin 10px;
+}
+
+::selection {
+    background: $primary;
+    color: white;
+}
+
+.wp-caption {
+    max-width: 100% !important;
+    background: $gray-light;
+    padding: 10px;
+    border-radius: 2px;
+    margin: $block-margin 1em;
+    color: $text-color-light;
+    box-shadow: map-get($shadows, 'depth-2');
+    img {
+        max-width: 100%;
+        width: auto;
+        height: auto;
+    }
+}
+.wp-caption-text {
+    font-style: italic;
+    text-align: justify;
+    margin: 0 !important;
+    padding-top: 5px;
+}
+
+.jetpack-video-wrapper iframe {
+    display: block;
+    margin: auto !important;
+}

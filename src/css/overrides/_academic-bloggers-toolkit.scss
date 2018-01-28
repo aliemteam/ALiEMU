@@ -1,0 +1,15 @@
+@import '../variables';
+
+.abt-bibliography {
+    margin-bottom: $block-margin;
+}
+
+.abt-bibliography__container {
+    font-size: 0.8em !important;
+    padding: 0 $block-margin;
+    line-height: 2em;
+}
+
+.abt-tooltip {
+    line-height: 2em;
+}
