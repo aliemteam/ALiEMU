@@ -14,8 +14,12 @@ package_update: true
 package_upgrade: true
 
 runcmd:
+# Scaffolds the directory structure
 - sudo -H -u {name} bash -c 'mkdir -p ~/app/{{data,wp-content/{{plugins,themes,uploads}}}}'
+# Downloads and installs docker compose
 - curl -L https://github.com/docker/compose/releases/download/{docker_compose_version}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+# Installs the digitalocean monitoring agent
 - curl -sSL https://agent.digitalocean.com/install.sh | sh
+# Creates bash aliases
 - echo alias d='docker' >> /home/{name}/.bashrc
 - echo alias dc='docker-compose' >> /home/{name}/.bashrc

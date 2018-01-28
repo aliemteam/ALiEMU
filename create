@@ -25,11 +25,9 @@ def create_machine() -> str:
     with NamedTemporaryFile(mode='w+') as tmp:
         with open('{}/cloud-config.yml'.format(dirname)) as config:
             ssh_users = ', '.join([
-                '"{}"'.format(x.strip())
-                for x in input(
+                '"{}"'.format(x.strip()) for x in input(
                     '--> Additional SSH users (format: gh:githubuser): ')
-                .split(',')
-                if x
+                .split(',') if x
             ])
             tmp.write(config.read().format(
                 name=name,
