@@ -82,7 +82,7 @@ class Deploy(object):
 
     def theme(self) -> None:
         """Deploy base theme if one exists."""
-        if not self.meta['base_theme']:
+        if 'base_theme' not in self.meta:
             print('No base theme defined. Skipping...')
             return
 
