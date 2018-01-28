@@ -40,7 +40,7 @@ class Deploy(object):
         }
 
     def site(self) -> None:
-        """Deploy site (child theme) files."""
+        """Deploy site files."""
         print('Removing old version of {name}...'.format(**self.meta))
         self.cmd.ssh(
             'rm -rf /home/{name}/app/wp-content/themes/{name}/*'.format(
@@ -48,8 +48,9 @@ class Deploy(object):
 
         print('Deploying {name}...'.format(**self.meta))
         self.cmd.rsync(
-            '{root}/dist'.format(**self.meta),
-            '{name}:/home/{name}/app/wp-content/themes'.format(**self.meta))
+            '{root}/dist/'.format(**self.meta),
+            '{name}:/home/{name}/app/wp-content/themes/{name}'.format(
+                **self.meta))
 
     def initial(self) -> None:
         """Deploy everything.
