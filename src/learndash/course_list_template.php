@@ -7,14 +7,23 @@ $hours       = $ld['sfwd-courses_recommendedHours'];
 $description = $ld['sfwd-courses_course_short_description'];
 $category    = get_the_category();
 
-if ( ! $category ) {
-	wp_die();
-}
-$category = $category[0]->cat_name;
+if ( ! empty( $category ) ) :
+
+	$category           = $category[0]->cat_name;
+	$category_lowercase = strtolower( $category );
 
 ?>
-<article id="post-<?php the_id(); ?>" <?php post_class( 'course-box' ); ?>>
-	<div <?php post_class( [ 'course-box__heading' ] ); ?>>
+<a
+	class="course-box"
+	role="listitem"
+	aria-labelledby="course-<?php the_id(); ?>-title course-<?php the_id(); ?>-hours"
+	aria-describedby="course-<?php the_id(); ?>-description"
+	href="<?php the_permalink(); ?>"
+>
+	<div
+		id="course-<?php the_id(); ?>-hours"
+		class="course-box__heading course-box__heading--<?php echo esc_attr( $category_lowercase ); ?>"
+	>
 		<?php
 			echo esc_html(
 				sprintf(
@@ -27,15 +36,19 @@ $category = $category[0]->cat_name;
 	</div>
 	<div class="course-box__body">
 		<code><?php echo esc_html( $category ); ?></code>
-		<h3><?php the_title(); ?></h3>
-		<div class="course-box__description">
-			<?php echo esc_html( wp_trim_words( $description, 25 ) ); ?>
-		</div>
-		<div class="course-box__link">
-			<a href="<?php the_permalink(); ?>" class="btn btn--flat btn--<?php echo esc_attr( strtolower( $category ) ); ?>">
-				View <?php echo esc_html( LearnDash_Custom_Label::get_label( 'course' ) ); ?>
-			</a>
+		<h3
+			id="course-<?php the_id(); ?>-title"
+		>
+			<?php the_title(); ?>
+		</h3>
+		<div
+			id="course-<?php the_id(); ?>-description"
+			class="course-box__description"
+		>
+			<?php echo esc_html( wp_trim_words( $description, 30 ) ); ?>
 		</div>
 	</div>
-</article>
+</a>
 <?php
+
+endif;

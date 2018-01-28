@@ -1,39 +1,54 @@
-// FIXME: This file should be imported only on the page it's needed.
 @import 'colors';
 @import 'variables';
+
+//
+// Course list -----------------------------------------------------------------
+//
+
+.course-list {
+    max-width: 100%;
+    width: 1000px;
+    margin: ($block-margin * 2) auto;
+    background: transparent;
+}
+
+.course-list__year-heading {
+    text-align: center;
+    font-size: 2rem;
+}
 
 //
 // Course Boxes ----------------------------------------------------------------
 //
 
 .course-boxes {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
-    padding: 20px;
-    white-space: normal;
-    height: 100%;
-    > article {
-        margin-bottom: $block-margin;
-    }
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    margin: $block-margin 0;
 }
 
-.course-boxes--scroll {
-    display: block;
-    padding: 0 10px 10px 10px;
-    overflow-y: visible;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-}
+//
+// Course Box ------------------------------------------------------------------
+//
 
 .course-box {
-    width: 300px;
-    display: inline-block;
-    white-space: normal;
+    display: block;
     background-color: white;
     border-radius: 2px;
     box-shadow: map-get($shadows, 'depth-2');
+    color: inherit;
+    font-weight: inherit;
+    transition: {
+        property: box-shadow, transform;
+        timing-function: ease;
+        duration: 0.15s;
+    }
+    &:hover {
+        text-decoration: none;
+        box-shadow: map-get($shadows, 'depth-4');
+        transform: translateY(-2px);
+    }
 }
 
 .course-box__heading {
@@ -47,13 +62,13 @@
     height: 50px;
     line-height: 50px;
     padding: 0 20px;
-    &.category-air {
+    &--air {
         background: $air-primary;
     }
-    &.category-air-pro {
+    &--air-pro {
         background: $airpro-primary;
     }
-    &.category-capsules {
+    &--capsules {
         background: $capsules-primary;
     }
 }
@@ -83,69 +98,4 @@
 
 .course-box__link {
     text-align: right;
-}
-
-//
-// Course list -----------------------------------------------------------------
-//
-
-.course-list {
-    max-width: 100%;
-    padding: 0;
-    margin-top: $block-margin * 2 !important;
-    background: white;
-    box-shadow: map-get($shadows, 'depth-2');
-}
-
-.course-list--transparent {
-    $margin-size: 10px;
-    width: 1000px;
-    margin: auto;
-    background: transparent;
-    box-shadow: unset;
-    .course-boxes {
-        padding: 0;
-        margin: -#{$margin-size};
-        margin-bottom: $margin-size;
-        justify-content: flex-start;
-        .course-box {
-            flex: auto;
-            min-width: 200px;
-            max-width: 350px;
-            width: 250px;
-            margin: $margin-size;
-        }
-    }
-}
-
-.course-list__year-links {
-    display: flex;
-    justify-content: center;
-    height: 50px;
-    align-items: center;
-    box-shadow: map-get($shadows, 'depth-2');
-    border-radius: 2px 2px 0 0;
-    background: $gray;
-    margin-bottom: $block-margin;
-    a {
-        margin: 0 10px;
-        font-weight: 400;
-        color: white;
-        &:hover {
-            text-decoration: underline;
-            color: white;
-        }
-    }
-}
-
-.course-list__single-year-container {
-    margin-bottom: $block-margin;
-    h1 {
-        text-align: center;
-    }
-}
-
-.course-list__year-heading {
-    text-align: center;
-    font-size: 2rem;
 }

@@ -77,6 +77,13 @@ img {
     &.alignright {
         float: right;
     }
+    blockquote & {
+        display: inline-block;
+    }
+    .content-area & {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
 blockquote {
@@ -86,9 +93,6 @@ blockquote {
     // FIXME: Can this be both top and bottom?
     margin: 0 0 $block-margin 0;
     padding: $block-margin 10px;
-    img {
-        display: inline-block;
-    }
 }
 
 ::selection {

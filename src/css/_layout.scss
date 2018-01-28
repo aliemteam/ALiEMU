@@ -19,27 +19,34 @@ body {
     justify-content: center;
 }
 
-main {
+main[role='main'] {
     $sep: $block-margin * 2;
     min-height: calc(100vh - #{$header-height});
+    max-width: 100%;
     width: 800px;
     padding: 0 $sep;
     margin: $sep 0;
     flex: auto;
 
-    &:only-child {
-        padding: 0;
-    }
+    // &:only-child {
+    //     padding: 0;
+    // }
     @include device-tablet {
-        padding: $block-margin;
+        padding: 0 $block-margin;
     }
     @include device-mobile {
-        padding: $block-margin;
+        padding: 0 $block-margin;
     }
 
     // .single has a sidebar
     .single & {
         max-width: 1000px;
+        @include device-tablet {
+            max-width: 100%;
+        }
+        @include device-mobile {
+            max-width: 100%;
+        }
     }
 
     // Admin bar fix

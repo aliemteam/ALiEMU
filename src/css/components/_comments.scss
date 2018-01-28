@@ -5,6 +5,9 @@
 #comments {
     margin: ($block-margin * 2);
     margin-top: 0;
+    a {
+        overflow-wrap: break-word;
+    }
 }
 
 .comments-area {

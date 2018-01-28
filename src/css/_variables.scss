@@ -62,11 +62,10 @@ $font-mono: 'Roboto Mono', monospace !default;
 $font-family: $font-sans !default;
 
 // Layout
-$header-height: 64px !default;
-$footer-height: 125px !default;
-$admin-bar-height: 32px !default;
+$header-height: 4rem !default;
+$admin-bar-height: 2rem !default;
 
 // Block element attributes
-$block-margin: 20px !default;
+$block-margin: 1.5rem !default;
 $block-padding: 20px !default;
 $border-radius: 3px !default;
