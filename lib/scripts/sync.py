@@ -69,7 +69,7 @@ class Sync(object):
 
     def theme(self) -> 'Sync':
         """Pull base theme."""
-        if not self.meta['base_theme']:
+        if 'base_theme' not in self.meta:
             print('No base theme defined. Skipping...')
             return self
 
