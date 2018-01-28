@@ -20,20 +20,17 @@ services:
             DB_USER: root
             PLUGINS: >-
                 academic-bloggers-toolkit,
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 jetpack,
                 mce-table-buttons,
                 rest-api,
                 sendgrid-email-delivery-simplified,
+                ultimate-member,
+                um-recaptcha,
+                [um-recaptcha]http://bit.ly/um-recaptcha,
                 w3-total-cache,
                 wp-smushit,
-                wpdiscuz,
-                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
 
-                [ultimate-member]https://ultimatemember.com/wp-content/uploads/2017/11/ultimate-member.zip,
-                [um-recaptcha]https://ultimatemember.com/wp-content/uploads/2017/11/um-recaptcha-2.0.zip,
-            # Temporary until ultimate member 2.x lands on wordpress.org
-            # ultimate-member,
-            # [um-recaptcha]http://bit.ly/um-recaptcha,
         logging:
             options:
                 max-size: 1m

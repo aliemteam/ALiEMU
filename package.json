@@ -4,7 +4,7 @@
   "license": "MIT",
   "repository": "https://github.com/aliemteam/ALiEMU",
   "server": {
-    "name": "emintro",
+    "name": "aliemu",
     "plugins": [
       "learndash-propanel",
       "sfwd-lms"
