@@ -158,8 +158,15 @@
 .wpProQuiz_questionListItem {
     list-style: none;
     label {
+        position: relative;
         display: block;
         cursor: pointer;
+        padding-left: $block-margin;
+    }
+    .wpProQuiz_questionInput {
+        position: absolute;
+        left: 0;
+        height: 2em;
     }
     &:nth-last-of-type(n + 2) {
         margin-bottom: 5px;
