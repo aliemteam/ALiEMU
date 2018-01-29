@@ -246,7 +246,7 @@ dd.course_progress {
 .wpProQuiz_listItem {
     list-style-type: none;
     &:before {
-        content: '';
+        content: '' !important;
     }
 }
 
