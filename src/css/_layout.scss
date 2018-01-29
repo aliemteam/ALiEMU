@@ -13,6 +13,25 @@ body {
     }
 }
 
+.skip-link {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    background: $secondary;
+    color: white;
+    left: $block-margin;
+    padding: 5px 20px;
+    box-shadow: map-get($shadows, 'depth-8');
+    &:focus {
+        clip: unset;
+        height: auto;
+        width: auto;
+    }
+}
+
 #content {
     max-width: 100%;
     display: flex;
@@ -28,9 +47,6 @@ main[role='main'] {
     margin: $sep 0;
     flex: auto;
 
-    // &:only-child {
-    //     padding: 0;
-    // }
     @include device-tablet {
         padding: 0 $block-margin;
     }

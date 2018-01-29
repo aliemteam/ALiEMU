@@ -21,13 +21,7 @@
 
 <body <?php body_class(); ?>>
 
-	<?php
-
-		/*
-		FIXME: add back this skip link later
-		<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'aliemu' ); ?></a>
-		*/
-	?>
+	<a class="skip-link" href="#content"><?php esc_html_e( 'Skip to content', 'aliemu' ); ?></a>
 
 	<header id="header-primary" class="header" role="banner">
 		<a href="/" class="header__logo">
