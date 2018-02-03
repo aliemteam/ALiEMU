@@ -88,6 +88,9 @@ if (!IS_PRODUCTION) {
             open: false,
             reloadDebounce: 2000,
             notify: false,
+        },
+        {
+            injectCss: true,
         }),
     );
 }

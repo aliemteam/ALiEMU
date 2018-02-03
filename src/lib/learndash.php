@@ -1,9 +1,16 @@
 <?php
+/**
+ * Functionality related to LearnDash
+ *
+ * @package ALiEMU
+ */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Adds "Course Short Description" field to the block meta.
+ *
+ * @param WP_Post[] $posts Array of posts.
  */
 function learndash_course_grid_post_args( $posts ) {
 	foreach ( $posts as $key => $post ) {
@@ -32,6 +39,8 @@ add_filter( 'learndash_post_args', 'learndash_course_grid_post_args', 10, 1 );
 
 /**
  * Adds a warning message if the short description field of a post exceeds 30 words.
+ *
+ * @global WP_Post $post
  */
 function check_description_length() {
 	global $post;

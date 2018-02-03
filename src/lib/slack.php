@@ -41,23 +41,12 @@ function slack_comment( $comment_id ) {
 	$post     = get_post( $comment->comment_post_ID );
 	$category = get_the_category( $post->ID )[0]->slug;
 
-	switch ( $category ) {
-		case 'capsules':
-			$endpoint = 'capsules/messages/comments';
-			break;
-		case 'air':
-			$endpoint = 'airseries/messages/comments';
-			break;
-		case 'air-pro':
-			$endpoint = 'airseries-pro/messages/comments';
-			break;
-		default:
-			$endpoint = 'aliemu/messages/comments';
-			break;
+	if ( ! in_array( $category, [ 'capsules', 'air', 'air-pro', 'in-training-exam-prep' ], true ) ) {
+		$category = 'aliemu';
 	}
 
 	slack_message(
-		$endpoint, [
+		"$category/messages/comments", [
 			'name'     => $comment->comment_author,
 			'email'    => $comment->comment_author_email,
 			'content'  => $comment->comment_content,
