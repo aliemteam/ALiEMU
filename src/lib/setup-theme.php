@@ -10,7 +10,7 @@
  *
  * @link https://codex.wordpress.org/Content_Width
  */
-$content_width = 640;
+$content_width = 800;
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -20,7 +20,7 @@ $content_width = 640;
  * as indicating support for post thumbnails.
  */
 function aliemu_setup() {
-	/*
+	/**
 	 * Make theme available for translation.
 	 * Translations can be filed in the /languages/ directory.
 	 * If you're building a theme based on ALiEMU, use a find and replace
@@ -31,7 +31,7 @@ function aliemu_setup() {
 	// Add default posts and comments RSS feed links to head.
 	add_theme_support( 'automatic-feed-links' );
 
-	/*
+	/**
 	 * Let WordPress manage the document title.
 	 * By adding theme support, we declare that this theme does not use a
 	 * hard-coded <title> tag in the document head, and expect WordPress to
@@ -39,7 +39,7 @@ function aliemu_setup() {
 	 */
 	add_theme_support( 'title-tag' );
 
-	/*
+	/**
 	 * Enable support for Post Thumbnails on posts and pages.
 	 *
 	 * @link https://developer.wordpress.org/themes/functionality/featured-images-post-thumbnails/
@@ -54,27 +54,27 @@ function aliemu_setup() {
 		]
 	);
 
-	/*
+	/**
 	 * Switch default core markup for search form, comment form, and comments
 	 * to output valid HTML5.
 	 */
 	add_theme_support(
-		'html5', array(
+		'html5', [
 			'search-form',
 			'comment-form',
 			'comment-list',
 			'gallery',
 			'caption',
-		)
+		]
 	);
 
 	// Set up the WordPress core custom background feature.
 	add_theme_support(
 		'custom-background', apply_filters(
-			'aliemu_custom_background_args', array(
+			'aliemu_custom_background_args', [
 				'default-color' => 'ffffff',
 				'default-image' => '',
-			)
+			]
 		)
 	);
 
@@ -82,17 +82,17 @@ function aliemu_setup() {
 	add_theme_support( 'customize-selective-refresh-widgets' );
 
 	/**
-		 * Add support for core custom logo.
-		 *
-		 * @link https://codex.wordpress.org/Theme_Logo
-		 */
+	 * Add support for core custom logo.
+	 *
+	 * @link https://codex.wordpress.org/Theme_Logo
+	 */
 	add_theme_support(
-		'custom-logo', array(
+		'custom-logo', [
 			'height'      => 250,
 			'width'       => 250,
 			'flex-width'  => true,
 			'flex-height' => true,
-		)
+		]
 	);
 }
 add_action( 'after_setup_theme', 'aliemu_setup' );
@@ -117,6 +117,11 @@ function aliemu_widgets_init() {
 }
 add_action( 'widgets_init', 'aliemu_widgets_init' );
 
+/**
+ * Customizes the comment form.
+ *
+ * @param mixed[] $defaults The default comment form arguments.
+ */
 function aliemu_comments_args( $defaults ) {
 
 	$user = wp_get_current_user();
@@ -178,52 +183,19 @@ function aliemu_comments_args( $defaults ) {
 }
 add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
 
-
-function aliemu_soundcloud_embed( $html, $url ) {
-
-	// We're only concerned with soundcloud embeds.
-	if ( wp_parse_url( $url, PHP_URL_HOST ) !== 'soundcloud.com' ) {
-		return $html;
-	}
-
-	preg_match( '/src="(.+?)"/', $html, $matches );
-	parse_str( wp_parse_url( htmlspecialchars_decode( $matches[1] ), PHP_URL_QUERY ), $query_data );
-
-	foreach ( [ 'visual', 'maxheight', 'maxwidth' ] as $idx ) {
-		unset( $query_data[ $idx ] );
-	}
-
-	$query = http_build_query( $query_data, '', '&amp;' );
-
-	ob_start();
-	?>
-		<iframe
-			width="100%"
-			height="166"
-			scrolling="no"
-			frameborder="no"
-			allow="autoplay"
-			src="https://w.soundcloud.com/player/?<?php echo esc_attr( $query ); ?>"
-		></iframe>
-	<?php
-
-	return ob_get_clean();
-}
-add_filter( 'oembed_result', 'aliemu_soundcloud_embed', 10, 2 );
-
 /**
  * Custom template tags for this theme.
  */
-require ALIEMU_ROOT . '/templates/template-tags.php';
+require_once ALIEMU_ROOT_PATH . '/lib/template-tags.php';
 
 /**
  * Functions which enhance the theme by hooking into WordPress.
  */
-require ALIEMU_ROOT . '/templates/template-functions.php';
+require_once ALIEMU_ROOT_PATH . '/lib/template-functions.php';
 
 /**
- * Load Jetpack compatibility file.
+ * Load plugin files.
  */
-if ( defined( 'JETPACK__VERSION' ) ) {
-	require __DIR__ . '/jetpack.php';
+foreach ( glob( __DIR__ . '/plugins/*.php' ) as $plugin_file ) {
+	require_once $plugin_file;
 }

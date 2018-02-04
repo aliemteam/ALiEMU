@@ -1,0 +1,12 @@
+{
+    "typescript.tsdk": "./node_modules/typescript/lib",
+    "lcov.path": "lib/tmp/coverage/lcov.info",
+    "files.associations": {
+        "deploy": "shellscript",
+        "helpers": "shellscript",
+        "sync": "shellscript",
+        "variables": "shellscript"
+    },
+    "phpcs.standard": "WordPress",
+    "phpcbf.standard": "WordPress"
+}

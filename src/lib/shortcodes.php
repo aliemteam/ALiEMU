@@ -20,9 +20,15 @@ defined( 'ABSPATH' ) || exit;
  * @param string  $content The content to be displayed inside the box.
  */
 function capsule( $atts, $content ) {
-	$atts = shortcode_atts( [ 'heading' => 'CAPSULE' ], $atts );
+	[
+		'heading' => $heading,
+	] = shortcode_atts(
+		[
+			'heading' => 'CAPSULE',
+		], $atts
+	);
 
-	$body_class = 'CAPSULE' === $atts['heading']
+	$body_class = 'CAPSULE' === $heading
 		? 'capsule-box__body capsule-box__body--capsule'
 		: 'capsule-box__body';
 
@@ -30,7 +36,7 @@ function capsule( $atts, $content ) {
 	?>
 	<div class='capsule-box'>
 		<div class='capsule-box__heading'>
-			<?php echo esc_html( $atts['heading'] ); ?>
+			<?php echo esc_html( $heading ); ?>
 		</div>
 		<div class='<?php echo esc_attr( $body_class ); ?>'>
 			<?php echo do_shortcode( $content ); ?>
@@ -39,50 +45,56 @@ function capsule( $atts, $content ) {
 	<?php
 	return ob_get_clean();
 }
-add_shortcode( 'capsule', 'ALIEMU\Shortcodes\capsule' );
+add_shortcode( 'capsule', __NAMESPACE__ . '\capsule' );
 
 /**
  * Shortcode which GETs and returns the recommended III hours for certificates.
  *
- * @return string The recommended hours
+ * @return string The recommended hours or "N/A" if not defined
  */
-function course_hours() {
-	$course_id = @$_GET['course_id'];
-	if ( empty( $course_id ) ) {
-		return '';
+function course_hours() : string {
+	$hours = 'N/A';
+	// Ignoring nonce verification here because learndash sets dynamic nonce
+	// action names using data that I don't have access to because they are the
+	// worst programmers ever.
+	// @codingStandardsIgnoreStart
+	if ( isset( $_GET['course_id'] ) ) {
+		// @codingStandardsIgnoreEnd
+		$course_id = intval( $_GET['course_id'] ); // Input var okay.
+		$meta      = get_post_meta( $course_id, '_sfwd-courses', true );
+		$hours     = $meta['sfwd-courses_recommendedHours'];
 	}
-	$meta = get_post_meta( $course_id, '_sfwd-courses', true );
-	return $meta['sfwd-courses_recommendedHours'];
+	return $hours;
 }
-add_shortcode( 'course-hours', 'ALIEMU\Shortcodes\course_hours' );
+add_shortcode( 'course-hours', __NAMESPACE__ . '\course_hours' );
 
 
 /**
  * "Learn more" toggle
  *
  * @param mixed[] $atts {
- *      Shortcode attributes.
+ *     Shortcode attributes.
  *
- *      @type string $caption The caption to be displayed in the toggle.
+ *     @type string $caption The caption to be displayed in the toggle.
  * }
  * @param string  $content The content to be toggled.
  */
 function learn_more( $atts, $content ) {
-	$atts = shortcode_atts(
+	[
+		'caption' => $caption,
+	] = shortcode_atts(
 		[
-			'caption' => '',
+			'caption' => 'Details',
 		], $atts
 	);
 
 	ob_start();
 	?>
 		<details>
-			<?php if ( $atts['caption'] ) : ?>
-			<summary><?php echo esc_html( $atts['caption'] ); ?></summary>
-			<?php endif; ?>
+			<summary><?php echo esc_html( $caption ); ?></summary>
 			<?php echo do_shortcode( $content ); ?>
 		</details>
 	<?php
 	return ob_get_clean();
 }
-add_shortcode( 'learn_more', 'ALIEMU\Shortcodes\learn_more' );
+add_shortcode( 'learn_more', __NAMESPACE__ . '\learn_more' );

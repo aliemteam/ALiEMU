@@ -1,6 +1,6 @@
 <?php
 
-namespace ALIEMU\Localizers;
+namespace ALIEMU;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -465,7 +465,7 @@ class EducatorDashboard {
 
 }
 
-function educator_dashboard() {
+function localize() {
 	$au_dashboard = new EducatorDashboard();
 	return [
 		'users'       => $au_dashboard->user_meta,

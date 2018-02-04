@@ -23,7 +23,6 @@ services:
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 jetpack,
                 mce-table-buttons,
-                rest-api,
                 sendgrid-email-delivery-simplified,
                 ultimate-member,
                 um-recaptcha,

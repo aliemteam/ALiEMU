@@ -5,14 +5,17 @@
  * @package ALiEMU
  */
 
+namespace ALIEMU\Learndash;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Adds "Course Short Description" field to the block meta.
  *
  * @param WP_Post[] $posts Array of posts.
+ * @return WP_Post[]
  */
-function learndash_course_grid_post_args( $posts ) {
+function course_fields( $posts ) : array {
 	foreach ( $posts as $key => $post ) {
 		if ( 'sfwd-courses' !== $post['post_type'] ) {
 			continue;
@@ -35,14 +38,21 @@ function learndash_course_grid_post_args( $posts ) {
 	}
 	return $posts;
 }
-add_filter( 'learndash_post_args', 'learndash_course_grid_post_args', 10, 1 );
+add_filter( 'learndash_post_args', __NAMESPACE__ . '\course_fields' );
 
 /**
  * Adds a warning message if the short description field of a post exceeds 30 words.
  *
+ * "Words" here are groups of characters separated by whitespace OR dashes.
+ * Consider the following examples:
+ *
+ *     "two-thirds of a cup" = 5 words.
+ *     "supercalifragilisticexpialidocious" = 1 word.
+ *     "hello-there-how-are-you" = 5 words.
+ *
  * @global WP_Post $post
  */
-function check_description_length() {
+function check_description_length() : void {
 	global $post;
 
 	// Not on a post page.
@@ -58,7 +68,7 @@ function check_description_length() {
 
 	$meta        = get_post_meta( $post->ID, '_sfwd-courses' );
 	$description = $meta[0]['sfwd-courses_course_short_description'];
-	$words       = preg_split( '/(?: |(?<=\S)-(?=\S))/', $description );
+	$words       = preg_split( '/(?: |(?<=\S)\p{Pd}(?=\S))/u', $description );
 	if ( count( $words ) > 30 ) {
 		?>
 		<div class="notice notice-error is-dismissible">
@@ -70,4 +80,4 @@ function check_description_length() {
 		<?php
 	}
 }
-add_action( 'admin_notices', 'check_description_length' );
+add_action( 'admin_notices', __NAMESPACE__ . '\check_description_length' );

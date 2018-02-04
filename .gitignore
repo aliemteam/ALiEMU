@@ -10,9 +10,8 @@ Thumbs.db
 .fseventsd
 .listing
 npm-debug.log
-.vscode
 tmp
 wp-content
 node_modules
 dist
-coverage
+NOTES.md
