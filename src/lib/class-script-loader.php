@@ -73,8 +73,6 @@ class Script_Loader {
 	 * delegation process.
 	 */
 	public function register() : void {
-		global $current_user, $post;
-
 		$fonts = add_query_arg(
 			[
 				'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
@@ -87,7 +85,7 @@ class Script_Loader {
 		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
-		$this->delegate( $post, $current_user );
+		$this->delegate();
 	}
 
 	/**
@@ -101,11 +99,8 @@ class Script_Loader {
 	 * Master delegator for the script loader.
 	 *
 	 * Loads/Unloads scripts and styles based on the current page.
-	 *
-	 * @param  string $post  Server request string.
-	 * @param  object $user  Current WordPress user.
 	 */
-	private function delegate( $post, $user ) : void {
+	private function delegate() : void {
 		// Always load these.
 		$load = (object) [
 			'scripts' => [ 'mobile-nav-menu-helper' ],
