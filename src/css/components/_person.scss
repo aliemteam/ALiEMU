@@ -1,0 +1,64 @@
+@import '../colors';
+@import '../variables';
+
+.person {
+    display: flex;
+    flex-flow: column nowrap;
+    box-shadow: map-get($shadows, 'depth-2');
+    border-radius: $border-radius;
+}
+
+.person__img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: $gray-light;
+    img {
+        border-top-right-radius: $border-radius;
+        border-top-left-radius: $border-radius;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+    img[src$='.svg'] {
+        height: 200px !important;
+    }
+}
+
+.person__meta {
+    flex: auto;
+    padding: 10px;
+}
+
+.person__name {
+    font-weight: 600;
+}
+
+.person__title {
+    font-size: 0.9em;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.person__background {
+    font-size: 0.8em;
+}
+
+.person__social-media {
+    border-top: solid $gray-light 1px;
+    display: flex;
+    padding: 5px;
+    min-height: 40px;
+    a {
+        display: flex;
+        margin: 0 5px;
+        height: 100%;
+        height: 30px;
+        width: 30px;
+        justify-content: center;
+        align-items: center;
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

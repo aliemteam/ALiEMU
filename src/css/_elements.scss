@@ -125,3 +125,8 @@ blockquote {
     display: block;
     margin: auto !important;
 }
+
+.grid {
+    display: grid;
+    margin: $block-margin 0;
+}
