@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * }
  * @param string  $content The content to be displayed inside the box.
  */
-function capsule( $atts, $content ) {
+function capsule( $atts, $content ) : string {
 	[
 		'heading' => $heading,
 	] = shortcode_atts(
@@ -79,7 +79,7 @@ add_shortcode( 'course-hours', __NAMESPACE__ . '\course_hours' );
  * }
  * @param string  $content The content to be toggled.
  */
-function learn_more( $atts, $content ) {
+function learn_more( $atts, $content ) : string {
 	[
 		'caption' => $caption,
 	] = shortcode_atts(

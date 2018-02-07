@@ -6,27 +6,27 @@ defined( 'ABSPATH' ) || exit;
  * Displays a course
  *
  * Available Variables
- * $course_id 		            : (int) ID of the course
- * $course 		                : (object) Post object of the course
+ * $course_id                   : (int) ID of the course
+ * $course                      : (object) Post object of the course
  * $course_settings             : (array) Settings specific to current course
  *
  * $courses_options             : Options/Settings as configured on Course Options page
  * $lessons_options             : Options/Settings as configured on Lessons Options page
  * $quizzes_options             : Options/Settings as configured on Quiz Options page
  *
- * $user_id 		            : Current User ID
- * $logged_in 		            : User is logged in
- * $current_user 	            : (object) Currently logged in user object
+ * $user_id                     : Current User ID
+ * $logged_in                   : User is logged in
+ * $current_user                : (object) Currently logged in user object
  *
- * $course_status 	            : Course Status
- * $has_access 	                : User has access to course or is enrolled.
- * $materials 		            : Course Materials
- * $has_course_content		    : Course has course content
- * $lessons 		            : Lessons Array
- * $quizzes 		            : Quizzes Array
- * $lesson_progression_enabled 	: (true/false)
- * $has_topics		            : (true/false)
- * $lesson_topics	            : (array) lessons topics
+ * $course_status               : Course Status
+ * $has_access                  : User has access to course or is enrolled.
+ * $materials                   : Course Materials
+ * $has_course_content          : Course has course content
+ * $lessons                     : Lessons Array
+ * $quizzes                     : Quizzes Array
+ * $lesson_progression_enabled  : (true/false)
+ * $has_topics                  : (true/false)
+ * $lesson_topics               : (array) lessons topics
  *
  * @since 2.1.0
  *
@@ -42,7 +42,7 @@ if ( $logged_in ) : ?>
 		<span>
 			<strong><?php printf( _x( '%s Status:', 'Course Status Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?></strong> <?php echo $course_status; ?>
 		</span>
-		<?php  if ( ! empty( $course_certficate_link ) ) : ?>
+		<?php if ( ! empty( $course_certficate_link ) ) : ?>
 			<a href='<?php echo esc_attr( $course_certficate_link ); ?>' class="btn btn--primary" target="_blank"><?php echo apply_filters( 'ld_certificate_link_label', __( 'Print Certificate', 'learndash' ), $user_id, $post->ID ); ?></a>
 		<?php endif; ?>
 	</div>
@@ -50,6 +50,7 @@ if ( $logged_in ) : ?>
 	<?php
 	/**
 	 * Filter to add custom content after the Course Status section of the Course template output.
+	 *
 	 * @since 2.3
 	 * See https://bitbucket.org/snippets/learndash/7oe9K for example use of this filter.
 	 */
@@ -73,7 +74,8 @@ if ( $logged_in ) : ?>
 		endif;
 	endif;
 
-	if ( $show_course_content ) : ?>
+	if ( $show_course_content ) :
+	?>
 		<div id="learndash_course_content">
 			<h1 id="learndash_course_content_title">
 				<?php printf( _x( '%s Content', 'Course Content Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?>
@@ -83,7 +85,8 @@ if ( $logged_in ) : ?>
 			/**
 			 * Display lesson list
 			 */
-			if ( ! empty( $lessons ) ) : ?>
+			if ( ! empty( $lessons ) ) :
+			?>
 
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
@@ -108,13 +111,14 @@ if ( $logged_in ) : ?>
 			/**
 			 * Display quiz list
 			 */
-			if ( ! empty( $quizzes ) ) : ?>
+			if ( ! empty( $quizzes ) ) :
+			?>
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
 						<div class="content-table__cell">Quizzes</div>
 						<div class="content-table__cell">Status</div>
 					</div>
-					<?php foreach( $quizzes as $quiz ) : ?>
+					<?php foreach ( $quizzes as $quiz ) : ?>
 						<div class="content-table__row">
 							<div class="content-table__cell content-table__cell--full-width">
 								<a class="content-table__link" href='<?php echo esc_attr( $quiz['permalink'] ); ?>'><?php echo $quiz['post']->post_title; ?></a>

@@ -4,27 +4,27 @@
  *
  * Available Variables
  *
- * $course_id 		            : (int) ID of the course
- * $course 		                : (object) Post object of the course
+ * $course_id                   : (int) ID of the course
+ * $course                      : (object) Post object of the course
  * $course_settings             : (array) Settings specific to current course
- * $course_status 	            : Course Status
- * $has_access 	                : User has access to course or is enrolled.
+ * $course_status               : Course Status
+ * $has_access                  : User has access to course or is enrolled.
  *
  * $courses_options             : Options/Settings as configured on Course Options page
  * $lessons_options             : Options/Settings as configured on Lessons Options page
  * $quizzes_options             : Options/Settings as configured on Quiz Options page
  *
- * $user_id 		            : (object) Current User ID
- * $logged_in 		            : (true/false) User is logged in
- * $current_user 	            : (object) Currently logged in user object
+ * $user_id                     : (object) Current User ID
+ * $logged_in                   : (true/false) User is logged in
+ * $current_user                : (object) Currently logged in user object
  *
- * $quizzes 		            : (array) Quizzes Array
- * $post 			            : (object) The lesson post object
- * $topics 		                : (array) Array of Topics in the current lesson
+ * $quizzes                     : (array) Quizzes Array
+ * $post                        : (object) The lesson post object
+ * $topics                      : (array) Array of Topics in the current lesson
  * $all_quizzes_completed       : (true/false) User has completed all quizzes on the lesson Or, there are no quizzes.
- * $lesson_progression_enabled 	: (true/false)
- * $show_content	            : (true/false) true if lesson progression is disabled or if previous lesson is completed.
- * $previous_lesson_completed 	: (true/false) true if previous lesson is completed
+ * $lesson_progression_enabled  : (true/false)
+ * $show_content                : (true/false) true if lesson progression is disabled or if previous lesson is completed.
+ * $previous_lesson_completed   : (true/false) true if previous lesson is completed
  * $lesson_settings             : Settings specific to the current lesson.
  *
  * @since 2.1.0
@@ -35,25 +35,23 @@ if ( @$lesson_progression_enabled && ! @$previous_lesson_completed ) : ?>
 	<p id="learndash_complete_prev_lesson">
 		<?php
 			$previous_item = learndash_get_previous( $post );
-			if ( ( !empty( $previous_item ) ) && ( $previous_item instanceof WP_Post ) ) {
+		if ( ( ! empty( $previous_item ) ) && ( $previous_item instanceof WP_Post ) ) {
 				if ( $previous_item->post_type == 'sfwd-quiz' ) {
-					echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%s">%s</a>.', 'placeholders: quiz URL, quiz label', 'learndash' ), get_permalink($previous_item->ID), LearnDash_Custom_Label::label_to_lower('quiz') );
+				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: quiz URL, quiz label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'quiz' ) );
 
+			} elseif ( $previous_item->post_type == 'sfwd-topic' ) {
+				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: topic URL, topic label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'topic' ) );
+			} else {
+				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: lesson URL, lesson label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
 				}
-				else if ( $previous_item->post_type == 'sfwd-topic' ) {
-					echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%s">%s</a>.', 'placeholders: topic URL, topic label', 'learndash' ), get_permalink($previous_item->ID), LearnDash_Custom_Label::label_to_lower('topic') );
+		} else {
+			echo sprintf( _x( 'Please go back and complete the previous %s.', 'placeholder lesson', 'learndash' ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
 				}
-				else {
-					echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%s">%s</a>.', 'placeholders: lesson URL, lesson label', 'learndash' ), get_permalink($previous_item->ID), LearnDash_Custom_Label::label_to_lower('lesson') );
-				}
-			}
-			else {
-				echo sprintf( _x( 'Please go back and complete the previous %s.', 'placeholder lesson', 'learndash' ), LearnDash_Custom_Label::label_to_lower('lesson') );
-			}
 		?>
 	</p>
 	<?php add_filter( 'comments_array', 'learndash_remove_comments', 1, 2 ); ?>
-<?php endif;
+<?php
+endif;
 if ( $show_content ) :
 
 	echo $content;
@@ -61,21 +59,22 @@ if ( $show_content ) :
 	/**
 	 * Lesson Topics
 	 */
-	if ( ! empty( $topics ) ) : ?>
+	if ( ! empty( $topics ) ) :
+	?>
 		<div id="learndash_lesson_topics_list">
 			<div id='learndash_topic_dots-<?php echo esc_attr( $post->ID ); ?>' class="learndash_topic_dots type-list">
-				<strong><?php printf( _x( '%s %s', 'Lesson Topics Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ), LearnDash_Custom_Label::get_label( 'topics' ) ); ?></strong>
+				<strong><?php printf( _x( '%1$s %2$s', 'Lesson Topics Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ), LearnDash_Custom_Label::get_label( 'topics' ) ); ?></strong>
 				<ul>
 					<?php $odd_class = ''; ?>
 
 					<?php foreach ( $topics as $key => $topic ) : ?>
 
-						<?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
+						<?php $odd_class       = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
 						<?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
 
 						<li class='<?php echo esc_attr( $odd_class ); ?>'>
 							<span class="topic_item">
-								<a class='<?php echo esc_attr( $completed_class ); ?>' href='<?php echo esc_attr(get_permalink( $topic->ID )); ?>' title='<?php echo esc_attr( $topic->post_title ); ?>'>
+								<a class='<?php echo esc_attr( $completed_class ); ?>' href='<?php echo esc_attr( get_permalink( $topic->ID ) ); ?>' title='<?php echo esc_attr( $topic->post_title ); ?>'>
 									<span><?php echo $topic->post_title; ?></span>
 								</a>
 							</span>
@@ -86,13 +85,15 @@ if ( $show_content ) :
 				</ul>
 			</div>
 		</div>
-	<?php endif;
+	<?php
+	endif;
 
 
 	/**
 	 * Show Quiz List
 	 */
-	if ( ! empty( $quizzes ) ) : ?>
+	if ( ! empty( $quizzes ) ) :
+	?>
 		<div class="content-table">
 			<div class="content-table__row content-table__row--header">
 				<div class="content-table__cell">Quizzes</div>
@@ -109,20 +110,22 @@ if ( $show_content ) :
 				</div>
 			<?php endforeach; ?>
 		</div>
-	<?php endif;
+	<?php
+	endif;
 
 
 	/**
 	 * Display Lesson Assignments
 	 */
-	if ( lesson_hasassignments( $post ) ) : ?>
+	if ( lesson_hasassignments( $post ) ) :
+	?>
 		<?php $assignments = learndash_get_user_assignments( $post->ID, $user_id ); ?>
 
 		<div id="learndash_uploaded_assignments">
 			<h2><?php _e( 'Files you have uploaded', 'learndash' ); ?></h2>
 			<table>
 				<?php if ( ! empty( $assignments ) ) : ?>
-					<?php foreach( $assignments as $assignment ) : ?>
+					<?php foreach ( $assignments as $assignment ) : ?>
 						<tr>
 							<td>
 								<a href='<?php echo esc_attr( get_post_meta( $assignment->ID, 'file_link', true ) ); ?>' target="_blank"><?php echo __( 'Download', 'learndash' ) . ' ' . get_post_meta( $assignment->ID, 'file_name', true ); ?></a>
@@ -135,7 +138,8 @@ if ( $show_content ) :
 				<?php endif; ?>
 			</table>
 		</div>
-	<?php endif;
+	<?php
+	endif;
 
 	/**
 	 * Display Mark Complete Button
@@ -144,7 +148,8 @@ if ( $show_content ) :
 		echo learndash_mark_complete( $post );
 	}
 
-endif; ?>
+endif;
+?>
 
 <p id="learndash_next_prev_link">
 	<?php

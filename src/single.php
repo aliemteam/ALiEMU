@@ -7,30 +7,28 @@
  * @package ALiEMU
  */
 
-get_header(); ?>
+get_header();
 
-<?php if ( have_posts() ) : ?>
-	<?php the_post(); ?>
-	<section id="content" class="content-area">
-		<main role="main">
-			<?php get_template_part( 'templates/partials/content', get_post_type() ); ?>
-			<?php the_post_navigation(); ?>
-		</main>
-		<?php get_sidebar(); ?>
-	</section>
+?>
+<section id="content" class="content-area">
+	<main role="main">
+		<?php
+		if ( have_posts() ) :
+			the_post();
+			get_template_part( 'templates/partials/content', get_post_type() );
+			the_post_navigation();
+			endif;
+		?>
+	</main>
+	<?php get_sidebar(); ?>
+</section>
 
-	<?php
-	if ( comments_open() || get_comments_number() ) {
-		comments_template();
-	}
-	?>
-
-<?php else : ?>
-	<section id="content" class="content-area">
-		<main role="main"></main>
-	</section>
-<?php endif; ?>
+<?php rewind_posts(); ?>
 
 <?php
+if ( have_posts() && ( comments_open() || get_comments_number() ) ) :
+	the_post();
+	comments_template();
+endif;
 
 get_footer();

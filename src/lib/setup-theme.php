@@ -19,7 +19,7 @@ $content_width = 800;
  * runs before the init hook. The init hook is too late for some features, such
  * as indicating support for post thumbnails.
  */
-function aliemu_setup() {
+function aliemu_setup() : void {
 	/**
 	 * Make theme available for translation.
 	 * Translations can be filed in the /languages/ directory.
@@ -102,7 +102,7 @@ add_action( 'after_setup_theme', 'aliemu_setup' );
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-function aliemu_widgets_init() {
+function aliemu_widgets_init() : void {
 	register_sidebar(
 		[
 			'name'          => esc_html__( 'Sidebar', 'aliemu' ),
@@ -122,7 +122,7 @@ add_action( 'widgets_init', 'aliemu_widgets_init' );
  *
  * @param mixed[] $defaults The default comment form arguments.
  */
-function aliemu_comments_args( $defaults ) {
+function aliemu_comments_args( $defaults ) : array {
 
 	$user = wp_get_current_user();
 
@@ -186,16 +186,36 @@ add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
 /**
  * Custom template tags for this theme.
  */
-require_once ALIEMU_ROOT_PATH . '/lib/template-tags.php';
+require_once __DIR__ . '/template-tags.php';
 
 /**
- * Functions which enhance the theme by hooking into WordPress.
+ * Shortcodes.
  */
-require_once ALIEMU_ROOT_PATH . '/lib/template-functions.php';
+require_once __DIR__ . '/shortcodes.php';
 
 /**
- * Load plugin files.
+ * Custom embeds.
+ */
+require_once __DIR__ . '/embeds.php';
+
+/**
+ * Plugin customizations.
  */
 foreach ( glob( __DIR__ . '/plugins/*.php' ) as $plugin_file ) {
 	require_once $plugin_file;
 }
+ * Custom embeds.
+ */
+require_once __DIR__ . '/embeds.php';
+
+/**
+ * Plugin customizations.
+ */
+foreach ( glob( __DIR__ . '/plugins/*.php' ) as $plugin_file ) {
+	require_once $plugin_file;
+}
+
+/**
+ * Slack message routing.
+ */
+require_once __DIR__ . '/slack.php';
