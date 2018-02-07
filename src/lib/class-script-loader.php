@@ -79,8 +79,10 @@ class Script_Loader {
 				'subset' => 'greek,greek-ext,latin-ext',
 			], 'https://fonts.googleapis.com/css'
 		);
+
 		wp_register_style( 'aliemu-fonts', $fonts );
 		wp_register_style( 'aliemu', ALIEMU_ROOT_URI . '/style.css', ALIEMU_VERSION );
+		wp_register_style( 'educator-dashboard', ALIEMU_ROOT_URI . '/css/educator-dashboard.css', [], ALIEMU_VERSION );
 
 		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
@@ -133,6 +135,7 @@ class Script_Loader {
 				switch ( $this->query['profiletab'] ?? '' ) {
 					case 'educator_dashboard':
 						array_push( $load->scripts, 'educator-dashboard' );
+						array_push( $load->styles, 'educator-dashboard' );
 						break 2;
 					case 'user_progress':
 						array_push( $load->styles, 'learndash_template_style_css' );
@@ -188,7 +191,7 @@ class Script_Loader {
 	 */
 	private function localize( $script, $varname ) : void {
 		require_once __DIR__ . "/localizers/$script.php";
-		wp_localize_script( $script, $varname, \ALIEMU\localize() );
+		wp_localize_script( $script, $varname, localize() );
 	}
 }
 
