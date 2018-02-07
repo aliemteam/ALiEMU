@@ -31,6 +31,7 @@ services:
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
                 ultimate-member,
                 [um-recaptcha]http://bit.ly/um-recaptcha,
+                wordpress-seo,
 
             WP_DEBUG_LOG: 'true'
             WP_DEBUG_DISPLAY: 'true'

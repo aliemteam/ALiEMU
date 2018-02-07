@@ -39,6 +39,13 @@ class Structured_Data {
 
 		add_filter( 'structured_data_sfwd-courses', [ $this, 'course' ] );
 		add_filter( 'structured_data_category-overview', [ $this, 'category' ] );
+
+		// Disables Yoast SEO's handling of the JSON-LD.
+		add_filter(
+			'wpseo_json_ld_output', function () {
+				return [];
+			}
+		);
 	}
 
 	/**

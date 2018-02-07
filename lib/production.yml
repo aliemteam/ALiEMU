@@ -29,6 +29,7 @@ services:
                 [um-recaptcha]http://bit.ly/um-recaptcha,
                 w3-total-cache,
                 wp-smushit,
+                wordpress-seo,
 
         logging:
             options:
