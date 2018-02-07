@@ -184,6 +184,11 @@ function aliemu_comments_args( $defaults ) : array {
 add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
 
 /**
+ * Utility / helper functions.
+ */
+require_once __DIR__ . '/utils.php';
+
+/**
  * Custom template tags for this theme.
  */
 require_once __DIR__ . '/template-tags.php';
@@ -194,16 +199,6 @@ require_once __DIR__ . '/template-tags.php';
 require_once __DIR__ . '/shortcodes.php';
 
 /**
- * Custom embeds.
- */
-require_once __DIR__ . '/embeds.php';
-
-/**
- * Plugin customizations.
- */
-foreach ( glob( __DIR__ . '/plugins/*.php' ) as $plugin_file ) {
-	require_once $plugin_file;
-}
  * Custom embeds.
  */
 require_once __DIR__ . '/embeds.php';

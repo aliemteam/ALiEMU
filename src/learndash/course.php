@@ -33,6 +33,7 @@ defined( 'ABSPATH' ) || exit;
  * @package LearnDash\Course
  */
 
+use ALIEMU\Tags;
 
 /**
  * Display course status
@@ -99,7 +100,7 @@ if ( $logged_in ) : ?>
 								<a class="content-table__link" href='<?php echo esc_attr( $lesson['permalink'] ); ?>'><?php echo $lesson['post']->post_title; ?></a>
 							</div>
 							<div class="content-table__cell content-table__cell--padded">
-								<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $lesson['status']; ?>.svg" height="40px" width="40px" role="presentation"/>
+								<img src="<?php Tags\the_asset_url( $lesson['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -124,7 +125,7 @@ if ( $logged_in ) : ?>
 								<a class="content-table__link" href='<?php echo esc_attr( $quiz['permalink'] ); ?>'><?php echo $quiz['post']->post_title; ?></a>
 							</div>
 							<div class="content-table__cell content-table__cell--padded">
-								<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $quiz['status']; ?>.svg" height="40px" width="40px" role="presentation"/>
+								<img src="<?php Tags\the_asset_url( $quiz['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
 							</div>
 						</div>
 					<?php endforeach; ?>

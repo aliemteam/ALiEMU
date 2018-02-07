@@ -31,22 +31,25 @@
  *
  * @package LearnDash\Lesson
  */
+
+use ALIEMU\Tags;
+
 if ( @$lesson_progression_enabled && ! @$previous_lesson_completed ) : ?>
 	<p id="learndash_complete_prev_lesson">
 		<?php
 			$previous_item = learndash_get_previous( $post );
 		if ( ( ! empty( $previous_item ) ) && ( $previous_item instanceof WP_Post ) ) {
-				if ( $previous_item->post_type == 'sfwd-quiz' ) {
+			if ( $previous_item->post_type == 'sfwd-quiz' ) {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: quiz URL, quiz label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'quiz' ) );
 
 			} elseif ( $previous_item->post_type == 'sfwd-topic' ) {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: topic URL, topic label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'topic' ) );
 			} else {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: lesson URL, lesson label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
-				}
+			}
 		} else {
 			echo sprintf( _x( 'Please go back and complete the previous %s.', 'placeholder lesson', 'learndash' ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
-				}
+		}
 		?>
 	</p>
 	<?php add_filter( 'comments_array', 'learndash_remove_comments', 1, 2 ); ?>
@@ -105,7 +108,7 @@ if ( $show_content ) :
 						<a class="content-table__link" href='<?php echo esc_attr( $quiz['permalink'] ); ?>'><?php echo $quiz['post']->post_title; ?></a>
 					</div>
 					<div class="content-table__cell content-table__cell--padded">
-						<img src="<?php echo get_stylesheet_directory_uri(); ?>/assets/<?php echo $quiz['status']; ?>.svg" height="40px" width="40px" role="presentation"/>
+						<img src="<?php Tags\the_asset_url( $quiz['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
 					</div>
 				</div>
 			<?php endforeach; ?>

@@ -9,6 +9,8 @@
  * @package ALiEMU
  */
 
+use ALIEMU\Tags;
+
 $user = wp_get_current_user();
 ?>
 
@@ -45,10 +47,18 @@ $user = wp_get_current_user();
 					</div>
 				<?php else : ?>
 					<div class="home__series-logos">
-						<a href="/in-training-exam"><img src="/wp-content/uploads/2018/01/ALiEM-In-Training-Exam-Prep-Quiz-Sets-1-5-2nd-ed-cover-231x300.png" alt="In Training Exam Prep Button" scale="0"></a>
-						<a href="/air"><img src="/wp-content/themes/aliemu/assets/air-logo.svg" alt="AIR Button" scale="0"></a>
-						<a href="/air-pro"><img src="/wp-content/themes/aliemu/assets/air-pro-logo.svg" alt="AIR-Pro Button" scale="0"></a>
-						<a href="/capsules"><img src="/wp-content/themes/aliemu/assets/capsules-logo.svg" alt="Capsules Button" scale="0"></a>
+						<a href="/in-training-exam">
+							<img src="/wp-content/uploads/2018/01/ALiEM-In-Training-Exam-Prep-Quiz-Sets-1-5-2nd-ed-cover-231x300.png" alt="In Training Exam Prep Button">
+						</a>
+						<a href="/air">
+							<img src="<?php Tags\the_asset_url( 'air-logo.svg' ); ?>" alt="AIR Button">
+						</a>
+						<a href="/air-pro">
+							<img src="<?php Tags\the_asset_url( 'air-pro-logo.svg' ); ?>" alt="AIR-Pro Button">
+						</a>
+						<a href="/capsules">
+							<img src="<?php Tags\the_asset_url( 'capsules-logo.svg' ); ?>" alt="Capsules Button">
+						</a>
 					</div>
 				<?php endif; ?>
 			</div>
