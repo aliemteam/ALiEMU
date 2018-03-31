@@ -76,7 +76,7 @@
     "style-loader": "^0.20.1",
     "stylelint": "^8.4.0",
     "stylelint-config-recommended-scss": "^3.0.0",
-    "stylelint-scss": "^2.3.0",
+    "stylelint-scss": "^3.0.0",
     "ts-jest": "^22.0.3",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
