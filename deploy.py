@@ -46,6 +46,15 @@ class Deploy(object):
             'rm -rf /home/{name}/app/wp-content/themes/{name}/*'.format(
                 **self.meta))
 
+        print('Deploying docker-compose files...')
+        self.cmd.rsync(
+            '{root}/docker-compose.yml'.format(**self.meta),
+            '{name}:/home/{name}/app/docker-compose.yml'.format(**self.meta))
+        self.cmd.rsync(
+            '{root}/lib/production.yml'.format(**self.meta),
+            '{name}:/home/{name}/app/docker-compose.override.yml'.format(
+                **self.meta))
+
         print('Deploying {name}...'.format(**self.meta))
         self.cmd.rsync(
             '{root}/dist/'.format(**self.meta),
@@ -67,19 +76,15 @@ class Deploy(object):
         self.cmd.rsync('{root}/.env'.format(**self.meta),
                        '{name}:/home/{name}/app/.env'.format(**self.meta))
 
-        print('Deploying docker-compose.yml...')
-        self.cmd.rsync(
-            '{root}/lib/production.yml'.format(**self.meta),
-            '{name}:/home/{name}/app/docker-compose.yml'.format(**self.meta))
-
         print('Deploying database...')
         self.cmd.rsync(
             '{root}/data/database.sql'.format(**self.meta),
             '{name}:/home/{name}/app/data/database.sql'.format(**self.meta))
 
         print('Deploying uploads...')
-        self.cmd.rsync('{root}/wp-content/uploads'.format(**self.meta),
-                       '{name}:/home/{name}/app/wp-content'.format(**self.meta))
+        self.cmd.rsync(
+            '{root}/wp-content/uploads'.format(**self.meta),
+            '{name}:/home/{name}/app/wp-content'.format(**self.meta))
 
     def theme(self) -> None:
         """Deploy base theme if one exists."""
@@ -101,8 +106,9 @@ class Deploy(object):
         for plugin in self.meta['plugins']:
             print('Removing old version of plugin "{plugin}"'
                   .format(plugin=plugin))
-            self.cmd.ssh('rm -rf /home/{name}/app/wp-content/plugins/{plugin}/*'
-                         .format(plugin=plugin, **self.meta))
+            self.cmd.ssh(
+                'rm -rf /home/{name}/app/wp-content/plugins/{plugin}/*'.format(
+                    plugin=plugin, **self.meta))
 
             print('Deploying plugin "{plugin}"'.format(plugin=plugin))
             self.cmd.rsync('{root}/wp-content/plugins/{plugin}'.format(
