@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Creates, provisions, and configures new remote docker-machine on DigitalOcean running Ubuntu.
+Creates, provisions, and configures new remote docker-machine on DigitalOcean
+running Ubuntu.
 """
 from json import load
 from os import getenv
@@ -20,7 +21,7 @@ def docker_compose_version() -> str:
 def create_machine() -> str:
     """Create docker-machine on DigitalOcean."""
     name = input('--> Droplet name: ')
-    size = input('--> Droplet size [2gb]: ') or '2gb'
+    size = input('--> Droplet size [2gb]: ') or 's-1vcpu-2gb'
     dirname = CommandRunner.dirs.script
     with NamedTemporaryFile(mode='w+') as tmp:
         with open('{}/cloud-config.yml'.format(dirname)) as config:
@@ -40,6 +41,7 @@ def create_machine() -> str:
                    '--digitalocean-size={size} '
                    '--digitalocean-backups=true '
                    '--digitalocean-userdata={userdata_file} '
+                   '--digitalocean-monitoring '
                    '{machine_name}').format(
                        token=getenv('DIGITALOCEAN_ACCESS_TOKEN'),
                        size=size,
