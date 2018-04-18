@@ -103,6 +103,7 @@ if (IS_PRODUCTION) {
 }
 
 export default <webpack.Configuration>{
+    mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
     devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
     context: path.resolve(__dirname, 'src'),

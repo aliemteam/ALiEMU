@@ -1,52 +1,25 @@
 version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.17.0-php7.2
-        ports:
-            - 443:443
-            - 80:80
-        volumes:
-            - ./data:/data
-            - ./wp-content/themes:/app/wp-content/themes
-            - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
-            - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
-            - ./wp-content/uploads:/app/wp-content/uploads
-            - ./letsencrypt:/etc/letsencrypt
-        restart: always
         environment:
-            DB_NAME: aliemu
             SERVER_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
-            DB_USER: root
-            PLUGINS: >-
-                academic-bloggers-toolkit,
-                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip,
-                jetpack,
-                mce-table-buttons,
-                sendgrid-email-delivery-simplified,
-                ultimate-member,
-                um-recaptcha,
-                [um-recaptcha]http://bit.ly/um-recaptcha,
-                w3-total-cache,
-                wp-smushit,
-                wordpress-seo,
-
         logging:
             options:
                 max-size: 1m
-    db:
-        image: mariadb:10
+        ports:
+            - 443:443
+            - 80:80
         restart: always
+        volumes:
+            - ./wp-content/themes:/app/wp-content/themes
+            - ./letsencrypt:/etc/letsencrypt
+    db:
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASS}
-        volumes:
-            - data:/var/lib/mysql
+        restart: always
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASS}
-        ports:
-            - 22222:80
-volumes:
-    data:
+            MYSQL_ROOT_PASSWORD: ${DB_PASS?DB_PASS not defined in .env}
+        restart: always
