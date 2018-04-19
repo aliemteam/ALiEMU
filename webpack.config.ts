@@ -5,9 +5,9 @@ import * as webpack from 'webpack';
 
 import * as BroswerSyncPlugin from 'browser-sync-webpack-plugin';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
-import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
 import * as UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
 const svgo = require('imagemin-svgo');
@@ -29,22 +29,7 @@ const plugins: Set<webpack.Plugin> = new Set([
         path.resolve(__dirname, 'lib', 'scripts'),
         path.resolve(__dirname, 'lib', 'utils'),
     ]),
-    new ExtractTextPlugin({
-        filename: (getPath: (format: string) => string): string => {
-            const p = getPath('[name]');
-            const dirname = path.dirname(p) + '.css';
-            const filename = path.basename(p) + '.css';
-            switch (filename) {
-                case 'index.css':
-                    return `css/${dirname}`;
-                case 'style.css':
-                    return 'style.css';
-                default:
-                    return `css/${filename}`;
-            }
-        },
-        ignoreOrder: true,
-    }),
+    new MiniCssExtractPlugin(),
     new CopyWebpackPlugin([
         {
             from: '**/*.php',
@@ -159,86 +144,83 @@ export default <webpack.Configuration>{
                 oneOf: [
                     {
                         resourceQuery: /global/,
-                        use: ExtractTextPlugin.extract({
-                            use: [
-                                {
-                                    loader: 'css-loader',
-                                    options: {
-                                        importLoaders: 1,
-                                        modules: false,
-                                        minimize: IS_PRODUCTION,
-                                        sourceMap: !IS_PRODUCTION,
-                                    },
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    importLoaders: 1,
+                                    modules: false,
+                                    minimize: IS_PRODUCTION,
+                                    sourceMap: !IS_PRODUCTION,
                                 },
-                                {
-                                    loader: 'sass-loader',
-                                    options: {
-                                        sourceMap: !IS_PRODUCTION,
-                                        outputStyle: IS_PRODUCTION
-                                            ? 'compressed'
-                                            : 'expanded',
-                                        includePaths: [
-                                            path.resolve(
-                                                __dirname,
-                                                'src/styles',
-                                            ),
-                                        ],
-                                    },
+                            },
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sourceMap: !IS_PRODUCTION,
+                                    outputStyle: IS_PRODUCTION
+                                        ? 'compressed'
+                                        : 'expanded',
+                                    includePaths: [
+                                        path.resolve(
+                                            __dirname,
+                                            'src/styles',
+                                        ),
+                                    ],
                                 },
-                            ],
-                            allChunks: true,
-                        }),
+                            },
+
+                        ]
                     },
                     {
-                        use: ExtractTextPlugin.extract({
-                            use: [
-                                {
-                                    loader: 'css-loader',
-                                    options: {
-                                        importLoaders: 1,
-                                        modules: true,
-                                        minimize: IS_PRODUCTION,
-                                        sourceMap: !IS_PRODUCTION,
-                                        camelCase: 'only',
-                                        localIdentName:
-                                            '[name]__[local]___[hash:base64:5]',
-                                    },
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    importLoaders: 1,
+                                    modules: true,
+                                    minimize: IS_PRODUCTION,
+                                    sourceMap: !IS_PRODUCTION,
+                                    camelCase: 'only',
+                                    localIdentName:
+                                        '[name]__[local]___[hash:base64:5]',
                                 },
-                                {
-                                    loader: 'sass-loader',
-                                    options: {
-                                        sourceMap: !IS_PRODUCTION,
-                                        outputStyle: IS_PRODUCTION
-                                            ? 'compressed'
-                                            : 'expanded',
-                                        includePaths: [
-                                            path.resolve(
-                                                __dirname,
-                                                'src/styles',
-                                            ),
-                                        ],
-                                    },
+                            },
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    sourceMap: !IS_PRODUCTION,
+                                    outputStyle: IS_PRODUCTION
+                                        ? 'compressed'
+                                        : 'expanded',
+                                    includePaths: [
+                                        path.resolve(
+                                            __dirname,
+                                            'src/styles',
+                                        ),
+                                    ],
                                 },
-                            ],
-                            allChunks: true,
-                        }),
+                            },
+
+                        ],
                     },
                 ],
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: [
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                minimize: IS_PRODUCTION,
-                                sourceMap: !IS_PRODUCTION,
-                            },
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            minimize: IS_PRODUCTION,
+                            sourceMap: !IS_PRODUCTION,
                         },
-                    ],
-                    allChunks: true,
-                }),
+                    },
+
+                ],
             },
             {
                 test: /\.svg$/,

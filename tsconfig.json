@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "commonjs",
         "lib": ["dom", "dom.iterable", "esnext"],
-        "jsx": "preserve",
+        "jsx": "react",
         "sourceMap": true,
         "strict": true,
         "noUnusedLocals": true,
