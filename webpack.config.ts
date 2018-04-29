@@ -68,15 +68,17 @@ const plugins: Set<webpack.Plugin> = new Set([
 
 if (!IS_PRODUCTION) {
     plugins.add(
-        new BroswerSyncPlugin({
-            proxy: 'localhost:8080',
-            open: false,
-            reloadDebounce: 2000,
-            notify: false,
-        },
-        {
-            injectCss: true,
-        }),
+        new BroswerSyncPlugin(
+            {
+                proxy: 'localhost:8080',
+                open: false,
+                reloadDebounce: 2000,
+                notify: false,
+            },
+            {
+                injectCss: true,
+            },
+        ),
     );
 }
 
@@ -96,6 +98,7 @@ export default <webpack.Configuration>{
         /**
          * JS Entrypoints
          */
+        'js/catalog': 'js/_entrypoints/catalog',
         'js/educator-dashboard': 'js/_entrypoints/educator-dashboard',
         'js/mobile-nav-menu-helper': 'js/_entrypoints/mobile-nav-menu-helper',
 
@@ -162,16 +165,10 @@ export default <webpack.Configuration>{
                                     outputStyle: IS_PRODUCTION
                                         ? 'compressed'
                                         : 'expanded',
-                                    includePaths: [
-                                        path.resolve(
-                                            __dirname,
-                                            'src/styles',
-                                        ),
-                                    ],
+                                    includePaths: ['src/css'],
                                 },
                             },
-
-                        ]
+                        ],
                     },
                     {
                         use: [
@@ -195,15 +192,9 @@ export default <webpack.Configuration>{
                                     outputStyle: IS_PRODUCTION
                                         ? 'compressed'
                                         : 'expanded',
-                                    includePaths: [
-                                        path.resolve(
-                                            __dirname,
-                                            'src/styles',
-                                        ),
-                                    ],
+                                    includePaths: ['src/css'],
                                 },
                             },
-
                         ],
                     },
                 ],
@@ -219,7 +210,6 @@ export default <webpack.Configuration>{
                             sourceMap: !IS_PRODUCTION,
                         },
                     },
-
                 ],
             },
             {

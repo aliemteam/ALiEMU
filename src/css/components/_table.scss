@@ -57,7 +57,7 @@ table {
     }
 }
 
-@media (max-width: 800px) {
+@include device-mobile {
     table {
         position: relative;
         display: block;

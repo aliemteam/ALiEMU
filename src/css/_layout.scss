@@ -8,6 +8,7 @@ body {
     &.um-page-account,
     &.um-page-login,
     &.um-page-password-reset,
+    &.post-type-archive-sfwd-courses,
     &.page-id-1248 {
         background: $gray-light;
     }
@@ -32,7 +33,7 @@ body {
     }
 }
 
-#content {
+.content-area {
     max-width: 100%;
     display: flex;
     justify-content: center;
@@ -42,7 +43,6 @@ main[role='main'] {
     $sep: $block-margin * 2;
     min-height: calc(100vh - #{$header-height});
     max-width: 100%;
-    width: 800px;
     padding: 0 $sep;
     margin: $sep 0;
     flex: auto;
@@ -55,15 +55,16 @@ main[role='main'] {
     }
 
     // .single has a sidebar
-    .single & {
-        max-width: 1000px;
-        @include device-tablet {
-            max-width: 100%;
-        }
-        @include device-mobile {
-            max-width: 100%;
-        }
-    }
+    // FIXME: Is this even needed?
+    // .single & {
+    //     max-width: 1000px;
+    //     @include device-tablet {
+    //         max-width: 100%;
+    //     }
+    //     @include device-mobile {
+    //         max-width: 100%;
+    //     }
+    // }
 
     // Admin bar fix
     .admin-bar & {
@@ -71,7 +72,7 @@ main[role='main'] {
     }
 
     > article {
-        max-width: 800px;
+        max-width: $article-max-width;
         margin: auto;
         // Ultimate member user page
         .um-page-user & {

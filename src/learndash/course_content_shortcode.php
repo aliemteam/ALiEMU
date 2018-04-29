@@ -1,29 +1,29 @@
 <?php
 
-defined('ABSPATH') || exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Displays content of course
  *
  * Available Variables
- * $course_id 		            : (int) ID of the course
- * $course 		                : (object) Post object of the course
+ * $course_id                   : (int) ID of the course
+ * $course                      : (object) Post object of the course
  * $course_settings             : (array) Settings specific to current course
  *
  * $courses_options             : Options/Settings as configured on Course Options page
  * $lessons_options             : Options/Settings as configured on Lessons Options page
  * $quizzes_options             : Options/Settings as configured on Quiz Options page
  *
- * $user_id 		            : Current User ID
- * $logged_in 		            : User is logged in
- * $current_user 	            : (object) Currently logged in user object
+ * $user_id                     : Current User ID
+ * $logged_in                   : User is logged in
+ * $current_user                : (object) Currently logged in user object
  *
- * $course_status 	            : Course Status
- * $has_access 	                : User has access to course or is enrolled.
- * $has_course_content		    : Course has course content
- * $lessons 		            : Lessons Array
- * $quizzes 		            : Quizzes Array
- * $lesson_progression_enabled 	: (true/false)
+ * $course_status               : Course Status
+ * $has_access                  : User has access to course or is enrolled.
+ * $has_course_content          : Course has course content
+ * $lessons                     : Lessons Array
+ * $quizzes                     : Quizzes Array
+ * $lesson_progression_enabled  : (true/false)
  *
  * @since 2.1.0
  *
@@ -51,22 +51,22 @@ defined('ABSPATH') || exit;
 			<div id='learndash_lessons'>
 
 				<div id='lesson_heading'>
-					<span><?php echo LearnDash_Custom_Label::get_label( 'lessons' ) ?></span>
+					<span><?php echo LearnDash_Custom_Label::get_label( 'lessons' ); ?></span>
 					<span class='right'><?php _e( 'Status', 'learndash' ); ?></span>
 				</div>
 
 				<div id='lessons_list'>
 
 					<?php foreach ( $lessons as $lesson ) : ?>
-						<div id='post-<?php echo $lesson['post']->ID; ?>' class='<?php echo $lesson['sample'];?>'>
+						<div id='post-<?php echo $lesson['post']->ID; ?>' class='<?php echo $lesson['sample']; ?>'>
 							<div class='list-count'><?php echo $lesson['sno']; ?></div>
 							<h4>
-								<a class='<?php echo $lesson['status']; ?>' href='<?php echo $lesson['permalink']?>'><?php echo $lesson['post']->post_title; ?></a>
+								<a class='<?php echo $lesson['status']; ?>' href='<?php echo $lesson['permalink']; ?>'><?php echo $lesson['post']->post_title; ?></a>
 
-								<?php  /* Not available message for drip feeding lessons */ ?>
+								<?php /* Not available message for drip feeding lessons */ ?>
 								<?php if ( ! empty( $lesson['lesson_access_from'] ) ) : ?>
 									<small class='notavailable_message'>
-										<?php echo sprintf( __( 'Available on: %s ', 'learndash' ), learndash_adjust_date_time_display( $lesson['lesson_access_from']  ) ); ?>
+										<?php echo sprintf( __( 'Available on: %s ', 'learndash' ), learndash_adjust_date_time_display( $lesson['lesson_access_from'] ) ); ?>
 									</small>
 								<?php endif; ?>
 
@@ -78,7 +78,7 @@ defined('ABSPATH') || exit;
 										<ul>
 											<?php $odd_class = ''; ?>
 											<?php foreach ( $topics as $key => $topic ) : ?>
-												<?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
+												<?php $odd_class       = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
 												<?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
 												<li class='<?php echo $odd_class; ?>'>
 													<span class='topic_item'>
@@ -101,7 +101,7 @@ defined('ABSPATH') || exit;
 		<?php endif; ?>
 
 
-		<?php /* Show Quiz List */	?>
+		<?php /* Show Quiz List */ ?>
 		<?php if ( ! empty( $quizzes ) ) : ?>
 			<div id='learndash_quizzes'>
 				<div id='quiz_heading'>
@@ -109,10 +109,10 @@ defined('ABSPATH') || exit;
 				</div>
 				<div id='quiz_list'>
 				<?php foreach ( $quizzes as $quiz ) : ?>
-					<div id='post-<?php echo $quiz['post']->ID; ?>' class='<?php echo $quiz['sample'];?>'>
+					<div id='post-<?php echo $quiz['post']->ID; ?>' class='<?php echo $quiz['sample']; ?>'>
 						<div class='list-count'><?php echo $quiz['sno']; ?></div>
 						<h4>
-							<a class='<?php echo $quiz['status']; ?>' href='<?php echo $quiz['permalink']?>'><?php echo $quiz['post']->post_title; ?></a>
+							<a class='<?php echo $quiz['status']; ?>' href='<?php echo $quiz['permalink']; ?>'><?php echo $quiz['post']->post_title; ?></a>
 						</h4>
 					</div>
 				<?php endforeach; ?>

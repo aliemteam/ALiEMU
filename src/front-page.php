@@ -29,8 +29,7 @@ $user = wp_get_current_user();
 						<h1>Welcome back, <?php echo esc_html( $user->first_name ); ?>!</h1>
 						<div>
 							<a class="btn btn--primary" href="/user">My Profile</a>
-							<!-- FIXME: why logout-2 permalink? Can this be fixed? -->
-							<a class="btn" href="/logout-2">Logout</a>
+							<a class="btn" href="/logout">Logout</a>
 						</div>
 					<?php else : ?>
 						<h1>General Members</h1>

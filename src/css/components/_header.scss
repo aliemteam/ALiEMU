@@ -28,10 +28,6 @@
         text-decoration: none;
         color: $gray;
     }
-    .menu-item-type-custom > a {
-        cursor: default;
-    }
-
     .menu {
         display: flex;
         > .menu-item {

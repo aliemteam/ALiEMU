@@ -23,14 +23,16 @@ function course_fields( $posts ) : array {
 
 		$extra_fields = [
 			'course_short_description' => [
-				'name'      => 'Course Short Description',
-				'type'      => 'textarea',
-				'help_text' => 'Short description for the course. Try to keep word cound ≤ 20 words (MAXIMUM = 30 words)',
+				'name'         => 'Course Short Description',
+				'type'         => 'textarea',
+				'help_text'    => 'Short description for the course. Try to keep word cound ≤ 20 words (MAXIMUM = 30 words)',
+				'show_in_rest' => true,
 			],
 			'recommendedHours'         => [
-				'name'      => 'Recommended III Hours',
-				'type'      => 'text',
-				'help_text' => 'The amount of hours that you recommend students claim for this course.',
+				'name'         => 'Recommended III Hours',
+				'type'         => 'text',
+				'help_text'    => 'The amount of hours that you recommend students claim for this course.',
+				'show_in_rest' => true,
 			],
 		];
 

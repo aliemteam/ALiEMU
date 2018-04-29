@@ -1,3 +1,5 @@
+@import '_colors';
+
 $shadows: (
     border-bottom: 0 1px 0 rgba(16, 22, 26, 0.15),
     border-top: 0 -1px 0 rgba(16, 22, 26, 0.15),
@@ -64,6 +66,7 @@ $font-family: $font-sans !default;
 // Layout
 $header-height: 4rem !default;
 $admin-bar-height: 2rem !default;
+$article-max-width: 800px !default;
 
 // Block element attributes
 $block-margin: 1.5rem !default;

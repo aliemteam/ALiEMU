@@ -11,13 +11,10 @@ body {
     font-family: $font-family;
     font-size: 18px;
     font-weight: 400;
-    line-height: 2em;
+    line-height: 1.6;
 }
 
-//
-// Headings --------------------------------------------------------------------
-//
-
+// Headings: {{{
 h1,
 h2,
 h3,
@@ -59,10 +56,8 @@ h6 {
     font-size: 0.9375rem;
 }
 
-//
-// Inline Text -----------------------------------------------------------------
-//
-
+// }}}
+// Inline Text: {{{
 a {
     color: $secondary;
     text-decoration: none;
@@ -94,3 +89,6 @@ pre,
 code {
     font-family: $font-mono;
 }
+//}}}
+
+// vim: fdm=marker

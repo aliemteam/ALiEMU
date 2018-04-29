@@ -51,7 +51,7 @@
     }
 }
 
-@media screen and (max-width: 650px) {
+@include device-mobile {
     .course-status {
         justify-content: space-around;
     }

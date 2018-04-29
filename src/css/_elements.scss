@@ -40,8 +40,7 @@ ul {
 
 // Block elements --------------------------------------------------------------
 p {
-    // FIXME: Can this be both top and bottom?
-    margin: 0 0 $block-margin;
+    margin: $block-margin 0;
     padding: 0;
     &:last-child {
         margin: 0;
@@ -58,11 +57,13 @@ hr {
     border: 0;
 }
 
-img[src$='.svg'],
-svg {
-    max-width: 100%;
-    max-height: 100%;
-    height: auto;
+#content {
+    img[src$='.svg'],
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+    }
 }
 
 // Inline elements -------------------------------------------------------------
@@ -90,8 +91,7 @@ blockquote {
     color: $text-color-light;
     border-left: 4px solid $primary;
     background: $gray-light;
-    // FIXME: Can this be both top and bottom?
-    margin: 0 0 $block-margin 0;
+    margin: $block-margin 0;
     padding: $block-margin 10px;
 }
 

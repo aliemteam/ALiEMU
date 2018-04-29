@@ -184,6 +184,28 @@ function aliemu_comments_args( $defaults ) : array {
 add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
 
 /**
+ * Filters out unnecessary classes from posts.
+ *
+ * Specifically, we're removing 'hentry' because this isn't a tradional "blog"
+ * so posts/pages should not be treated as such.
+ *
+ * @param string[] $classes The complete list of classes.
+ * @param string[] $class A subset of custom classes added.
+ * @param int      $id The post id of the calling post.
+ */
+function aliemu_filter_post_classes( array $classes, array $class, int $id ) : array {
+	$filtered = array_values(
+		array_filter(
+			$classes, function ( string $cls ) : bool {
+				return ! in_array( $cls, [ 'hentry' ], true );
+			}
+		)
+	);
+	return $filtered;
+}
+add_filter( 'post_class', 'aliemu_filter_post_classes', 10, 3 );
+
+/**
  * Utility / helper functions.
  */
 require_once __DIR__ . '/utils.php';

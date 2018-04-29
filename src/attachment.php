@@ -5,4 +5,6 @@
  * @package ALiEMU
  */
 
-get_404_template();
+// require the 404 page.
+require_once get_404_template();
+

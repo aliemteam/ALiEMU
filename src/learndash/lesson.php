@@ -39,16 +39,16 @@ if ( @$lesson_progression_enabled && ! @$previous_lesson_completed ) : ?>
 		<?php
 			$previous_item = learndash_get_previous( $post );
 		if ( ( ! empty( $previous_item ) ) && ( $previous_item instanceof WP_Post ) ) {
-			if ( $previous_item->post_type == 'sfwd-quiz' ) {
+			if ( 'sfwd-quiz' === $previous_item->post_type ) {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: quiz URL, quiz label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'quiz' ) );
 
-			} elseif ( $previous_item->post_type == 'sfwd-topic' ) {
+			} elseif ( 'sfwd-topic' === $previous_item->post_type ) {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: topic URL, topic label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'topic' ) );
 			} else {
 				echo sprintf( _x( 'Please go back and complete the previous <a class="learndash-link-previous-incomplete" href="%1$s">%2$s</a>.', 'placeholders: lesson URL, lesson label', 'learndash' ), get_permalink( $previous_item->ID ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
 			}
 		} else {
-			echo sprintf( _x( 'Please go back and complete the previous %s.', 'placeholder lesson', 'learndash' ), LearnDash_Custom_Label::label_to_lower( 'lesson' ) );
+			echo sprintf( _x( 'Please go back and complete the previous %s.', 'placeholder lesson', 'learndash' ), esc_html( LearnDash_Custom_Label::label_to_lower( 'lesson' ) ) );
 		}
 		?>
 	</p>

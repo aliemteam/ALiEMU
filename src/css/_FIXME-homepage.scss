@@ -19,9 +19,6 @@
             100vh - #{$header-height} - #{$vertical-padding * 2} - #{$admin-bar-height}
         );
     }
-    > div:not(.home__splash) {
-        max-width: 800px;
-    }
 }
 
 .home__series-logos {

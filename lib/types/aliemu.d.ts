@@ -1,7 +1,12 @@
 // tslint:disable no-namespace
 declare namespace ALiEMU {
-
-    type BrowserType = 'edge'|'safari'|'ie'|'opera'|'chrome'|'firefox';
+    type BrowserType =
+        | 'edge'
+        | 'safari'
+        | 'ie'
+        | 'opera'
+        | 'chrome'
+        | 'firefox';
 
     interface CSV {
         data: string;
@@ -9,7 +14,6 @@ declare namespace ALiEMU {
     }
 
     namespace EducatorDashboard {
-
         interface DateRange {
             start: any;
             end: any;
@@ -78,12 +82,16 @@ declare namespace ALiEMU {
             badgeosPoints?: number;
             completed?: string;
             country?: string;
-            courseAccessed: {
-                [courseID: number]: number;
-            }|number[];
-            courseCompleted?: {
-                [courseID: string]: number;
-            }|number[];
+            courseAccessed:
+                | {
+                      [courseID: number]: number;
+                  }
+                | number[];
+            courseCompleted?:
+                | {
+                      [courseID: string]: number;
+                  }
+                | number[];
             courseProgress?: {
                 [courseID: number]: LearnDash.CourseProgress;
             };
@@ -110,11 +118,9 @@ declare namespace ALiEMU {
             userUsState?: string;
             username: string;
         }
-
     }
 
     namespace LearnDash {
-
         // Date below in the following form: `YYYY-MM-DD HH:MM:SS`
         interface Courses {
             ID: number;
@@ -140,9 +146,11 @@ declare namespace ALiEMU {
          */
         interface CourseProgress {
             completed: number;
-            lessons: number[] | {
-                [lessonID: number]: number;
-            };
+            lessons:
+                | number[]
+                | {
+                      [lessonID: number]: number;
+                  };
             topics: {
                 [lessonID: number]: {
                     [topicID: number]: number;
@@ -155,14 +163,13 @@ declare namespace ALiEMU {
             count: number;
             pass: number;
             percentage: string;
-            'pro_quizid': string;
+            pro_quizid: string;
             quiz: string;
             rank: string;
             score: string;
             time: number;
             timespent: string;
-            'total_points': string;
+            total_points: string;
         }
-
     }
 }

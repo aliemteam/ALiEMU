@@ -1,19 +1,30 @@
+sudo: required
+
 language: node_js
-node_js:
-    - node
+
+services:
+  - docker
+
 branches:
     only:
         - master
         - /^greenkeeper-.*$/
+
 cache:
-    directories:
-        - "node_modules"
+  directories:
+  - node_modules
+
+before_install:
+- docker pull willhallonline/wordpress-phpcs
+
 script: npm test -- --runInBand
+
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+- bash <(curl -s https://codecov.io/bash)
+
 notifications:
-    webhooks:
-        urls:
-            - https://aliem-slackbot.now.sh/aliemu/hooks/travis-ci
-        on_success: change
-        on_failure: change
+  webhooks:
+    urls:
+    - https://aliem-slackbot.now.sh/aliemu/hooks/travis-ci
+    on_success: change
+    on_failure: change

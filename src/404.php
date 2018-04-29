@@ -7,6 +7,7 @@
  * @package ALiEMU
  */
 
+status_header( 404 );
 get_header(); ?>
 
 <section id="content" class="content-area">
@@ -29,13 +30,15 @@ get_header(); ?>
 					<h2 class="widget-title"><?php esc_html_e( 'Most Used Categories', 'aliemu' ); ?></h2>
 					<ul>
 					<?php
-						wp_list_categories( [
-							'orderby'    => 'count',
-							'order'      => 'DESC',
-							'show_count' => 1,
-							'title_li'   => '',
-							'number'     => 10,
-						] );
+						wp_list_categories(
+							[
+								'orderby'    => 'count',
+								'order'      => 'DESC',
+								'show_count' => 1,
+								'title_li'   => '',
+								'number'     => 10,
+							]
+						);
 					?>
 					</ul>
 				</div><!-- .widget -->

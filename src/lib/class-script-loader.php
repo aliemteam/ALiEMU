@@ -25,6 +25,7 @@ class Script_Loader {
 	 * @var array $localized
 	 */
 	private static $localized = [
+		'catalog'            => 'AU_Catalog',
 		'educator-dashboard' => 'AU_EducatorData',
 	];
 
@@ -73,17 +74,22 @@ class Script_Loader {
 	 * delegation process.
 	 */
 	public function register() : void {
-		$fonts = add_query_arg(
-			[
-				'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
-				'subset' => 'greek,greek-ext,latin-ext',
-			], 'https://fonts.googleapis.com/css'
+		wp_register_style( 'aliemu', get_stylesheet_uri() );
+		wp_register_style(
+			'aliemu-fonts', add_query_arg(
+				[
+					'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
+					'subset' => 'greek,greek-ext,latin-ext',
+				], 'https://fonts.googleapis.com/css'
+			)
 		);
 
-		wp_register_style( 'aliemu-fonts', $fonts );
-		wp_register_style( 'aliemu', ALIEMU_ROOT_URI . '/style.css', ALIEMU_VERSION );
-		wp_register_style( 'educator-dashboard', ALIEMU_ROOT_URI . '/css/educator-dashboard.css', [], ALIEMU_VERSION );
+		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
+			$style = pathinfo( $stylesheet );
+			wp_register_style( $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
+		}
 
+		wp_register_script( 'catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'wp-api' ], ALIEMU_VERSION, true );
 		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
@@ -128,6 +134,11 @@ class Script_Loader {
 		if ( ! array_intersect( [ 'um-page-loggedin', 'um-page-loggedout', 'home', 'page-id-3432' ], get_body_class() ) ) {
 			array_push( $unload->scripts, 'um_minified' );
 			array_push( $unload->styles, 'um_minified', 'um_recaptcha' );
+		}
+
+		if ( is_post_type_archive( 'sfwd-courses' ) ) {
+			array_push( $load->scripts, 'catalog' );
+			array_push( $load->styles, 'catalog' );
 		}
 
 		switch ( $this->path[0] ?? '' ) {

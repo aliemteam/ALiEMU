@@ -1,16 +1,17 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "jsx": "react",
-        "sourceMap": true,
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "experimentalDecorators": true
-    },
-    "include": ["src/**/*", "lib/**/*", "webpack.config.ts", "gulpfile.ts"]
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["dom", "dom.iterable", "esnext" ],
+    "jsx": "react",
+    "baseUrl": "./src/js",
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*", "lib/**/*", "webpack.config.ts", "gulpfile.ts"]
 }

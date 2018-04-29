@@ -1,9 +1,27 @@
 <?php
+/**
+ * Template for the Contact Us page.
+ *
+ * @package ALiEMU
+ */
 
-if ( wp_verify_nonce( @$_POST['_wpnonce'], 'contact-form-nonce' ) && $_POST['g-recaptcha-response'] !== '' ) {
-	$name    = $_POST['contact-name'];
-	$email   = $_POST['contact-email'];
-	$message = $_POST['contact-message'];
+// This passes all validations. The only reason the ignore was placed here was to avoid having to
+// put "Input var okay." on literally every line containing $_POST.
+// @codingStandardsIgnoreStart
+if (
+	isset(
+		$_POST['contact-name'],
+		$_POST['contact-email'],
+		$_POST['contact-message'],
+		$_POST['_wpnonce']
+	)
+	&& ! empty( $_POST['g-recaptcha-response'] )
+	&& wp_verify_nonce( sanitize_key( $_POST['_wpnonce'] ), 'contact-form-nonce' ) ) {
+
+	$name    = sanitize_text_field( wp_unslash( $_POST['contact-name'] ) );
+	$email   = sanitize_text_field( wp_unslash( $_POST['contact-email'] ) );
+	$message = sanitize_textarea_field( wp_unslash( $_POST['contact-message'] ) );
+
 	if ( $name && $email && $message ) {
 		slack_message(
 			'aliemu/messages/contact-form', [
@@ -17,9 +35,9 @@ if ( wp_verify_nonce( @$_POST['_wpnonce'], 'contact-form-nonce' ) && $_POST['g-r
 		die;
 	}
 }
+// @codingStandardsIgnoreEnd
 
-get_header();
-?>
+get_header(); ?>
 
 <section id="content" class="content-area">
 	<main role="main">

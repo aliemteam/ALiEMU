@@ -4,6 +4,8 @@ services:
         image: visiblevc/wordpress:0.18.0-php7.2
         environment:
             ALIEM_API_KEY: ${ALIEM_API_KEY?ALIEM_API_KEY key not defined in .env}
+            EXTRA_PHP: |
+                define( 'LEARNDASH_REST_API_ENABLED', true );
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
@@ -15,7 +17,7 @@ services:
                 query-monitor
                 sendgrid-email-delivery-simplified
                 ultimate-member
-                [um-recaptcha]http://bit.ly/um-recaptcha
+                [um-recaptcha]https://ultimatemember.com/free-extensions/um-recaptcha.zip
                 w3-total-cache
                 wordpress-seo
                 wp-smushit

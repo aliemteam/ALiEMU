@@ -84,6 +84,10 @@ class Structured_Data {
 			'@graph'          => apply_filters( "structured_data_${suffix}", [] ),
 		];
 
+		if ( empty( $data['@graph'] ) ) {
+			unset( $data['@graph'] );
+		}
+
 		?>
 			<script type="application/ld+json">
 				<?php echo wp_json_encode( $data ); ?>

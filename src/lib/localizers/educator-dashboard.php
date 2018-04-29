@@ -1,4 +1,11 @@
 <?php
+// @codingStandardsIgnoreFile
+// FIXME: This entire file needs a do-over
+/**
+ * Localizer for Educator Dashboard
+ *
+ * @package ALiEMU
+ */
 
 namespace ALIEMU;
 
@@ -104,15 +111,15 @@ class EducatorDashboard {
 		'wp_user_level',
 	];
 
-	function __construct() {
+	public function __construct() {
 		$this->current_user      = wp_get_current_user();
-		$this->courses           = $this->getCourses();
-		$this->course_meta       = $this->getCourseMeta( $this->courses );
-		$this->lessons           = $this->getLessons();
-		$this->categories        = $this->getCourseCategories( $this->courses );
-		$this->unique_categories = $this->encodeUniqueCategories( $this->categories );
-		$this->user_data         = $this->getCurrentUsers();
-		$this->user_meta         = $this->getCurrentUsersMeta( $this->user_data );
+		$this->courses           = $this->get_courses();
+		$this->course_meta       = $this->get_course_meta( $this->courses );
+		$this->lessons           = $this->get_lessons();
+		$this->categories        = $this->get_course_categories( $this->courses );
+		$this->unique_categories = $this->encode_unique_categories( $this->categories );
+		$this->user_data         = $this->get_current_users();
+		$this->user_meta         = $this->get_current_users_meta( $this->user_data );
 	}
 
 	/**
@@ -123,16 +130,16 @@ class EducatorDashboard {
 	 *
 	 * @return mixed[] Associative array of users within the current user's Institution
 	 */
-	private function getCurrentUsers() {
+	private function get_current_users() {
 		$compare_date = date( 'Y' );
 
 		// If the month is june, exclude users who have their graduation year
-		// set as the current year from the dashboard
+		// set as the current year from the dashboard.
 		if ( date( 'n' ) >= 7 ) {
-			$compare_date += 1;
+			$compare_date++;
 		}
 
-		$graduatedUsers = get_users(
+		$graduated_users = get_users(
 			[
 				'meta_query' => [
 					'relation' => 'AND',
@@ -157,7 +164,7 @@ class EducatorDashboard {
 				'meta_key'   => 'residency_us_em',
 				'meta_value' => $this->current_user->residency_us_em,
 				'fields'     => 'all_with_meta',
-				'exclude'    => $graduatedUsers,
+				'exclude'    => $graduated_users,
 			]
 		);
 		foreach ( $users as $key => $value ) {
@@ -172,12 +179,12 @@ class EducatorDashboard {
 	 * @author Derek P Sifford
 	 * @since 0.0.1
 	 *
-	 * @param  mixed[] $users_array Associative array of users within current user's institution
+	 * @param  mixed[] $users_array Associative array of users within current user's institution.
 	 *
 	 * @return mixed[] Associative array of metadata with keys the same as the
 	 *                 keys of the current_user array.
 	 */
-	private function getCurrentUsersMeta( $users_array ) {
+	private function get_current_users_meta( $users_array ) {
 		$meta                = [];
 		$need_to_unserialize = [
 			'_badgeos_achievements',
@@ -194,15 +201,15 @@ class EducatorDashboard {
 
 			foreach ( $meta[ $key ] as $k => $v ) {
 
-				// Skip stuff that we don't need
-				if ( in_array( $k, $this->skipped_usermeta )
+				// Skip stuff that we don't need.
+				if ( in_array( $k, $this->skipped_usermeta, true )
 				|| preg_match( '/^learndash_group_users_/', $k )
 				|| preg_match( '/^learndash_group_leaders_/', $k ) ) {
 					unset( $meta[ $key ][ $k ] );
 					continue;
 				}
 
-				// Turn all keys to camelCase
+				// Turn all keys to camelCase.
 				$camel_key = preg_replace_callback(
 					'/(?<!^)[-_]\w/',
 					function( $matches ) {
@@ -211,14 +218,14 @@ class EducatorDashboard {
 					$k
 				);
 
-				// Remove "private" underscores
+				// Remove "private" underscores.
 				$camel_key = preg_replace( '/^[_]/', '', $camel_key );
 
-				// Unserialize data that needs it
-				if ( in_array( $k, $need_to_unserialize ) ) {
+				// Unserialize data that needs it.
+				if ( in_array( $k, $need_to_unserialize, true ) ) {
 
 					// Remove sfwd because it makes absolutely zero sense.
-					if ( $k == '_sfwd-course_progress' || $k == '_sfwd-quizzes' ) {
+					if ( '_sfwd-course_progress' === $k || '_sfwd-quizzes' === $k ) {
 						$camel_key = strtolower( substr( $camel_key, 4, 1 ) ) . substr( $camel_key, 5 );
 					}
 
@@ -227,7 +234,7 @@ class EducatorDashboard {
 					continue;
 				}
 
-				// Reshape the completed courses data
+				// Reshape the completed courses data.
 				if ( preg_match( '/^course_completed_/', $k ) ) {
 					preg_match( '/(^course_completed_)(\d+)/', $k, $matches );
 					$completed_courses[ intval( $matches[2] ) ] = intval( $meta[ $key ][ $k ][0] );
@@ -242,33 +249,30 @@ class EducatorDashboard {
 					continue;
 				}
 
-				// Parse graduation year, lastLogin, and badgeosPoints as integers
-				if ( $k == 'au_graduation_year'
-				|| $k == '_um_last_login'
-				|| $k == '_badgeos_points' ) {
+				// Parse graduation year, lastLogin, and badgeosPoints as integers.
+				if ( in_array( $k, [ 'au_graduation_year', '_um_last_login', '_badgeos_points' ], true ) ) {
 					$meta[ $key ][ $camel_key ] = intval( $meta[ $key ][ $k ][0] );
 					unset( $meta[ $key ][ $k ] );
 					continue;
 				}
 
-				// Reshape em_resident to boolean
-				if ( $k == 'em_resident' ) {
-					$meta[ $key ][ $camel_key ] = $meta[ $key ][ $k ][0] == 'Yes' ? true : false;
+				// Reshape em_resident to boolean.
+				if ( 'em_resident' === $k ) {
+					$meta[ $key ][ $camel_key ] = 'Yes' === $meta[ $key ][ $k ][0] ? true : false;
 					unset( $meta[ $key ][ $k ] );
 					continue;
 				}
 
-				// Reshape User Agreement to boolean
-				if ( $k == 'user_agreement' ) {
-					$meta[ $key ][ $camel_key ] = $meta[ $key ][ $k ][0] == 'I Agree' ? true : false;
+				// Reshape User Agreement to boolean.
+				if ( 'user_agreement' === $k ) {
+					$meta[ $key ][ $camel_key ] = 'I Agree' === $meta[ $key ][ $k ][0] ? true : false;
 					unset( $meta[ $key ][ $k ] );
 					continue;
 				}
 
-				// $meta[$key][$k] = $meta[$key][$k][0];
 				$meta[ $key ][ $camel_key ] = $meta[ $key ][ $k ][0];
 
-				if ( $k != $camel_key ) {
+				if ( $k !== $camel_key ) {
 					unset( $meta[ $key ][ $k ] );
 				}
 			}
@@ -289,35 +293,35 @@ class EducatorDashboard {
 	 * @author Derek P Sifford
 	 * @since 0.0.2
 	 *
-	 * @param  mixed[] $posts Associative array of course post objects
+	 * @param  mixed[] $courses Associative array of courses.
 	 *
 	 * @return mixed[] Associative array of metadata
 	 */
-	private function getCourseMeta( $courses ) {
+	private function get_course_meta( $courses ) {
 		$meta = [];
 		foreach ( $courses as $key => $value ) {
-			$thisMeta      = get_metadata( 'post', $key );
-			$learndashMeta = @unserialize( $thisMeta['_sfwd-courses'][0] );
+			$this_meta      = get_metadata( 'post', $key );
+			$learndash_meta = @unserialize( $this_meta['_sfwd-courses'][0] );
 
-			if ( ! $learndashMeta ) {
+			if ( ! $learndash_meta ) {
 				continue;
 			}
 
-			foreach ( $learndashMeta as $k => $v ) {
-				$camelKey = preg_replace_callback(
+			foreach ( $learndash_meta as $k => $v ) {
+				$camel_key                  = preg_replace_callback(
 					'/(?<!^)[-_]\w/',
 					function( $matches ) {
 						return strtoupper( $matches[0][1] );
 					},
 					$k
 				);
-				$camelKey = preg_replace_callback(
+				$camel_key                  = preg_replace_callback(
 					'/^(sfwdCourses\w(ourse\w)?)/',
 					function( $match ) {
 						return strtolower( $match[0][ strlen( $match[0] ) - 1 ] );
-					}, $camelKey
+					}, $camel_key
 				);
-				$meta[ $key ][ $camelKey ] = $v;
+				$meta[ $key ][ $camel_key ] = $v;
 			}
 		}
 		return $meta;
@@ -341,14 +345,14 @@ class EducatorDashboard {
 	 * @author Derek P Sifford
 	 * @since 0.1.1
 	 *
-	 * @param  string[] $categories Array of categories - Key = CourseID, Value = Category
+	 * @param  string[] $categories Array of categories - Key = CourseID, Value = Category.
 	 *
 	 * @return array[string[]] Multidimensional array in the format shown above.
 	 */
-	private function encodeUniqueCategories( $categories ) {
-		$uniqueHolder = array_unique( $categories );
-		$payload      = [];
-		foreach ( $uniqueHolder as $unique ) {
+	private function encode_unique_categories( $categories ) {
+		$unique_holder = array_unique( $categories );
+		$payload       = [];
+		foreach ( $unique_holder as $unique ) {
 			$payload[ $unique ] = [];
 		}
 		foreach ( $categories as $key => $value ) {
@@ -363,11 +367,11 @@ class EducatorDashboard {
 	 * @author Derek P Sifford
 	 * @since 0.0.3
 	 *
-	 * @param  mixed[] $courses Associative array of all courses (WordPress "Post" Objects)
+	 * @param  mixed[] $courses Associative array of all courses (WordPress "Post" Objects).
 	 *
 	 * @return string[] Associative array of course categories indexed by post ID.
 	 */
-	private static function getCourseCategories( $courses ) {
+	private static function get_course_categories( $courses ) {
 		$categories = [];
 		foreach ( $courses as $key => $value ) {
 			$category = get_the_category( $key );
@@ -387,34 +391,34 @@ class EducatorDashboard {
 	 *
 	 * @return mixed[] Array of arrays containing course information; Key = Course ID
 	 */
-	private static function getCourses() {
+	private static function get_courses() {
 		global $wpdb;
 
-		$courseQuery = $wpdb->get_results(
+		$course_query = $wpdb->get_results(
 			"
-			SELECT ID
-			FROM $wpdb->posts
-			WHERE post_type = 'sfwd-courses'
-		"
+            SELECT ID
+            FROM $wpdb->posts
+            WHERE post_type = 'sfwd-courses'
+        "
 		);
 
-		$courseHolder = [];
+		$course_holder = [];
 
-		foreach ( $courseQuery as $course ) {
-			$lessonQuery = $wpdb->get_results(
+		foreach ( $course_query as $course ) {
+			$lesson_query = $wpdb->get_results(
 				"
-				SELECT post_id
-				FROM $wpdb->postmeta
-				WHERE meta_key = 'course_id'
-				AND meta_value = $course->ID
-			"
+                SELECT post_id
+                FROM $wpdb->postmeta
+                WHERE meta_key = 'course_id'
+                AND meta_value = $course->ID
+            "
 			);
-			$lessons     = [];
-			foreach ( $lessonQuery as $key => $val ) {
+			$lessons      = [];
+			foreach ( $lesson_query as $key => $val ) {
 				array_push( $lessons, $val->post_id );
 			}
-			$c                           = get_post( $course->ID );
-			$courseHolder[ $course->ID ] = [
+			$c                            = get_post( $course->ID );
+			$course_holder[ $course->ID ] = [
 				'ID'           => $c->ID,
 				'postAuthor'   => intval( $c->post_author ),
 				'postDate'     => $c->post_date,
@@ -423,7 +427,7 @@ class EducatorDashboard {
 				'lessons'      => $lessons,
 			];
 		}
-		return $courseHolder;
+		return $course_holder;
 	}
 
 	/**
@@ -434,22 +438,22 @@ class EducatorDashboard {
 	 *
 	 * @return mixed[] Array of arrays containing lesson information; Key = lesson ID
 	 */
-	private static function getLessons() {
+	private static function get_lessons() {
 		global $wpdb;
 
-		$lessonQuery = $wpdb->get_results(
+		$lesson_query = $wpdb->get_results(
 			"
-			SELECT ID
-			FROM $wpdb->posts
-			WHERE post_type = 'sfwd-lessons'
-		"
+            SELECT ID
+            FROM $wpdb->posts
+            WHERE post_type = 'sfwd-lessons'
+        "
 		);
 
-		$lessonHolder = [];
+		$lesson_holder = [];
 
-		foreach ( $lessonQuery as $lesson ) {
-			$l                           = get_post( $lesson->ID );
-			$lessonHolder[ $lesson->ID ] = [
+		foreach ( $lesson_query as $lesson ) {
+			$l                            = get_post( $lesson->ID );
+			$lesson_holder[ $lesson->ID ] = [
 				'ID'           => intval( $lesson->ID ),
 				'menuOrder'    => $l->menu_order,
 				'postAuthor'   => intval( $l->post_author ),
@@ -459,12 +463,15 @@ class EducatorDashboard {
 			];
 		}
 
-		return $lessonHolder;
+		return $lesson_holder;
 
 	}
 
 }
 
+/**
+ * Main localizer for the educator dashboard.
+ */
 function localize() {
 	$au_dashboard = new EducatorDashboard();
 	return [
