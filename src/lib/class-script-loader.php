@@ -104,11 +104,38 @@ class Script_Loader {
 	}
 
 	/**
+	 * Removes unnecessary garbage styles/scripts unless they're actually needed.
+	 */
+	private function remove_junk(): void {
+		$styles  = wp_styles();
+		$scripts = wp_scripts();
+		foreach ( $styles->queue as $style ) {
+			if ( ( ! is_ultimatemember() || is_front_page() ) && strncmp( $style, 'um_', 3 ) === 0 ) {
+				wp_dequeue_style( $style );
+			}
+			if ( strncmp( $style, 'learndash_', 10 ) === 0 || strncmp( $style, 'sfwd_', 5 ) === 0 ) {
+				wp_dequeue_style( $style );
+			}
+		}
+
+		foreach ( $scripts->queue as $script ) {
+			if ( ( ! is_ultimatemember() || is_front_page() ) && strncmp( $script, 'um_', 3 ) === 0 ) {
+				wp_dequeue_script( $script );
+			}
+			if ( strncmp( $script, 'learndash_', 10 ) === 0 || strncmp( $script, 'sfwd_', 5 ) === 0 ) {
+				wp_dequeue_script( $script );
+			}
+		}
+	}
+
+	/**
 	 * Master delegator for the script loader.
 	 *
 	 * Loads/Unloads scripts and styles based on the current page.
 	 */
 	private function delegate() : void {
+		$this->remove_junk();
+
 		// Always load these.
 		$load = (object) [
 			'scripts' => [ 'mobile-nav-menu-helper' ],
@@ -117,23 +144,11 @@ class Script_Loader {
 		// Always unload these.
 		$unload = (object) [
 			'scripts' => [],
-			'styles'  => [
-				'learndash_quiz_front_css',
-				'learndash_template_style_css',
-				'learndash_style',
-				'sfwd_front_css',
-				'wpProQuiz_front_style',
-			],
+			'styles'  => [],
 		];
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			array_push( $load->scripts, 'comment-reply' );
-		}
-
-		// Not an Ultimate Member page.
-		if ( ! array_intersect( [ 'um-page-loggedin', 'um-page-loggedout', 'home', 'page-id-3432' ], get_body_class() ) ) {
-			array_push( $unload->scripts, 'um_minified' );
-			array_push( $unload->styles, 'um_minified', 'um_recaptcha' );
 		}
 
 		if ( is_post_type_archive( 'sfwd-courses' ) ) {
