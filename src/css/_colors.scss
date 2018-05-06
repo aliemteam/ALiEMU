@@ -12,7 +12,7 @@ $gray-light: #f5f7f9 !default;
 $gray: #444243 !default;
 $gray-dark: #182026 !default;
 
-$text-color: #182026 !default;
+$text-color: $gray-dark !default;
 $text-color-light: #666 !default;
 
 $border-color: rgba($black, 0.1) !default;

@@ -38,7 +38,7 @@ export default class Catalog extends React.Component {
         try {
             while (page <= pages) {
                 const response = yield fetch(
-                    `${location.origin}/wp-json/ldlms/v1/courses?page=${page}`,
+                    `${location.origin}/wp-json/ldlms/v1/courses?page=${page}&_embed`,
                 );
                 const json: LearnDash.Course[] = yield response.json();
                 courses = [...courses, ...json];

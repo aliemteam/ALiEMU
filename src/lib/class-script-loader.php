@@ -110,7 +110,7 @@ class Script_Loader {
 		$styles  = wp_styles();
 		$scripts = wp_scripts();
 		foreach ( $styles->queue as $style ) {
-			if ( ( ! is_ultimatemember() || is_front_page() ) && strncmp( $style, 'um_', 3 ) === 0 ) {
+			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $style, 'um_', 3 ) === 0 ) {
 				wp_dequeue_style( $style );
 			}
 			if ( strncmp( $style, 'learndash_', 10 ) === 0 || strncmp( $style, 'sfwd_', 5 ) === 0 ) {
@@ -119,7 +119,7 @@ class Script_Loader {
 		}
 
 		foreach ( $scripts->queue as $script ) {
-			if ( ( ! is_ultimatemember() || is_front_page() ) && strncmp( $script, 'um_', 3 ) === 0 ) {
+			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $script, 'um_', 3 ) === 0 ) {
 				wp_dequeue_script( $script );
 			}
 			if ( strncmp( $script, 'learndash_', 10 ) === 0 || strncmp( $script, 'sfwd_', 5 ) === 0 ) {

@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Main localizer function for catalog entrypoint.
  */
 function localize() {
+	global $wp_rest_server;
 
 	$courses_req = new \WP_Rest_Request( 'GET', '/ldlms/v1/courses' );
 	$response    = rest_do_request( $courses_req );
@@ -25,12 +26,11 @@ function localize() {
 		wp_die( printf( '<p>An error occurred: %s (%d)</p>', $message, $error_data ) ); // @codingStandardsIgnoreLine
 	}
 
-	$data    = $response->get_data();
 	$headers = $response->get_headers();
+	$data    = $wp_rest_server->response_to_data( $response, true );
 
 	$visible_course_ids = get_transient( 'aliemu_catalog_categories' );
 	if ( ! $visible_course_ids ) {
-
 		$query = new \WP_Query(
 			[
 				'post_type'   => 'sfwd-courses',

@@ -1,7 +1,11 @@
 version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.18.0-php7.2
+        image: visiblevc/wordpress:0.19.0-php7.2
+        cap_add:
+          - SYS_ADMIN
+        devices:
+          - /dev/fuse
         environment:
             ALIEM_API_KEY: ${ALIEM_API_KEY?ALIEM_API_KEY key not defined in .env}
             EXTRA_PHP: |
@@ -19,7 +23,6 @@ services:
                 ultimate-member
                 [um-recaptcha]https://ultimatemember.com/free-extensions/um-recaptcha.zip
                 w3-total-cache
-                wordpress-seo
                 wp-smushit
         volumes:
             - ./data:/data

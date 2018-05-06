@@ -1,4 +1,4 @@
-@import '../variables';
+@import 'variables';
 
 //
 // Ultimate Member Templated Pages
@@ -16,6 +16,11 @@
 
 .um-page-account .um {
     padding: 40px 20px;
+}
+
+.um-profile-nav {
+    background: $gray-dark;
+    border-radius: $border-radius;
 }
 
 .um-profile-nav-item i {

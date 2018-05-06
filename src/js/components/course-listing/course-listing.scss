@@ -19,8 +19,15 @@
     }
 }
 
-.img {
+.image {
     grid-area: img;
+    width: 100%;
+}
+
+.overlay {
+    opacity: 0.8;
+    background: $secondary;
+    height: 100%;
     width: 100%;
 }
 
@@ -66,6 +73,7 @@
             'img'
             'head'
             'desc';
+        grid-template-rows: 175px auto auto;
     }
     .new-tag {
         display: none;

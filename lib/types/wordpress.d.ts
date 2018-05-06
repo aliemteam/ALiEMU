@@ -1,3 +1,4 @@
+// tslint:disable:no-namespace no-reserved-keywords
 declare namespace WordPress {
     type PostStatus = 'draft' | 'future' | 'pending' | 'private' | 'publish';
     type PostFormat =
@@ -59,6 +60,12 @@ declare namespace WordPress {
                 embeddable?: true;
             };
         };
+        _embedded?: {
+            author: any[]; // TODO
+            replies: any[]; // TODO
+            'wp:featuredmedia': Media[];
+            'wp:term': any[]; // TODO
+        };
     }
 
     interface Post
@@ -66,6 +73,49 @@ declare namespace WordPress {
             Supports.CustomFields,
             Supports.Excerpt,
             Supports.PostFormats {}
+
+    interface Media {
+        alt_text: string;
+        author: number;
+        caption: __.DisplayObject;
+        date: string;
+        id: number;
+        link: string;
+        media_details: {
+            file: string;
+            height: number;
+            image_meta: {
+                aperture: string;
+                camera: string;
+                caption: string;
+                copyright: string;
+                created_timestamp: string;
+                credit: string;
+                focal_length: string;
+                iso: string;
+                keywords: string[];
+                orientation: string;
+                shutter_speed: string;
+                title: string;
+            };
+            sizes: {
+                [sizeId: string]: {
+                    file: string;
+                    height: number;
+                    mime_type: string;
+                    source_url: string;
+                    width: number;
+                };
+            };
+            width: number;
+        };
+        media_type: 'image' | 'file';
+        mime_type: string;
+        slug: string;
+        source_url: string;
+        title: __.DisplayObject;
+        type: string;
+    }
 
     interface Term {
         count: number;
