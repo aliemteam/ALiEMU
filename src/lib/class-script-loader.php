@@ -74,7 +74,6 @@ class Script_Loader {
 	 * delegation process.
 	 */
 	public function register() : void {
-		wp_register_style( 'aliemu', get_stylesheet_uri() );
 		wp_register_style(
 			'aliemu-fonts', add_query_arg(
 				[
@@ -83,6 +82,7 @@ class Script_Loader {
 				], 'https://fonts.googleapis.com/css'
 			)
 		);
+		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ] );
 
 		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
 			$style = pathinfo( $stylesheet );

@@ -1,11 +1,12 @@
 // FIXME: This should be imported only on the page it's needed.
-@import 'colors';
 @import 'mixins';
 @import 'variables';
 
 .home__row {
     $vertical-padding: 25px;
     width: 100%;
+    max-width: $article-max-width;
+    margin: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
