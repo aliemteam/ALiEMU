@@ -94,8 +94,8 @@ class Sync(object):
 
         print('Exporting database...')
         self.cmd.ssh((
-            'sudo -u {name} docker-compose -f /home/{name}/app/docker-compose.yml '
-            'exec -T wordpress /bin/bash -c '
+            'cd /home/{name}/app && sudo -u {name} '
+            'docker-compose exec -T wordpress /bin/bash -c '
             "'wp db export /data/database.sql --allow-root'"
         ).format(**self.meta))
 
