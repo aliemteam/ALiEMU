@@ -1,0 +1,19 @@
+@import 'variables';
+
+.navbar {
+    width: 100%;
+    background: white;
+    border-top: solid $border-color 1px;
+    border-bottom: solid $border-color 1px;
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: $max-width-medium;
+    margin: 0 $block-margin;
+}

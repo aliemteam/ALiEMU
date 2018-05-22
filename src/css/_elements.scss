@@ -1,4 +1,5 @@
-@import 'mixins';
+@import 'mixins/hard-boundary';
+@import 'mixins/noselect';
 
 summary {
     @include noselect;
@@ -18,9 +19,11 @@ ul {
         padding: 0;
         margin: 0 0 $block-margin 25px;
         counter-reset: item;
+
         > li {
             display: block;
             position: relative;
+
             &:before {
                 content: counter(item) '.';
                 counter-increment: item;
@@ -42,9 +45,11 @@ ul {
 p {
     margin: $block-margin 0;
     padding: 0;
+
     &:last-child {
         margin: 0;
     }
+
     &:empty {
         display: none;
     }
@@ -59,7 +64,7 @@ hr {
 
 #content {
     img[src$='.svg'],
-    svg {
+    svg:not(.no-inherit) {
         max-width: 100%;
         max-height: 100%;
         height: auto;
@@ -72,15 +77,19 @@ img {
         display: block;
         margin: auto;
     }
+
     &.alignleft {
         float: left;
     }
+
     &.alignright {
         float: right;
     }
+
     blockquote & {
         display: inline-block;
     }
+
     .content-area & {
         max-width: 100%;
         height: auto;
@@ -96,8 +105,7 @@ blockquote {
 }
 
 ::selection {
-    background: $primary;
-    color: white;
+    background: transparentize($primary, 0.6);
 }
 
 .wp-caption {
@@ -108,12 +116,14 @@ blockquote {
     margin: $block-margin 1em;
     color: $text-color-light;
     box-shadow: map-get($shadows, 'depth-2');
+
     img {
         max-width: 100%;
         width: auto;
         height: auto;
     }
 }
+
 .wp-caption-text {
     font-style: italic;
     text-align: justify;

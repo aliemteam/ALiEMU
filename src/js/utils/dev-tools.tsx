@@ -1,22 +1,23 @@
-// tslint:disable:no-typeof-undefined
 import DevTool from 'mobx-react-devtools';
 import * as React from 'react';
 
-export default function devtool(props: any): JSX.Element | null {
+export default (): JSX.Element | null => {
     if (process.env.NODE_ENV !== 'production') {
-        return <DevTool {...props} />;
+        return <DevTool position={{ bottom: 0, right: 0 }} />;
     }
     return null;
-}
+};
 
-export function configureDevtool(options: {
+interface ConfigureOptions {
     logEnabled?: boolean;
     updatesEnabled?: boolean;
     graphEnabled?: boolean;
     logFilter?: (p: any) => boolean;
-}): void {
+}
+
+export const configureDevtool = (options: ConfigureOptions): void => {
     if (process.env.NODE_ENV !== 'production') {
         const cdt = require('mobx-react-devtools').configureDevtool;
         cdt(options);
     }
-}
+};

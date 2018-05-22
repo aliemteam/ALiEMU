@@ -1,6 +1,5 @@
-@import 'colors';
-@import 'mixins';
 @import 'variables';
+@import 'mixins/media';
 
 // Contact Page ----------------------------------------------------------------
 .contact-form__row {
@@ -20,6 +19,7 @@
     #recaptcha {
         transform: scale(0.8);
     }
+
     .contact-form__row_submit {
         justify-content: center;
     }
@@ -30,9 +30,11 @@
     flex: auto;
     flex-wrap: wrap;
     padding: 5px;
+
     input {
         flex: auto;
     }
+
     label {
         white-space: nowrap;
         padding-right: 20px;

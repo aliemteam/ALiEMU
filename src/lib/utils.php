@@ -32,3 +32,22 @@ function unautop( string $content ) : string {
 	preg_match( '/^(?<br><br(?: \/)?>)\s*(?<content>.+?)(\k<br>)$/s', $content, $matches );
 	return $matches['content'] ?? $content;
 }
+
+/**
+ * Checks if a given WP_Rest_Response is an error. If so, calls wp_die and dumps an error message.
+ *
+ * @param \WP_Rest_Response $response WordPress response instance.
+ * @param bool              $die True if an error should be fatal.
+ */
+function check_rest_response( \WP_Rest_Response $response, $die = false ) {
+	if ( $response->is_error() ) {
+		$error      = $response->as_error();
+		$msg        = $error->get_error_message();
+		$error_data = $error->get_error_data();
+		if ( $die ) {
+			wp_die( printf( '<p>An error occurred: %s (%d)</p>', $msg, $error_data ) ); // @codingStandardsIgnoreLine
+		}
+		return array_merge( $error_data, [ 'message' => $msg ] );
+	}
+	return false;
+}

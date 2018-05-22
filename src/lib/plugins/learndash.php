@@ -10,6 +10,35 @@ namespace ALIEMU\Learndash;
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Modifies some of the LearnDash custom post type registration arguments.
+ *
+ * @param mixed[] $args  Array of post type arguments.
+ * @param string  $post_type  The post type of the custom post type being registered.
+ */
+function modify_post_types( array $args, string $post_type ) : array {
+	switch ( $post_type ) {
+		case ALIEMU_POST_TYPES['course']:
+			$args['show_in_rest']          = true;
+			$args['rest_controller_class'] = 'ALIEMU\API\Courses_Controller';
+			$args['rest_base']             = 'courses';
+			return $args;
+		case ALIEMU_POST_TYPES['lesson']:
+			$args['show_in_rest']          = true;
+			$args['rest_controller_class'] = 'ALIEMU\API\Lessons_Controller';
+			$args['rest_base']             = 'lessons';
+			return $args;
+		case ALIEMU_POST_TYPES['quiz']:
+			$args['show_in_rest']          = true;
+			$args['rest_controller_class'] = 'ALIEMU\API\Quizzes_Controller';
+			$args['rest_base']             = 'quizzes';
+			return $args;
+		default:
+			return $args;
+	}
+}
+add_filter( 'register_post_type_args', __NAMESPACE__ . '\modify_post_types', 10, 2 );
+
+/**
  * Adds "Course Short Description" field to the block meta.
  *
  * @param WP_Post[] $posts Array of posts.

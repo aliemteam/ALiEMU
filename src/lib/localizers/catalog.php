@@ -9,22 +9,33 @@ namespace ALIEMU;
 
 defined( 'ABSPATH' ) || exit;
 
+use function ALIEMU\Utils\check_rest_response;
+
 /**
  * Main localizer function for catalog entrypoint.
  */
 function localize() {
 	global $wp_rest_server;
 
-	$courses_req = new \WP_Rest_Request( 'GET', '/ldlms/v1/courses' );
-	$response    = rest_do_request( $courses_req );
+	$courses_req = new \WP_Rest_Request( 'GET', '/aliemu/v1/courses' );
+	$courses_req->set_param(
+		'_fields', join(
+			',', [
+				'_links',
+				'categories',
+				'course_short_description',
+				'date_gmt',
+				'featured_media',
+				'id',
+				'link',
+				'recommendedHours',
+				'title',
+			]
+		)
+	);
+	$response = rest_do_request( $courses_req );
 
-	if ( $response->is_error() ) {
-		$error      = $response->as_error();
-		$msg        = $response->get_error_message();
-		$error_data = $response->get_error_data();
-		$status     = isset( $error_data['status'] ) ? $error_data['status'] : 500;
-		wp_die( printf( '<p>An error occurred: %s (%d)</p>', $message, $error_data ) ); // @codingStandardsIgnoreLine
-	}
+	check_rest_response( $response, true );
 
 	$headers = $response->get_headers();
 	$data    = $wp_rest_server->response_to_data( $response, true );
@@ -47,6 +58,7 @@ function localize() {
 	}
 
 	return [
+		'nonce'      => wp_create_nonce( 'wp_rest' ),
 		'headers'    => [
 			'courses' => $headers,
 		],

@@ -1,0 +1,28 @@
+.profile {
+    display: grid;
+    grid:
+        'bio   bio'
+        'stats comments' 1fr
+        / 1fr 1fr;
+    justify-content: space-around;
+    grid-gap: 20px 50px;
+}
+
+.bio {
+    grid-area: bio;
+}
+
+.stats {
+    grid-area: stats;
+}
+
+.comments {
+    grid-area: comments;
+}
+
+.view-more {
+    font-size: 16px;
+    opacity: 0.8;
+    float: right;
+    padding: 0 5px;
+}

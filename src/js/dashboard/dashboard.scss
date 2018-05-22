@@ -1,0 +1,17 @@
+@import 'variables';
+
+:global #content {
+    background-color: $gray-light;
+}
+
+%container-outer {
+    display: flex;
+    justify-content: center;
+}
+
+%container-inner {
+    width: 100%;
+    max-width: $max-width-medium;
+    margin: 0 $block-margin;
+}
+

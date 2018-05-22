@@ -1,14 +1,13 @@
+@import '~normalize.css';
 
-@import 'colors';
 @import 'variables';
 @import 'typography';
 @import 'components/table';
 
-@import '~normalize.css';
-
 html {
     box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
@@ -73,9 +72,11 @@ span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
     .wp-playlist-item-title {
         font-weight: 700;
     }
+
     .wp-playlist-item-album {
         font-style: normal;
     }
+
     .wp-playlist-item-artist {
         font-size: 0.625rem;
         font-weight: 800;
@@ -87,13 +88,16 @@ span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
 .wp-playlist-item {
     padding: 0 0.3125em;
     cursor: pointer;
+
     &:last-of-type {
         border-bottom: none;
     }
+
     a {
         padding: 0.3125em 0;
         border-bottom: none;
         box-shadow: none;
+
         &:focus,
         &:hover {
             box-shadow: none;
@@ -105,18 +109,22 @@ span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
 .wp-playlist-light {
     border-color: $gray-light;
     color: $text-color;
+
     .wp-playlist-current-item {
         .wp-playlist-item-album {
             color: $text-color;
         }
+
         .wp-playlist-item-artist {
             color: $text-color-light;
         }
     }
+
     .wp-playlist-item {
         border-bottom: 1px dotted $gray-light;
         transition: background-color 0.2s ease-in-out,
             border-color 0.2s ease-in-out, color 0.3s ease-in-out;
+
         &:hover,
         &:focus {
             border-bottom-color: transparent;
@@ -124,6 +132,7 @@ span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
             color: white;
         }
     }
+
     a.wp-playlist-caption:hover,
     .wp-playlist-item:hover a,
     .wp-playlist-item:focus a {
@@ -134,6 +143,7 @@ span.mce-preview-object[data-mce-p-src*='soundcloud.com'] {
 .wp-playlist {
     padding: 0.625em 0.625em 0.3125em;
 }
+
 .wp-playlist-item-length {
     top: 5px;
 }

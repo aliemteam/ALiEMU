@@ -1,4 +1,4 @@
-@import 'mixins';
+@import 'mixins/media';
 
 .catalog {
     display: grid;
@@ -10,6 +10,7 @@
 
     max-width: 73.75rem;
     margin: auto;
+
     > h1 {
         margin: 0;
         grid-area: head;
@@ -18,6 +19,7 @@
 
 .search {
     grid-area: search;
+
     input {
         width: 100%;
     }

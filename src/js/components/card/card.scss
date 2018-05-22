@@ -1,0 +1,8 @@
+@import 'variables';
+
+.card {
+    background: white;
+    border: solid 1px darken($gray-light, 8%);
+    border-radius: 2px;
+    padding: 10px;
+}

@@ -1,4 +1,3 @@
-@import 'colors';
 @import 'variables';
 
 // FIXME: This should be inlined in the dashboard itself.
@@ -7,6 +6,7 @@
     box-shadow: map-get($shadows, 'depth-2');
     box-sizing: border-box;
     margin-bottom: 30px;
+
     h1 {
         background: $primary;
         color: white;
@@ -14,6 +14,7 @@
         padding: 10px;
         font: 600 1.5em;
     }
+
     h2 {
         font-size: 1.1em;
         margin: 0;

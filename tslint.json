@@ -22,6 +22,7 @@
       "severity": "warning"
     },
     "interface-name": false,
+		"max-classes-per-file": false,
     "member-access": {
       "options": [
         "no-public"
@@ -45,8 +46,7 @@
     "strict-boolean-expressions": false,
     "typedef": {
       "options": [
-        "call-signature",
-        "arrow-call-signature"
+        "call-signature"
       ]
     },
     "variable-name": false,

@@ -1,0 +1,15 @@
+@import 'variables';
+
+.circle {
+    transform: rotate(-90deg);
+    fill: none;
+    stroke-linecap: round;
+}
+
+.circle__background {
+    stroke: $gray-light;
+}
+
+.circle__fill {
+    stroke: $secondary;
+}

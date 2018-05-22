@@ -110,7 +110,6 @@ declare namespace ALiEMU {
             residencyUsEm?: string;
             registerDate: string;
             role: string;
-            submitted: string;
             twitter?: string;
             umLastLogin: number;
             userAgreement?: boolean;

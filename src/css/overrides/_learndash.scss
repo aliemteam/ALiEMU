@@ -1,6 +1,7 @@
-@import '../colors';
-@import '../mixins';
-@import '../variables';
+@import 'variables';
+@import 'mixins/button';
+@import 'mixins/hard-boundary';
+@import 'mixins/media';
 
 // Center the "Mark Complete" button
 #sfwd-mark-complete {
@@ -16,6 +17,7 @@
 .next-link {
     @include button($primary);
     margin-bottom: $block-margin;
+
     > span {
         display: none;
     }
@@ -46,6 +48,7 @@
     align-items: baseline;
     background: $gray-light;
     padding: 10px;
+
     span {
         text-align: center;
     }
@@ -71,10 +74,12 @@
     align-items: center;
     justify-content: space-between;
     font-weight: 400;
+
     &:last-of-type {
         border-radius: 0 0 2px 2px;
         box-shadow: unset;
     }
+
     &:hover {
         background: rgba(0, 0, 0, 0.02);
     }
@@ -86,6 +91,7 @@
     color: white;
     font-weight: 500;
     border-radius: 2px 2px 0 0;
+
     &:hover {
         background: $secondary;
     }
@@ -106,6 +112,7 @@
 .content-table__cell--full-width {
     width: 100%;
     min-width: 0;
+
     a {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -125,6 +132,7 @@
 // Outermost shell
 .wpProQuiz_content {
     margin-bottom: 20px;
+
     ol[class] {
         margin: 0;
     }
@@ -148,6 +156,7 @@
 // Hint box
 .wpProQuiz_tipp {
     @extend .wpProQuiz_questionList;
+
     > div p {
         margin: 0.5em 0;
     }
@@ -156,23 +165,28 @@
 // Each individual question item
 .wpProQuiz_questionListItem {
     list-style: none;
+
     label {
         position: relative;
         display: block;
         cursor: pointer;
         padding-left: $block-margin;
     }
+
     .wpProQuiz_questionInput {
         position: absolute;
         left: 0;
         height: 2em;
     }
+
     &:nth-last-of-type(n + 2) {
         margin-bottom: 5px;
     }
+
     &.wpProQuiz_answerIncorrect {
         background: rgba($intent-danger, 0.15);
     }
+
     &.wpProQuiz_answerCorrect {
         background: rgba($intent-success, 0.15);
     }
@@ -195,6 +209,7 @@ dd.course_progress {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
     height: 20px;
     overflow: hidden;
+
     .sending_progress_bar {
         display: block;
         position: relative;
@@ -229,9 +244,8 @@ dd.course_progress {
 }
 
 // The word "Incorrect" or "Correct" in the results panel
-@each $status,
-    $color in (correct, $intent-success),
-    (incorrect, $intent-danger) {
+@each $status, $color in (correct, $intent-success), (incorrect, $intent-danger)
+{
     .wpProQuiz_#{$status} > span:first-of-type {
         display: block;
         color: $color;
@@ -251,6 +265,7 @@ dd.course_progress {
 // Disable ordered list for questions
 .wpProQuiz_listItem {
     list-style-type: none;
+
     &:before {
         content: '' !important;
     }

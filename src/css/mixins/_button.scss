@@ -1,20 +1,11 @@
 @import 'variables';
-@import 'colors';
 
-@mixin noselect() {
-    -webkit-appearance: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
+// FIXME: below needs to be refactored out into classes
 
 @mixin button($color: false, $modifiers: false) {
     $button-active: rgba(0, 0, 0, 0.12) !default;
     $button-disabled: #a0a5aa !default;
-    background: transparent;
+    background: white;
     background-image: none;
     border: none;
     border-radius: 2px;
@@ -48,15 +39,18 @@
             color: $color;
         }
     }
+
     &::-moz-focus-inner {
         border: 0;
     }
+
     &:hover {
         box-shadow: map-get($shadows, depth-4);
         @if index($modifiers, flat) {
             box-shadow: none;
         }
     }
+
     &:disabled {
         pointer-events: none;
         background: $button-disabled;
@@ -66,6 +60,7 @@
             color: white;
         }
     }
+
     &:active:hover {
         @if type-of($color) == 'color' {
             @if not index($modifiers, flat) {
@@ -83,33 +78,9 @@
         &:hover {
             background: rgba(158, 158, 158, 0.2);
         }
+
         &:active {
             background: lighten($button-active, 5%);
         }
-    }
-}
-
-@mixin hard-boundary($side) {
-    $sides: (
-        top: inset 0 1px 0 0 $border-color,
-        right: inset -1px 0 0 0 $border-color,
-        bottom: inset 0 -1px 0 0 $border-color,
-        left: inset 1px 0 0 0 $border-color
-    );
-    @if not map-has-key($sides, $side) {
-        @error ("Expected 'top', 'right', 'bottom', or 'left', but recieved #{$side}");
-    }
-    box-shadow: map-get($sides, $side);
-}
-
-@mixin device-tablet {
-    @media (min-width: 601px) and (max-width: 1024px) {
-        @content;
-    }
-}
-
-@mixin device-mobile {
-    @media (max-width: 600px) {
-        @content;
     }
 }

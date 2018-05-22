@@ -63,12 +63,16 @@ $font-serif: 'Roboto Slab', serif !default;
 $font-mono: 'Roboto Mono', monospace !default;
 $font-family: $font-sans !default;
 
-// Layout
-$header-height: 4rem !default;
-$admin-bar-height: 2rem !default;
-$article-max-width: 800px !default;
-
 // Block element attributes
 $block-margin: 1.5rem !default;
 $block-padding: 20px !default;
 $border-radius: 3px !default;
+
+// Layout
+$header-height: 4rem !default;
+$admin-bar-height: 2rem !default;
+$max-width-wide: 1250px !default;
+$max-width-medium: 1000px !default;
+$max-width-narrow: 800px !default;
+$section-margin: $block-margin * 2 !default;
+

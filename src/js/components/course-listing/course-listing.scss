@@ -1,5 +1,5 @@
-@import 'mixins';
 @import 'variables';
+@import 'mixins/media';
 
 .listing {
     background-color: white;
@@ -10,9 +10,11 @@
         / 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
     padding: 30px $block-margin;
+
     &:nth-of-type(n + 2) {
         border-top: 1px solid $border-color;
     }
+
     div {
         line-height: 1.5rem;
         font-size: 16px;
@@ -34,6 +36,7 @@
 .heading {
     grid-area: head;
     display: flex;
+
     strong {
         flex-shrink: 0;
     }
@@ -75,6 +78,7 @@
             'desc';
         grid-template-rows: 175px auto auto;
     }
+
     .new-tag {
         display: none;
     }

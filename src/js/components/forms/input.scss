@@ -2,16 +2,23 @@
 
 .container {
     background-color: white;
-    padding: 10px 14px;
-    border-radius: 4px;
     box-shadow: 0 1px 3px 0 #e6ebf1;
     border: 1px solid transparent;
     transition: box-shadow 150ms ease;
+
+    padding: 5px 10px;
+    border-radius: 2px;
+
     &.focused {
         box-shadow: 0 1px 3px 0 #cfd7df;
         box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px,
             rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
     }
+}
+
+.container--large {
+    padding: 10px 14px;
+    border-radius: 4px;
 }
 
 .input {
@@ -22,12 +29,22 @@
     padding: 0;
     width: 100%;
 
+    $height: 18px;
+    height: $height;
+    line-height: $height;
+    font-size: 16px;
+
+    color: #424770;
+    font-family: $font-mono;
+
     &:focus {
         outline: none;
     }
-    height: 20px;
-    line-height: 20px;
+}
+
+.input--large {
+    $height: 20px;
+    height: $height;
+    line-height: $height;
     font-size: 18px;
-    color: #424770;
-    font-family: $font-mono;
 }

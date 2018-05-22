@@ -1,0 +1,22 @@
+@import 'variables';
+
+.btn {
+    padding: 0 20px;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: solid transparent 4px;
+    height: 100%;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+        border-bottom: solid $border-color 4px;
+    }
+}
+
+.active,
+.active:hover {
+    color: $secondary;
+    border-bottom: solid $secondary 4px;
+}

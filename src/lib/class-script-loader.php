@@ -25,8 +25,9 @@ class Script_Loader {
 	 * @var array $localized
 	 */
 	private static $localized = [
-		'catalog'            => 'AU_Catalog',
-		'educator-dashboard' => 'AU_EducatorData',
+		'aliemu-catalog'            => 'AU_Catalog',
+		'aliemu-dashboard'          => 'AU_Dashboard',
+		'aliemu-educator-dashboard' => 'AU_EducatorData',
 	];
 
 	/**
@@ -86,11 +87,12 @@ class Script_Loader {
 
 		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
 			$style = pathinfo( $stylesheet );
-			wp_register_style( $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
+			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
 		}
 
-		wp_register_script( 'catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'wp-api' ], ALIEMU_VERSION, true );
-		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'wp-api' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'wp-api' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
 		$this->delegate();
@@ -110,7 +112,7 @@ class Script_Loader {
 		$styles  = wp_styles();
 		$scripts = wp_scripts();
 		foreach ( $styles->queue as $style ) {
-			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $style, 'um_', 3 ) === 0 ) {
+			if ( ( ! is_ultimatemember() && ! is_front_page() || is_page( 'user' ) ) && strncmp( $style, 'um_', 3 ) === 0 ) {
 				wp_dequeue_style( $style );
 			}
 			if ( strncmp( $style, 'learndash_', 10 ) === 0 || strncmp( $style, 'sfwd_', 5 ) === 0 ) {
@@ -119,7 +121,7 @@ class Script_Loader {
 		}
 
 		foreach ( $scripts->queue as $script ) {
-			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $script, 'um_', 3 ) === 0 ) {
+			if ( ( ! is_ultimatemember() && ! is_front_page() || is_page( 'user' ) ) && strncmp( $script, 'um_', 3 ) === 0 ) {
 				wp_dequeue_script( $script );
 			}
 			if ( strncmp( $script, 'learndash_', 10 ) === 0 || strncmp( $script, 'sfwd_', 5 ) === 0 ) {
@@ -134,7 +136,10 @@ class Script_Loader {
 	 * Loads/Unloads scripts and styles based on the current page.
 	 */
 	private function delegate() : void {
-		$this->remove_junk();
+		// TODO: This is temporary until we can get forms styled better.
+		if ( ! is_page( 'faculty-start' ) ) {
+			$this->remove_junk();
+		}
 
 		// Always load these.
 		$load = (object) [
@@ -152,16 +157,21 @@ class Script_Loader {
 		}
 
 		if ( is_post_type_archive( 'sfwd-courses' ) ) {
-			array_push( $load->scripts, 'catalog' );
-			array_push( $load->styles, 'catalog' );
+			array_push( $load->scripts, 'aliemu-catalog' );
+			array_push( $load->styles, 'aliemu-catalog' );
+		}
+
+		if ( is_page( 'user' ) ) {
+			array_push( $load->scripts, 'aliemu-dashboard' );
+			array_push( $load->styles, 'aliemu-dashboard' );
 		}
 
 		switch ( $this->path[0] ?? '' ) {
 			case 'user':
 				switch ( $this->query['profiletab'] ?? '' ) {
 					case 'educator_dashboard':
-						array_push( $load->scripts, 'educator-dashboard' );
-						array_push( $load->styles, 'educator-dashboard' );
+						array_push( $load->scripts, 'aliemu-educator-dashboard' );
+						array_push( $load->styles, 'aliemu-educator-dashboard' );
 						break 2;
 					case 'user_progress':
 						array_push( $load->styles, 'learndash_template_style_css' );
@@ -216,7 +226,12 @@ class Script_Loader {
 	 * @param string $varname Name of the global JS variable to set.
 	 */
 	private function localize( $script, $varname ) : void {
-		require_once __DIR__ . "/localizers/$script.php";
+		$scriptname = preg_replace( '/^aliemu-/', '', $script );
+		if ( file_exists( __DIR__ . "/localizers/$scriptname.php" ) ) {
+			require_once __DIR__ . "/localizers/$scriptname.php";
+		} else {
+			wp_die( 'Could not locate required localizer script' );
+		}
 		wp_localize_script( $script, $varname, localize() );
 	}
 }

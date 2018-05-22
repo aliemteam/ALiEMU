@@ -18,8 +18,10 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASS}
         restart: always
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASS?DB_PASS not defined in .env}
+    adminer:
+        image: adminer
         restart: always
+        volumes:
+            - data:/var/lib/mysql
+        ports:
+            - 22222:8080

@@ -1,9 +1,11 @@
-@import 'colors';
 @import 'variables';
-@import 'mixins';
+@import 'mixins/hard-boundary';
+@import 'mixins/media';
 
 body {
+    min-height: 100vh;
     background: white;
+
     &.home,
     &.um-page-account,
     &.um-page-login,
@@ -12,6 +14,20 @@ body {
     &.page-id-1248 {
         background: $gray-light;
     }
+    display: grid;
+    grid:
+        'header' auto
+        'body' 1fr
+        'comments' auto
+        'footer' auto;
+}
+
+.header {
+    grid-area: header;
+}
+
+.footer {
+    grid-area: footer;
 }
 
 .skip-link {
@@ -26,6 +42,7 @@ body {
     left: $block-margin;
     padding: 5px 20px;
     box-shadow: map-get($shadows, 'depth-8');
+
     &:focus {
         clip: unset;
         height: auto;
@@ -34,17 +51,17 @@ body {
 }
 
 .content-area {
+    grid-area: body;
     max-width: 100%;
     display: flex;
     justify-content: center;
 }
 
 main[role='main'] {
-    $sep: $block-margin * 2;
     min-height: calc(100vh - #{$header-height});
     max-width: 100%;
-    padding: 0 $sep;
-    margin: $sep 0;
+    padding: 0 $section-margin;
+    margin: $section-margin 0;
     flex: auto;
 
     @include device-tablet {
@@ -54,25 +71,13 @@ main[role='main'] {
         padding: 0 $block-margin;
     }
 
-    // .single has a sidebar
-    // FIXME: Is this even needed?
-    // .single & {
-    //     max-width: 1000px;
-    //     @include device-tablet {
-    //         max-width: 100%;
-    //     }
-    //     @include device-mobile {
-    //         max-width: 100%;
-    //     }
-    // }
-
     // Admin bar fix
     .admin-bar & {
         min-height: calc(100vh - #{$header-height} - #{$admin-bar-height});
     }
 
     > article {
-        max-width: $article-max-width;
+        max-width: $max-width-narrow;
         margin: auto;
         // Ultimate member user page
         .um-page-user & {
@@ -85,6 +90,7 @@ main[role='main'] {
     .um-page-password-reset &,
     .page-id-1248 & {
         display: flex;
+
         article {
             max-width: 100%;
             width: auto;
@@ -93,6 +99,7 @@ main[role='main'] {
 
     .um-page-account & {
         display: flex;
+
         article {
             max-width: 900px;
             width: 100%;
@@ -101,16 +108,16 @@ main[role='main'] {
 }
 
 #sidebar {
-    $sep: $block-margin * 2;
     @include hard-boundary(left);
     max-width: 250px;
-    margin: $sep $sep $sep 0;
-    padding-left: $sep;
+    margin: $section-margin $section-margin $section-margin 0;
+    padding-left: $section-margin;
+
     .widget-content--sticky {
         position: sticky;
-        top: $sep + $header-height;
+        top: $section-margin + $header-height;
         @at-root .admin-bar & {
-            top: $sep + $header-height + $admin-bar-height;
+            top: $section-margin + $header-height + $admin-bar-height;
         }
     }
     @include device-tablet {

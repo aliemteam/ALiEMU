@@ -10,3 +10,9 @@ services:
             - 8080:80
         volumes:
             - ./dist:/app/wp-content/themes/aliemu
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        volumes:
+            - data:/var/lib/mysql
+        ports:
+            - 22222:80

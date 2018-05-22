@@ -1,11 +1,6 @@
-@import 'mixins';
-
-input {
-    @extend body;
-}
+@import 'mixins/noselect';
 
 select {
-    @extend body;
     &:disabled {
         opacity: 0.6;
         pointer-events: none;
@@ -13,7 +8,6 @@ select {
 }
 
 textarea {
-    @extend body;
     line-height: normal;
 }
 

@@ -55,11 +55,7 @@ const plugins: Set<webpack.Plugin> = new Set([
                             plugins: [svgo()],
                         });
                     default:
-                        throw new Error(
-                            `Need to install imagemin plugin for ${path.extname(
-                                pathname,
-                            )}`,
-                        );
+                        return content;
                 }
             },
         },
@@ -99,6 +95,7 @@ export default <webpack.Configuration>{
          * JS Entrypoints
          */
         'js/catalog': 'js/_entrypoints/catalog',
+        'js/dashboard': 'js/_entrypoints/dashboard',
         'js/educator-dashboard': 'js/_entrypoints/educator-dashboard',
         'js/mobile-nav-menu-helper': 'js/_entrypoints/mobile-nav-menu-helper',
 
@@ -113,6 +110,9 @@ export default <webpack.Configuration>{
         path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
+        alias: {
+            css: path.resolve(__dirname, 'src/css/'),
+        },
         modules: [path.resolve(__dirname, 'src'), 'node_modules'],
         extensions: ['*', '.ts', '.tsx', '.js', '.scss'],
         plugins: [new TsConfigPathsPlugin()],

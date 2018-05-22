@@ -1,5 +1,4 @@
-@import '../colors';
-@import '../variables';
+@import 'variables';
 
 .person {
     display: flex;
@@ -13,6 +12,7 @@
     justify-content: center;
     align-items: center;
     background: $gray-light;
+
     img {
         border-top-right-radius: $border-radius;
         border-top-left-radius: $border-radius;
@@ -20,6 +20,7 @@
         max-height: 100%;
         object-fit: cover;
     }
+
     img[src$='.svg'] {
         height: 200px !important;
     }
@@ -49,6 +50,7 @@
     display: flex;
     padding: 5px;
     min-height: 40px;
+
     a {
         display: flex;
         margin: 0 5px;
@@ -57,6 +59,7 @@
         width: 30px;
         justify-content: center;
         align-items: center;
+
         &:hover {
             opacity: 0.8;
         }

@@ -1,6 +1,6 @@
-@import '../colors';
-@import '../variables';
-@import '../mixins';
+@import 'variables';
+@import 'mixins/hard-boundary';
+@import 'mixins/media';
 
 /* stylelint-disable */
 table {
@@ -11,12 +11,14 @@ table {
         font-weight: bold;
         color: white;
     }
+
     thead {
         & tr:first-of-type > td,
         th {
             &:first-of-type {
                 border-top-left-radius: 2px;
             }
+
             &:last-of-type {
                 border-top-right-radius: 2px;
             }
@@ -29,27 +31,33 @@ table {
     border: none;
     border-radius: 2px;
     box-shadow: map-get($shadows, 'depth-2');
+
     tr {
         &:nth-child(odd) {
             background-color: $gray-light;
         }
+
         td,
         th {
             padding: 0.8em;
             vertical-align: top;
         }
     }
+
     tfoot {
         font-size: 0.8em;
+
         tr {
             @include hard-boundary(top);
             background-color: white !important;
         }
+
         td {
             text-align: justify;
             padding: 0 0.8em;
             color: $text-color-light;
         }
+
         p {
             margin: 10px 0 !important;
             line-height: 1.5em;

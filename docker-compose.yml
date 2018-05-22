@@ -3,13 +3,11 @@ services:
     wordpress:
         image: visiblevc/wordpress:0.19.0-php7.2
         cap_add:
-          - SYS_ADMIN
+            - SYS_ADMIN
         devices:
-          - /dev/fuse
+            - /dev/fuse
         environment:
             ALIEM_API_KEY: ${ALIEM_API_KEY?ALIEM_API_KEY key not defined in .env}
-            EXTRA_PHP: |
-                define( 'LEARNDASH_REST_API_ENABLED', true );
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
@@ -35,11 +33,5 @@ services:
             MYSQL_ROOT_PASSWORD: root
         volumes:
             - data:/var/lib/mysql
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-        ports:
-            - 22222:80
 volumes:
     data:

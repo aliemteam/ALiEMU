@@ -8,11 +8,23 @@ import Sidebar, { Duration } from './sidebar';
 
 import * as styles from './catalog.scss';
 
+export type CourseSubset = Pick<
+    LearnDash.Course,
+    | 'categories'
+    | 'description'
+    | 'date_gmt'
+    | 'featured_media'
+    | 'id'
+    | 'link'
+    | 'hours'
+    | 'title'
+> & { _embedded: { [k: string]: any } };
+
 export interface CatalogGlobals {
     categories: {
         [categoryId: string]: string;
     };
-    courses: LearnDash.Course[];
+    courses: CourseSubset[];
     headers: {
         [k in keyof Omit<CatalogGlobals, 'headers'>]: WordPress.Headers
     };
@@ -34,13 +46,25 @@ export default class Catalog extends React.Component {
     fetchCourses = flow(function*(this: Catalog): any {
         const pages = AU_Catalog.headers.courses['X-WP-TotalPages'];
         let page = 2;
-        let courses: LearnDash.Course[] = [];
+        let courses: CourseSubset[] = [];
         try {
             while (page <= pages) {
                 const response = yield fetch(
-                    `${location.origin}/wp-json/ldlms/v1/courses?page=${page}&_embed`,
+                    `/wp-json/aliemu/v1/courses?page=${page}&_fields=${encodeURIComponent(
+                        [
+                            '_links',
+                            'categories',
+                            'description',
+                            'date_gmt',
+                            'featured_media',
+                            'id',
+                            'link',
+                            'hours',
+                            'title',
+                        ].join(','),
+                    )}&_embed`,
                 );
-                const json: LearnDash.Course[] = yield response.json();
+                const json: CourseSubset[] = yield response.json();
                 courses = [...courses, ...json];
                 page++;
             }
@@ -49,7 +73,7 @@ export default class Catalog extends React.Component {
             console.error(e);
         }
         this._courses.push(...courses);
-    });
+    }).bind(this);
 
     private _courses = observable([...AU_Catalog.courses], { deep: false });
 
@@ -58,7 +82,7 @@ export default class Catalog extends React.Component {
     }
 
     @computed
-    get courses(): LearnDash.Course[] {
+    get courses(): CourseSubset[] {
         return this._courses.filter(course => {
             if (
                 this.categorySelection !== 0 &&
@@ -69,7 +93,7 @@ export default class Catalog extends React.Component {
 
             if (
                 this.filterText.length &&
-                `${course.title} ${course.course_short_description}`
+                `${course.title} ${course.description}`
                     .toLowerCase()
                     .indexOf(this.filterText.toLowerCase()) === -1
             ) {
@@ -77,7 +101,7 @@ export default class Catalog extends React.Component {
             }
 
             if (this.durationSelection !== Duration.NONE) {
-                const duration = parseFloat(course.recommendedHours);
+                const duration = course.hours;
                 switch (this.durationSelection) {
                     case Duration.LESS_THAN_TWO:
                         return duration < 2;
@@ -139,6 +163,7 @@ export default class Catalog extends React.Component {
                 <h1>Course Catalog</h1>
                 <div className={styles.search}>
                     <Input
+                        large
                         type="search"
                         placeholder="Search"
                         aria-label="course catalog search"

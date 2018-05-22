@@ -1,0 +1,34 @@
+@import 'variables';
+@import '../card/card';
+
+.listing {
+    $padding: 10px;
+    display: grid;
+    grid:
+        'icon title'
+        'icon details'
+        / auto 1fr;
+    align-items: center;
+    grid-gap: 0 $padding;
+    padding: $padding;
+    line-height: initial;
+    margin: 10px 0;
+}
+
+.icon {
+    grid-area: icon;
+}
+
+.title {
+    grid-area: title;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.details {
+    grid-area: details;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}

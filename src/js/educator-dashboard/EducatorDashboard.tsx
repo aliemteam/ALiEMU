@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DevTools from '../utils/DevTools';
+import DevTools from 'utils/dev-tools';
 import { CourseTable } from './CourseTable';
 import { StudentTable } from './StudentTable';
 
@@ -11,7 +11,7 @@ export class EducatorDashboard extends React.Component<Props, {}> {
     render(): JSX.Element {
         return (
             <div>
-                <DevTools position={{ right: 50, top: 100 }} />
+                <DevTools />
                 <div className="au-edudash-shadowbox">
                     <h1>
                         {this.props.data.currentUser.meta.residencyUsEm}
