@@ -58,7 +58,6 @@ function localize() {
 	}
 
 	return [
-		'nonce'      => wp_create_nonce( 'wp_rest' ),
 		'headers'    => [
 			'courses' => $headers,
 		],

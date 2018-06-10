@@ -66,8 +66,23 @@ class Script_Loader {
 			parse_str( $url['query'], $this->query );
 		}
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
 		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
+		add_action( 'wp_head', [ $this, 'print_globals' ] );
+	}
+
+	/**
+	 * Prints global variables needed in most or all pages in the head
+	 */
+	public function print_globals(): void {
+		?>
+			<script>
+				var AU_API = {
+					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
+					url: '<?php echo esc_url_raw( rest_url() ); ?>',
+				};
+			</script>
+		<?php
 	}
 
 	/**
@@ -78,7 +93,15 @@ class Script_Loader {
 		wp_register_style(
 			'aliemu-fonts', add_query_arg(
 				[
-					'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
+					'family' => join(
+						'|',
+						[
+							'Roboto+Mono:400,500,700',
+							'Roboto+Slab:300,400,700',
+							'Roboto:300,400,400i,500,700',
+							'Material+Icons',
+						]
+					),
 					'subset' => 'greek,greek-ext,latin-ext',
 				], 'https://fonts.googleapis.com/css'
 			)
@@ -90,8 +113,8 @@ class Script_Loader {
 			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
 		}
 
-		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'wp-api' ], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'wp-api' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'aliemu-educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
@@ -114,6 +137,7 @@ class Script_Loader {
 		foreach ( $styles->queue as $style ) {
 			if ( ( ! is_ultimatemember() && ! is_front_page() || is_page( 'user' ) ) && strncmp( $style, 'um_', 3 ) === 0 ) {
 				wp_dequeue_style( $style );
+				continue;
 			}
 			if ( strncmp( $style, 'learndash_', 10 ) === 0 || strncmp( $style, 'sfwd_', 5 ) === 0 ) {
 				wp_dequeue_style( $style );
@@ -123,6 +147,7 @@ class Script_Loader {
 		foreach ( $scripts->queue as $script ) {
 			if ( ( ! is_ultimatemember() && ! is_front_page() || is_page( 'user' ) ) && strncmp( $script, 'um_', 3 ) === 0 ) {
 				wp_dequeue_script( $script );
+				continue;
 			}
 			if ( strncmp( $script, 'learndash_', 10 ) === 0 || strncmp( $script, 'sfwd_', 5 ) === 0 ) {
 				wp_dequeue_script( $script );

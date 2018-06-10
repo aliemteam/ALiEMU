@@ -6,6 +6,7 @@ import * as styles from './input.scss';
 interface Props extends React.HTMLProps<HTMLInputElement> {
     forwardedRef: any;
     large?: boolean;
+    raised?: boolean;
 }
 
 interface State {
@@ -18,12 +19,13 @@ class Input extends React.PureComponent<Props, State> {
     };
 
     render(): JSX.Element {
-        const { forwardedRef, className, large, ...props } = this.props;
+        const { forwardedRef, className, large, raised, ...props } = this.props;
         const containerClass = classNames(
             styles.container,
             {
                 [styles.focused]: this.state.isFocused,
                 [styles.containerLarge]: large,
+                [styles.containerRaised]: raised,
             },
             className,
         );

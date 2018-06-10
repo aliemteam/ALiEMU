@@ -3,7 +3,7 @@
 @import 'mixins/media';
 
 /* stylelint-disable */
-table {
+table:not(.no-inherit) {
     thead > tr > td,
     tbody > tr > th {
         background-color: $primary;
@@ -66,7 +66,7 @@ table {
 }
 
 @include device-mobile {
-    table {
+    table:not(.no-inherit) {
         position: relative;
         display: block;
         max-width: 100%;

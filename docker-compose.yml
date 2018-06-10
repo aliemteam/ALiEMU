@@ -1,7 +1,7 @@
 version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.19.0-php7.2
+        image: visiblevc/wordpress:0.20.0-php7.2
         cap_add:
             - SYS_ADMIN
         devices:
@@ -33,5 +33,13 @@ services:
             MYSQL_ROOT_PASSWORD: root
         volumes:
             - data:/var/lib/mysql
+    redis:
+        image: redis
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        volumes:
+            - data:/var/lib/mysql
+        ports:
+            - 22222:80
 volumes:
     data:

@@ -33,6 +33,7 @@ function unautop( string $content ) : string {
 	return $matches['content'] ?? $content;
 }
 
+// FIXME: Should this be removed in favor of `rest_ensure_response`?
 /**
  * Checks if a given WP_Rest_Response is an error. If so, calls wp_die and dumps an error message.
  *

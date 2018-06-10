@@ -8,25 +8,28 @@ services:
   - docker
 
 branches:
-    only:
-        - master
-        - /^greenkeeper-.*$/
+  only:
+    - master
+    - /^greenkeeper-.*$/
 
 cache:
   directories:
-  - node_modules
+    - "$HOME/.npm"
 
 before_install:
-- docker pull willhallonline/wordpress-phpcs
+  - docker pull willhallonline/wordpress-phpcs
+
+install:
+  - npm ci
 
 script: npm test -- --runInBand
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   webhooks:
     urls:
-    - https://aliem-slackbot.now.sh/aliemu/hooks/travis-ci
+      - https://aliem-slackbot.now.sh/aliemu/hooks/travis-ci
     on_success: change
     on_failure: change

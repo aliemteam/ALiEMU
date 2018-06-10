@@ -1,5 +1,28 @@
 // tslint:disable no-namespace
 declare namespace ALiEMU {
+    type CoachOfUser = WordPress.User<'view'> & { email: string };
+    type LearnerOfUser = WordPress.User<'edit'>;
+
+    interface Groups {
+        coaches: number[];
+        learners: number[];
+        _links: WordPress.API.Links;
+        _embedded?: {
+            coaches?: [CoachOfUser[]];
+            learners?: [LearnerOfUser[]];
+        };
+    }
+
+    interface Course
+        extends WordPress.BasePost,
+            WordPress.Supports.PageAttributes {
+        description: string;
+        hours: number;
+    }
+
+    // DEPRECATED {{{
+
+    /** @deprecated */
     type BrowserType =
         | 'edge'
         | 'safari'
@@ -8,11 +31,13 @@ declare namespace ALiEMU {
         | 'chrome'
         | 'firefox';
 
+    /** @deprecated */
     interface CSV {
         data: string;
         filename: string;
     }
 
+    /** @deprecated */
     namespace EducatorDashboard {
         interface DateRange {
             start: any;
@@ -119,6 +144,7 @@ declare namespace ALiEMU {
         }
     }
 
+    /** @deprecated */
     namespace LearnDash {
         // Date below in the following form: `YYYY-MM-DD HH:MM:SS`
         interface Courses {
@@ -171,4 +197,7 @@ declare namespace ALiEMU {
             total_points: string;
         }
     }
+
+    // }}}
 }
+// vim: set fdm=marker:

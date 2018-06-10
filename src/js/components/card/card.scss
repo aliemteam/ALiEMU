@@ -2,7 +2,7 @@
 
 .card {
     background: white;
-    border: solid 1px darken($gray-light, 8%);
+    border: solid 1px $border-color;
     border-radius: 2px;
     padding: 10px;
 }

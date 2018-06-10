@@ -4,7 +4,6 @@ import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import * as React from 'react';
 import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
 
-import { Globals } from 'dashboard/dashboard';
 import { displayUnicode } from 'utils/text-utils';
 import * as styles from './course-progress-listing.scss';
 
@@ -17,13 +16,12 @@ interface Props {
     steps_completed: number;
 }
 
-declare const AU_Dashboard: Globals;
-
 @observer
 export default class CourseProgressListing extends React.Component<Props> {
     fetchResult: IPromiseBasedObservable<LearnDash.Course> = fromPromise(
         fetch(`/wp-json/aliemu/v1/courses/${this.props.courseId}`, {
-            headers: { 'X-WP-Nonce': AU_Dashboard.nonce },
+            headers: { 'X-WP-Nonce': window.AU_API.nonce },
+            mode: 'same-origin',
         }).then(res => res.json()),
     );
 

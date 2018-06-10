@@ -17,10 +17,11 @@ class DashboardNavbar extends React.Component<Props> {
     render(): JSX.Element {
         const { getCurrentTab, onClick, user } = this.props;
         const tab = getCurrentTab();
+        const isOwner = user === User.OWNER;
         return (
             <Navbar>
                 <NavGroup>
-                    {user === User.OWNER && (
+                    {isOwner && (
                         <NavTab
                             data-tab={Tabs.HOME}
                             active={tab === Tabs.HOME}
@@ -36,13 +37,24 @@ class DashboardNavbar extends React.Component<Props> {
                     >
                         Profile
                     </NavTab>
-                    <NavTab
-                        data-tab={Tabs.GROUPS}
-                        active={tab === Tabs.GROUPS}
-                        onClick={onClick}
-                    >
-                        Groups
-                    </NavTab>
+                    {isOwner && (
+                        <NavTab
+                            data-tab={Tabs.PROGRESS}
+                            active={tab === Tabs.PROGRESS}
+                            onClick={onClick}
+                        >
+                            Progress
+                        </NavTab>
+                    )}
+                    {isOwner && (
+                        <NavTab
+                            data-tab={Tabs.GROUPS}
+                            active={tab === Tabs.GROUPS}
+                            onClick={onClick}
+                        >
+                            Groups
+                        </NavTab>
+                    )}
                 </NavGroup>
             </Navbar>
         );

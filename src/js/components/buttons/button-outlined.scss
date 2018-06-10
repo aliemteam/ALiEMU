@@ -1,0 +1,62 @@
+@import './shared';
+@import 'variables';
+@import 'mixins/_focus';
+
+.button-outlined {
+    @include reset;
+
+    color: $secondary;
+
+    min-width: 64px;
+    height: 36px;
+    line-height: 36px;
+
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+
+    padding: 0 16px;
+
+    cursor: pointer;
+
+    &:hover {
+        border-color: $secondary;
+    }
+
+    &:focus {
+        @include focus-flat;
+    }
+
+    &:disabled {
+        cursor: default;
+        color: $black;
+        border-color: $border-color;
+        // TODO: make this a variable
+        background: darken($gray-light, 5%);
+        opacity: 0.5;
+    }
+}
+
+@each $_intent,
+    $_color
+        in (
+            success: $intent-success,
+            danger: $intent-danger,
+            warning: $intent-warning
+        )
+{
+    .button-outlined--#{$_intent} {
+        color: $_color;
+
+        &:hover {
+            border-color: $_color;
+        }
+
+        &:focus {
+            @include focus-flat($_color);
+        }
+    }
+}

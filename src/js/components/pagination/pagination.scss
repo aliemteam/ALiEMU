@@ -1,0 +1,71 @@
+@import 'variables';
+@import 'mixins/clipped';
+
+.clipped {
+    @include clipped;
+}
+
+.pagination {
+    display: inline-flex;
+    margin: 5px 0;
+}
+
+.page-list {
+    display: flex;
+}
+
+.button {
+    cursor: pointer;
+    background: white;
+    color: $black;
+
+    border: 1px solid $border-color;
+    border-left-width: 0.5px;
+    border-right-width: 0.5px;
+
+    &[aria-current] {
+        cursor: default;
+        color: white;
+        background: $secondary;
+        border-color: $secondary-dark !important;
+    }
+
+    &:hover {
+        border-color: darken($border-color, 5%);
+    }
+}
+
+.button--prev {
+    @extend .button;
+
+    display: flex;
+
+    border: 1px solid $border-color;
+    border-radius: 2px 0 0 2px;
+    border-right-width: 0.5px;
+
+    &:disabled {
+        cursor: default;
+        // TODO: make this a variable
+        background: darken($gray-light, 5%);
+        border-color: $border-color !important;
+        opacity: 0.5;
+    }
+}
+
+.button-next {
+    @extend .button--prev;
+
+    border: 1px solid $border-color;
+    border-radius: 0 2px 2px 0;
+    border-left-width: 0.5px;
+}
+
+.ellipse {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    cursor: default;
+    background: darken($gray-light, 5%);
+    opacity: 0.5;
+}

@@ -5,7 +5,7 @@
  * @package ALiEMU
  */
 
-namespace ALIEMU\Plugins;
+namespace ALIEMU\Plugins\UltimateMember;
 
 defined( 'ABSPATH' ) || exit;
 

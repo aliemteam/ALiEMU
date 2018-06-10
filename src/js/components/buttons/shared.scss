@@ -1,0 +1,11 @@
+
+@mixin reset {
+    margin: 0;
+    padding: 0;
+    width: initial;
+    height: initial;
+    line-height: normal;
+    outline: none;
+    background: transparent;
+    border: initial;
+}

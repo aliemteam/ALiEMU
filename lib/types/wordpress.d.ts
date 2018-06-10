@@ -1,11 +1,22 @@
 // tslint:disable:no-namespace no-reserved-keywords
 declare namespace WordPress {
-    type Context = 'view' | 'embed' | 'edit';
+    namespace API {
+        type Context = 'view' | 'embed' | 'edit';
 
-    interface Headers {
-        Link: string;
-        'X-WP-Total': number;
-        'X-WP-TotalPages': number;
+        interface Links {
+            [linkId: string]: [
+                {
+                    embeddable: true | undefined;
+                    href: string;
+                }
+            ];
+        }
+
+        interface Headers {
+            Link: string;
+            'X-WP-Total': number;
+            'X-WP-TotalPages': number;
+        }
     }
 
     /**
@@ -15,21 +26,25 @@ declare namespace WordPress {
         /**
          * Avatar URL with image size of 24 pixels.
          */
-        '24'?: string;
+        '24': string;
         /**
          * Avatar URL with image size of 48 pixels.
          */
-        '48'?: string;
+        '48': string;
         /**
          * Avatar URL with image size of 96 pixels.
          */
-        '96'?: string;
+        '96': string;
+        /**
+         * Avatar URL with image size of 150 pixels.
+         */
+        '150': string
     }
 
     // Comments{{{
 
     // prettier-ignore
-    type Comment<T extends Context = 'view'> =
+    type Comment<T extends API.Context = 'view'> =
         T extends 'edit' ? BaseComment :
         T extends 'embed' ? Omit<BaseComment, CommentEditFields | 'date_gmt' | 'post' | 'status' | 'meta'> :
         Omit<BaseComment, CommentEditFields>
@@ -109,14 +124,14 @@ declare namespace WordPress {
             [k: string]: {
                 embeddable?: true;
                 href: string;
-            }
+            };
         };
         _embedded: {
             author: User[];
             up: Post[];
-        }
+        };
     }
-// }}}
+    // }}}
     // Posts{{{
 
     type Post = BasePost &
@@ -248,18 +263,18 @@ declare namespace WordPress {
     // Users{{{
 
     // prettier-ignore
-    type User<T extends Context = 'view'> =
+    type User<T extends API.Context = 'view'> =
         T extends 'embed' ? Omit<BaseUser, UserEditFields | 'meta'> :
-        T extends 'view'  ? Omit<BaseUser, UserEditFields> :
+        T extends 'view'  ? Omit<BaseUser, UserEditFields | 'course_progress'> :
         BaseUser;
 
     type UserEditFields =
         | 'capabilities'
-        | 'course_progress'
         | 'email'
         | 'extra_capabilities'
         | 'first_name'
         | 'last_name'
+        | 'last_login'
         | 'locale'
         | 'nickname'
         | 'roles'
@@ -269,20 +284,7 @@ declare namespace WordPress {
         /**
          * Avatar URLs for the user.
          */
-        avatar_urls: {
-            /**
-             * Avatar URL with image size of 24 pixels.
-             */
-            '24'?: string;
-            /**
-             * Avatar URL with image size of 48 pixels.
-             */
-            '48'?: string;
-            /**
-             * Avatar URL with image size of 96 pixels.
-             */
-            '96'?: string;
-        };
+        avatar_urls: AvatarUrls;
         /**
          * All capabilities assigned to the user.
          */
@@ -361,7 +363,20 @@ declare namespace WordPress {
             /**
              * An array of completed course IDs
              */
-            completed: number[];
+            completed: Array<{
+                /**
+                 * The course ID
+                 */
+                id: number;
+                /**
+                 * The associated hours
+                 */
+                hours: number;
+                /**
+                 * ISO formatted date of completion
+                 */
+                date: string;
+            }>;
             /**
              * An array of objects describing courses started but not yet completed
              */
@@ -389,6 +404,10 @@ declare namespace WordPress {
          * The user's self-defined institutional affiliation
          */
         institution: string;
+        /**
+         * Numeric ISO date of last login
+         */
+        last_login: number;
     }
     // }}}
 

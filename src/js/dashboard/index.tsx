@@ -4,7 +4,6 @@ import Dashboard from './dashboard';
 
 export interface Globals {
     current_user: WordPress.User<'edit'> | null;
-    nonce: string;
     profile_user: WordPress.User;
 }
 

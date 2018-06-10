@@ -1,0 +1,38 @@
+@import 'variables';
+
+.coaches-caption {
+    display: flex;
+    align-items: center;
+    h2 {
+        margin-bottom: 0;
+    }
+}
+
+.add-coach-form {
+    display: flex;
+    flex: auto;
+    justify-content: flex-end;
+    margin-bottom: 4px;
+
+    > button {
+        margin-left: 5px;
+    }
+}
+
+.table {
+    grid-area: table;
+}
+
+.empty-state {
+    text-align: center;
+    margin: $block-margin;
+
+    i {
+        color: $secondary;
+    }
+
+    h3 {
+        margin: 0;
+        font-weight: initial;
+    }
+}

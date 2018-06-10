@@ -1,0 +1,63 @@
+@import 'variables';
+
+.figure {
+    margin: $block-margin 0 $section-margin 0;
+}
+
+.container {
+    position: relative;
+    min-height: 75px;
+}
+
+.loading-state {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        font-family: $font-mono;
+        font-weight: 500;
+        font-size: 16px;
+        white-space: nowrap;
+
+        &[scope='col'] {
+            border-bottom: 2px solid $border-color;
+        }
+
+        &[scope='row'] {
+            border-right: 2px solid $border-color;
+        }
+    }
+
+    td,
+    th {
+        padding: 5px 8px;
+
+        text-align: center;
+        vertical-align: middle;
+
+        &[data-kind='string'] {
+            text-align: left;
+        }
+
+        &[data-kind='numeric'],
+        &[data-kind='date'] {
+            font-family: $font-mono;
+            text-align: right;
+        }
+    }
+}
+
+.fixed {
+    table-layout: fixed;
+}

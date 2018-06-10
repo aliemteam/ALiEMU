@@ -2,14 +2,12 @@ import { flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Globals, User, UserContext } from './';
+import { User, UserContext } from './';
 
 import { Button } from 'components/buttons/';
 import ClickToEdit from 'components/click-to-edit';
 
 import * as styles from './header.scss';
-
-declare const AU_Dashboard: Globals;
 
 interface Props {
     user: User;
@@ -31,11 +29,13 @@ class Store {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-WP-Nonce': AU_Dashboard.nonce,
+                    'X-WP-Nonce': window.AU_API.nonce,
                 },
                 body: JSON.stringify({ institution: value }),
+                mode: 'same-origin',
             });
             if (!response.ok) {
+                // FIXME:
                 throw new Error('do something here');
             }
         } catch (e) {

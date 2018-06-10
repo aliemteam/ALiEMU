@@ -13,15 +13,15 @@ declare const AU_Dashboard: Globals;
 
 export interface Globals {
     current_user: WordPress.User<'edit'> | null;
-    nonce: string;
     profile_user: WordPress.User<'view'>;
     recent_comments: number[];
 }
 
 export const enum Tabs {
+    GROUPS = 'GROUPS',
     HOME = 'HOME',
     PROFILE = 'PROFILE',
-    GROUPS = 'GROUPS',
+    PROGRESS = 'PROGRESS',
 }
 
 interface Props {
@@ -34,9 +34,8 @@ interface Props {
 @observer
 export default class Dashboard extends React.Component<Props> {
     @observable
-    private _currentTab: Tabs = this.props.user === User.OWNER
-        ? Tabs.HOME
-        : Tabs.PROFILE;
+    private _currentTab: Tabs =
+        this.props.user === User.OWNER ? Tabs.PROGRESS : Tabs.PROFILE;
 
     getCurrentTab = (): Tabs => this._currentTab;
 

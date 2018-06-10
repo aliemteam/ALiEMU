@@ -34,15 +34,35 @@ class Course_Progress_Field extends Field {
 		'type'                 => 'object',
 		'description'          => 'The user\'s current course progress.',
 		'additionalProperties' => false,
-		'context'              => [ 'edit' ],
+		'context'              => [ 'view', 'embed', 'edit' ],
 		'properties'           => [
 			'completed' => [
 				'type'        => 'array',
-				'description' => 'An array of completed course IDs.',
+				'description' => 'An array of objects describing completed courses.',
 				'items'       => [
-					'type' => 'integer',
+					'type'                 => 'object',
+					'description'          => 'An object describing a completed course',
+					'additionalProperties' => false,
+					'properties'           => [
+						'id'    => [
+							'type'        => 'integer',
+							'description' => 'The course ID.',
+						],
+						'hours' => [
+							'type'        => 'integer',
+							'description' => 'The associated III hours.',
+						],
+						'date'  => [
+							'type'        => 'date-time',
+							'description' => 'Date of completion.',
+						],
+					],
+					'required'             => [
+						'id',
+						'date',
+						'hours',
+					],
 				],
-				'uniqueItems' => true,
 			],
 			'started'   => [
 				'type'        => 'array',
@@ -114,7 +134,17 @@ class Course_Progress_Field extends Field {
 		// reversing the array so that it is sorted in descending order by last activity.
 		foreach ( array_reverse( $meta, true ) as $id => $data ) {
 			if ( (int) $data['completed'] >= (int) $data['total'] ) {
-				$progress['completed'][] = (int) $id;
+				$completed_date = $this->course_completion_date( $user['id'], $id );
+
+				// Bug in learndash (shocker!) that caused some users to show completed for a course when it actually is not.
+				if ( '1970-01-01T00:00:00+00:00' !== $completed_date ) {
+					$course                  = get_post_meta( $id, '_sfwd-courses', true );
+					$progress['completed'][] = [
+						'id'    => (int) $id,
+						'hours' => (int) $course['sfwd-courses_recommendedHours'] ?? 0,
+						'date'  => $completed_date,
+					];
+				}
 			} else {
 				$progress['started'][] = [
 					'id'                => (int) $id,
@@ -126,5 +156,42 @@ class Course_Progress_Field extends Field {
 		}
 
 		return $progress;
+	}
+
+	/**
+	 * Returns the activity_completed timestamp for a given course and user.
+	 *
+	 * @param int $user_id The user ID.
+	 * @param int $course_id The course ID.
+	 * @return int Timestamp
+	 */
+	private function course_completion_date( int $user_id, int $course_id ) : string {
+		global $wpdb;
+		$key = join( '_', [ 'course_completion_date', $user_id, $course_id ] );
+
+		$timestamp = get_transient( $key );
+		if ( ! $timestamp ) {
+			$query = $wpdb->prepare(
+				"
+						  SELECT activity_completed
+						    FROM {$wpdb->prefix}learndash_user_activity
+						   WHERE post_id = %d
+						     AND user_id = %d
+						     AND activity_status = 1
+							 AND activity_type = 'course'
+							 AND activity_completed > 0
+						ORDER BY activity_completed DESC
+					",
+				$course_id,
+				$user_id
+			);
+			// Ignoring because we're caching the result here in a transient
+			// @codingStandardsIgnoreLine
+			$timestamp = (int) $wpdb->get_var( $query );
+			$timestamp = date( 'c', $timestamp );
+			set_transient( $key, $timestamp, DAY_IN_SECONDS );
+		}
+
+		return $timestamp;
 	}
 }

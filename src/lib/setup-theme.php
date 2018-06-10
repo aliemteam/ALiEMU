@@ -5,6 +5,10 @@
  * @package ALiEMU
  */
 
+namespace ALIEMU;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Sets the max content width for WordPress to be aware of
  *
@@ -19,7 +23,7 @@ $content_width = 800;
  * runs before the init hook. The init hook is too late for some features, such
  * as indicating support for post thumbnails.
  */
-function aliemu_setup() : void {
+function setup() : void {
 	/**
 	 * Make theme available for translation.
 	 * Translations can be filed in the /languages/ directory.
@@ -95,14 +99,14 @@ function aliemu_setup() : void {
 		]
 	);
 }
-add_action( 'after_setup_theme', 'aliemu_setup' );
+add_action( 'after_setup_theme', __NAMESPACE__ . '\setup' );
 
 /**
  * Register widget area.
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar
  */
-function aliemu_widgets_init() : void {
+function widgets_init() : void {
 	register_sidebar(
 		[
 			'name'          => esc_html__( 'Sidebar', 'aliemu' ),
@@ -115,14 +119,14 @@ function aliemu_widgets_init() : void {
 		]
 	);
 }
-add_action( 'widgets_init', 'aliemu_widgets_init' );
+add_action( 'widgets_init', __NAMESPACE__ . '\widgets_init' );
 
 /**
  * Customizes the comment form.
  *
  * @param mixed[] $defaults The default comment form arguments.
  */
-function aliemu_comments_args( $defaults ) : array {
+function comments_args( $defaults ) : array {
 
 	$user = wp_get_current_user();
 
@@ -181,7 +185,7 @@ function aliemu_comments_args( $defaults ) : array {
 
 	return $defaults;
 }
-add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
+add_filter( 'comment_form_defaults', __NAMESPACE__ . '\comments_args' );
 
 /**
  * Filters out unnecessary classes from posts.
@@ -193,7 +197,7 @@ add_filter( 'comment_form_defaults', 'aliemu_comments_args' );
  * @param string[] $class A subset of custom classes added.
  * @param int      $id The post id of the calling post.
  */
-function aliemu_filter_post_classes( array $classes, array $class, int $id ) : array {
+function filter_post_classes( array $classes, array $class, int $id ) : array {
 	$filtered = array_values(
 		array_filter(
 			$classes, function ( string $cls ) : bool {
@@ -203,7 +207,18 @@ function aliemu_filter_post_classes( array $classes, array $class, int $id ) : a
 	);
 	return $filtered;
 }
-add_filter( 'post_class', 'aliemu_filter_post_classes', 10, 3 );
+add_filter( 'post_class', __NAMESPACE__ . '\filter_post_classes', 10, 3 );
+
+/**
+ * Adjusts the scheme of avatar URLs to enforce https.
+ *
+ * @param array $args Arguments passed to get_avatar_data(), after processing.
+ */
+function avatars_via_https( array $args ) : array {
+	$args['scheme'] = 'https';
+	return $args;
+}
+add_filter( 'pre_get_avatar_data', __NAMESPACE__ . '\avatars_via_https' );
 
 /**
  * Utility / helper functions.

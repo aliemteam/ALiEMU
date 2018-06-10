@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as styles from './content.scss';
 
 import { Tabs } from './dashboard';
-import { TabHome, TabProfile } from './tabs/';
+import { TabGroups, TabHome, TabProfile, TabProgress } from './tabs/';
 
 interface Props {
     getCurrentTab(): Tabs;
@@ -26,8 +26,10 @@ export default class DashboardContent extends React.Component<Props> {
                 return <TabHome />;
             case Tabs.PROFILE:
                 return <TabProfile />;
+            case Tabs.PROGRESS:
+                return <TabProgress />;
             case Tabs.GROUPS:
-                return <h1>Groups tab</h1>;
+                return <TabGroups />;
             default:
                 return <h1>Error</h1>;
         }

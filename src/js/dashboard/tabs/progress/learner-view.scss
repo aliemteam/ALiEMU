@@ -1,0 +1,28 @@
+.grid {
+    display: grid;
+
+    grid:
+        'info data'
+        / auto 1fr;
+    grid-gap: 20px;
+}
+
+.info {
+    width: 200px;
+    grid-area: info;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+
+    img {
+        border-radius: 4px;
+    }
+}
+
+.data {
+    grid-area: data;
+}
+
+.progress-table {
+    margin-top: 0;
+}

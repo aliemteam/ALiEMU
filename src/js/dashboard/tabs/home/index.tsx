@@ -2,7 +2,7 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Globals } from '../dashboard';
+import { Globals } from 'dashboard/';
 import * as styles from './tab-home.scss';
 
 import { AnchorButton } from 'components/buttons/';
@@ -53,7 +53,7 @@ export default class TabHome extends React.Component {
                     <SectionHeading>Completed</SectionHeading>
                     {user.course_progress.completed
                         .slice(0, this.visibleCompletedRows)
-                        .map(id => (
+                        .map(({ id }) => (
                             <CourseProgressListing
                                 key={id}
                                 courseId={id}

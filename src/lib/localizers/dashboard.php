@@ -18,7 +18,6 @@ function localize() {
 	$profile_id = um_profile_id();
 
 	return [
-		'nonce'           => wp_create_nonce( 'wp_rest' ),
 		'profile_user'    => DB\get_user( $profile_id ),
 		'current_user'    => DB\get_me(),
 		'recent_comments' => get_comments(

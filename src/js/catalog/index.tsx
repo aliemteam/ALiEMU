@@ -26,7 +26,7 @@ export interface CatalogGlobals {
     };
     courses: CourseSubset[];
     headers: {
-        [k in keyof Omit<CatalogGlobals, 'headers'>]: WordPress.Headers
+        [k in keyof Omit<CatalogGlobals, 'headers'>]: WordPress.API.Headers
     };
 }
 
@@ -63,6 +63,9 @@ export default class Catalog extends React.Component {
                             'title',
                         ].join(','),
                     )}&_embed`,
+                    {
+                        mode: 'same-origin',
+                    }
                 );
                 const json: CourseSubset[] = yield response.json();
                 courses = [...courses, ...json];
@@ -164,6 +167,7 @@ export default class Catalog extends React.Component {
                 <div className={styles.search}>
                     <Input
                         large
+                        raised
                         type="search"
                         placeholder="Search"
                         aria-label="course catalog search"
