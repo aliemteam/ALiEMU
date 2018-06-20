@@ -45,7 +45,7 @@
             text-align: right;
 
             .submit {
-                @include button($secondary);
+                @include button($primary);
             }
         }
 

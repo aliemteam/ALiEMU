@@ -33,8 +33,6 @@ function localize() {
 
 namespace ALIEMU\Localizers\Dashboard;
 
-use function ALIEMU\Utils\check_rest_response;
-
 /**
  * Performs a GET request to /wp/v2/users/$id and returns response
  *
@@ -46,7 +44,11 @@ function get_user( int $id ) {
 	$req = new \WP_Rest_Request( 'GET', '/wp/v2/users/' . intval( $id ) );
 	$res = rest_do_request( $req );
 
-	check_rest_response( $res, true );
+	if ( $res->is_error() ) {
+		wp_die(
+			printf( '<p>An unanticipated error occurred: %s</p>', $res->as_error()->get_error_message() ) // phpcs:ignore
+		);
+	}
 
 	return $wp_rest_server->response_to_data( $res, true );
 }
@@ -61,8 +63,7 @@ function get_me() {
 	$req->set_param( 'context', 'edit' );
 	$res = rest_do_request( $req );
 
-	$err = check_rest_response( $res );
-	if ( $err ) {
+	if ( $res->is_error() ) {
 		return null;
 	}
 

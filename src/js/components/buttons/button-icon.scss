@@ -1,0 +1,9 @@
+@import './shared';
+
+.button {
+    @include reset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

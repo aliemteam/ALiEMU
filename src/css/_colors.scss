@@ -1,15 +1,12 @@
-$black: #182026 !default;
+$primary-light: #0288d1 !default;
+$primary: #01579b !default;
+$primary-dark: #003067 !default;
 
-$primary: #00b092 !default;
-$primary-light: #58e3c2 !default;
-$primary-dark: #008064 !default;
+$secondary-light: #58e3c2 !default;
+$secondary: #00b092 !default;
+$secondary-dark: #008064 !default;
 
-// Below is the color we used to use
-// $secondary: #345995 !default;
-
-$secondary: #01579b !default;
-$secondary-light: #6785c6 !default;
-$secondary-dark: #003067 !default;
+$black: darken(desaturate($primary, 50%), 10%) !default;
 
 $gray-light: #f5f7f9 !default;
 $gray: #444243 !default;
@@ -20,7 +17,7 @@ $text-color-light: #666 !default;
 
 $border-color: darken($gray-light, 8%) !default;
 
-$intent-primary: $secondary !default;
+$intent-primary: $primary !default;
 $intent-success: #0f9960 !default;
 $intent-danger: #b71c1c !default;
 $intent-warning: #d9822b !default;

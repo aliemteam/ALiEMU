@@ -7,23 +7,21 @@ export interface Globals {
     profile_user: WordPress.User;
 }
 
-// TODO: should this instead be a const enum?
-// export type User = 'owner' | 'visitor';
-export const enum User {
+export const enum UserKind {
     OWNER = 'owner',
     VISITOR = 'visitor',
 }
 
-export const UserContext = React.createContext<User>(User.VISITOR);
+export const UserContext = React.createContext<UserKind>(UserKind.VISITOR);
 
 declare const AU_Dashboard: Globals;
 
 export default (): JSX.Element => {
-    const user: User =
+    const user: UserKind =
         AU_Dashboard.current_user !== null &&
         AU_Dashboard.current_user.id === AU_Dashboard.profile_user.id
-            ? User.OWNER
-            : User.VISITOR;
+            ? UserKind.OWNER
+            : UserKind.VISITOR;
     return (
         <UserContext.Provider value={user}>
             <Dashboard user={user} />

@@ -98,14 +98,14 @@ img {
 
 blockquote {
     color: $text-color-light;
-    border-left: 4px solid $primary;
+    border-left: 4px solid $secondary;
     background: $gray-light;
     margin: $block-margin 0;
     padding: $block-margin 10px;
 }
 
 ::selection {
-    background: transparentize($primary, 0.6);
+    background: transparentize($secondary, 0.6);
 }
 
 .wp-caption {

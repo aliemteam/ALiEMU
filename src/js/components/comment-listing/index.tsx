@@ -6,6 +6,7 @@ import * as React from 'react';
 import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
 import * as striptags from 'striptags';
 
+import { Comments } from 'utils/api';
 import { displayUnicode } from 'utils/text-utils';
 import * as styles from './comment-listing.scss';
 
@@ -18,10 +19,7 @@ interface Props {
 @observer
 export default class CommentListing extends React.Component<Props> {
     fetchResult: IPromiseBasedObservable<WordPress.Comment> = fromPromise(
-        fetch(`/wp-json/wp/v2/comments/${this.props.commentId}?_embed`, {
-            headers: { 'X-WP-Nonce': window.AU_API.nonce },
-            mode: 'same-origin',
-        }).then(res => res.json()),
+        Comments.fetchOne(this.props.commentId, { _embed: true }),
     );
 
     render(): JSX.Element | null {

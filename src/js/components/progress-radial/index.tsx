@@ -12,10 +12,19 @@ interface Props extends React.HTMLProps<HTMLDivElement> {
 
 export default class ProgressRadial extends React.Component<Props> {
     render(): JSX.Element {
-        const { diameter, max, thickness, value, ...props } = this.props;
+        const {
+            diameter,
+            max,
+            thickness,
+            value,
+            className,
+            ...props
+        } = this.props;
+        const classname = classNames(styles.container, className);
         return (
             <div
                 {...props}
+                className={classname}
                 role="progressbar"
                 aria-valuemax={max}
                 aria-valuenow={value}

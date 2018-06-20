@@ -9,6 +9,9 @@ namespace ALIEMU\API;
 
 defined( 'ABSPATH' ) || exit;
 
+use function ALIEMU\Database\Queries\get_nearest_parent;
+use function ALIEMU\Utils\post_type_normalized;
+
 /**
  * Main controller class
  */
@@ -83,48 +86,17 @@ class Quizzes_Controller extends \WP_REST_Posts_Controller {
 	 * @param  int $id The quiz ID.
 	 */
 	private function prepare_up_link( $id ) : array {
-		global $wpdb;
+		$parent = get_nearest_parent( $id );
 
-		$result = get_transient( 'aliemu_quiz_parent_' . $id );
-		if ( ! $result ) {
-			$query = $wpdb->prepare(
-				"
-					SELECT meta_key, meta_value
-					FROM $wpdb->postmeta
-					WHERE post_id = %d
-					AND meta_key IN (
-						'course_id',
-						'lesson_id',
-						'topic_id'
-					)
-					AND meta_value != 0
-					ORDER BY CASE
-								WHEN meta_key = 'topic_id'  THEN 1
-								WHEN meta_key = 'lesson_id' THEN 2
-								WHEN meta_key = 'course_id' THEN 3
-							 END
-				",
-				$id
-			);
-
-			// Ignoring this because we're manually caching the result in a transient.
-			// @codingStandardsIgnoreLine
-			$result = $wpdb->get_row( $query );
-
-			// put the results in a transient. expire after 24 hours.
-			set_transient( 'aliemu_quiz_parent_' . $id, $result, DAY_IN_SECONDS );
-		}
-
-		if ( $result ) {
-			$endpoint  = substr( $result->meta_key, 0, strlen( $result->meta_key ) - 3 ) . 's';
-			$parent_id = intval( $result->meta_value );
+		if ( $parent ) {
+			$parent_id = intval( $parent->ID );
+			$endpoint  = post_type_normalized( $parent->post_type, true );
 			return [
 				'up' => [
 					'href'       => rest_url( $this->namespace . '/' . $endpoint . '/' . $parent_id ),
 					'embeddable' => true,
 				],
 			];
-
 		}
 
 		return [];

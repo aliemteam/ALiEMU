@@ -1,13 +1,16 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import * as styles from './input.scss';
+import * as styles from './forms.scss';
 
 interface Props extends React.HTMLProps<HTMLInputElement> {
     forwardedRef: any;
     large?: boolean;
+    flex?: boolean;
     raised?: boolean;
 }
+
+export type InputProps = Omit<Props, 'forwardedRef'>;
 
 interface State {
     isFocused: boolean;
@@ -19,25 +22,30 @@ class Input extends React.PureComponent<Props, State> {
     };
 
     render(): JSX.Element {
-        const { forwardedRef, className, large, raised, ...props } = this.props;
+        const {
+            className,
+            flex,
+            forwardedRef,
+            large,
+            raised,
+            ...props
+        } = this.props;
         const containerClass = classNames(
             styles.container,
             {
                 [styles.focused]: this.state.isFocused,
+                [styles.containerFlex]: flex,
                 [styles.containerLarge]: large,
                 [styles.containerRaised]: raised,
             },
             className,
         );
-        const inputClass = classNames(styles.input, {
-            [styles.inputLarge]: large,
-        });
         return (
-            <div className={containerClass}>
+            <div className={containerClass} >
                 <input
                     {...props}
                     ref={forwardedRef}
-                    className={inputClass}
+                    className={styles.input}
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}
                 />
@@ -64,6 +72,6 @@ class Input extends React.PureComponent<Props, State> {
     };
 }
 
-export default React.forwardRef<HTMLInputElement, Omit<Props, 'forwardedRef'>>(
+export default React.forwardRef<HTMLInputElement, InputProps>(
     (props: any, ref) => <Input {...props} forwardedRef={ref} />,
 );

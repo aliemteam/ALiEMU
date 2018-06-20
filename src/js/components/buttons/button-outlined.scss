@@ -5,7 +5,7 @@
 .button-outlined {
     @include reset;
 
-    color: $secondary;
+    color: $primary;
 
     min-width: 64px;
     height: 36px;
@@ -23,7 +23,7 @@
     cursor: pointer;
 
     &:hover {
-        border-color: $secondary;
+        border-color: $primary;
     }
 
     &:focus {
@@ -34,8 +34,7 @@
         cursor: default;
         color: $black;
         border-color: $border-color;
-        // TODO: make this a variable
-        background: darken($gray-light, 5%);
+        background: rgba($black, 0.05);
         opacity: 0.5;
     }
 }

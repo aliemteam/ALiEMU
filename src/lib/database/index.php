@@ -47,6 +47,7 @@ function create_user_groups_table() : void {
 			id        BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			owner_id  BIGINT(20) UNSIGNED NOT NULL,
 			member_id BIGINT(20) UNSIGNED NOT NULL,
+			tags	  JSON,
 			INDEX owner_id  (owner_id),
 			INDEX member_id (member_id),
 			FOREIGN KEY (owner_id)
@@ -56,7 +57,8 @@ function create_user_groups_table() : void {
 				REFERENCES $wpdb->users(ID)
 				ON DELETE CASCADE,
 			CONSTRAINT owner_id_member_id_unique
-				UNIQUE KEY (owner_id, member_id)
+				UNIQUE KEY (owner_id, member_id),
+			CHECK (JSON_VALID(tags))
 		)
 		ENGINE=INNODB
 		$charset_collate;
@@ -67,3 +69,8 @@ function create_user_groups_table() : void {
 	}
 	// @codingStandardsIgnoreEnd
 }
+
+foreach ( glob( __DIR__ . '/queries-*.php' ) as $queries_file ) {
+	require_once $queries_file;
+}
+

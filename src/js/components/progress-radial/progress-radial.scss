@@ -1,5 +1,11 @@
 @import 'variables';
 
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .circle {
     transform: rotate(-90deg);
     fill: none;
@@ -11,5 +17,5 @@
 }
 
 .circle__fill {
-    stroke: $secondary;
+    stroke: $primary;
 }

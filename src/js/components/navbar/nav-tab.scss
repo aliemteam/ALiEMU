@@ -9,6 +9,7 @@
     height: 100%;
     cursor: pointer;
     font-weight: 500;
+    color: $black;
 
     &:hover {
         border-bottom: solid $border-color 4px;
@@ -17,6 +18,6 @@
 
 .active,
 .active:hover {
-    color: $secondary;
-    border-bottom: solid $secondary 4px;
+    color: $primary;
+    border-bottom: solid $primary 4px;
 }

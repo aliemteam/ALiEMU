@@ -7,3 +7,11 @@ export const enum Intent {
     SUCCESS = 'success',
     WARNING = 'warning',
 }
+
+/**
+ * Course status enum used in `User.course_progress`.
+ */
+export const enum CourseStatus {
+    COMPLETED = 'COMPLETED',
+    STARTED = 'STARTED',
+}

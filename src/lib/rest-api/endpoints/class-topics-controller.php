@@ -9,6 +9,11 @@ namespace ALIEMU\API;
 
 defined( 'ABSPATH' ) || exit;
 
+use WP_Post;
+
+use function ALIEMU\Database\Queries\get_post_quiz_ids;
+use function ALIEMU\Utils\get_nearest_parent;
+
 /**
  * Main controller class
  */
@@ -74,95 +79,37 @@ class Topics_Controller extends \WP_REST_Posts_Controller {
 	protected function prepare_links( $topic ) : array {
 		$links = parent::prepare_links( $topic );
 		$links = array_merge( $links, $this->prepare_up_link( $topic->ID ) );
-		$links = array_merge( $links, $this->prepare_quiz_links( $topic->ID ) );
+		$links = array_merge( $links, $this->prepare_quiz_links( $topic ) );
 		return $links;
 	}
 
 	/**
 	 * Prepares "up" link for the request, which resolves to the parent quiz.
 	 *
-	 * @param  int $id The quiz ID.
+	 * @param  int $id The topic ID.
 	 */
 	private function prepare_up_link( $id ) : array {
-		global $wpdb;
-
-		$result = get_transient( 'aliemu_topic_parent_' . $id );
-		if ( ! $result ) {
-			$query = $wpdb->prepare(
-				"
-					SELECT meta_key, meta_value
-					FROM $wpdb->postmeta
-					WHERE post_id = %d
-					AND meta_key IN (
-						'course_id',
-						'lesson_id'
-					)
-					AND meta_value != 0
-					ORDER BY CASE
-								WHEN meta_key = 'lesson_id' THEN 1
-								WHEN meta_key = 'course_id' THEN 2
-							 END
-				",
-				$id
-			);
-
-			// Ignoring this because we're manually caching the result in a transient.
-			// @codingStandardsIgnoreLine
-			$result = $wpdb->get_row( $query );
-
-			// put the results in a transient. expire after 24 hours.
-			set_transient( 'aliemu_topic_parent_' . $id, $result, DAY_IN_SECONDS );
-		}
-
-		if ( $result ) {
-			$endpoint  = substr( $result->meta_key, 0, strlen( $result->meta_key ) - 3 ) . 's';
-			$parent_id = intval( $result->meta_value );
+		$parent = get_nearest_parent( $id );
+		if ( $parent ) {
+			$parent_id = intval( $parent->ID );
+			$endpoint  = post_type_normalized( $parent->post_type, true );
 			return [
 				'up' => [
 					'href'       => rest_url( $this->namespace . '/' . $endpoint . '/' . $parent_id ),
 					'embeddable' => true,
 				],
 			];
-
 		}
-
 		return [];
 	}
 
 	/**
 	 * Prepares "quizzes" link for the request.
 	 *
-	 * @param  int $id The topic ID.
+	 * @param WP_Post $topic The topic post object.
 	 */
-	private function prepare_quiz_links( int $id ) : array {
-		global $wpdb;
-
-		$quiz_ids = get_transient( 'aliemu_topic_quizzes_' . $id );
-		if ( ! $quiz_ids ) {
-			$query = $wpdb->prepare(
-				"
-					SELECT ID
-					FROM $wpdb->posts
-					WHERE ID IN (
-						SELECT post_id
-						FROM $wpdb->postmeta
-						WHERE meta_key = 'topic_id'
-						AND meta_value = %d
-					)
-					AND post_type = %s
-				",
-				$id,
-				ALIEMU_POST_TYPES['quiz']
-			);
-
-			// Ignoring this because we're manually caching the result in a transient.
-			// @codingStandardsIgnoreLine
-			$quiz_ids = $wpdb->get_col( $query );
-
-			// Put the results in a transient. Expire after 24 hours.
-			set_transient( 'aliemu_topic_quizzes_' . $id, $quiz_ids, DAY_IN_SECONDS );
-		}
-
+	private function prepare_quiz_links( WP_Post $topic ) : array {
+		$quiz_ids = get_post_quiz_ids( $topic );
 		return [
 			'quizzes' => [
 				'href'       => add_query_arg(

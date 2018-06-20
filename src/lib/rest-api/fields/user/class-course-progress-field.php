@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
 require_once ALIEMU_ROOT_PATH . '/lib/rest-api/fields/class-field.php';
 
 use ALIEMU\API\Field;
+use function ALIEMU\Database\Queries\get_user_course_progress;
 
 /**
  * Course progress field implementation
@@ -31,82 +32,76 @@ class Course_Progress_Field extends Field {
 	 * @var $schema
 	 */
 	protected $schema = [
-		'type'                 => 'object',
-		'description'          => 'The user\'s current course progress.',
-		'additionalProperties' => false,
-		'context'              => [ 'view', 'embed', 'edit' ],
-		'properties'           => [
-			'completed' => [
-				'type'        => 'array',
-				'description' => 'An array of objects describing completed courses.',
-				'items'       => [
-					'type'                 => 'object',
-					'description'          => 'An object describing a completed course',
-					'additionalProperties' => false,
-					'properties'           => [
-						'id'    => [
-							'type'        => 'integer',
-							'description' => 'The course ID.',
-						],
-						'hours' => [
-							'type'        => 'integer',
-							'description' => 'The associated III hours.',
-						],
-						'date'  => [
-							'type'        => 'date-time',
-							'description' => 'Date of completion.',
-						],
-					],
-					'required'             => [
-						'id',
-						'date',
-						'hours',
+		'type'        => 'array',
+		'description' => 'Array of objects describing progress of courses that a user has interacted with.',
+		'items'       => [
+			'type'                 => 'object',
+			'additionalProperties' => false,
+			'properties'           => [
+				'status'             => [
+					'type'        => 'string',
+					'description' => 'Enum describing the status of the course.',
+					'enum'        => [
+						'COMPLETED',
+						'STARTED',
 					],
 				],
-			],
-			'started'   => [
-				'type'        => 'array',
-				'description' => 'An array of objects describing courses started but not yet completed.',
-				'items'       => [
-					'type'                 => 'object',
-					'description'          => 'An object describing the progress of a course not yet completed.',
-					'additionalProperties' => false,
-					'properties'           => [
-						'id'                => [
-							'type'        => 'integer',
-							'description' => 'The course ID.',
+				'id'                 => [
+					'type'        => 'integer',
+					'description' => 'The course ID.',
+				],
+				'steps_total'        => [
+					'type'        => 'integer',
+					'description' => 'Total number of steps the course has.',
+				],
+				'steps_completed'    => [
+					'type'        => 'integer',
+					'description' => 'Total number of steps the user has completed.',
+				],
+				'activity_started'   => [
+					'oneOf'       => [
+						[
+							'type'   => 'string',
+							'format' => 'date-time',
 						],
-						'lessons_completed' => [
-							'type'        => 'array',
-							'description' => 'An array of completed lesson IDs.',
-							'items'       => [
-								'type' => 'integer',
-							],
-						],
-						'topics_completed'  => [
-							'type'        => 'array',
-							'description' => 'An array of completed topic IDs.',
-							'items'       => [
-								'type' => 'integer',
-							],
-						],
-						'total_steps'       => [
-							'type'        => 'integer',
-							'description' => 'Total number of lessons and topics in this course.',
+						[
+							'type' => 'null',
 						],
 					],
-					'required'             => [
-						'id',
-						'lessons_completed',
-						'topics_completed',
-						'total_steps',
+					'description' => 'Either a parsable date-time of when the activity was started or null of it doesn\'t exist.',
+				],
+				'activity_completed' => [
+					'oneOf'       => [
+						[
+							'type'   => 'string',
+							'format' => 'date-time',
+						],
+						[
+							'type' => 'null',
+						],
 					],
+					'description' => 'Either a parsable date-time of when the activity was completed or null of it doesn\'t exist.',
+				],
+				'activity_updated'   => [
+					'type'        => 'string',
+					'format'      => 'date-time',
+					'description' => 'A parsable date-time of when the activity was last updated.',
+				],
+				'hours_awarded'      => [
+					'type'        => 'integer',
+					'description' => 'Number of hours awarded for the current course, or 0 if the course is not yet completed.',
 				],
 			],
-		],
-		'required'             => [
-			'completed',
-			'in_progress',
+			'required'             => [
+				'activity_completed',
+				'activity_started',
+				'activity_updated',
+				'hours_awarded',
+				'id',
+				'status',
+				'steps_completed',
+				'steps_total',
+			],
 		],
 	];
 
@@ -118,80 +113,7 @@ class Course_Progress_Field extends Field {
 	 * @param WP_REST_Request $req The request instance.
 	 */
 	public function get_callback( $user, $field, $req ) {
-		// Ignoring because this is only an issue on WordPress VIP
-		// sites and won't affect us in any real measurable way.
-		// @codingStandardsIgnoreLine
-		$meta = get_user_meta( $user['id'], '_sfwd-course_progress', true );
-		$progress = [
-			'completed' => [],
-			'started'   => [],
-		];
-
-		if ( ! $meta ) {
-			return $progress;
-		}
-
-		// reversing the array so that it is sorted in descending order by last activity.
-		foreach ( array_reverse( $meta, true ) as $id => $data ) {
-			if ( (int) $data['completed'] >= (int) $data['total'] ) {
-				$completed_date = $this->course_completion_date( $user['id'], $id );
-
-				// Bug in learndash (shocker!) that caused some users to show completed for a course when it actually is not.
-				if ( '1970-01-01T00:00:00+00:00' !== $completed_date ) {
-					$course                  = get_post_meta( $id, '_sfwd-courses', true );
-					$progress['completed'][] = [
-						'id'    => (int) $id,
-						'hours' => (int) $course['sfwd-courses_recommendedHours'] ?? 0,
-						'date'  => $completed_date,
-					];
-				}
-			} else {
-				$progress['started'][] = [
-					'id'                => (int) $id,
-					'lessons_completed' => array_keys( $data['lessons'] ),
-					'topics_completed'  => array_keys( $data['topics'] ),
-					'total_steps'       => (int) $data['total'],
-				];
-			}
-		}
-
+		$progress = get_user_course_progress( $user['id'] );
 		return $progress;
-	}
-
-	/**
-	 * Returns the activity_completed timestamp for a given course and user.
-	 *
-	 * @param int $user_id The user ID.
-	 * @param int $course_id The course ID.
-	 * @return int Timestamp
-	 */
-	private function course_completion_date( int $user_id, int $course_id ) : string {
-		global $wpdb;
-		$key = join( '_', [ 'course_completion_date', $user_id, $course_id ] );
-
-		$timestamp = get_transient( $key );
-		if ( ! $timestamp ) {
-			$query = $wpdb->prepare(
-				"
-						  SELECT activity_completed
-						    FROM {$wpdb->prefix}learndash_user_activity
-						   WHERE post_id = %d
-						     AND user_id = %d
-						     AND activity_status = 1
-							 AND activity_type = 'course'
-							 AND activity_completed > 0
-						ORDER BY activity_completed DESC
-					",
-				$course_id,
-				$user_id
-			);
-			// Ignoring because we're caching the result here in a transient
-			// @codingStandardsIgnoreLine
-			$timestamp = (int) $wpdb->get_var( $query );
-			$timestamp = date( 'c', $timestamp );
-			set_transient( $key, $timestamp, DAY_IN_SECONDS );
-		}
-
-		return $timestamp;
 	}
 }

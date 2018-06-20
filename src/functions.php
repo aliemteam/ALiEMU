@@ -24,12 +24,11 @@ define(
 		'lesson'      => 'sfwd-lessons',
 		'quiz'        => 'sfwd-quiz',
 		'topic'       => 'sfwd-topic',
-		'lesson'      => 'sfwd-lessons',
 		'certificate' => 'sfwd-certificates',
 	]
 );
 
-require_once __DIR__ . '/lib/database.php';
+require_once __DIR__ . '/lib/database/index.php';
 require_once __DIR__ . '/lib/setup-theme.php';
 require_once __DIR__ . '/lib/class-script-loader.php';
 require_once __DIR__ . '/lib/class-structured-data.php';

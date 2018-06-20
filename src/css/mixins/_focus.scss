@@ -1,13 +1,12 @@
 @import 'variables';
 
-@mixin focus-flat($color: $secondary) {
+@mixin focus-flat($color: $primary-light) {
     border-color: $color;
-    box-shadow: 0 0 0 1px transparent, 0 0 0 1px rgba($color, 0.2),
-        0 0 0 2px rgba($color, 0.25), 0 1px 1px rgba(black, 0.08);
+    box-shadow: 0 0 0 1px $color, 0 0 0 3px rgba($color, 0.3),
+        inset 0 1px 1px rgba($black, 0.2);
 }
 
 @mixin focus-raised {
     border-color: transparent;
-    box-shadow: rgba($secondary, 0.11) 0px 4px 6px,
-        rgba(black, 0.08) 0px 1px 3px;
+    box-shadow: rgba($primary, 0.11) 0px 4px 6px, rgba(black, 0.08) 0px 1px 3px;
 }

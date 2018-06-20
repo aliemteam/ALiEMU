@@ -1,19 +1,23 @@
-import { action, computed, flow, observable } from 'mobx';
+import { action, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Row } from 'components/tables/base';
+import { ICoach, ILearner } from 'utils/types';
+
+import { HeaderRow, Row } from 'components/tables/base';
+import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
 import * as styles from './tab-groups.scss';
 
 import { Button } from 'components/buttons/';
 import ButtonOutlined from 'components/buttons/button-outlined';
-import { Input } from 'components/forms/';
+import Card from 'components/card/';
+import Input from 'components/forms/input';
 import Icon from 'components/icon/';
 import SimpleTable from 'components/tables/simple/';
 import { SectionHeading } from 'components/typography/';
 
-type Member = ALiEMU.LearnerOfUser | ALiEMU.CoachOfUser;
+type Member = ILearner | ICoach;
 
 const enum MemberKind {
     LEARNER = 'learners',
@@ -33,80 +37,44 @@ export default class TabGroups extends React.Component {
     coaches = observable.array<Member>([], { deep: false });
     learners = observable.array<Member>([], { deep: false });
 
-    @computed
-    get coachRows(): Row[] {
-        return [
-            headingRow,
-            ...this.coaches
-                .map(this.makeRowCreator(MemberKind.COACH))
-                .sort(this.makeRowSorter(this.coachesSortByColumn)),
-        ];
-    }
-
-    @computed
-    get learnerRows(): Row[] {
-        return [
-            headingRow,
-            ...this.learners
-                .map(this.makeRowCreator(MemberKind.LEARNER))
-                .sort(this.makeRowSorter(this.learnersSortByColumn)),
-        ];
-    }
-
     fetchGroups = flow(function*(this: TabGroups): IterableIterator<any> {
-        const response: ALiEMU.Groups = yield fetch(
-            '/wp-json/wp/v2/users/me/groups?_embed',
-            {
-                headers: { 'X-WP-Nonce': window.AU_API.nonce },
-                mode: 'same-origin',
-            },
-        ).then(res => res.json());
-        if (response._embedded) {
-            const { coaches, learners } = response._embedded;
-            if (coaches) {
-                this.coaches.replace(coaches[0]);
-            }
-            if (learners) {
-                this.learners.replace(learners[0]);
-            }
-        }
+        const [coaches, learners] = yield Promise.all([
+            Groups.fetchCoaches(),
+            Groups.fetchLearners(),
+        ]);
+        this.coaches.replace(coaches);
+        this.learners.replace(learners);
         this.coachesAreLoading = false;
         this.learnersAreLoading = false;
     }).bind(this);
 
     removeMember = flow(function*(
         this: TabGroups,
-        e: React.MouseEvent<HTMLAnchorElement>,
+        e: React.MouseEvent<HTMLButtonElement>,
     ): IterableIterator<any> {
-        const { email } = e.currentTarget.dataset;
-        const kind = e.currentTarget.dataset.kind as MemberKind | undefined;
-        if (!kind || !email) {
+        const kind = e.currentTarget.dataset.kind as MemberKind;
+        const id = parseInt(e.currentTarget.dataset.id!, 10);
+        if (!kind || isNaN(id)) {
             return;
         }
         this.toggleLoadingFor(kind);
-        const response: Response = yield fetch(
-            '/wp-json/wp/v2/users/me/groups',
-            {
-                method: 'DELETE',
-                headers: {
-                    'X-WP-Nonce': window.AU_API.nonce,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email,
-                    kind: kind === MemberKind.COACH ? 'coach' : 'learner',
-                }),
-                mode: 'same-origin',
-            },
-        );
-        if (response.ok) {
-            this[kind].replace(
-                this[kind].filter(member => member.email !== email),
-            );
-        } else {
-            // TODO:
-            console.error('do something with the error here.');
+
+        let response: Response;
+        switch (kind) {
+            case MemberKind.COACH:
+                response = yield Groups.removeCoach(id);
+                break;
+            case MemberKind.LEARNER:
+                response = yield Groups.removeLearner(id);
+                break;
+            default:
+                throw new Error('Invalid member kind given.');
         }
+
+        if (response.ok) {
+            this[kind].replace(this[kind].filter(member => member.id !== id));
+        }
+
         this.toggleLoadingFor(kind);
     }).bind(this);
 
@@ -119,23 +87,8 @@ export default class TabGroups extends React.Component {
         this.emailInput = '';
         this.coachesAreLoading = true;
         try {
-            const response: ALiEMU.Groups = yield fetch(
-                '/wp-json/wp/v2/users/me/groups',
-                {
-                    method: 'POST',
-                    headers: {
-                        'X-WP-Nonce': window.AU_API.nonce,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email,
-                    }),
-                    mode: 'same-origin',
-                },
-            ).then(data => data.json());
-            if (response._embedded && response._embedded.coaches) {
-                this.coaches.replace(response._embedded.coaches[0]);
-            }
+            const newCoach: ICoach = yield Groups.addCoach(email);
+            this.coaches.push(newCoach);
         } catch (e) {
             console.error(e);
         }
@@ -157,17 +110,23 @@ export default class TabGroups extends React.Component {
                 <h1>My Groups</h1>
                 <SimpleTable
                     fixed
-                    renderCaption={this.coachesTableCaption}
-                    rows={this.coachRows}
-                    emptyState={emptyCoaches}
+                    caption={this.coachesTableCaption}
+                    header={header}
+                    rows={this.coaches.map(
+                        this.makeRowCreator(MemberKind.COACH),
+                    )}
+                    emptyState={this.emptyCoachesRenderer}
                     isEmpty={this.coaches.length === 0}
                     isLoading={this.coachesAreLoading}
                 />
                 <SimpleTable
                     fixed
-                    renderCaption={this.learnerTableCaption}
-                    rows={this.learnerRows}
-                    emptyState={emptyLearners}
+                    caption="My Learners"
+                    header={header}
+                    rows={this.learners.map(
+                        this.makeRowCreator(MemberKind.LEARNER),
+                    )}
+                    emptyState={this.emptyLearnersRenderer}
                     isEmpty={this.learners.length === 0}
                     isLoading={this.learnersAreLoading}
                 />
@@ -175,37 +134,62 @@ export default class TabGroups extends React.Component {
         );
     }
 
-    private learnerTableCaption = (id: string) => (
-        <SectionHeading id={id}>My Learners</SectionHeading>
-    );
-
     private coachesTableCaption = (id: string) => {
-        const formRenderer = () => (
-            <form onSubmit={this.addCoach} className={styles.addCoachForm}>
-                <Input
-                    type="email"
-                    placeholder="Email address"
-                    aria-label="Add a coach using their email address"
-                    value={this.emailInput}
-                    onChange={this.handleEmailChange}
-                    required
-                />
-                <Button
-                    type="submit"
-                    style={{ backgroundColor: '#345995' }}
-                    primary
-                >
-                    Add Coach
-                </Button>
-            </form>
-        );
         return (
             <div className={styles.coachesCaption}>
                 <SectionHeading id={id}>My Coaches</SectionHeading>
-                <Observer>{formRenderer}</Observer>
+                <Observer>{this.addCoachForm}</Observer>
             </div>
         );
     };
+
+    private emptyCoachesRenderer = () => (
+        <div className={styles.emptyState}>
+            <Observer>{this.addCoachForm}</Observer>
+            <Card>
+                <Icon icon="supervised_user_circle" size={100} />
+                <h3>No coaches yet</h3>
+                <p>
+                    Add a coach now so that he/she can track your progress and
+                    activity.
+                </p>
+            </Card>
+        </div>
+    );
+
+    private emptyLearnersRenderer = () => (
+        <div className={styles.emptyState}>
+            <Card>
+                <Icon icon="supervised_user_circle" size={100} />
+                <h3>No learners yet</h3>
+                <p>
+                    Have your learners add you as a coach and they will show up
+                    here.
+                </p>
+            </Card>
+        </div>
+    );
+
+    private addCoachForm = () => (
+        <form onSubmit={this.addCoach} className={styles.addCoachForm}>
+            <Input
+                required
+                large
+                type="email"
+                placeholder="Email address"
+                aria-label="Add a coach using their email address"
+                value={this.emailInput}
+                onChange={this.handleEmailChange}
+            />
+            <Button
+                type="submit"
+                style={{ backgroundColor: '#345995' }}
+                primary
+            >
+                Add Coach
+            </Button>
+        </form>
+    );
 
     @action
     private toggleLoadingFor = (kind: MemberKind, state?: boolean): boolean => {
@@ -243,7 +227,7 @@ export default class TabGroups extends React.Component {
                     content: (
                         <ButtonOutlined
                             data-kind={kind}
-                            data-email={email}
+                            data-id={id}
                             intent={Intent.DANGER}
                             onClick={this.removeMember}
                         >
@@ -254,15 +238,9 @@ export default class TabGroups extends React.Component {
             ],
         };
     };
-
-    private makeRowSorter = (sortByColumn: number) => (a: Row, b: Row) => {
-        const keyA = a.cells[sortByColumn].key;
-        const keyB = b.cells[sortByColumn].key;
-        return keyA < keyB ? -1 : keyA > keyB ? 1 : 0;
-    };
 }
 
-const headingRow: Row = {
+const header: HeaderRow = {
     key: 'heading',
     cells: [
         {
@@ -285,22 +263,3 @@ const headingRow: Row = {
         },
     ],
 };
-
-const emptyCoaches = () => (
-    <div className={styles.emptyState}>
-        <Icon icon="supervised_user_circle" size={100} />
-        <h3>No coaches yet</h3>
-        <p>
-            Add a coach above so that he/she can track your progress and
-            activity.
-        </p>
-    </div>
-);
-
-const emptyLearners = () => (
-    <div className={styles.emptyState}>
-        <Icon icon="supervised_user_circle" size={100} />
-        <h3>No learners yet</h3>
-        <p>Have your learners add you as a coach and they will show up here.</p>
-    </div>
-);

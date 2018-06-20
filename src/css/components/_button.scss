@@ -6,11 +6,11 @@
 }
 
 .btn--primary {
-    @include button($primary);
+    @include button($secondary);
 }
 
 .btn--primary-alt {
-    @include button($secondary);
+    @include button($primary);
 }
 
 .btn--flat {
@@ -23,7 +23,7 @@
 }
 
 .btn--active {
-    color: $primary !important;
+    color: $secondary !important;
 }
 
 .btn--air-pro {

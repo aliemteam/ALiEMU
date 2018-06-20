@@ -1,0 +1,79 @@
+@import 'variables';
+@import 'mixins/_focus';
+
+$padding-size: 10px;
+
+.container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    width: 100%;
+    height: 28px;
+    font-size: 14px;
+
+    background-color: white;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba($black, 0.1), 0 0 0 1px transparent,
+        0 0 0 2px transparent, 0 1px 1px rgba(black, 0.05);
+
+    &.focused,
+    &:focus {
+        outline: none;
+        @include focus-flat;
+    }
+}
+
+.container--flex {
+    flex: auto;
+    width: initial;
+    height: initial !important;
+    max-width: 100%;
+}
+
+.container--large {
+    height: 36px;
+    font-size: 16px;
+}
+
+.container--raised {
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    border: 1px solid transparent;
+    transition: box-shadow 150ms ease;
+
+    &.focused {
+        @include focus-raised;
+    }
+}
+
+.input {
+    position: absolute;
+    padding: 0 $padding-size;
+    background-color: transparent;
+    border: none;
+    display: block;
+    margin: 0;
+    width: 100%;
+
+    color: #424770;
+    font-family: $font-mono;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.textarea {
+    @extend .container;
+    padding: $padding-size;
+    height: auto;
+    overflow: auto;
+    color: #424770;
+    font-family: $font-mono;
+}
+
+.textarea--large {
+    @extend .container--large;
+    height: auto;
+}

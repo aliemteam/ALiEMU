@@ -94,16 +94,16 @@ export default <webpack.Configuration>{
         /**
          * JS Entrypoints
          */
-        'js/catalog': 'js/_entrypoints/catalog',
-        'js/dashboard': 'js/_entrypoints/dashboard',
-        'js/educator-dashboard': 'js/_entrypoints/educator-dashboard',
-        'js/mobile-nav-menu-helper': 'js/_entrypoints/mobile-nav-menu-helper',
+        'js/catalog': 'js/catalog',
+        'js/dashboard': 'js/dashboard',
+        'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
+        'js/polyfills': 'js/polyfills',
 
         /**
          * Stylesheet entrypoints
          */
-        style: 'css/_entrypoints/style',
         'css/editor': 'css/_entrypoints/editor',
+        style: 'css/_entrypoints/style',
     },
     output: {
         filename: '[name].js',

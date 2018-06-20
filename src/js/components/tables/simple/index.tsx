@@ -1,17 +1,19 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import BaseTable, { HeaderCell, Row, SortOrder } from 'components/tables/base';
+import BaseTable, {
+    HeaderCell,
+    HeaderRow,
+    Row,
+    SortOrder,
+} from 'components/tables/base';
 import * as styles from './simple-table.scss';
 
 import Card from 'components/card/';
 import Pagination from 'components/pagination/';
 import Spinner from 'components/spinner/';
 import SortIcon from 'components/tables/sort-icon/';
-
-export interface HeaderSortable extends HeaderCell {
-    sortable?: boolean;
-}
+import { SectionHeading } from 'components/typography/';
 
 interface Props {
     /** Whether or not the table should be in a loading state. */
@@ -20,10 +22,10 @@ interface Props {
     emptyState?: React.SFC;
     /** Whether or not the proviced emptyState should be rendered. */
     isEmpty?: boolean;
-    /** True if table should be rendered with fixed layout. */
+    /** True if table should be rendered with `table-layout: fixed`. */
     fixed?: boolean;
     /** Explicit `<thead>` row with sortable headers. */
-    header?: Row<HeaderSortable>;
+    header?: HeaderRow;
     /** Set to number `n` to make table paginated at `n` rows. */
     rowsPerPage?: number;
     /** Class name to be added to the container. */
@@ -33,7 +35,7 @@ interface Props {
     /** Default sort order to sort for sortable tables. */
     defaultSortOrder?: SortOrder;
     /** Caption for the table. */
-    renderCaption?(labelId: string): JSX.Element;
+    caption?: string | ((labelId: string) => JSX.Element);
 }
 
 interface State {
@@ -90,7 +92,6 @@ export default class SimpleTable extends BaseTable<Props, State> {
             fixed,
             isEmpty,
             isLoading,
-            renderCaption,
         } = this.props;
 
         if (isEmpty && EmptyState && !isLoading) {
@@ -105,7 +106,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
 
         return (
             <figure className={containerClass}>
-                {renderCaption && <figcaption>{renderCaption(uid)}</figcaption>}
+                {this.maybeRenderCaption(uid)}
                 <Card className={styles.container}>
                     {!isEmpty && (
                         <table className={tableClass} aria-labelledby={uid}>
@@ -124,6 +125,21 @@ export default class SimpleTable extends BaseTable<Props, State> {
         );
     }
 
+    private maybeRenderCaption = (id: string): React.ReactNode => {
+        const { caption, isLoading } = this.props;
+        if (typeof caption === 'string' && !isLoading) {
+            return (
+                <figcaption>
+                    <SectionHeading id={id}>{caption}</SectionHeading>
+                </figcaption>
+            );
+        }
+        if (typeof caption === 'function' && !isLoading) {
+            return <figcaption>{caption(id)}</figcaption>;
+        }
+        return null;
+    };
+
     private maybeRenderPagination = (): React.ReactNode => {
         const rowsPerPage = this.props.rowsPerPage!;
         const { page } = this.state;
@@ -132,13 +148,12 @@ export default class SimpleTable extends BaseTable<Props, State> {
             return null;
         }
         return (
-            <div style={{ textAlign: 'right' }}>
-                <Pagination
-                    value={page}
-                    total={Math.ceil(numRows / rowsPerPage)}
-                    onChange={this.handlePageChange}
-                />
-            </div>
+            <Pagination
+                align="right"
+                value={page}
+                total={Math.ceil(numRows / rowsPerPage)}
+                onChange={this.handlePageChange}
+            />
         );
     };
 
@@ -155,6 +170,9 @@ export default class SimpleTable extends BaseTable<Props, State> {
         );
     };
 
+    private maybeSortRows = (rows: Row[]): Row[] =>
+        this.state.sortKey ? rows.sort(this.sortRows) : rows;
+
     private renderBody = (): JSX.Element => {
         const { header, rows } = this.props;
         const rowsPerPage = this.props.rowsPerPage!;
@@ -163,8 +181,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
             const startIndex = (page - 1) * rowsPerPage || 0;
             return (
                 <tbody>
-                    {[...rows]
-                        .sort(this.sortRows)
+                    {this.maybeSortRows([...rows])
                         .slice(startIndex, startIndex + rowsPerPage)
                         .map(this.renderRow)}
                 </tbody>
@@ -173,7 +190,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
         return <>{rows.map(this.renderRow)}</>;
     };
 
-    private renderHeaderCell = (cell: HeaderSortable): JSX.Element => {
+    private renderHeaderCell = (cell: HeaderCell): JSX.Element => {
         const { content, width, kind, sortable, ...props } = cell;
         const { sortKey, sortOrder } = this.state;
         const style = {

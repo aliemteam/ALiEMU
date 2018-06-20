@@ -12,15 +12,19 @@ export interface BodyCell {
 export interface HeaderCell extends BodyCell {
     scope: 'col' | 'row';
     width?: number;
+    sortable?: boolean;
 }
 
 export type Cell = BodyCell | HeaderCell;
 
-export interface Row<T extends BodyCell = Cell> {
+interface BaseRow<T extends BodyCell = Cell> {
     key: string | number;
     cells: T[];
     height?: number;
 }
+
+export type Row = BaseRow<Cell>;
+export type HeaderRow = BaseRow<HeaderCell>;
 
 export const enum SortOrder {
     ASC = 'ascending',
@@ -45,7 +49,13 @@ export default abstract class BaseTable<P = {}, S = {}> extends React.Component<
     };
 
     protected renderCell = (cell: Cell): JSX.Element => {
-        const { kind, content, width, sortKey, ...props } = cell as HeaderCell;
+        const {
+            kind,
+            content,
+            width,
+            sortKey,
+            ...props
+        } = cell as HeaderCell;
         return this.isHeaderCell(cell) ? (
             <th style={{ width }} {...this.cellKind(kind)} {...props}>
                 {cell.content}
@@ -67,7 +77,11 @@ export default abstract class BaseTable<P = {}, S = {}> extends React.Component<
     });
 
     protected getSortKey = (cell: BodyCell): string | number | {} =>
-        cell.sortKey !== undefined ? cell.sortKey : cell.content ? cell.content : '';
+        cell.sortKey !== undefined
+            ? cell.sortKey
+            : cell.content
+                ? cell.content
+                : '';
 
     private isHeaderCell(cell: Cell): cell is HeaderCell {
         return (cell as HeaderCell).scope !== undefined;

@@ -1,100 +1,118 @@
-import * as dateFormat from 'date-fns/format';
-import { computed, flow, IReactionDisposer, observable, reaction } from 'mobx';
+import { computed, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Row } from 'components/tables/base';
+import { ICourse, ILearner } from 'utils/types';
+
+import { HeaderRow, Row } from 'components/tables/base';
+import { Courses, Groups } from 'utils/api';
+import { CourseStatus } from 'utils/constants';
 import { displayUnicode } from 'utils/text-utils';
+import { DateRange, isWithinDateRange } from './';
 import * as styles from './learner-view.scss';
 
+import ButtonIcon from 'components/buttons/button-icon';
+import ClickToEdit from 'components/click-to-edit/';
 import ProgressRadial from 'components/progress-radial/';
-import SimpleTable, { HeaderSortable } from 'components/tables/simple/';
+import SimpleTable from 'components/tables/simple/';
+import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/';
 
-// TODO: Add link rel preload for this url: https://secure.gravatar.com/avatar?s=150&d=mp and work some magic to prevent image flickering
-
 interface Props {
-    learner: WordPress.BaseUser;
+    learner: ILearner;
+    dateRange?: DateRange;
 }
-
-export const fetchCourses = async (
-    courseIds: number[],
-    page: number = 1,
-    courses: ALiEMU.Course[] = [],
-): Promise<ALiEMU.Course[]> => {
-    const response = await fetch(
-        `/wp-json/aliemu/v1/courses?page=${page}&include=${courseIds.join(
-            ',',
-        )}&_embed`,
-        {
-            headers: {
-                'X-WP-Nonce': window.AU_API.nonce,
-            },
-        },
-    );
-    courses = [...courses, ...(await response.json())];
-
-    let totalPages = 0;
-    if (response.headers.has('X-WP-TotalPages')) {
-        totalPages = parseInt(response.headers.get('X-WP-TotalPages')!, 10);
-    }
-    if (page >= totalPages) {
-        return courses;
-    }
-    return fetchCourses(courseIds, page + 1, courses);
-};
 
 @observer
 export default class LearnerView extends React.Component<Props> {
     @observable coursesLoading = true;
-    @observable learner = this.props.learner;
 
-    courses = observable.map<number, ALiEMU.Course>([], { deep: false });
+    courses = observable.map<number, ICourse>([], { deep: false });
 
     fetchCourses = flow(function*(this: LearnerView): IterableIterator<any> {
         this.coursesLoading = true;
         this.courses.clear();
-        const { completed, started } = this.props.learner.course_progress;
-        const courseIds = [...completed, ...started].map(({ id }) => id);
-        const courses: ALiEMU.Course[] = yield fetchCourses(courseIds);
+
+        const include = this.props.learner.course_progress.map(({ id }) => id);
+        const courses: ICourse[] =
+            include.length > 0 ? yield Courses.fetchMany({ include }) : [];
+
         this.courses.replace(courses.map(course => [course.id, course]));
         this.coursesLoading = false;
     });
 
-    private disposeLearnerReaction: IReactionDisposer;
+    handleRemoveTag = flow(function*(
+        this: LearnerView,
+        tag: string,
+    ): IterableIterator<any> {
+        const { learner } = this.props;
+        const oldTags = learner.learner_tags.slice();
+        learner.learner_tags = learner.learner_tags.filter(t => t !== tag);
+        try {
+            const response = yield Groups.removeLearnerTag(learner.id, tag);
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+        } catch (e) {
+            console.error(`Error occurred: ${e.message}`);
+            learner.learner_tags = oldTags;
+            return;
+        }
+    }).bind(this);
 
-    constructor(props: Props) {
-        super(props);
+    handleAddTag = flow(function*(
+        this: LearnerView,
+        tag: string,
+    ): IterableIterator<any> {
+        const { learner } = this.props;
+        const oldTags = learner.learner_tags.slice();
+        if (oldTags.includes(tag)) {
+            return;
+        }
+        learner.learner_tags.push(tag);
+        try {
+            yield Groups.addLearnerTag(learner.id, tag);
+        } catch {
+            console.error('Error occurred while attempting to add learner tag');
+            learner.learner_tags = oldTags;
+        }
+    }).bind(this);
+
+    componentDidMount(): void {
         this.fetchCourses();
-        this.disposeLearnerReaction = reaction(
-            () => this.props.learner.id,
-            () => this.fetchCourses(),
-        );
-    }
-
-    componentWillUnmount(): void {
-        this.disposeLearnerReaction();
     }
 
     render(): JSX.Element {
-        const { avatar_urls, name, id } = this.props.learner;
+        const { avatar_urls, id, name } = this.props.learner;
         return (
             <div className={styles.grid} key={id}>
                 <div className={styles.info}>
                     <img src={avatar_urls[150]} />
-                    <div>
-                        <h2>{name}</h2>
-                        <div>Tags will go here</div>
+                    <h1>{name}</h1>
+                    <div className={styles.tagHeading}>
+                        <SectionHeading>Tags</SectionHeading>
+                        <ClickToEdit
+                            flex
+                            buttonElement={addTagButton}
+                            onSave={this.handleAddTag}
+                            inputProps={{ list: 'tag-list' }}
+                        />
+                    </div>
+                    <div className={styles.tagContainer}>
+                        {this.props.learner.learner_tags.map(t => (
+                            <Tag key={t} onRemove={this.handleRemoveTag}>
+                                {t}
+                            </Tag>
+                        ))}
                     </div>
                 </div>
                 <div className={styles.data}>
                     <SimpleTable
-                        containerClassName={styles.progressTable}
-                        header={headerRow}
-                        renderCaption={progressCaptionRenderer}
+                        header={header}
+                        caption="Course Progress"
                         rows={[...this.courseProgressRows]}
                         rowsPerPage={5}
-                        defaultSortKey="progress"
+                        defaultSortKey="status"
                         isLoading={this.coursesLoading}
                         isEmpty={this.courses.size === 0}
                     />
@@ -105,105 +123,101 @@ export default class LearnerView extends React.Component<Props> {
 
     @computed
     get courseProgressRows(): Row[] {
+        const {
+            dateRange,
+            learner: { course_progress },
+        } = this.props;
         if (this.coursesLoading) {
             return [];
         }
-        const {
-            course_progress: { completed, started },
-        } = this.props.learner;
-        const items = [...this.courses.entries()];
-        return items.map(([id, course]) => {
-            let progress: any = completed.find(i => i.id === id);
-            if (progress) {
+        return course_progress
+            .filter(progress => {
+                const { status, activity_completed } = progress;
+                if (
+                    status === CourseStatus.COMPLETED &&
+                    !isWithinDateRange(activity_completed, dateRange)
+                ) {
+                    return false;
+                }
+                return true;
+            })
+            .map(progress => {
+                const { id, status } = progress;
+                const isCompleted = status === CourseStatus.COMPLETED;
+                const course = this.courses.get(id)!;
                 return {
                     key: id,
+                    height: 50,
                     cells: [
                         {
                             key: `progress-${id}`,
-                            sortKey: Infinity,
+                            sortKey: isCompleted
+                                ? Infinity
+                                : progress.steps_completed /
+                                  progress.steps_total,
                             content: (
                                 <ProgressRadial
-                                    diameter={25}
-                                    thickness={2}
-                                    max={1}
-                                    value={1}
+                                    diameter={30}
+                                    thickness={3}
+                                    max={isCompleted ? 1 : progress.steps_total}
+                                    value={
+                                        isCompleted
+                                            ? 1
+                                            : progress.steps_completed
+                                    }
                                 />
                             ),
                         },
                         {
                             key: `course-name-${id}`,
                             kind: String,
-                            content: displayUnicode(course.title.rendered),
+                            content: (
+                                <div
+                                    className={styles.courseNameCell}
+                                    title={displayUnicode(
+                                        course.title.rendered,
+                                    )}
+                                >
+                                    {displayUnicode(course.title.rendered)}
+                                </div>
+                            ),
                         },
                         {
                             key: `date-${id}`,
                             kind: Date,
-                            content: dateFormat(
-                                new Date(progress.date),
-                                'YYYY/MM/DD',
-                            ),
+                            sortKey:
+                                progress.activity_completed !== null
+                                    ? progress.activity_completed
+                                    : '',
+                            content: isCompleted
+                                ? new Date(
+                                      progress.activity_completed!,
+                                  ).toLocaleDateString()
+                                : '',
                         },
                         {
                             key: `hours-${id}`,
                             kind: Number,
-                            content: progress.hours,
+                            content: isCompleted ? progress.hours_awarded : '',
                         },
                     ],
                 };
-            }
-            progress = started.find(i => i.id === id)!;
-            const steps = progress.lessons_completed
-                ? progress.lessons_completed.length
-                : 0 + progress.topics_completed
-                    ? progress.topics_completed.length
-                    : 0;
-            return {
-                key: id,
-                cells: [
-                    {
-                        key: `progress-${id}`,
-                        sortKey: steps,
-                        content: (
-                            <ProgressRadial
-                                diameter={25}
-                                thickness={2}
-                                max={progress.total_steps}
-                                value={steps}
-                            />
-                        ),
-                    },
-                    {
-                        key: `course-name-${id}`,
-                        kind: String,
-                        content: displayUnicode(course.title.rendered),
-                    },
-                    {
-                        key: `date-${id}`,
-                        kind: Date,
-                        content: '',
-                    },
-                    {
-                        key: `hours-${id}`,
-                        kind: Number,
-                        content: '',
-                    },
-                ],
-            };
-        });
+            });
     }
 }
 
-const progressCaptionRenderer = (id: string): JSX.Element => (
-    <SectionHeading id={id}>Course Progress</SectionHeading>
+const addTagButton = (props: React.HTMLProps<HTMLButtonElement>) => (
+    <ButtonIcon onClick={props.onClick} icon="add_circle_outline" size={16} />
 );
 
-const headerRow: Row<HeaderSortable> = {
+const header: HeaderRow = {
     key: 'header',
     cells: [
         {
-            key: 'progress',
-            content: 'Progress',
+            key: 'status',
+            content: 'Status',
             sortable: true,
+            width: 40,
             scope: 'col',
         },
         {

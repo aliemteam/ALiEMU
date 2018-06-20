@@ -21,26 +21,28 @@ export default class TabHome extends React.Component {
             throw new Error('User should be available here.');
         }
         const user = AU_Dashboard.current_user;
+        const started = user.course_progress.filter(
+            progress => progress.status === 'STARTED',
+        );
+        const completed = user.course_progress.filter(
+            progress => progress.status === 'COMPLETED',
+        );
         return (
             <div className={styles.home}>
                 <h1 className={styles.title}>My Learning</h1>
                 <div className={styles.inProgress}>
                     <SectionHeading>In Progress</SectionHeading>
-                    {user.course_progress.started
+                    {started
                         .slice(0, this.visibleProgressRows)
                         .map(course => (
                             <CourseProgressListing
                                 key={course.id}
                                 courseId={course.id}
-                                steps_completed={
-                                    course.lessons_completed.length +
-                                    course.topics_completed.length
-                                }
-                                steps_total={course.total_steps}
+                                steps_completed={course.steps_completed}
+                                steps_total={course.steps_total}
                             />
                         ))}
-                    {user.course_progress.started.length >
-                        this.visibleProgressRows && (
+                    {started.length > this.visibleProgressRows && (
                         <AnchorButton
                             className={styles.viewMore}
                             onClick={this.addProgressRows}
@@ -51,7 +53,7 @@ export default class TabHome extends React.Component {
                 </div>
                 <div className={styles.completed}>
                     <SectionHeading>Completed</SectionHeading>
-                    {user.course_progress.completed
+                    {completed
                         .slice(0, this.visibleCompletedRows)
                         .map(({ id }) => (
                             <CourseProgressListing
@@ -61,8 +63,7 @@ export default class TabHome extends React.Component {
                                 steps_total={1}
                             />
                         ))}
-                    {user.course_progress.completed.length >
-                        this.visibleCompletedRows && (
+                    {completed.length > this.visibleCompletedRows && (
                         <AnchorButton
                             className={styles.viewMore}
                             onClick={this.addCompletedRows}

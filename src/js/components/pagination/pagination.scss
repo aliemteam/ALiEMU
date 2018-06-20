@@ -5,7 +5,22 @@
     @include clipped;
 }
 
-.pagination {
+.nav {
+    display: flex;
+    &.align-left {
+        justify-content: flex-start;
+    }
+
+    &.align-right {
+        justify-content: flex-end;
+    }
+
+    &.align-center {
+        justify-content: center;
+    }
+}
+
+.pager {
     display: inline-flex;
     margin: 5px 0;
 }
@@ -26,8 +41,8 @@
     &[aria-current] {
         cursor: default;
         color: white;
-        background: $secondary;
-        border-color: $secondary-dark !important;
+        background: $primary;
+        border-color: $primary-dark !important;
     }
 
     &:hover {

@@ -33,22 +33,20 @@ function unautop( string $content ) : string {
 	return $matches['content'] ?? $content;
 }
 
-// FIXME: Should this be removed in favor of `rest_ensure_response`?
 /**
- * Checks if a given WP_Rest_Response is an error. If so, calls wp_die and dumps an error message.
+ * Given a custom post type as input, output a the regular name for it.
  *
- * @param \WP_Rest_Response $response WordPress response instance.
- * @param bool              $die True if an error should be fatal.
+ * @param string $post_type Post type.
+ * @param bool   $plural True if returned string be pluralized.
+ * @throws Error If string is not a valid post type.
  */
-function check_rest_response( \WP_Rest_Response $response, $die = false ) {
-	if ( $response->is_error() ) {
-		$error      = $response->as_error();
-		$msg        = $error->get_error_message();
-		$error_data = $error->get_error_data();
-		if ( $die ) {
-			wp_die( printf( '<p>An error occurred: %s (%d)</p>', $msg, $error_data ) ); // @codingStandardsIgnoreLine
-		}
-		return array_merge( $error_data, [ 'message' => $msg ] );
+function post_type_normalized( string $post_type, $plural = false ) : string {
+	$value = array_search( $post_type, ALIEMU_POST_TYPES, true );
+	if ( ! $value ) {
+		throw new Error( "Invalid post type: $post_type" );
+	} elseif ( 'quiz' === $value ) {
+		return $plural ? 'quizzes' : 'quiz';
+	} else {
+		return $plural ? $value . 's' : $value;
 	}
-	return false;
 }

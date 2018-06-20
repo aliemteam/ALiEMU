@@ -13,6 +13,13 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_User;
 
+use function ALIEMU\Database\Queries\{
+	current_user_has_access,
+	current_user_is_coach_of,
+	current_user_is_learner_of,
+	get_learner_tags
+};
+
 defined( 'ABSPATH' ) || exit;
 
 add_filter(
@@ -65,6 +72,7 @@ add_filter(
 			'field_email',
 			'field_first_name_last_name',
 			'field_last_login',
+			'field_learner_tags',
 			'field_registered_date',
 		];
 
@@ -123,11 +131,8 @@ function field_first_name_last_name( $response, $user, $request ) : WP_REST_Resp
 		! array_key_exists( 'first_name', $response->data ) &&
 		( current_user_has_access( $user->ID ) || current_user_is_learner_of( $user->ID ) )
 	) {
-		// Ignoring because this is only an issue on massive multisites like WordPress VIP.
-		// @codingStandardsIgnoreStart
-		$response->data['first_name'] = get_user_meta( $user->ID, 'first_name', true );
-		$response->data['last_name']  = get_user_meta( $user->ID, 'last_name', true );
-		// @codingStandardsIgnoreEnd
+		$response->data['first_name'] = get_user_meta( $user->ID, 'first_name', true ); // phpcs:ignore
+		$response->data['last_name']  = get_user_meta( $user->ID, 'last_name', true ); // phpcs:ignore
 	}
 	return rest_ensure_response( $response );
 }
@@ -142,9 +147,25 @@ function field_first_name_last_name( $response, $user, $request ) : WP_REST_Resp
  */
 function field_last_login( $response, $user, $request ) : WP_REST_Response {
 	if ( current_user_has_access( $user->ID ) ) {
-		// Ignoring because this is only an issue on massive multisites like WordPress VIP.
-		// @codingStandardsIgnoreLine
-		$response->data['last_login'] = (int) get_user_meta( $user->ID, '_um_last_login', true );
+		$last_login_time = (int) get_user_meta( $user->ID, '_um_last_login', true ); // phpcs:ignore
+		$response->data['last_login'] = 0 === $last_login_time
+			? false
+			: date( 'c', $last_login_time );
+	}
+	return rest_ensure_response( $response );
+}
+
+/**
+ * Add `learner_tags` field to User response for users who are learner of the current user.
+ *
+ * @param WP_REST_Response $response The response object.
+ * @param WP_User          $user     User object used to create response.
+ * @param WP_REST_Request  $request  Request object.
+ */
+function field_learner_tags( $response, $user, $request ) : WP_REST_Response {
+	$current_user_id = get_current_user_id();
+	if ( current_user_is_coach_of( $user->ID ) || $current_user_id === $user->ID ) {
+		$response->data['learner_tags'] = get_learner_tags( $current_user_id, $user->ID );
 	}
 	return rest_ensure_response( $response );
 }
@@ -164,81 +185,3 @@ function field_registered_date( $response, $user, $request ) : WP_REST_Response 
 	return rest_ensure_response( $response );
 }
 
-/**
- * Return true if the current user has access to a given user's data.
- *
- * @param int $user_id The data owner for which we're checking to see if the
- *                     current user has access.
- */
-function current_user_has_access( int $user_id ) : bool {
-	global $wpdb;
-	$current_user = wp_get_current_user();
-
-	if ( ! $current_user ) {
-		return false;
-	}
-
-	if ( current_user_can( 'edit_users', $user_id ) || $current_user->ID === $user_id ) {
-		return true;
-	}
-
-	return current_user_is_coach_of( $user_id );
-}
-
-/**
- * Return true if the current user is a coach of a given user.
- *
- * @param int $user_id The user in question.
- */
-function current_user_is_coach_of( $user_id ) : bool {
-	global $wpdb;
-	$current_user = wp_get_current_user();
-
-	if ( ! $current_user || $user_id <= 0 ) {
-		return false;
-	}
-
-	$current_user_is_learner = (bool) $wpdb->get_var(
-		$wpdb->prepare(
-			"
-				SELECT COUNT(*)
-				  FROM {$wpdb->prefix}user_groups
-				 WHERE owner_id = %d
-				   AND member_id = %d
-			",
-			$current_user->ID,
-			$user_id
-		)
-	);
-
-	return $current_user_is_learner;
-}
-
-/**
- * Return true if the current user is a learner of a given user.
- *
- * @param int $user_id The user in question.
- */
-function current_user_is_learner_of( $user_id ) : bool {
-	global $wpdb;
-	$current_user = wp_get_current_user();
-
-	if ( ! $current_user || $user_id <= 0 ) {
-		return false;
-	}
-
-	$current_user_is_learner = (bool) $wpdb->get_var(
-		$wpdb->prepare(
-			"
-				SELECT COUNT(*)
-				  FROM {$wpdb->prefix}user_groups
-				 WHERE owner_id = %d
-				   AND member_id = %d
-			",
-			$user_id,
-			$current_user->ID
-		)
-	);
-
-	return $current_user_is_learner;
-}

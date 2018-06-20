@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 
 import * as styles from './pagination.scss';
@@ -8,12 +9,17 @@ interface Props {
     value: number;
     total: number;
     size?: number;
+    align?: 'left' | 'right' | 'center';
     onChange(e: React.MouseEvent<HTMLButtonElement>): void;
 }
 
 export default class Pagination extends React.PureComponent<Props> {
+    static defaultProps: Partial<Props> = {
+        align: 'right',
+    };
+
     render(): JSX.Element {
-        const { value, total, onChange, size } = this.props;
+        const { align, value, total, onChange, size } = this.props;
         const uid = Date.now().toString();
         const labelId = `pagination-${uid}`;
         const style = {
@@ -21,68 +27,75 @@ export default class Pagination extends React.PureComponent<Props> {
             minWidth: size || 30,
             fontSize: size ? size / 2 : 15,
         };
+        const classname = classNames(styles.nav, {
+            [styles.alignRight]: align === 'right',
+            [styles.alignLeft]: align === 'left',
+            [styles.alignCenter]: align === 'center',
+        });
         return (
             <nav
                 role="navigation"
                 aria-labelledby={labelId}
-                className={styles.pagination}
+                className={classname}
             >
-                <span aria-live="polite" role="status">
-                    <h2 id={labelId} className={styles.clipped}>
-                        {`Table Pagination - Page ${value}`}
-                    </h2>
-                </span>
-                <button
-                    aria-label="previous page"
-                    className={styles.buttonPrev}
-                    data-page={value - 1}
-                    onClick={onChange}
-                    disabled={value === 1}
-                    style={style}
-                >
-                    <Icon icon="chevron_left" />
-                </button>
-                <div role="list" className={styles.pageList}>
-                    {createPageRange(value, total).map(
-                        (item, i) =>
-                            typeof item === 'number' ? (
-                                <button
-                                    key={`page-${item}`}
-                                    role="listitem"
-                                    aria-label={`page ${item}`}
-                                    aria-current={
-                                        item === value ? 'page' : undefined
-                                    }
-                                    aria-setsize={total}
-                                    aria-posinset={item}
-                                    data-page={item}
-                                    onClick={onChange}
-                                    className={styles.button}
-                                    style={style}
-                                >
-                                    {item}
-                                </button>
-                            ) : (
-                                <div
-                                    key={`ellipse-${i}`}
-                                    className={styles.ellipse}
-                                    style={style}
-                                >
-                                    <Icon icon={item} />
-                                </div>
-                            ),
-                    )}
+                <div className={styles.pager}>
+                    <span aria-live="polite" role="status">
+                        <h2 id={labelId} className={styles.clipped}>
+                            {`Table Pagination - Page ${value}`}
+                        </h2>
+                    </span>
+                    <button
+                        aria-label="previous page"
+                        className={styles.buttonPrev}
+                        data-page={value - 1}
+                        onClick={onChange}
+                        disabled={value === 1}
+                        style={style}
+                    >
+                        <Icon icon="chevron_left" />
+                    </button>
+                    <div role="list" className={styles.pageList}>
+                        {createPageRange(value, total).map(
+                            (item, i) =>
+                                typeof item === 'number' ? (
+                                    <button
+                                        key={`page-${item}`}
+                                        role="listitem"
+                                        aria-label={`page ${item}`}
+                                        aria-current={
+                                            item === value ? 'page' : undefined
+                                        }
+                                        aria-setsize={total}
+                                        aria-posinset={item}
+                                        data-page={item}
+                                        onClick={onChange}
+                                        className={styles.button}
+                                        style={style}
+                                    >
+                                        {item}
+                                    </button>
+                                ) : (
+                                    <div
+                                        key={`ellipse-${i}`}
+                                        className={styles.ellipse}
+                                        style={style}
+                                    >
+                                        <Icon icon={item} />
+                                    </div>
+                                ),
+                        )}
+                    </div>
+                    <button
+                        aria-label="next page"
+                        className={styles.buttonNext}
+                        data-page={value + 1}
+                        onClick={onChange}
+                        disabled={value === total}
+                        style={style}
+                    >
+                        <Icon icon="chevron_right" />
+                    </button>
                 </div>
-                <button
-                    aria-label="next page"
-                    className={styles.buttonNext}
-                    data-page={value + 1}
-                    onClick={onChange}
-                    disabled={value === total}
-                    style={style}
-                >
-                    <Icon icon="chevron_right" />
-                </button>
             </nav>
         );
     }

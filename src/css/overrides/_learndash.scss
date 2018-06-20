@@ -10,12 +10,12 @@
 }
 
 #learndash_mark_complete_button {
-    @include button($primary);
+    @include button($secondary);
 }
 
 .prev-link,
 .next-link {
-    @include button($primary);
+    @include button($secondary);
     margin-bottom: $block-margin;
 
     > span {
@@ -36,7 +36,7 @@
 }
 
 .btn-join {
-    @include button($primary);
+    @include button($secondary);
 }
 
 // Course status line
@@ -87,13 +87,13 @@
 
 .content-table__row--header {
     padding: 0 $block-margin;
-    background: $secondary;
+    background: $primary;
     color: white;
     font-weight: 500;
     border-radius: 2px 2px 0 0;
 
     &:hover {
-        background: $secondary;
+        background: $primary;
     }
 }
 
@@ -122,7 +122,7 @@
 
 .content-table__link {
     width: 100%;
-    color: $secondary;
+    color: $primary;
     height: 100%;
     padding: 0 $block-margin;
 }
@@ -229,7 +229,7 @@ dd.course_progress {
 .wpProQuiz_button,
 .wpProQuiz_QuestionButton,
 .quiz_continue_link a {
-    @include button($primary);
+    @include button($secondary);
     margin: 0 !important;
     // Hides the "View Questions" button because it's not
     // necessary and arguably confusing.

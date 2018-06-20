@@ -4,6 +4,9 @@ import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import * as React from 'react';
 import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
 
+import { ICourse } from 'utils/types';
+
+import { Courses } from 'utils/api';
 import { displayUnicode } from 'utils/text-utils';
 import * as styles from './course-progress-listing.scss';
 
@@ -18,11 +21,8 @@ interface Props {
 
 @observer
 export default class CourseProgressListing extends React.Component<Props> {
-    fetchResult: IPromiseBasedObservable<LearnDash.Course> = fromPromise(
-        fetch(`/wp-json/aliemu/v1/courses/${this.props.courseId}`, {
-            headers: { 'X-WP-Nonce': window.AU_API.nonce },
-            mode: 'same-origin',
-        }).then(res => res.json()),
+    fetchResult: IPromiseBasedObservable<ICourse> = fromPromise(
+        Courses.fetchOne(this.props.courseId),
     );
 
     render(): JSX.Element | null {
@@ -33,7 +33,7 @@ export default class CourseProgressListing extends React.Component<Props> {
         });
     }
 
-    private renderListing(data: LearnDash.Course): JSX.Element {
+    private renderListing(data: ICourse): JSX.Element {
         const title = displayUnicode(data.title.rendered);
         const { steps_total: total, steps_completed: completed } = this.props;
         const isComplete = total === completed;

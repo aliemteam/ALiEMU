@@ -1,13 +1,13 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { User, UserContext } from './';
+import { UserContext, UserKind } from './';
 
 import { Navbar, NavGroup, NavTab } from 'components/navbar/';
 import { Tabs } from './dashboard';
 
 interface Props {
-    user: User;
+    userKind: UserKind;
     getCurrentTab(): Tabs;
     onClick(e: React.MouseEvent<HTMLButtonElement>): void;
 }
@@ -15,9 +15,9 @@ interface Props {
 @observer
 class DashboardNavbar extends React.Component<Props> {
     render(): JSX.Element {
-        const { getCurrentTab, onClick, user } = this.props;
+        const { getCurrentTab, onClick, userKind } = this.props;
         const tab = getCurrentTab();
-        const isOwner = user === User.OWNER;
+        const isOwner = userKind === UserKind.OWNER;
         return (
             <Navbar>
                 <NavGroup>
@@ -61,10 +61,10 @@ class DashboardNavbar extends React.Component<Props> {
     }
 }
 
-export default (props: Omit<Props, 'user'>): JSX.Element => (
+export default (props: Omit<Props, 'userKind'>): JSX.Element => (
     <UserContext.Consumer>
-        {(user: User): JSX.Element => (
-            <DashboardNavbar {...props} user={user} />
+        {(userKind: UserKind): JSX.Element => (
+            <DashboardNavbar {...props} userKind={userKind} />
         )}
     </UserContext.Consumer>
 );

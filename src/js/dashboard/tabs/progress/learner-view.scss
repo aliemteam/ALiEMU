@@ -1,28 +1,64 @@
+@import 'variables';
+
 .grid {
     display: grid;
+    min-height: 300px;
 
     grid:
-        'info data'
-        / auto 1fr;
+        'a b b b b'
+        / 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
 }
 
 .info {
-    width: 200px;
-    grid-area: info;
+    grid-area: a;
     display: flex;
     flex-flow: column;
-    align-items: center;
 
     img {
+        margin: 10px auto;
         border-radius: 4px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
     }
 }
 
 .data {
-    grid-area: data;
+    grid-area: b;
+
+    figure {
+        margin: 0;
+    }
 }
 
-.progress-table {
-    margin-top: 0;
+.tag-heading {
+    display: flex;
+    margin: 0 {
+        bottom: 10px;
+    }
+
+    h2 {
+        margin: 0 {
+            right: 10px;
+        }
+    }
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        margin-bottom: 5px !important;
+    }
+}
+
+.course-name-cell {
+    max-width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

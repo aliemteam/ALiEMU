@@ -38,7 +38,7 @@ declare namespace WordPress {
         /**
          * Avatar URL with image size of 150 pixels.
          */
-        '150': string
+        '150': string;
     }
 
     // Comments{{{
@@ -357,48 +357,43 @@ declare namespace WordPress {
         // ALiEMU Custom Fields
 
         /**
-         * The user's current course progress
+         * Array of objects describing progress of courses that a user has interacted with.
          */
-        course_progress: {
+        course_progress: ReadonlyArray<{
             /**
-             * An array of completed course IDs
+             * Either a parsable date-time of when the activity was completed or null of it doesn't
+             * exist.
              */
-            completed: Array<{
-                /**
-                 * The course ID
-                 */
-                id: number;
-                /**
-                 * The associated hours
-                 */
-                hours: number;
-                /**
-                 * ISO formatted date of completion
-                 */
-                date: string;
-            }>;
+            activity_completed: null | string;
             /**
-             * An array of objects describing courses started but not yet completed
+             * Either a parsable date-time of when the activity was started or null of it doesn't exist.
              */
-            started: Array<{
-                /**
-                 * The course ID
-                 */
-                id: number;
-                /**
-                 * An array of completed lesson IDs
-                 */
-                lessons_completed: number[];
-                /**
-                 * An array of completed topic IDs
-                 */
-                topics_completed: number[];
-                /**
-                 * Total number of lessons and topics in this course
-                 */
-                total_steps: number;
-            }>;
-        };
+            activity_started: null | string;
+            /**
+             * A parsable date-time of when the activity was last updated.
+             */
+            activity_updated: string;
+            /**
+             * Number of hours awarded for the current course, or 0 if the course is not yet completed.
+             */
+            hours_awarded: number;
+            /**
+             * The course ID.
+             */
+            id: number;
+            /**
+             * Enum describing the status of the course.
+             */
+            status: 'COMPLETED' | 'STARTED';
+            /**
+             * Total number of steps the user has completed.
+             */
+            steps_completed: number;
+            /**
+             * Total number of steps the course has.
+             */
+            steps_total: number;
+        }>;
 
         /**
          * The user's self-defined institutional affiliation

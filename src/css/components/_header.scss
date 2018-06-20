@@ -64,7 +64,7 @@
         min-width: 150px;
         background: white;
         box-shadow: map-get($shadows, 'depth-6');
-        border-top: solid 3px $secondary;
+        border-top: solid 3px $primary;
         right: -20px;
         z-index: 2;
 
@@ -86,7 +86,7 @@
             &.menu--open {
                 display: flex;
             }
-            background: $secondary;
+            background: $primary;
             flex-direction: column;
             position: absolute;
             left: 0;

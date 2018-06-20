@@ -3,19 +3,22 @@
 .coaches-caption {
     display: flex;
     align-items: center;
+
     h2 {
         margin-bottom: 0;
+        flex: auto;
     }
 }
 
 .add-coach-form {
     display: flex;
     flex: auto;
-    justify-content: flex-end;
+    justify-content: center;
     margin-bottom: 4px;
 
     > button {
         margin-left: 5px;
+        flex-shrink: 0;
     }
 }
 
@@ -24,15 +27,33 @@
 }
 
 .empty-state {
-    text-align: center;
-    margin: $block-margin;
+    display: grid;
+    grid:
+        'a b' auto
+        'c c' 1fr
+        / 1fr 1fr;
+
+    form {
+        grid-area: b;
+    }
+
+    > div {
+        grid-area: c;
+        display: grid;
+        justify-content: center;
+        text-align: center;
+        grid-gap: 10px;
+
+        > * {
+            margin: 0;
+        }
+    }
 
     i {
-        color: $secondary;
+        color: $primary;
     }
 
     h3 {
-        margin: 0;
         font-weight: initial;
     }
 }

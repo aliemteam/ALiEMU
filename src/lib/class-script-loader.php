@@ -31,41 +31,9 @@ class Script_Loader {
 	];
 
 	/**
-	 * The current URL path split by `/`.
-	 *
-	 * @var string[] $path
-	 */
-	private $path;
-
-	/**
-	 * The current URL query (if it exists).
-	 *
-	 * @var string[] $query Key-value array of query params.
-	 */
-	private $query;
-
-	/**
 	 * Constructor. Initializes WordPress hooks.
 	 */
 	public function __construct() {
-		$url = wp_parse_url(
-			isset( $_SERVER['REQUEST_URI'] ) // Input var okay.
-			? wp_unslash( $_SERVER['REQUEST_URI'] ) // Input var okay; sanitization okay.
-			: ''
-		);
-
-		// `array_values` is important. Without it, keys will be preserved.
-		$this->path  = array_values(
-			array_filter(
-				explode( '/', $url['path'] )
-			)
-		);
-		$this->query = [];
-
-		if ( ! empty( $url['query'] ) ) {
-			parse_str( $url['query'], $this->query );
-		}
-
 		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
 		add_action( 'wp_head', [ $this, 'print_globals' ] );
@@ -113,9 +81,9 @@ class Script_Loader {
 			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
 		}
 
-		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-polyfills', ALIEMU_ROOT_URI . '/js/polyfills.js', [], ALIEMU_VERSION, false );
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
 		$this->delegate();
@@ -189,20 +157,6 @@ class Script_Loader {
 		if ( is_page( 'user' ) ) {
 			array_push( $load->scripts, 'aliemu-dashboard' );
 			array_push( $load->styles, 'aliemu-dashboard' );
-		}
-
-		switch ( $this->path[0] ?? '' ) {
-			case 'user':
-				switch ( $this->query['profiletab'] ?? '' ) {
-					case 'educator_dashboard':
-						array_push( $load->scripts, 'aliemu-educator-dashboard' );
-						array_push( $load->styles, 'aliemu-educator-dashboard' );
-						break 2;
-					case 'user_progress':
-						array_push( $load->styles, 'learndash_template_style_css' );
-						break 2;
-				}
-				break;
 		}
 
 		$this->unload( $unload->scripts, $unload->styles );

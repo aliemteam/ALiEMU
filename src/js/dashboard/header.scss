@@ -2,7 +2,7 @@
 
 .heading {
     @extend %container-outer;
-    background: $secondary;
+    background: $primary;
     color: white;
 
     h1 {
@@ -26,7 +26,22 @@
 }
 
 .institution-btn {
-    a {
-        opacity: 0.5;
+    opacity: 0.5;
+}
+
+.institution-input {
+    height: 28px;
+}
+
+.edit-profile-form {
+    width: 100vw;
+    max-width: 500px;
+    padding: 20px;
+    label {
+        display: block;
+        margin: 10px 0;
+    }
+    > div {
+        text-align: right;
     }
 }

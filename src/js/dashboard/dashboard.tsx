@@ -2,8 +2,10 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
+import { ICoach, ILearner } from 'utils/types';
+
 import DevTool from 'utils/dev-tools';
-import { User } from './';
+import { UserKind } from './';
 
 import Content from './content';
 import Header from './header';
@@ -12,7 +14,7 @@ import Navbar from './navbar';
 declare const AU_Dashboard: Globals;
 
 export interface Globals {
-    current_user: WordPress.User<'edit'> | null;
+    current_user: ICoach & ILearner | null;
     profile_user: WordPress.User<'view'>;
     recent_comments: number[];
 }
@@ -28,23 +30,31 @@ interface Props {
     /**
      * The type of user visiting the dashboard
      */
-    user: User;
+    user: UserKind;
 }
 
 @observer
 export default class Dashboard extends React.Component<Props> {
     @observable
     private _currentTab: Tabs =
-        this.props.user === User.OWNER ? Tabs.PROGRESS : Tabs.PROFILE;
+        this.props.user === UserKind.OWNER ? Tabs.PROGRESS : Tabs.PROFILE;
+
+    constructor(props: Props) {
+        super(props);
+        AU_Dashboard.profile_user = observable(AU_Dashboard.profile_user);
+        if (AU_Dashboard.current_user) {
+            AU_Dashboard.current_user = observable(AU_Dashboard.current_user);
+        }
+    }
 
     getCurrentTab = (): Tabs => this._currentTab;
 
     render(): JSX.Element {
-        const { profile_user } = AU_Dashboard;
+        const { profile_user, current_user } = AU_Dashboard;
         return (
             <>
                 <DevTool />
-                <Header data={profile_user} />
+                <Header data={current_user || profile_user} />
                 <Navbar
                     getCurrentTab={this.getCurrentTab}
                     onClick={this.handleTabClick}

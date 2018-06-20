@@ -9,6 +9,13 @@ namespace ALIEMU\API;
 
 defined( 'ABSPATH' ) || exit;
 
+use WP_Post;
+
+use function ALIEMU\Database\Queries\{
+	get_post_topic_ids,
+	get_post_quiz_ids
+};
+
 /**
  * Main controller class
  */
@@ -74,8 +81,8 @@ class Lessons_Controller extends \WP_REST_Posts_Controller {
 	protected function prepare_links( $lesson ) : array {
 		$links = parent::prepare_links( $lesson );
 		$links = array_merge( $links, $this->prepare_up_link( $lesson->ID ) );
-		$links = array_merge( $links, $this->prepare_topic_links( $lesson->ID ) );
-		$links = array_merge( $links, $this->prepare_quiz_links( $lesson->ID ) );
+		$links = array_merge( $links, $this->prepare_topic_links( $lesson ) );
+		$links = array_merge( $links, $this->prepare_quiz_links( $lesson ) );
 		return $links;
 	}
 
@@ -99,37 +106,10 @@ class Lessons_Controller extends \WP_REST_Posts_Controller {
 	/**
 	 * Prepares "topics" link for the request.
 	 *
-	 * @param  int $id The lesson ID.
+	 * @param WP_Post $lesson The lesson post object.
 	 */
-	private function prepare_topic_links( int $id ) : array {
-		global $wpdb;
-
-		$topic_ids = get_transient( 'aliemu_lesson_topics_' . $id );
-		if ( ! $topic_ids ) {
-			$query = $wpdb->prepare(
-				"
-					SELECT ID
-					FROM $wpdb->posts
-					WHERE ID IN (
-						SELECT post_id
-						FROM $wpdb->postmeta
-						WHERE meta_key = 'lesson_id'
-						AND meta_value = %d
-					)
-					AND post_type = %s
-				",
-				$id,
-				ALIEMU_POST_TYPES['topic']
-			);
-
-			// Ignoring this because we're manually caching the result in a transient.
-			// @codingStandardsIgnoreLine
-			$topic_ids = $wpdb->get_col( $query );
-
-			// Put the results in a transient. Expire after 24 hours.
-			set_transient( 'aliemu_lesson_topics_' . $id, $topic_ids, DAY_IN_SECONDS );
-		}
-
+	private function prepare_topic_links( WP_Post $lesson ) : array {
+		$topic_ids = get_post_topic_ids( $lesson );
 		return [
 			'topics' => [
 				'href'       => add_query_arg(
@@ -148,37 +128,10 @@ class Lessons_Controller extends \WP_REST_Posts_Controller {
 	/**
 	 * Prepares "quizzes" link for the request.
 	 *
-	 * @param  int $id The lesson ID.
+	 * @param WP_Post $lesson The lesson post object.
 	 */
-	private function prepare_quiz_links( int $id ) : array {
-		global $wpdb;
-
-		$quiz_ids = get_transient( 'aliemu_lesson_quizzes_' . $id );
-		if ( ! $quiz_ids ) {
-			$query = $wpdb->prepare(
-				"
-					SELECT ID
-					FROM $wpdb->posts
-					WHERE ID IN (
-						SELECT post_id
-						FROM $wpdb->postmeta
-						WHERE meta_key = 'lesson_id'
-						AND meta_value = %d
-					)
-					AND post_type = %s
-				",
-				$id,
-				ALIEMU_POST_TYPES['quiz']
-			);
-
-			// Ignoring this because we're manually caching the result in a transient.
-			// @codingStandardsIgnoreLine
-			$quiz_ids = $wpdb->get_col( $query );
-
-			// Put the results in a transient. Expire after 24 hours.
-			set_transient( 'aliemu_lesson_quizzes_' . $id, $quiz_ids, DAY_IN_SECONDS );
-		}
-
+	private function prepare_quiz_links( WP_Post $lesson ) : array {
+		$quiz_ids = get_post_quiz_ids( $lesson );
 		return [
 			'quizzes' => [
 				'href'       => add_query_arg(

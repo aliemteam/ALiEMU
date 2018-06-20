@@ -2,14 +2,17 @@ import { action, computed, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
+import { Courses } from 'utils/api';
+import { ICourse } from 'utils/types';
+
 import CourseListing from 'components/course-listing/';
-import { Input } from 'components/forms/';
+import Input from 'components/forms/input';
 import Sidebar, { Duration } from './sidebar';
 
 import * as styles from './catalog.scss';
 
 export type CourseSubset = Pick<
-    LearnDash.Course,
+    ICourse,
     | 'categories'
     | 'description'
     | 'date_gmt'
@@ -44,37 +47,22 @@ export default class Catalog extends React.Component {
     @observable durationSelection: Duration = Duration.NONE;
 
     fetchCourses = flow(function*(this: Catalog): any {
-        const pages = AU_Catalog.headers.courses['X-WP-TotalPages'];
-        let page = 2;
-        let courses: CourseSubset[] = [];
-        try {
-            while (page <= pages) {
-                const response = yield fetch(
-                    `/wp-json/aliemu/v1/courses?page=${page}&_fields=${encodeURIComponent(
-                        [
-                            '_links',
-                            'categories',
-                            'description',
-                            'date_gmt',
-                            'featured_media',
-                            'id',
-                            'link',
-                            'hours',
-                            'title',
-                        ].join(','),
-                    )}&_embed`,
-                    {
-                        mode: 'same-origin',
-                    }
-                );
-                const json: CourseSubset[] = yield response.json();
-                courses = [...courses, ...json];
-                page++;
-            }
-        } catch (e) {
-            // tslint:disable-next-line
-            console.error(e);
-        }
+        const courses: CourseSubset[] = yield Courses.fetchMany(
+            {
+                _fields: [
+                    '_links',
+                    'categories',
+                    'description',
+                    'date_gmt',
+                    'featured_media',
+                    'id',
+                    'link',
+                    'hours',
+                    'title',
+                ],
+            },
+            2,
+        );
         this._courses.push(...courses);
     }).bind(this);
 
