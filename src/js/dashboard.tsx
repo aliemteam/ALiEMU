@@ -2,7 +2,7 @@ import { configure } from 'mobx';
 import * as React from 'react';
 import { render } from 'react-dom';
 
-import Dashboard from 'dashboard/index';
+import Dashboard from 'dashboard/dashboard';
 
 configure({ enforceActions: true });
 

@@ -12,7 +12,9 @@ import { DateRange, isWithinDateRange } from './';
 import * as styles from './learner-view.scss';
 
 import ButtonIcon from 'components/buttons/button-icon';
+import Card from 'components/card/';
 import ClickToEdit from 'components/click-to-edit/';
+import Icon from 'components/icon/';
 import ProgressRadial from 'components/progress-radial/';
 import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
@@ -115,6 +117,7 @@ export default class LearnerView extends React.Component<Props> {
                         defaultSortKey="status"
                         isLoading={this.coursesLoading}
                         isEmpty={this.courses.size === 0}
+                        emptyState={emptyProgress}
                     />
                 </div>
             </div>
@@ -208,6 +211,23 @@ export default class LearnerView extends React.Component<Props> {
 
 const addTagButton = (props: React.HTMLProps<HTMLButtonElement>) => (
     <ButtonIcon onClick={props.onClick} icon="add_circle_outline" size={16} />
+);
+
+const emptyProgress = () => (
+    <Card>
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexFlow: 'column',
+                height: 100,
+            }}
+        >
+            <Icon icon="assignment_late" size={50} />
+            <div>This user has not interacted with any courses yet.</div>
+        </div>
+    </Card>
 );
 
 const header: HeaderRow = {

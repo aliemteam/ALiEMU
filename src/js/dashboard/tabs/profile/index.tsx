@@ -3,7 +3,7 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Globals } from 'dashboard/dashboard';
+import UserStore from 'dashboard/user-store';
 import * as styles from './tab-profile.scss';
 
 import { AnchorButton } from 'components/buttons/';
@@ -11,16 +11,18 @@ import Card from 'components/card/';
 import CommentListing from 'components/comment-listing/';
 import { SectionHeading } from 'components/typography/';
 
-declare const AU_Dashboard: Globals;
+interface Props {
+    store: UserStore;
+}
 
 @observer
-export default class TabProfile extends React.Component {
+export default class TabProfile extends React.Component<Props> {
     @observable visibleCommentRows = 3;
 
-    private readonly recent_comments = AU_Dashboard.recent_comments;
+    private readonly recent_comments = [];
 
     render(): JSX.Element {
-        const user = AU_Dashboard.profile_user;
+        const { user } = this.props.store;
         return (
             <div className={styles.profile}>
                 {user.description && (

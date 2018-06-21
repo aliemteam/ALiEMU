@@ -3,10 +3,15 @@ import * as React from 'react';
 
 import * as styles from './content.scss';
 
-import { Tabs } from './dashboard';
-import { TabGroups, TabHome, TabProfile, TabProgress } from './tabs/';
+import { Tabs } from 'dashboard/dashboard';
+import TabGroups from 'dashboard/tabs/groups/';
+import TabHome from 'dashboard/tabs/home/';
+import TabProfile from 'dashboard/tabs/profile/';
+import TabProgress from 'dashboard/tabs/progress/';
+import UserStore from 'dashboard/user-store';
 
 interface Props {
+    store: UserStore;
     getCurrentTab(): Tabs;
 }
 
@@ -21,13 +26,14 @@ export default class DashboardContent extends React.Component<Props> {
     }
 
     private renderTab(): JSX.Element {
+        const { store } = this.props;
         switch (this.props.getCurrentTab()) {
             case Tabs.HOME:
-                return <TabHome />;
+                return <TabHome store={store} />;
             case Tabs.PROFILE:
-                return <TabProfile />;
+                return <TabProfile store={store} />;
             case Tabs.PROGRESS:
-                return <TabProgress />;
+                return <TabProgress store={store} />;
             case Tabs.GROUPS:
                 return <TabGroups />;
             default:

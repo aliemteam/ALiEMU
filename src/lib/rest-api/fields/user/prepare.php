@@ -17,7 +17,7 @@ use function ALIEMU\Database\Queries\{
 	current_user_has_access,
 	current_user_is_coach_of,
 	current_user_is_learner_of,
-	get_learner_tags
+	get_learner_tags,
 };
 
 defined( 'ABSPATH' ) || exit;

@@ -14,7 +14,7 @@ use WP_Post;
 use function ALIEMU\Database\Queries\{
 	get_post_lesson_ids,
 	get_post_topic_ids,
-	get_post_quiz_ids
+	get_post_quiz_ids,
 };
 
 /**

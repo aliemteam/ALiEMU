@@ -16,7 +16,8 @@ use function ALIEMU\Database\Queries\{
 	get_user_coaches,
 	get_user_learners,
 	remove_coach_for_user,
-	remove_learner_tag_for_user
+	remove_learner_tag_for_user,
+	current_user_has_access,
 };
 
 use WP_Error;
@@ -243,7 +244,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $parent_user;
 		}
 
-		if ( ! current_user_can( 'edit_users', $parent_user->ID ) ) {
+		if ( ! current_user_has_access( $parent_user->ID ) ) {
 			return new WP_Error(
 				'rest_cannot_read',
 				'Sorry, you are not allowed to view groups for this user.',
@@ -266,7 +267,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $parent_user;
 		}
 
-		if ( ! current_user_can( 'edit_user', $parent_user->ID ) ) {
+		if ( ! current_user_has_access( $parent_user->ID ) ) {
 			return new WP_Error(
 				'rest_cannot_edit',
 				'Sorry, you are not allowed to edit this user.',
@@ -289,7 +290,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $parent_user;
 		}
 
-		if ( ! current_user_can( 'edit_users', $parent_user->ID ) && get_current_user_id() !== $parent_user->ID ) {
+		if ( ! current_user_has_access( $parent_user->ID ) ) {
 			return new WP_Error(
 				'rest_user_cannot_delete',
 				'Sorry, you are not allowed to delete resources for this user.',

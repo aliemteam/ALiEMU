@@ -4,33 +4,32 @@ import { action, computed, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
 import * as React from 'react';
 
-import { ILearner } from 'utils/types';
-
 import { HeaderRow, Row } from 'components/tables/base';
-import { Globals } from 'dashboard/dashboard';
+import UserStore from 'dashboard/user-store';
 import { Groups } from 'utils/api';
+import { ILearner } from 'utils/types';
 
 import ButtonOutlined from 'components/buttons/button-outlined';
 import DateInput from 'components/forms/date-input';
 import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/';
-
 import LearnerView from './learner-view';
 import * as styles from './tab-progress.scss';
-
-declare const AU_Dashboard: Globals;
 
 export interface DateRange {
     start?: Date;
     end?: Date;
 }
 
+interface Props {
+    store: UserStore;
+}
+
 @observer
-export default class TabProgress extends React.Component {
-    current_user = AU_Dashboard.current_user!;
+export default class TabProgress extends React.Component<Props> {
     @observable learnersAreLoading: boolean = true;
-    @observable selectedLearnerId = AU_Dashboard.current_user!.id;
+    @observable selectedLearnerId = this.props.store.user.id;
     @observable startDateFilter = '';
     @observable endDateFilter = '';
 
@@ -41,7 +40,7 @@ export default class TabProgress extends React.Component {
 
     fetchLearners = flow(function*(this: TabProgress): IterableIterator<any> {
         const learners: ILearner[] = yield Groups.fetchLearners();
-        this.learners.replace([AU_Dashboard.current_user!, ...learners]);
+        this.learners.replace([this.props.store.user as ILearner, ...learners]);
         this.learnersAreLoading = false;
     }).bind(this);
 
@@ -72,7 +71,7 @@ export default class TabProgress extends React.Component {
     get selectedLearner(): ILearner {
         return (
             this.learners.find(({ id }) => id === this.selectedLearnerId) ||
-            this.current_user
+            this.props.store.user
         );
     }
     set selectedLearner({ id }: ILearner) {

@@ -1,9 +1,8 @@
-import { action, flow, observable, toJS } from 'mobx';
+import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Users } from 'utils/api';
-import { UserContext, UserKind } from './';
+import UserStore, { UserKind } from 'dashboard/user-store';
 
 import { Button } from 'components/buttons/';
 import ClickToEdit from 'components/click-to-edit';
@@ -14,41 +13,12 @@ import Modal from 'components/modal/';
 import * as styles from './header.scss';
 
 interface Props {
-    userKind: UserKind;
-    data: WordPress.User<'view'>;
+    store: UserStore;
 }
 
 @observer
-class DashboardHeader extends React.Component<Props> {
-    @observable user = this.props.data;
+export default class DashboardHeader extends React.Component<Props> {
     @observable isShowingEditModal: boolean = false;
-
-    updateInstitution = flow(function*(
-        this: DashboardHeader,
-        institution: string,
-    ): IterableIterator<any> {
-        const oldValue = this.user.institution;
-        this.user.institution = institution;
-        try {
-            yield Users.update({ institution });
-        } catch (e) {
-            this.user.institution = oldValue;
-            throw e;
-        }
-    }).bind(this);
-
-    updateUser = flow(function*(
-        this: DashboardHeader,
-        data: Partial<WordPress.User<'view'>>,
-    ): IterableIterator<any> {
-        const oldUser = toJS(this.user);
-        this.user = { ...this.user, ...data };
-        try {
-            yield Users.update(data);
-        } catch {
-            this.user = oldUser;
-        }
-    });
 
     @action
     toggleEditModal = () => {
@@ -56,12 +26,12 @@ class DashboardHeader extends React.Component<Props> {
     };
 
     render(): JSX.Element {
-        const { userKind } = this.props;
+        const { user, userKind } = this.props.store;
         return (
             <div className={styles.heading}>
                 <div className={styles.headingContainer}>
                     <div>
-                        <h1>{this.user.name}</h1>
+                        <h1>{user.name}</h1>
                         {this.maybeRenderInstitution()}
                     </div>
                     {userKind === UserKind.OWNER && (
@@ -80,10 +50,10 @@ class DashboardHeader extends React.Component<Props> {
     }
 
     private maybeRenderInstitution = (): React.ReactNode => {
-        if (!this.user.institution) {
+        if (!this.props.store.user.institution) {
             return null;
         }
-        if (this.props.userKind === UserKind.OWNER) {
+        if (this.props.store.userKind === UserKind.OWNER) {
             return (
                 <ClickToEdit
                     inputProps={{ className: styles.institutionInput }}
@@ -91,17 +61,19 @@ class DashboardHeader extends React.Component<Props> {
                     placeholder="Add your institution"
                     onSave={this.updateInstitution}
                 >
-                    {this.user.institution}
+                    {this.props.store.user.institution}
                 </ClickToEdit>
             );
         }
         return (
-            <span className={styles.institution}>{this.user.institution}</span>
+            <span className={styles.institution}>
+                {this.props.store.user.institution}
+            </span>
         );
     };
 
     private editProfileForm = (): React.ReactNode => {
-        const data = this.user as WordPress.User<'edit'>;
+        const { user } = this.props.store;
         return (
             <form
                 className={styles.editProfileForm}
@@ -113,7 +85,7 @@ class DashboardHeader extends React.Component<Props> {
                     <Input
                         large
                         name="first_name"
-                        defaultValue={data.first_name}
+                        defaultValue={user.first_name}
                         required
                     />
                 </label>
@@ -122,7 +94,7 @@ class DashboardHeader extends React.Component<Props> {
                     <Input
                         large
                         name="last_name"
-                        defaultValue={data.last_name}
+                        defaultValue={user.last_name}
                         required
                     />
                 </label>
@@ -131,7 +103,7 @@ class DashboardHeader extends React.Component<Props> {
                     <Input
                         large
                         name="name"
-                        defaultValue={data.name}
+                        defaultValue={user.name}
                         required
                     />
                 </label>
@@ -140,7 +112,7 @@ class DashboardHeader extends React.Component<Props> {
                     <Input
                         large
                         name="email"
-                        defaultValue={data.email}
+                        defaultValue={user.email}
                         type="email"
                         required
                     />
@@ -150,7 +122,7 @@ class DashboardHeader extends React.Component<Props> {
                     <TextArea
                         large
                         name="description"
-                        defaultValue={data.description}
+                        defaultValue={user.description}
                     />
                 </label>
                 <div>
@@ -163,19 +135,16 @@ class DashboardHeader extends React.Component<Props> {
     };
 
     private handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+        e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const data: Partial<WordPress.User<'view'>> = {};
         for (const [k, v] of formData.entries()) {
             data[k as keyof WordPress.User<'view'>] = v;
         }
-        this.updateUser(data);
+        this.props.store.updateUser(data);
+    };
+
+    private updateInstitution = (institution: string): void => {
+        this.props.store.updateUser({ institution });
     };
 }
-
-export default (props: Omit<Props, 'userKind'>): JSX.Element => (
-    <UserContext.Consumer>
-        {(userKind: UserKind): JSX.Element => (
-            <DashboardHeader {...props} userKind={userKind} />
-        )}
-    </UserContext.Consumer>
-);

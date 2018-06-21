@@ -2,25 +2,24 @@ import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Globals } from 'dashboard/';
+import UserStore from 'dashboard/user-store';
 import * as styles from './tab-home.scss';
 
 import { AnchorButton } from 'components/buttons/';
 import CourseProgressListing from 'components/course-progress-listing/';
 import { SectionHeading } from 'components/typography/';
 
-declare const AU_Dashboard: Globals;
+interface Props {
+    store: UserStore;
+}
 
 @observer
-export default class TabHome extends React.Component {
+export default class TabHome extends React.Component<Props> {
     @observable visibleProgressRows = 5;
     @observable visibleCompletedRows = 5;
 
     render(): JSX.Element {
-        if (!AU_Dashboard.current_user) {
-            throw new Error('User should be available here.');
-        }
-        const user = AU_Dashboard.current_user;
+        const { user } = this.props.store;
         const started = user.course_progress.filter(
             progress => progress.status === 'STARTED',
         );
