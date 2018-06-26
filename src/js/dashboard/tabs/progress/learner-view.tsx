@@ -214,19 +214,9 @@ const addTagButton = (props: React.HTMLProps<HTMLButtonElement>) => (
 );
 
 const emptyProgress = () => (
-    <Card>
-        <div
-            style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexFlow: 'column',
-                height: 100,
-            }}
-        >
-            <Icon icon="assignment_late" size={50} />
-            <div>This user has not interacted with any courses yet.</div>
-        </div>
+    <Card className={styles.empty}>
+        <Icon icon="assignment_late" size={50} />
+        <div>This user has not interacted with any courses yet.</div>
     </Card>
 );
 

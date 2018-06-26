@@ -50,10 +50,11 @@ export default class DashboardHeader extends React.Component<Props> {
     }
 
     private maybeRenderInstitution = (): React.ReactNode => {
-        if (!this.props.store.user.institution) {
-            return null;
-        }
-        if (this.props.store.userKind === UserKind.OWNER) {
+        const {
+            user: { institution },
+            userKind,
+        } = this.props.store;
+        if (userKind === UserKind.OWNER) {
             return (
                 <ClickToEdit
                     inputProps={{ className: styles.institutionInput }}
@@ -61,15 +62,13 @@ export default class DashboardHeader extends React.Component<Props> {
                     placeholder="Add your institution"
                     onSave={this.updateInstitution}
                 >
-                    {this.props.store.user.institution}
+                    {institution}
                 </ClickToEdit>
             );
         }
-        return (
-            <span className={styles.institution}>
-                {this.props.store.user.institution}
-            </span>
-        );
+        return institution ? (
+            <span className={styles.institution}>{institution}</span>
+        ) : null;
     };
 
     private editProfileForm = (): React.ReactNode => {

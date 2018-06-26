@@ -163,8 +163,7 @@ export default class TabGroups extends React.Component {
                 <Icon icon="supervised_user_circle" size={100} />
                 <h3>No learners yet</h3>
                 <p>
-                    Have your learners add you as a coach and they will show up
-                    here.
+                    Have your learners add you as a coach to begin tracking their progress.
                 </p>
             </Card>
         </div>

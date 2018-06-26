@@ -33,6 +33,8 @@
         'c c' 1fr
         / 1fr 1fr;
 
+    margin: $block-margin 0 $section-margin 0;
+
     form {
         grid-area: b;
     }

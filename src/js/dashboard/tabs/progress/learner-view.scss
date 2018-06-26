@@ -34,6 +34,14 @@
     }
 }
 
+.empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
 .tag-heading {
     display: flex;
     margin: 0 {
@@ -44,6 +52,10 @@
         margin: 0 {
             right: 10px;
         }
+    }
+
+    button {
+        color: $black;
     }
 }
 
