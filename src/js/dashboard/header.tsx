@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 
@@ -10,7 +10,7 @@ import Input from 'components/forms/input';
 import TextArea from 'components/forms/textarea';
 import Modal from 'components/modal/';
 
-import * as styles from './header.scss';
+import styles from './header.scss';
 
 interface Props {
     store: UserStore;

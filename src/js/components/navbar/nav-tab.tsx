@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 
-import * as styles from './nav-tab.scss';
+import styles from './nav-tab.scss';
 
 interface Props extends React.HTMLProps<HTMLButtonElement> {
     active?: boolean;

@@ -1,13 +1,21 @@
-import * as React from 'react';
+import React, {
+    Component,
+    createRef,
+    FormEvent,
+    HTMLProps,
+    KeyboardEvent,
+    ReactNode,
+    SFC,
+} from 'react';
 
 import { AnchorButton } from 'components/buttons/';
 import Input from 'components/forms/input';
 
 interface Props {
     children?: string;
-    inputProps?: React.HTMLProps<HTMLInputElement>;
-    buttonProps?: React.HTMLProps<Element>;
-    buttonElement?: React.SFC<React.HTMLProps<HTMLButtonElement>>;
+    inputProps?: HTMLProps<HTMLInputElement>;
+    buttonProps?: HTMLProps<Element>;
+    buttonElement?: SFC<HTMLProps<HTMLButtonElement>>;
     placeholder?: string;
     flex?: boolean;
     onSave(value: string): any;
@@ -18,7 +26,7 @@ interface State {
     value: string;
 }
 
-export default class ClickToEdit extends React.Component<Props, State> {
+export default class ClickToEdit extends Component<Props, State> {
     static defaultProps: Partial<Props> = {
         placeholder: '',
     };
@@ -28,7 +36,7 @@ export default class ClickToEdit extends React.Component<Props, State> {
         value: this.props.children || '',
     };
 
-    private ref = React.createRef<HTMLInputElement>();
+    private ref = createRef<HTMLInputElement>();
 
     render(): JSX.Element {
         return (
@@ -39,7 +47,7 @@ export default class ClickToEdit extends React.Component<Props, State> {
         );
     }
 
-    private maybeRenderButton = (): React.ReactNode => {
+    private maybeRenderButton = (): ReactNode => {
         if (this.state.isEditing) {
             return null;
         }
@@ -59,7 +67,7 @@ export default class ClickToEdit extends React.Component<Props, State> {
         );
     };
 
-    private maybeRenderInput = (): React.ReactNode => {
+    private maybeRenderInput = (): ReactNode => {
         if (!this.state.isEditing) {
             return null;
         }
@@ -85,13 +93,13 @@ export default class ClickToEdit extends React.Component<Props, State> {
         this.toggleEdit();
     };
 
-    private handleChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { value } = e.currentTarget;
         return this.setState(prev => ({ ...prev, value }));
     };
 
     private handleKeyUp = async (
-        e: React.KeyboardEvent<HTMLInputElement>,
+        e: KeyboardEvent<HTMLInputElement>,
     ): Promise<void> => {
         switch (e.key) {
             case 'Escape':
@@ -104,7 +112,11 @@ export default class ClickToEdit extends React.Component<Props, State> {
                 try {
                     await this.props.onSave(this.state.value);
                 } catch (e) {
-                    console.error(`Error occured while attempting to change institution: ${e.message}`);
+                    console.error(
+                        `Error occured while attempting to change institution: ${
+                            e.message
+                        }`,
+                    );
                 }
                 this.setState(prev => ({
                     ...prev,

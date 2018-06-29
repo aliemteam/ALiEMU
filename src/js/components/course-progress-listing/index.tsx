@@ -1,14 +1,14 @@
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import * as React from 'react';
+import React from 'react';
 import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
 
 import { ICourse } from 'utils/types';
 
 import { Courses } from 'utils/api';
 import { displayUnicode } from 'utils/text-utils';
-import * as styles from './course-progress-listing.scss';
+import styles from './course-progress-listing.scss';
 
 import Card from 'components/card/';
 import RadialProgress from 'components/progress-radial/';

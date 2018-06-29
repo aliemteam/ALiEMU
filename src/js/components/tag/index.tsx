@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 
 import Icon from 'components/icon/';
 
-import * as styles from './tag.scss';
+import styles from './tag.scss';
 
 interface Props {
     children: string;

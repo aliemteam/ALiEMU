@@ -1,5 +1,5 @@
 import DevTool from 'mobx-react-devtools';
-import * as React from 'react';
+import React from 'react';
 
 export default (): JSX.Element | null => {
     if (process.env.NODE_ENV !== 'production') {

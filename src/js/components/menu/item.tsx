@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 
-import * as styles from './item.scss';
+import styles from './item.scss';
 
 interface Props extends React.HTMLProps<HTMLButtonElement> {
     selected?: boolean;

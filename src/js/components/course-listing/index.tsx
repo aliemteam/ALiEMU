@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 
 import { displayUnicode, pluralize } from 'utils/text-utils';
-import * as styles from './course-listing.scss';
+import styles from './course-listing.scss';
 
 import { CourseSubset } from 'catalog/';
 import Placeholder from '../../../assets/aliemu-placeholder.svg';

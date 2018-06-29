@@ -1,3 +1,4 @@
+declare module 'classnames';
 declare module 'browser-sync-webpack-plugin';
 declare module 'uglifyjs-webpack-plugin';
 

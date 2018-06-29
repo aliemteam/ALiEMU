@@ -1,6 +1,6 @@
 import { computed, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import { ICourse, ILearner } from 'utils/types';
 
@@ -9,7 +9,7 @@ import { Courses, Groups } from 'utils/api';
 import { CourseStatus } from 'utils/constants';
 import { displayUnicode } from 'utils/text-utils';
 import { DateRange, isWithinDateRange } from './';
-import * as styles from './learner-view.scss';
+import styles from './learner-view.scss';
 
 import ButtonIcon from 'components/buttons/button-icon';
 import Card from 'components/card/';
@@ -74,7 +74,7 @@ export default class LearnerView extends React.Component<Props> {
         learner.learner_tags.push(tag);
         try {
             yield Groups.addLearnerTag(learner.id, tag);
-        } catch {
+        } catch (_e) {
             console.error('Error occurred while attempting to add learner tag');
             learner.learner_tags = oldTags;
         }

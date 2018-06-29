@@ -75,7 +75,7 @@
     "imagemin-pngquant": "^5.1.0",
     "imagemin-svgo": "^6.0.0",
     "jest-cli": "^23.2.0",
-    "mini-css-extract-plugin": "^0.4.0",
+    "mini-css-extract-plugin": "^0.4.1",
     "mobx-react-devtools": "^5.0.1",
     "node-sass": "^4.9.0",
     "react-addons-test-utils": "^15.6.2",
@@ -93,7 +93,7 @@
     "tslint-microsoft-contrib": "^5.0.3",
     "tslint-react": "^3.6.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.13.0",
+    "webpack": "^4.14.0",
     "webpack-cli": "^3.0.8"
   },
   "jest": {

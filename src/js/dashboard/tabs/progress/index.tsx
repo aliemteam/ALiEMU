@@ -1,8 +1,8 @@
-import * as isAfter from 'date-fns/is_after';
-import * as isBefore from 'date-fns/is_before';
+import isAfter from 'date-fns/is_after';
+import isBefore from 'date-fns/is_before';
 import { action, computed, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import { HeaderRow, Row } from 'components/tables/base';
 import UserStore from 'dashboard/user-store';
@@ -15,7 +15,7 @@ import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/';
 import LearnerView from './learner-view';
-import * as styles from './tab-progress.scss';
+import styles from './tab-progress.scss';
 
 export interface DateRange {
     start?: Date;

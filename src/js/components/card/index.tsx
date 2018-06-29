@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React, { HTMLProps, PureComponent } from 'react';
 
-import * as styles from './card.scss';
+import styles from './card.scss';
 
-interface Props extends React.HTMLProps<HTMLDivElement> {}
+interface Props extends HTMLProps<HTMLDivElement> {}
 
-export default class Card extends React.PureComponent<Props> {
+export default class Card extends PureComponent<Props> {
     render(): JSX.Element {
         const { children, className, ...props } = this.props;
         const classname = classNames(styles.card, className);

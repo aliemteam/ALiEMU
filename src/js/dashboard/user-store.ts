@@ -22,7 +22,7 @@ export default class UserStore {
         set(this.user, { ...data });
         try {
             yield Users.update(data);
-        } catch {
+        } catch (_e) {
             set(this.user, { ...oldUser });
         }
     });

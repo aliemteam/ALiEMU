@@ -1,11 +1,11 @@
-import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
-import { execSync } from 'child_process';
-import * as path from 'path';
-import * as webpack from 'webpack';
+const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
+const { execSync } = require('child_process');
+const path = require('path');
+const webpack = require('webpack');
 
-import * as BroswerSyncPlugin from 'browser-sync-webpack-plugin';
-import * as CopyWebpackPlugin from 'copy-webpack-plugin';
-import * as UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const imagemin = require('imagemin');
@@ -17,7 +17,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 // Clean out dist directory
 execSync(`rm -rf ${__dirname}/dist/*`);
 
-const plugins: Set<webpack.Plugin> = new Set([
+const plugins = new Set([
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.EnvironmentPlugin({
         NODE_ENV: 'development',
@@ -44,7 +44,7 @@ const plugins: Set<webpack.Plugin> = new Set([
         },
         {
             from: 'assets/**',
-            transform: (content, pathname): any => {
+            transform: (content, pathname) => {
                 switch (path.extname(pathname)) {
                     case '.png':
                         return imagemin.buffer(content, {
@@ -64,7 +64,7 @@ const plugins: Set<webpack.Plugin> = new Set([
 
 if (!IS_PRODUCTION) {
     plugins.add(
-        new BroswerSyncPlugin(
+        new BrowserSyncPlugin(
             {
                 proxy: 'localhost:8080',
                 open: false,
@@ -85,7 +85,7 @@ if (IS_PRODUCTION) {
         .add(new UglifyJsPlugin({ sourceMap: true }));
 }
 
-export default <webpack.Configuration>{
+module.exports = {
     mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
     devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',

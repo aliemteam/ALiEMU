@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 
-import * as styles from './forms.scss';
+import styles from './forms.scss';
 
 interface Props extends React.HTMLProps<HTMLTextAreaElement> {
     large?: boolean;

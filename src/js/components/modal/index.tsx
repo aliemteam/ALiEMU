@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 
 import Card from 'components/card/';
-import * as styles from './modal.scss';
+import styles from './modal.scss';
 
 interface Props {
     onClose(): void;

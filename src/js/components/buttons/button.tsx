@@ -1,15 +1,15 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React, { HTMLProps, PureComponent } from 'react';
 
-import * as styles from 'css/components/_button.scss';
+import styles from 'css/components/_button.scss';
 
-interface Props extends React.HTMLProps<HTMLButtonElement> {
+interface Props extends HTMLProps<HTMLButtonElement> {
     primary?: boolean;
     flat?: boolean;
     narrow?: boolean;
 }
 
-export default class Button extends React.PureComponent<Props> {
+export default class Button extends PureComponent<Props> {
     render(): JSX.Element {
         const { primary, flat, narrow, children, ...btnProps } = this.props;
         const classname = classNames(styles.btn, {

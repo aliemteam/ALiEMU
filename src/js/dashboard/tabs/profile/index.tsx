@@ -1,10 +1,10 @@
-import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import UserStore from 'dashboard/user-store';
-import * as styles from './tab-profile.scss';
+import styles from './tab-profile.scss';
 
 import { AnchorButton } from 'components/buttons/';
 import Card from 'components/card/';

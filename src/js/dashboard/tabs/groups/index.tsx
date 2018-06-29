@@ -1,13 +1,13 @@
 import { action, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import { ICoach, ILearner } from 'utils/types';
 
 import { HeaderRow, Row } from 'components/tables/base';
 import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
-import * as styles from './tab-groups.scss';
+import styles from './tab-groups.scss';
 
 import { Button } from 'components/buttons/';
 import ButtonOutlined from 'components/buttons/button-outlined';

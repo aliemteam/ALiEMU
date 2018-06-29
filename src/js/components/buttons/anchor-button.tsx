@@ -1,11 +1,11 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React, { HTMLProps, PureComponent } from 'react';
 
-import * as styles from './anchor-button.scss';
+import styles from './anchor-button.scss';
 
-interface Props extends React.HTMLProps<HTMLAnchorElement> {}
+interface Props extends HTMLProps<HTMLAnchorElement> {}
 
-export default class Button extends React.PureComponent<Props> {
+export default class Button extends PureComponent<Props> {
     render(): JSX.Element {
         const { children, className, ...btnProps } = this.props;
         const classname = classNames(styles.btn, className);

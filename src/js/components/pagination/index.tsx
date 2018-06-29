@@ -1,7 +1,7 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 
-import * as styles from './pagination.scss';
+import styles from './pagination.scss';
 
 import Icon from 'components/icon/';
 

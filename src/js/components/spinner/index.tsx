@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
-import * as styles from './spinner.scss';
+import styles from './spinner.scss';
 
 interface Props {
     size: number;

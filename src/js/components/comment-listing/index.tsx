@@ -1,14 +1,14 @@
-import * as classNames from 'classnames';
-import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import classNames from 'classnames';
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import * as React from 'react';
+import React from 'react';
 import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
-import * as striptags from 'striptags';
+import striptags from 'striptags';
 
 import { Comments } from 'utils/api';
 import { displayUnicode } from 'utils/text-utils';
-import * as styles from './comment-listing.scss';
+import styles from './comment-listing.scss';
 
 import Card from 'components/card/';
 

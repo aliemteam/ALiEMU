@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
-import * as styles from './content.scss';
+import styles from './content.scss';
 
 import { Tabs } from 'dashboard/dashboard';
 import TabGroups from 'dashboard/tabs/groups/';

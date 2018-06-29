@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
-import * as styles from './navbar.scss';
+import styles from './navbar.scss';
 
 export default class Navbar extends React.Component {
     render(): JSX.Element {

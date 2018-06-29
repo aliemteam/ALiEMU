@@ -1,9 +1,9 @@
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import UserStore from 'dashboard/user-store';
-import * as styles from './tab-home.scss';
+import styles from './tab-home.scss';
 
 import { AnchorButton } from 'components/buttons/';
 import CourseProgressListing from 'components/course-progress-listing/';

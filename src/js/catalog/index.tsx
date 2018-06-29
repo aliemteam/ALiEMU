@@ -1,6 +1,6 @@
 import { action, computed, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React, { Component, FormEvent } from 'react';
 
 import { Courses } from 'utils/api';
 import { ICourse } from 'utils/types';
@@ -9,7 +9,7 @@ import CourseListing from 'components/course-listing/';
 import Input from 'components/forms/input';
 import Sidebar, { Duration } from './sidebar';
 
-import * as styles from './catalog.scss';
+import styles from './catalog.scss';
 
 export type CourseSubset = Pick<
     ICourse,
@@ -41,7 +41,7 @@ interface DurationObj {
 declare const AU_Catalog: CatalogGlobals;
 
 @observer
-export default class Catalog extends React.Component {
+export default class Catalog extends Component {
     @observable filterText = '';
     @observable categorySelection: number = 0;
     @observable durationSelection: Duration = Duration.NONE;
@@ -144,7 +144,7 @@ export default class Catalog extends React.Component {
     };
 
     @action
-    handleFilterChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    handleFilterChange = (e: FormEvent<HTMLInputElement>): void => {
         this.filterText = e.currentTarget.value;
     };
 

@@ -1,5 +1,5 @@
 import { configure } from 'mobx';
-import * as React from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 
 import Dashboard from 'dashboard/dashboard';

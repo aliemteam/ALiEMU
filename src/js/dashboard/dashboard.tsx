@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 import DevTool from 'utils/dev-tools';

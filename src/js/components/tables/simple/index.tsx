@@ -1,5 +1,5 @@
-import * as classNames from 'classnames';
-import * as React from 'react';
+import classNames from 'classnames';
+import React from 'react';
 
 import BaseTable, {
     HeaderCell,
@@ -7,7 +7,7 @@ import BaseTable, {
     Row,
     SortOrder,
 } from 'components/tables/base';
-import * as styles from './simple-table.scss';
+import styles from './simple-table.scss';
 
 import Card from 'components/card/';
 import Pagination from 'components/pagination/';
