@@ -1,19 +1,19 @@
 @import 'variables';
 
-th:hover {
-    .icon {
-        polygon {
-            opacity: 0.5;
-        }
-    }
-}
-
 .icon {
     margin-left: 10px;
 
     polygon {
         fill: $black;
         opacity: 0.2;
+    }
+}
+
+th:hover {
+    .icon {
+        polygon {
+            opacity: 0.5;
+        }
     }
 }
 

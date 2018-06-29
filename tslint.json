@@ -6,6 +6,9 @@
 	},
 	"rules": {
 		"await-promise": true,
+		"no-console": {
+			"severity": "warning"
+		},
 		"cyclomatic-complexity": {
 			"options": [10],
 			"severity": "warning"

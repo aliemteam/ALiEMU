@@ -17,7 +17,7 @@
 		</div>
 	</div>
 
-<?php
+	<?php
 else :
 
 	$current_year = (int) get_gmt_from_date( null, 'Y' );
@@ -33,7 +33,7 @@ else :
 	}
 
 	$years = array_keys( $courses );
-?>
+	?>
 
 	<div class="course-list">
 	<?php foreach ( array_reverse( $courses, true ) as $year => $boxes ) : ?>
@@ -58,5 +58,5 @@ else :
 	<?php endforeach; ?>
 	</div>
 
-<?php
+	<?php
 endif;

@@ -51,6 +51,6 @@
 						'menu_id'        => 'menu-primary',
 					]
 				);
-			?>
+				?>
 		</nav>
 	</header>

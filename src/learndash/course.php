@@ -76,7 +76,7 @@ if ( $logged_in ) : ?>
 	endif;
 
 	if ( $show_course_content ) :
-	?>
+		?>
 		<div id="learndash_course_content">
 			<h1 id="learndash_course_content_title">
 				<?php printf( _x( '%s Content', 'Course Content Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?>
@@ -87,7 +87,7 @@ if ( $logged_in ) : ?>
 			 * Display lesson list
 			 */
 			if ( ! empty( $lessons ) ) :
-			?>
+				?>
 
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
@@ -113,7 +113,7 @@ if ( $logged_in ) : ?>
 			 * Display quiz list
 			 */
 			if ( ! empty( $quizzes ) ) :
-			?>
+				?>
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
 						<div class="content-table__cell">Quizzes</div>

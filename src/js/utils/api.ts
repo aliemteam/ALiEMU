@@ -12,7 +12,7 @@ export class Comments {
     private static endpoint = '/wp-json/wp/v2/comments';
 
     static async fetchOne(id: number, params?: Params): Promise<IComment> {
-        return _get(`${Comments.endpoint}/${id}`, params).then(data =>
+        return _get(`${Comments.endpoint}/${id}`, params).then(async data =>
             data.json(),
         );
     }
@@ -24,7 +24,7 @@ export class Courses {
     private static endpoint = '/wp-json/aliemu/v1/courses';
 
     static async fetchOne(id: number, params?: Params): Promise<ICourse> {
-        return _get(`${Courses.endpoint}/${id}`, params).then(res =>
+        return _get(`${Courses.endpoint}/${id}`, params).then(async res =>
             res.json(),
         );
     }
@@ -79,13 +79,16 @@ export class Users {
     // {{{
     private static endpoint = '/wp-json/wp/v2/users';
 
-    static async update(fields: Partial<IUser> | FormData, id?: number): Promise<IUser> {
+    static async update(
+        fields: Partial<IUser> | FormData,
+        id?: number,
+    ): Promise<IUser> {
         return _post<IUser>(`${Users.endpoint}/${id ? id : 'me'}`, fields);
     }
     // }}}
 }
 
-function _get(endpoint: string, params?: Params): Promise<Response> {
+async function _get(endpoint: string, params?: Params): Promise<Response> {
     // {{{
     if (params) {
         endpoint = endpoint + parseParams(params);
@@ -99,7 +102,10 @@ function _get(endpoint: string, params?: Params): Promise<Response> {
     // }}}
 }
 
-function _post<T>(endpoint: string, params: object | FormData): Promise<T> {
+async function _post<T>(
+    endpoint: string,
+    params: object | FormData,
+): Promise<T> {
     // {{{
     return fetch(endpoint, {
         method: 'POST',
@@ -109,11 +115,14 @@ function _post<T>(endpoint: string, params: object | FormData): Promise<T> {
         },
         body: JSON.stringify(params),
         mode: 'same-origin',
-    }).then(data => data.json());
+    }).then(async data => data.json());
     // }}}
 }
 
-function _delete(endpoint: string, params: object = {}): Promise<Response> {
+async function _delete(
+    endpoint: string,
+    params: object = {},
+): Promise<Response> {
     // {{{
     return fetch(endpoint, {
         method: 'DELETE',

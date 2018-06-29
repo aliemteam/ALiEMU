@@ -43,6 +43,6 @@
 					'after'  => '</div>',
 				]
 			);
-		?>
+			?>
 	</div>
 </article>

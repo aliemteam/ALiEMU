@@ -53,7 +53,7 @@ if ( @$lesson_progression_enabled && ! @$previous_lesson_completed ) : ?>
 		?>
 	</p>
 	<?php add_filter( 'comments_array', 'learndash_remove_comments', 1, 2 ); ?>
-<?php
+	<?php
 endif;
 if ( $show_content ) :
 
@@ -63,7 +63,7 @@ if ( $show_content ) :
 	 * Lesson Topics
 	 */
 	if ( ! empty( $topics ) ) :
-	?>
+		?>
 		<div id="learndash_lesson_topics_list">
 			<div id='learndash_topic_dots-<?php echo esc_attr( $post->ID ); ?>' class="learndash_topic_dots type-list">
 				<strong><?php printf( _x( '%1$s %2$s', 'Lesson Topics Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'lesson' ), LearnDash_Custom_Label::get_label( 'topics' ) ); ?></strong>
@@ -72,7 +72,7 @@ if ( $show_content ) :
 
 					<?php foreach ( $topics as $key => $topic ) : ?>
 
-						<?php $odd_class       = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
+						<?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
 						<?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
 
 						<li class='<?php echo esc_attr( $odd_class ); ?>'>
@@ -88,7 +88,7 @@ if ( $show_content ) :
 				</ul>
 			</div>
 		</div>
-	<?php
+		<?php
 	endif;
 
 
@@ -96,7 +96,7 @@ if ( $show_content ) :
 	 * Show Quiz List
 	 */
 	if ( ! empty( $quizzes ) ) :
-	?>
+		?>
 		<div class="content-table">
 			<div class="content-table__row content-table__row--header">
 				<div class="content-table__cell">Quizzes</div>
@@ -113,7 +113,7 @@ if ( $show_content ) :
 				</div>
 			<?php endforeach; ?>
 		</div>
-	<?php
+		<?php
 	endif;
 
 
@@ -121,7 +121,7 @@ if ( $show_content ) :
 	 * Display Lesson Assignments
 	 */
 	if ( lesson_hasassignments( $post ) ) :
-	?>
+		?>
 		<?php $assignments = learndash_get_user_assignments( $post->ID, $user_id ); ?>
 
 		<div id="learndash_uploaded_assignments">
@@ -141,7 +141,7 @@ if ( $show_content ) :
 				<?php endif; ?>
 			</table>
 		</div>
-	<?php
+		<?php
 	endif;
 
 	/**

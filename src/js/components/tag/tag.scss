@@ -1,5 +1,22 @@
 @import 'variables';
 
+.remove-btn {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 0;
+    color: $black;
+    background-color: #d1dfeb;
+
+    i {
+        font-weight: bold;
+        position: absolute;
+    }
+}
+
 .tag {
     display: inline-flex;
     cursor: default;
@@ -23,23 +40,6 @@
 
     &[role='button'] {
         cursor: pointer;
-    }
-}
-
-.remove-btn {
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    width: 0;
-    color: $black;
-    background-color: #d1dfeb;
-
-    i {
-        font-weight: bold;
-        position: absolute;
     }
 }
 

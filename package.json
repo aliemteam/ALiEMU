@@ -14,10 +14,10 @@
     "build": "NODE_ENV=production TS_NODE_FILES=true webpack",
     "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy.py -a",
     "deploy": "npm run test && npm run build && ./lib/scripts/deploy.py",
-    "lint:scss": "stylelint **/*.scss",
-    "lint:ts": "tslint -p . -t codeFrame",
-    "lint:php": "npm run phpcs -- --ignore=src/learndash --report=${PHPCS_REPORT:-summary} ./src",
-    "phpcs": "docker run -it --rm -v $(pwd):/app willhallonline/wordpress-phpcs phpcs",
+    "lint:scss": "stylelint \"src/**/*.scss\"",
+    "lint:ts": "tslint -p . -t stylish",
+    "lint:php": "npm run phpcs -- --ignore=src/learndash --report=${PHPCS_REPORT:-summary} --basepath=. ./src",
+    "phpcs": "docker run -it --rm -v $(pwd):/app dsifford/phpcs",
     "lint": "npm run lint:scss && npm run lint:ts && npm run lint:php",
     "pretest": "PHPCS_REPORT=full npm run lint",
     "pull-subtree": "git subtree pull -P lib/scripts --squash devops master",
@@ -93,7 +93,7 @@
     "tslint-microsoft-contrib": "^5.0.3",
     "tslint-react": "^3.6.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
-    "webpack": "^4.12.2",
+    "webpack": "^4.13.0",
     "webpack-cli": "^3.0.8"
   },
   "jest": {

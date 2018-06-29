@@ -32,7 +32,7 @@
 					'theme-location' => 'menu-footer',
 				]
 			);
-		?>
+			?>
 		<div class="footer__icons">
 			<a href="https://www.facebook.com/academiclifeinem" class="footer__icon footer__icon--facebook" target="_blank" rel="noopener noreferrer" aria-label="Navigate to our Facebook">
 				<svg aria-labelledby="simpleicons-facebook-icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
