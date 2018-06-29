@@ -17,7 +17,7 @@ cache:
     - "$HOME/.npm"
 
 before_install:
-  - docker pull willhallonline/wordpress-phpcs
+  - docker pull dsifford/phpcs
 
 install:
   - npm ci
