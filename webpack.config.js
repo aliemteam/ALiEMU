@@ -1,4 +1,5 @@
 const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
+const { stripIndent } = require('common-tags');
 const { execSync } = require('child_process');
 const path = require('path');
 const webpack = require('webpack');
@@ -6,23 +7,34 @@ const webpack = require('webpack');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
 const svgo = require('imagemin-svgo');
 
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const VERSION = require('./package.json').version;
 
 // Clean out dist directory
 execSync(`rm -rf ${__dirname}/dist/*`);
 
 const plugins = new Set([
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.EnvironmentPlugin({
-        NODE_ENV: 'development',
+    new webpack.BannerPlugin({
+        banner: stripIndent`
+            /*
+            Theme Name: ALiEMU
+            Author: ALiEM
+            Description: Theme for ALiEMU.com
+            Version: ${VERSION}
+            License: MIT
+            License URI: https://opensource.org/licenses/MIT
+            Text Domain: aliemu
+            */
+        `,
+        raw: true,
+        include: /style\.css$/,
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.WatchIgnorePlugin([
         /(node_modules|gulpfile|dist|webpack.config)/,
         path.resolve(__dirname, 'lib', 'tmp'),
@@ -73,22 +85,15 @@ if (!IS_PRODUCTION) {
             },
             {
                 injectCss: true,
-            },
-        ),
+            }
+        )
     );
-}
-
-if (IS_PRODUCTION) {
-    plugins
-        .add(new webpack.optimize.ModuleConcatenationPlugin())
-        .add(new webpack.optimize.OccurrenceOrderPlugin(true))
-        .add(new UglifyJsPlugin({ sourceMap: true }));
 }
 
 module.exports = {
     mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
-    devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
+    devtool: IS_PRODUCTION ? 'none' : 'cheap-module-eval-source-map',
     context: path.resolve(__dirname, 'src'),
     entry: {
         /**
@@ -118,13 +123,12 @@ module.exports = {
         plugins: [new TsConfigPathsPlugin()],
     },
     plugins: [...plugins],
-    stats: {
-        children: IS_PRODUCTION,
-    },
+    stats: IS_PRODUCTION ? 'verbose' : 'minimal',
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
+                sideEffects: false,
                 exclude: /(?:__tests__|node_modules)/,
                 use: [
                     {
@@ -134,7 +138,7 @@ module.exports = {
                             useCache: !IS_PRODUCTION,
                             cacheDirectory: path.resolve(
                                 __dirname,
-                                'node_modules/.cache/awesome-typescript-loader',
+                                'node_modules/.cache/awesome-typescript-loader'
                             ),
                             babelCore: '@babel/core',
                             reportFiles: ['src/**/*.{ts,tsx}'],
