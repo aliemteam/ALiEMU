@@ -68,7 +68,7 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "imagemin": "^5.3.1",
-    "imagemin-pngquant": "^5.1.0",
+    "imagemin-pngquant": "^6.0.0",
     "imagemin-svgo": "^6.0.0",
     "jest-cli": "^22.4.3",
     "mini-css-extract-plugin": "^0.4.0",
