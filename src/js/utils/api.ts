@@ -98,6 +98,7 @@ async function _get(endpoint: string, params?: Params): Promise<Response> {
             'X-WP-Nonce': window.AU_API.nonce,
         },
         mode: 'same-origin',
+        credentials: 'include',
     });
     // }}}
 }
@@ -115,6 +116,7 @@ async function _post<T>(
         },
         body: JSON.stringify(params),
         mode: 'same-origin',
+        credentials: 'include',
     }).then(async data => data.json());
     // }}}
 }
@@ -132,6 +134,7 @@ async function _delete(
         },
         body: JSON.stringify(params),
         mode: 'same-origin',
+        credentials: 'include',
     });
     // }}}
 }
