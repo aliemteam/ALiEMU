@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Icon /> should render an accessibility icon 1`] = `
+<i
+  className="material-icons"
+  style={
+    Object {
+      "color": undefined,
+      "fontSize": 18,
+    }
+  }
+>
+  accessibility
+</i>
+`;
+
+exports[`<Icon /> should render an account_circle icon with custom attributes 1`] = `
+<i
+  className="material-icons"
+  style={
+    Object {
+      "color": "red",
+      "fontSize": 50,
+    }
+  }
+>
+  account_circle
+</i>
+`;

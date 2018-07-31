@@ -7,7 +7,7 @@ import styles from './tab-home.scss';
 
 import { AnchorButton } from 'components/buttons/';
 import CourseProgressListing from 'components/course-progress-listing/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 
 interface Props {
     store: UserStore;

@@ -15,7 +15,7 @@ import Card from 'components/card/';
 import Input from 'components/forms/input';
 import Icon from 'components/icon/';
 import SimpleTable from 'components/tables/simple/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 
 type Member = ILearner | ICoach;
 

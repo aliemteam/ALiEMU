@@ -9,7 +9,7 @@ import styles from './tab-profile.scss';
 import { AnchorButton } from 'components/buttons/';
 import Card from 'components/card/';
 import CommentListing from 'components/comment-listing/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 
 interface Props {
     store: UserStore;

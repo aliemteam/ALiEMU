@@ -25,6 +25,7 @@
     "sync": "./lib/scripts/sync.py",
     "test": "jest --coverage",
     "version": "ts-node ./lib/utils/version.ts && git add -A",
+    "view-coverage": "$(test $(uname) == Linux && echo xdg-open || echo open) ./node_modules/.cache/coverage/lcov-report/index.html",
     "up": "docker-compose up -d && docker-compose logs -f wordpress",
     "down": "docker-compose down -v"
   },
@@ -63,6 +64,7 @@
     "@types/react-addons-test-utils": "^0.14.21",
     "@types/react-content-loader": "^3.1.2",
     "@types/react-dom": "^16.0.6",
+    "@types/react-test-renderer": "^16.0.1",
     "@types/webpack": "^4.4.8",
     "autoprefixer": "^9.0.2",
     "awesome-typescript-loader": "^5.2.0",
@@ -70,18 +72,21 @@
     "browser-sync": "^2.24.6",
     "browser-sync-webpack-plugin": "^2.2.2",
     "copy-webpack-plugin": "^4.5.2",
-    "css-loader": "^0.28.11",
+    "css-loader": "^1.0.0",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
+    "identity-obj-proxy": "^3.0.0",
     "imagemin": "^6.0.0",
     "imagemin-pngquant": "^6.0.0",
     "imagemin-svgo": "^7.0.0",
-    "jest-cli": "^23.4.2",
+    "jest": "^23.4.2",
     "mini-css-extract-plugin": "^0.4.1",
     "mobx-react-devtools": "^6.0.2",
     "node-sass": "^4.9.2",
+    "prettier": "^1.14.0",
     "react-addons-test-utils": "^15.6.2",
     "react-svg-loader": "^2.1.0",
+    "react-test-renderer": "^16.4.1",
     "sass-loader": "^7.0.3",
     "snapshot-diff": "^0.4.0",
     "style-loader": "^0.21.0",
@@ -99,10 +104,16 @@
     "webpack-cli": "^3.1.0"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.jest.json"
+      }
+    },
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "identity-obj-proxy"
+    },
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
-      "!**/_entrypoints/*",
-      "!src/**/index.{ts,tsx}",
       "!**/{vendor,__tests__}/**"
     ],
     "coverageDirectory": "node_modules/.cache/coverage",
@@ -110,13 +121,12 @@
       "ts",
       "tsx",
       "js",
-      "json"
+      "jsx",
+      "json",
+      "node"
     ],
-    "setupFiles": [
-      "./lib/utils/before-test.ts"
-    ],
-    "setupTestFrameworkScriptFile": "./lib/utils/setup-test.ts",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testURL": "http://localhost",
     "transform": {
       ".(ts|tsx)": "ts-jest"
     }

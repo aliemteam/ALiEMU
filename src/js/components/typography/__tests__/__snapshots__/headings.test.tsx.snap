@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render <SectionHeading> 1`] = `
+<h2
+  className="sectionHeading"
+>
+  Hello World
+</h2>
+`;

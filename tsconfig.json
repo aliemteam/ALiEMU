@@ -3,6 +3,7 @@
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": "./src/js",
 		"experimentalDecorators": true,
+		"esModuleInterop": true,
 		"jsx": "preserve",
 		"lib": ["dom", "dom.iterable", "esnext"],
 		"module": "esnext",

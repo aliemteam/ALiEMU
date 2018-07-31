@@ -13,7 +13,7 @@ import Card from 'components/card/';
 import Pagination from 'components/pagination/';
 import Spinner from 'components/spinner/';
 import SortIcon from 'components/tables/sort-icon/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 
 interface Props {
     /** Whether or not the table should be in a loading state. */

@@ -18,7 +18,7 @@ import Icon from 'components/icon/';
 import ProgressRadial from 'components/progress-radial/';
 import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 
 interface Props {
     learner: ILearner;
@@ -27,7 +27,8 @@ interface Props {
 
 @observer
 export default class LearnerView extends React.Component<Props> {
-    @observable coursesLoading = true;
+    @observable
+    coursesLoading = true;
 
     courses = observable.map<number, ICourse>([], { deep: false });
 

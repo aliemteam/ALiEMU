@@ -13,7 +13,7 @@ import ButtonOutlined from 'components/buttons/button-outlined';
 import DateInput from 'components/forms/date-input';
 import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
-import { SectionHeading } from 'components/typography/';
+import { SectionHeading } from 'components/typography/headings';
 import LearnerView from './learner-view';
 import styles from './tab-progress.scss';
 
@@ -28,13 +28,20 @@ interface Props {
 
 @observer
 export default class TabProgress extends React.Component<Props> {
-    @observable learnersAreLoading: boolean = true;
-    @observable selectedLearnerId = this.props.store.user.id;
-    @observable startDateFilter = '';
-    @observable endDateFilter = '';
-
     learners = observable.array<ILearner>([], { deep: true });
     tagFilters = observable.array<string>([], { deep: false });
+
+    @observable
+    learnersAreLoading: boolean = true;
+
+    @observable
+    selectedLearnerId = this.props.store.user.id;
+
+    @observable
+    startDateFilter = '';
+
+    @observable
+    endDateFilter = '';
 
     dateRangeForm = React.createRef<HTMLFormElement>();
 
