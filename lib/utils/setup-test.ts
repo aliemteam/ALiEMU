@@ -1,3 +1,4 @@
+// tslint:disable:no-var-requires
 require('ts-node/register');
 const { toMatchDiffSnapshot } = require('snapshot-diff');
 
