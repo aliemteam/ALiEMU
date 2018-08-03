@@ -1,6 +1,8 @@
 version: '3'
 services:
     wordpress:
+        security_opt:
+            - apparmor:unconfined
         environment:
             SERVER_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
