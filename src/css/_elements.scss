@@ -104,10 +104,6 @@ blockquote {
     padding: $block-margin 10px;
 }
 
-::selection {
-    background: transparentize($secondary, 0.6);
-}
-
 .wp-caption {
     max-width: 100% !important;
     background: $gray-light;

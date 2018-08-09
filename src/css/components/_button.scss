@@ -9,23 +9,11 @@
     @include button($primary);
 }
 
+.btn--secondary {
+    @include button($secondary);
+}
+
 .btn--flat {
     @include button($modifiers: flat);
 }
 
-.btn--narrow {
-    min-width: 32px;
-    padding: 0;
-}
-
-.btn--air-pro {
-    color: $airpro-primary !important;
-}
-
-.btn--air {
-    color: $air-primary !important;
-}
-
-.btn--capsules {
-    color: $capsules-primary !important;
-}

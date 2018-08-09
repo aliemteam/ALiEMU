@@ -36,7 +36,7 @@ export default class DashboardHeader extends React.Component<Props> {
                         {this.maybeRenderInstitution()}
                     </div>
                     {userKind === UserKind.OWNER && (
-                        <Button primary onClick={this.toggleEditModal}>
+                        <Button secondary onClick={this.toggleEditModal}>
                             Edit profile
                         </Button>
                     )}

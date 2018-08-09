@@ -29,7 +29,7 @@ $user = wp_get_current_user();
 						<h1>Welcome back, <?php echo esc_html( $user->first_name ); ?>!</h1>
 						<div>
 							<a class="btn btn--primary" href="/user">My Profile</a>
-							<a class="btn" href="/logout">Logout</a>
+							<a class="btn btn--secondary" href="/logout">Logout</a>
 						</div>
 					<?php else : ?>
 						<h1>General Members</h1>
@@ -39,10 +39,10 @@ $user = wp_get_current_user();
 				<?php if ( ! is_user_logged_in() ) : ?>
 					<div class="card">
 						<h1>EM Residency Program Directors</h1>
-						<a class="btn" href="/faculty-start">Register Here</a>
+						<a class="btn btn--secondary" href="/faculty-start">Register Here</a>
 					</div>
 					<div class="card">
-						<a class="btn btn--primary" href="#about">Learn More</a>
+						<a class="btn btn--secondary" href="#about">Learn More</a>
 					</div>
 				<?php else : ?>
 					<div class="home__series-logos">
