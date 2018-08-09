@@ -58,7 +58,6 @@ body {
 }
 
 main[role='main'] {
-    min-height: calc(100vh - #{$header-height});
     max-width: 100%;
     padding: 0 $section-margin;
     margin: $section-margin 0;
@@ -69,11 +68,6 @@ main[role='main'] {
     }
     @include device-mobile {
         padding: 0 $block-margin;
-    }
-
-    // Admin bar fix
-    .admin-bar & {
-        min-height: calc(100vh - #{$header-height} - #{$admin-bar-height});
     }
 
     > article {
@@ -87,8 +81,7 @@ main[role='main'] {
 
     // Absolutely-centered content on select pages
     .um-page-login &,
-    .um-page-password-reset &,
-    .page-id-1248 & {
+    .um-page-password-reset {
         display: flex;
 
         article {

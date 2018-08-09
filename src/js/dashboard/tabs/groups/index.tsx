@@ -9,7 +9,7 @@ import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
 import styles from './tab-groups.scss';
 
-import { Button } from 'components/buttons/';
+import Button from 'components/buttons/button';
 import ButtonOutlined from 'components/buttons/button-outlined';
 import Card from 'components/card/';
 import Input from 'components/forms/input';
@@ -26,13 +26,18 @@ const enum MemberKind {
 
 @observer
 export default class TabGroups extends React.Component {
-    @observable coachesSortByColumn: number = 0;
-    @observable coachesAreLoading: boolean = true;
+    @observable
+    coachesSortByColumn: number = 0;
+    @observable
+    coachesAreLoading: boolean = true;
 
-    @observable learnersSortByColumn: number = 0;
-    @observable learnersAreLoading: boolean = true;
+    @observable
+    learnersSortByColumn: number = 0;
+    @observable
+    learnersAreLoading: boolean = true;
 
-    @observable emailInput: string = '';
+    @observable
+    emailInput: string = '';
 
     coaches = observable.array<Member>([], { deep: false });
     learners = observable.array<Member>([], { deep: false });
@@ -163,7 +168,8 @@ export default class TabGroups extends React.Component {
                 <Icon icon="supervised_user_circle" size={100} />
                 <h3>No learners yet</h3>
                 <p>
-                    Have your learners add you as a coach to begin tracking their progress.
+                    Have your learners add you as a coach to begin tracking
+                    their progress.
                 </p>
             </Card>
         </div>

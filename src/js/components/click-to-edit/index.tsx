@@ -8,7 +8,7 @@ import React, {
     SFC,
 } from 'react';
 
-import { AnchorButton } from 'components/buttons/';
+import AnchorButton from 'components/buttons/anchor-button';
 import Input from 'components/forms/input';
 
 interface Props {

@@ -4,7 +4,7 @@ import React from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 
-import { Button } from 'components/buttons/';
+import Button from 'components/buttons/button';
 import ClickToEdit from 'components/click-to-edit';
 import Input from 'components/forms/input';
 import TextArea from 'components/forms/textarea';
@@ -18,7 +18,8 @@ interface Props {
 
 @observer
 export default class DashboardHeader extends React.Component<Props> {
-    @observable isShowingEditModal: boolean = false;
+    @observable
+    isShowingEditModal: boolean = false;
 
     @action
     toggleEditModal = () => {

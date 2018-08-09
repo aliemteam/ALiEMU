@@ -6,7 +6,7 @@ import React from 'react';
 import UserStore from 'dashboard/user-store';
 import styles from './tab-profile.scss';
 
-import { AnchorButton } from 'components/buttons/';
+import AnchorButton from 'components/buttons/anchor-button';
 import Card from 'components/card/';
 import CommentListing from 'components/comment-listing/';
 import { SectionHeading } from 'components/typography/headings';
@@ -17,7 +17,8 @@ interface Props {
 
 @observer
 export default class TabProfile extends React.Component<Props> {
-    @observable visibleCommentRows = 3;
+    @observable
+    visibleCommentRows = 3;
 
     private readonly recentComments = [];
 

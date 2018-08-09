@@ -5,7 +5,7 @@ import React from 'react';
 import UserStore from 'dashboard/user-store';
 import styles from './tab-home.scss';
 
-import { AnchorButton } from 'components/buttons/';
+import AnchorButton from 'components/buttons/anchor-button';
 import CourseProgressListing from 'components/course-progress-listing/';
 import { SectionHeading } from 'components/typography/headings';
 
@@ -15,8 +15,10 @@ interface Props {
 
 @observer
 export default class TabHome extends React.Component<Props> {
-    @observable visibleProgressRows = 5;
-    @observable visibleCompletedRows = 5;
+    @observable
+    visibleProgressRows = 5;
+    @observable
+    visibleCompletedRows = 5;
 
     render(): JSX.Element {
         const { user } = this.props.store;
@@ -31,16 +33,14 @@ export default class TabHome extends React.Component<Props> {
                 <h1 className={styles.title}>My Learning</h1>
                 <div className={styles.inProgress}>
                     <SectionHeading>In Progress</SectionHeading>
-                    {started
-                        .slice(0, this.visibleProgressRows)
-                        .map(course => (
-                            <CourseProgressListing
-                                key={course.id}
-                                courseId={course.id}
-                                steps_completed={course.steps_completed}
-                                steps_total={course.steps_total}
-                            />
-                        ))}
+                    {started.slice(0, this.visibleProgressRows).map(course => (
+                        <CourseProgressListing
+                            key={course.id}
+                            courseId={course.id}
+                            steps_completed={course.steps_completed}
+                            steps_total={course.steps_total}
+                        />
+                    ))}
                     {started.length > this.visibleProgressRows && (
                         <AnchorButton
                             className={styles.viewMore}

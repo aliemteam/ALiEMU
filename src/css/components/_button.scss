@@ -6,10 +6,6 @@
 }
 
 .btn--primary {
-    @include button($secondary);
-}
-
-.btn--primary-alt {
     @include button($primary);
 }
 
@@ -20,10 +16,6 @@
 .btn--narrow {
     min-width: 32px;
     padding: 0;
-}
-
-.btn--active {
-    color: $secondary !important;
 }
 
 .btn--air-pro {
