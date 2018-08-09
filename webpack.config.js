@@ -101,6 +101,7 @@ module.exports = {
          */
         'js/catalog': 'js/catalog',
         'js/dashboard': 'js/dashboard',
+        'js/feedback': 'js/feedback',
         'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
         'js/polyfills': 'js/polyfills',
 

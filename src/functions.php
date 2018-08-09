@@ -28,6 +28,7 @@ define(
 	]
 );
 
+require_once __DIR__ . '/lib/ajax.php';
 require_once __DIR__ . '/lib/database/index.php';
 require_once __DIR__ . '/lib/setup-theme.php';
 require_once __DIR__ . '/lib/class-script-loader.php';

@@ -19,12 +19,13 @@ services:
                 query-monitor
                 sendgrid-email-delivery-simplified
                 ultimate-member
-                [um-recaptcha]https://ultimatemember.com/free-extensions/um-recaptcha.zip
                 w3-total-cache
+                wordfence
                 wp-smushit
+            EXTRA_PHP: |
+              define( 'RECAPTCHA_KEY', '$RECAPTCHA_KEY' );
         volumes:
             - ./data:/data
-            - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
             - ./wp-content/uploads:/app/wp-content/uploads
     db:

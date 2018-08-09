@@ -83,7 +83,7 @@ function slack_message( $route, $data ) : void {
 	// Don't message slack when developing / testing.
 	if ( WP_DEBUG ) {
 		// Debug code is not used in production here. So warning is incorrect.
-		// @codingStandardsIgnoreStart
+		// phpcs:disable
 		trigger_error(
 			wp_json_encode(
 				[
@@ -92,7 +92,7 @@ function slack_message( $route, $data ) : void {
 				]
 			)
 		);
-		// @codingStandardsIgnoreEnd
+		// phpcs:enable
 		return;
 	}
 	for ( $i = 0; $i < 5; $i++ ) {

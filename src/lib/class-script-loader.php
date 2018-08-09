@@ -25,9 +25,9 @@ class Script_Loader {
 	 * @var array $localized
 	 */
 	private static $localized = [
-		'aliemu-catalog'            => 'AU_Catalog',
-		'aliemu-dashboard'          => 'AU_Dashboard',
-		'aliemu-educator-dashboard' => 'AU_EducatorData',
+		'aliemu-catalog'   => 'AU_Catalog',
+		'aliemu-dashboard' => 'AU_Dashboard',
+		'aliemu-feedback'  => 'AU_Feedback',
 	];
 
 	/**
@@ -48,6 +48,9 @@ class Script_Loader {
 				var AU_API = {
 					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
 					url: '<?php echo esc_url_raw( rest_url() ); ?>',
+				};
+				var AU_AJAX = {
+					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>',
 				};
 			</script>
 		<?php
@@ -84,6 +87,7 @@ class Script_Loader {
 		wp_register_script( 'aliemu-polyfills', ALIEMU_ROOT_URI . '/js/polyfills.js', [], ALIEMU_VERSION, false );
 		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
 		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
 		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
 
 		$this->delegate();
@@ -157,6 +161,11 @@ class Script_Loader {
 		if ( is_page( 'user' ) ) {
 			array_push( $load->scripts, 'aliemu-dashboard' );
 			array_push( $load->styles, 'aliemu-dashboard' );
+		}
+
+		if ( is_page( 'feedback' ) ) {
+			array_push( $load->scripts, 'aliemu-feedback' );
+			array_push( $load->styles, 'aliemu-feedback' );
 		}
 
 		$this->unload( $unload->scripts, $unload->styles );

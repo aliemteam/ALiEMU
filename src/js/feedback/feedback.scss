@@ -1,0 +1,32 @@
+.container {
+    padding: 40px;
+    text-align: center;
+}
+
+.form {
+    text-align: initial;
+
+    display: grid;
+    grid-gap: 10px;
+    grid:
+        'name email'
+        'text text'
+        'send send';
+}
+
+.name {
+    grid-area: name;
+}
+
+.email {
+    grid-area: email;
+}
+
+.message {
+    grid-area: text;
+}
+
+.send {
+    grid-area: send;
+    text-align: right;
+}
