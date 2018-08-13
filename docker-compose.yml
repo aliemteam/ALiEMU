@@ -11,17 +11,6 @@ services:
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
-            PLUGINS: >-
-                academic-bloggers-toolkit
-                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
-                jetpack
-                mce-table-buttons
-                query-monitor
-                sendgrid-email-delivery-simplified
-                ultimate-member
-                w3-total-cache
-                wordfence
-                wp-smushit
             EXTRA_PHP: |
               define( 'RECAPTCHA_KEY', '$RECAPTCHA_KEY' );
         volumes:

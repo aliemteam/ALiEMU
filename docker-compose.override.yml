@@ -6,6 +6,16 @@ services:
             WP_DEBUG_DISPLAY: 'true'
             WP_DEBUG: 'true'
             WP_VERSION: nightly
+            PLUGINS: >-
+                academic-bloggers-toolkit
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
+                jetpack
+                mce-table-buttons
+                query-monitor
+                sendgrid-email-delivery-simplified
+                ultimate-member
+                w3-total-cache
+                wp-smushit
         ports:
             - 8080:80
         volumes:

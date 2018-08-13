@@ -6,6 +6,16 @@ services:
         environment:
             SERVER_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
+            PLUGINS: >-
+                academic-bloggers-toolkit
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
+                jetpack
+                mce-table-buttons
+                sendgrid-email-delivery-simplified
+                ultimate-member
+                w3-total-cache
+                wordfence
+                wp-smushit
         logging:
             options:
                 max-size: 1m
