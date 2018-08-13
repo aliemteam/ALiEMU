@@ -38,10 +38,6 @@ $user = wp_get_current_user();
 				</div>
 				<?php if ( ! is_user_logged_in() ) : ?>
 					<div class="card">
-						<h1>EM Residency Program Directors</h1>
-						<a class="btn btn--secondary" href="/faculty-start">Register Here</a>
-					</div>
-					<div class="card">
 						<a class="btn btn--secondary" href="#about">Learn More</a>
 					</div>
 				<?php else : ?>

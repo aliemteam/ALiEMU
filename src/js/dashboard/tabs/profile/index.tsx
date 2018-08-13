@@ -20,10 +20,8 @@ export default class TabProfile extends React.Component<Props> {
     @observable
     visibleCommentRows = 3;
 
-    private readonly recentComments = [];
-
     render(): JSX.Element {
-        const { user } = this.props.store;
+        const { user, recentComments } = this.props.store;
         return (
             <div className={styles.profile}>
                 {user.description && (
@@ -41,15 +39,15 @@ export default class TabProfile extends React.Component<Props> {
                         })}
                     </Card>
                 </div>
-                {this.recentComments.length > 0 && (
+                {recentComments.length > 0 && (
                     <div className={styles.comments}>
                         <SectionHeading>Recent Comments</SectionHeading>
-                        {this.recentComments
+                        {recentComments
                             .slice(0, this.visibleCommentRows)
                             .map(id => (
                                 <CommentListing key={id} commentId={id} />
                             ))}
-                        {this.recentComments.length >
+                        {recentComments.length >
                             this.visibleCommentRows && (
                             <AnchorButton
                                 className={styles.viewMore}

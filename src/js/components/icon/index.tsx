@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 export interface Props {
     /**
@@ -30,7 +30,7 @@ export interface Props {
     children?: never;
 }
 
-export default class Icon extends React.PureComponent<Props> {
+export default class Icon extends PureComponent<Props> {
     static defaultProps = {
         size: 18,
     };

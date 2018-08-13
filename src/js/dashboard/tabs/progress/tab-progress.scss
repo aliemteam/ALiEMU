@@ -1,14 +1,13 @@
+@import 'mixins/media';
+
 .caption__container {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    margin-bottom: 5px;
-}
-
-.caption__right {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 5px;
-    align-content: flex-end;
+    margin-bottom: 5px;
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+    }
 }
 
 .caption__left {
@@ -20,5 +19,23 @@
         margin: 0 {
             right: 10px;
         }
+
+        @include device-mobile {
+            margin: 0 10px 10px 0;
+        }
+    }
+}
+
+.caption__right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5px;
+}
+
+.table-container {
+    display: grid;
+
+    > div {
+        overflow-x: auto;
     }
 }

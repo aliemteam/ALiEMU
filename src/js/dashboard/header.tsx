@@ -29,8 +29,8 @@ export default class DashboardHeader extends React.Component<Props> {
     render(): JSX.Element {
         const { user, userKind } = this.props.store;
         return (
-            <div className={styles.heading}>
-                <div className={styles.headingContainer}>
+            <div className={styles.header}>
+                <div className={styles.headerContainer}>
                     <div>
                         <h1>{user.name}</h1>
                         {this.maybeRenderInstitution()}

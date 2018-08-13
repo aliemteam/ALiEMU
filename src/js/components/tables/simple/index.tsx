@@ -141,17 +141,16 @@ export default class SimpleTable extends BaseTable<Props, State> {
     };
 
     private maybeRenderPagination = (): React.ReactNode => {
-        const rowsPerPage = this.props.rowsPerPage!;
+        const { rowsPerPage, rows } = this.props;
         const { page } = this.state;
-        const numRows = this.props.rows.length;
-        if (rowsPerPage > numRows) {
+        if (rowsPerPage! > rows.length) {
             return null;
         }
         return (
             <Pagination
                 align="right"
                 value={page}
-                total={Math.ceil(numRows / rowsPerPage)}
+                total={Math.ceil(rows.length / rowsPerPage!)}
                 onChange={this.handlePageChange}
             />
         );
@@ -174,15 +173,14 @@ export default class SimpleTable extends BaseTable<Props, State> {
         this.state.sortKey ? rows.sort(this.sortRows) : rows;
 
     private renderBody = (): JSX.Element => {
-        const { header, rows } = this.props;
-        const rowsPerPage = this.props.rowsPerPage!;
+        const { header, rows, rowsPerPage } = this.props;
         if (header) {
             const { page } = this.state;
-            const startIndex = (page - 1) * rowsPerPage || 0;
+            const startIndex = (page - 1) * rowsPerPage! || 0;
             return (
                 <tbody>
                     {this.maybeSortRows([...rows])
-                        .slice(startIndex, startIndex + rowsPerPage)
+                        .slice(startIndex, startIndex + rowsPerPage!)
                         .map(this.renderRow)}
                 </tbody>
             );
@@ -212,8 +210,8 @@ export default class SimpleTable extends BaseTable<Props, State> {
                 <span>{content}</span>
                 {sortable && (
                     <SortIcon
-                        order={this.state.sortOrder}
-                        active={this.state.sortKey === props.key}
+                        order={sortOrder!}
+                        active={sortKey === props.key}
                     />
                 )}
             </th>

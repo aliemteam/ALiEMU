@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { MouseEvent, PureComponent } from 'react';
 
 import styles from './pagination.scss';
 
@@ -10,11 +10,11 @@ interface Props {
     total: number;
     size?: number;
     align?: 'left' | 'right' | 'center';
-    onChange(e: React.MouseEvent<HTMLButtonElement>): void;
+    onChange(e: MouseEvent<HTMLButtonElement>): void;
 }
 
-export default class Pagination extends React.PureComponent<Props> {
-    static defaultProps: Partial<Props> = {
+export default class Pagination extends PureComponent<Props> {
+    static defaultProps = {
         align: 'right',
     };
 

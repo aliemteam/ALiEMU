@@ -102,6 +102,18 @@ function setup() : void {
 add_action( 'after_setup_theme', __NAMESPACE__ . '\setup' );
 
 /**
+ * Limit max menu depth in admin panel to 2
+ *
+ * @param string $hook  The current admin page being loaded.
+ */
+function limit_nav_menu_depth( $hook ) {
+	if ( 'nav-menus.php' === $hook ) {
+		wp_add_inline_script( 'nav-menu', 'wpNavMenu.options.globalMaxDepth = 1;', 'after' );
+	}
+}
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\limit_nav_menu_depth' );
+
+/**
  * Register widget area.
  *
  * @link https://developer.wordpress.org/themes/functionality/sidebars/#registering-a-sidebar

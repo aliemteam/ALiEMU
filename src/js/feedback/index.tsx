@@ -66,12 +66,12 @@ export default class Feedback extends Component<{}, State> {
     render(): JSX.Element {
         return (
             <Card className={styles.container}>
-                <h1>We {String.fromCharCode(0x2764)} Feedback!</h1>
-                <p>
-                    Please contact us regarding anything you think we can do
-                    better.
-                </p>
                 <form className={styles.form} onSubmit={this.handleValidate}>
+                    <h1 className={styles.heading}>We {String.fromCharCode(0x2764)} Feedback!</h1>
+                    <p className={styles.text}>
+                        Please contact us regarding anything you think we can do
+                        better.
+                    </p>
                     <label className={styles.name}>
                         Name:
                         <Input

@@ -27,7 +27,7 @@ interface State {
 }
 
 export default class ClickToEdit extends Component<Props, State> {
-    static defaultProps: Partial<Props> = {
+    static defaultProps = {
         placeholder: '',
     };
 

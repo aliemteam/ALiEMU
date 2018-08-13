@@ -12,6 +12,8 @@ type ProfileUser = ICoach & ILearner;
 
 export default class UserStore {
     readonly userKind: UserKind;
+    readonly recentComments: number[];
+
     user: ProfileUser;
 
     updateUser = flow(function*(
@@ -27,8 +29,9 @@ export default class UserStore {
         }
     });
 
-    constructor(user: ProfileUser) {
+    constructor(user: ProfileUser, recentComments: number[]) {
         this.user = observable.object(user);
+        this.recentComments = recentComments;
         this.userKind =
             user.capabilities !== undefined ? UserKind.OWNER : UserKind.VISITOR;
     }

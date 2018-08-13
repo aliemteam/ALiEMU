@@ -86,41 +86,42 @@ export default class LearnerView extends React.Component<Props> {
     }
 
     render(): JSX.Element {
-        const { avatar_urls, id, name } = this.props.learner;
+        const { avatar_urls, id, learner_tags, name } = this.props.learner;
         return (
-            <div className={styles.grid} key={id}>
-                <div className={styles.info}>
-                    <img src={avatar_urls[150]} />
-                    <h1>{name}</h1>
-                    <div className={styles.tagHeading}>
-                        <SectionHeading>Tags</SectionHeading>
-                        <ClickToEdit
-                            flex
-                            buttonElement={addTagButton}
-                            onSave={this.handleAddTag}
-                            inputProps={{ list: 'tag-list' }}
-                        />
-                    </div>
-                    <div className={styles.tagContainer}>
-                        {this.props.learner.learner_tags.map(t => (
-                            <Tag key={t} onRemove={this.handleRemoveTag}>
-                                {t}
-                            </Tag>
-                        ))}
+            <div className={styles.containerOuter} key={id}>
+                <div className={styles.containerInner}>
+                    <img className={styles.img} src={avatar_urls[150]} />
+                    <div className={styles.metadata}>
+                        <h1>{name}</h1>
+                        <div className={styles.tagHeading}>
+                            <SectionHeading>Tags</SectionHeading>
+                            <ClickToEdit
+                                flex
+                                buttonElement={addTagButton}
+                                onSave={this.handleAddTag}
+                                inputProps={{ list: 'tag-list' }}
+                            />
+                        </div>
+                        <div className={styles.tagContainer}>
+                            {learner_tags.map(t => (
+                                <Tag key={t} onRemove={this.handleRemoveTag}>
+                                    {t}
+                                </Tag>
+                            ))}
+                        </div>
                     </div>
                 </div>
-                <div className={styles.data}>
-                    <SimpleTable
-                        header={header}
-                        caption="Course Progress"
-                        rows={[...this.courseProgressRows]}
-                        rowsPerPage={5}
-                        defaultSortKey="status"
-                        isLoading={this.coursesLoading}
-                        isEmpty={this.courses.size === 0}
-                        emptyState={emptyProgress}
-                    />
-                </div>
+                <SimpleTable
+                    header={header}
+                    caption="Course Progress"
+                    containerClassName={styles.tableContainer}
+                    rows={[...this.courseProgressRows]}
+                    rowsPerPage={5}
+                    defaultSortKey="status"
+                    isLoading={this.coursesLoading}
+                    isEmpty={this.courses.size === 0}
+                    emptyState={emptyProgress}
+                />
             </div>
         );
     }

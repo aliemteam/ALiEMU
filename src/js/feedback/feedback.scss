@@ -1,17 +1,41 @@
+@import 'mixins/media';
+@import 'variables';
+
 .container {
-    padding: 40px;
-    text-align: center;
+    padding: $block-padding;
 }
 
 .form {
-    text-align: initial;
-
     display: grid;
     grid-gap: 10px;
     grid:
-        'name email'
+        'head head'
         'text text'
-        'send send';
+        'name email'
+        'mesg mesg'
+        '.... send';
+
+    @include device-mobile {
+        grid:
+            'head'
+            'text'
+            'name'
+            'email'
+            'mesg'
+            'send';
+    }
+}
+
+.heading {
+    grid-area: head;
+    margin: 0;
+    text-align: center;
+}
+
+.text {
+    grid-area: text;
+    margin: 0;
+    text-align: center;
 }
 
 .name {
@@ -23,7 +47,7 @@
 }
 
 .message {
-    grid-area: text;
+    grid-area: mesg;
 }
 
 .send {

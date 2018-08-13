@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent, KeyboardEvent, PureComponent } from 'react';
 
 import Input, { InputProps } from './input';
 
@@ -12,11 +12,11 @@ interface State {
     value: string;
 }
 
-type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
-type InputEvent = React.FormEvent<HTMLInputElement>;
+type KBEvent = KeyboardEvent<HTMLInputElement>;
+type InputEvent = FormEvent<HTMLInputElement>;
 
-export default class DateInput extends React.PureComponent<Props, State> {
-    static defaultProps: Partial<Props> = {
+export default class DateInput extends PureComponent<Props, State> {
+    static defaultProps = {
         delimiter: '/',
     };
 
@@ -37,7 +37,7 @@ export default class DateInput extends React.PureComponent<Props, State> {
             />
         );
     }
-    private handleKeyPress = (e: KeyboardEvent): void => {
+    private handleKeyPress = (e: KBEvent): void => {
         const code = e.key.charCodeAt(0);
         if (code < 48 || 57 < code) {
             e.preventDefault();
@@ -62,7 +62,7 @@ export default class DateInput extends React.PureComponent<Props, State> {
 
     private handleInsert = (value: string): string => {
         const { delimiter } = this.props;
-        const [year, month, day] = value.split(this.props.delimiter!);
+        const [year, month, day] = value.split(delimiter!);
         return [
             parseYear(year, delimiter),
             parseMonth(month, delimiter),

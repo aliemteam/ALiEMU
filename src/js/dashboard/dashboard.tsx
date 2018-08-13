@@ -28,16 +28,15 @@ declare const AU_Dashboard: Globals;
 export default class Dashboard extends React.Component {
     store: UserStore;
 
-    @observable private _currentTab: Tabs;
+    @observable
+    private _currentTab: Tabs;
 
     constructor(props: {}) {
         super(props);
-        const { user } = AU_Dashboard;
-        this.store = new UserStore(user);
+        const { recent_comments, user } = AU_Dashboard;
+        this.store = new UserStore(user, recent_comments);
         this._currentTab =
-            this.store.userKind === UserKind.OWNER
-                ? Tabs.PROGRESS
-                : Tabs.PROFILE;
+            this.store.userKind === UserKind.OWNER ? Tabs.HOME : Tabs.PROFILE;
     }
 
     getCurrentTab = (): Tabs => this._currentTab;

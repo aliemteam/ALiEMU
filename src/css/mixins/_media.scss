@@ -9,3 +9,12 @@
         @content;
     }
 }
+
+@mixin devices {
+    @include device-tablet {
+        @content;
+    }
+    @include device-mobile {
+        @content;
+    }
+}

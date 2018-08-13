@@ -1,8 +1,13 @@
+@import 'mixins/media';
+
 .nav-group {
     display: flex;
     align-items: center;
     height: 100%;
-    position: absolute;
+
+    @include device-mobile {
+        margin: auto;
+    }
 }
 
 .align-left {

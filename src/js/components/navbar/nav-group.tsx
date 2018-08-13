@@ -8,9 +8,6 @@ interface Props {
 }
 
 export default class NavGroup extends React.PureComponent<Props> {
-    static defaultProps = {
-        align: 'left',
-    };
     render(): JSX.Element {
         const { align, children } = this.props;
         const classes = classNames(styles.navGroup, {

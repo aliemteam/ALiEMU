@@ -1,6 +1,8 @@
+@import 'variables';
+@import 'mixins/media';
 @import './dashboard';
 
-.heading {
+.header {
     @extend %container-outer;
     background: $primary;
     color: white;
@@ -11,13 +13,28 @@
     }
 }
 
-.heading-container {
+.header-container {
     @extend %container-inner;
     display: flex;
+    flex-flow: row wrap;
     justify-content: space-between;
     align-items: center;
     min-height: 100px;
-    margin: 10px 0;
+    margin: 10px $block-margin;
+
+    button {
+        margin: 10px 0;
+    }
+
+    @include device-mobile {
+        > div {
+            margin: auto;
+        }
+
+        > button {
+            margin: 10px auto;
+        }
+    }
 }
 
 .institution {

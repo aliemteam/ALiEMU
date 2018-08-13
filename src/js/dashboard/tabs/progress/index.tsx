@@ -15,6 +15,7 @@ import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/headings';
 import LearnerView from './learner-view';
+
 import styles from './tab-progress.scss';
 
 export interface DateRange {
@@ -142,6 +143,7 @@ export default class TabProgress extends React.Component<Props> {
                 />
                 <SimpleTable
                     caption={this.renderTableCaption}
+                    containerClassName={styles.tableContainer}
                     header={header}
                     rows={this.learnerRows}
                     rowsPerPage={5}
