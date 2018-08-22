@@ -1,3 +1,4 @@
+@import 'mixins/state';
 @import 'variables';
 @import './shared';
 
@@ -8,4 +9,9 @@
     overflow: auto;
     color: #424770;
     font-family: $font-mono;
+
+    &:focus {
+        outline: none;
+        @include focus;
+    }
 }

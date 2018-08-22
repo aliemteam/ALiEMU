@@ -82,17 +82,6 @@ main[role='main'] {
         }
     }
 
-    // Absolutely-centered content on select pages
-    // FIXME: This can be deleted when login form is done
-    // .um-page-login &,
-    // .um-page-password-reset {
-    //     display: flex;
-
-    //     article {
-    //         max-width: 100%;
-    //         width: auto;
-    //     }
-    // }
     .um-page-account & {
         display: flex;
 
