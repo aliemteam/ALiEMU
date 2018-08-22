@@ -5,7 +5,7 @@
  * @package ALiEMU
  */
 
-// phpcs:disable WordPress.VIP.DirectDatabaseQuery.DirectQuery
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 namespace ALIEMU\Database\Queries;
 
@@ -189,7 +189,7 @@ function get_learner_tags( int $coach_id, int $learner_id ) : array {
 	$tags        = wp_cache_get( 'learner_tags', $cache_group );
 	if ( false === $tags ) {
 		$tags = json_decode(
-			$wpdb->get_var(
+			$wpdb->get_var( // phpcs:ignore
 				$wpdb->prepare(
 					"
 					SELECT tags

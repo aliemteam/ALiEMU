@@ -7,9 +7,9 @@
  * @package ALiEMU
  */
 
-namespace ALIEMU\Tags;
+namespace ALIEMU\Theme\Tags;
 
-use ALIEMU\Utils;
+use function ALIEMU\Utils\array_css;
 
 /**
  * Renders an assets URL from a relative asset path.
@@ -29,5 +29,5 @@ function the_asset_url( $relative_asset_path ) : void {
  * @param string[] $input CSS key value pairs.
  */
 function the_array_css( array $input ) : void {
-	echo esc_attr( Utils\array_css( $input ) );
+	echo esc_attr( array_css( $input ) );
 }

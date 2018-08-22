@@ -9,66 +9,25 @@ namespace ALIEMU\Database;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/upgrade.php';
+
 /**
  * Responsible for creating all custom tables
  */
-function create_tables() : void {
-	$db_version = get_option( 'aliemu_db_version' );
-
-	if ( $db_version || version_compare( $db_version, ALIEMU_DB_VERSION, '<' ) ) {
-		create_user_groups_table();
-		update_option( 'aliemu_db_version', ALIEMU_DB_VERSION );
+function upgrade() : void {
+	if ( ALIEMU_VERSION === get_option( 'aliemu_version' ) ) {
+		return;
 	}
-}
-add_action( 'init', __NAMESPACE__ . '\create_tables' );
 
-/**
- * Create / update the user_groups table
- */
-function create_user_groups_table() : void {
-	global $wpdb;
+	$upgrader_func = __NAMESPACE__ . '\Upgrades\upgrade_' . str_replace( '.', '_', ALIEMU_VERSION );
 
-	$table_name      = $wpdb->prefix . 'user_groups';
-	$charset_collate = $wpdb->get_charset_collate();
-
-	/**
-	 * Ignoring below for the following reasons:
-	 * - Our database will never be big enough to make querying $wpdb->users
-	 *   an issue.
-	 * - There is no need for $wpdb->prepare here as we do not have dangerous
-	 *   placeholders.
-	 * - There is no need for caching the response here because this response is one
-	 *   that should fundamentally not be cached.
-	 */
-	// @codingStandardsIgnoreStart
-	$sql = "
-		CREATE TABLE IF NOT EXISTS $table_name (
-			PRIMARY KEY (id),
-			id        BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-			owner_id  BIGINT(20) UNSIGNED NOT NULL,
-			member_id BIGINT(20) UNSIGNED NOT NULL,
-			tags	  JSON,
-			INDEX owner_id  (owner_id),
-			INDEX member_id (member_id),
-			FOREIGN KEY (owner_id)
-				REFERENCES $wpdb->users(ID)
-				ON DELETE CASCADE,
-			FOREIGN KEY (member_id)
-				REFERENCES $wpdb->users(ID)
-				ON DELETE CASCADE,
-			CONSTRAINT owner_id_member_id_unique
-				UNIQUE KEY (owner_id, member_id),
-			CHECK (JSON_VALID(tags))
-		)
-		ENGINE=INNODB
-		$charset_collate;
-	";
-
-	if ( ! $wpdb->query( $sql ) ) {
-		wp_die( esc_html( $wpdb->last_error ) );
+	if ( function_exists( $upgrader_func ) ) {
+		$upgrader_func();
 	}
-	// @codingStandardsIgnoreEnd
+
+	update_option( 'aliemu_version', ALIEMU_VERSION );
 }
+add_action( 'init', __NAMESPACE__ . '\upgrade' );
 
 foreach ( glob( __DIR__ . '/queries-*.php' ) as $queries_file ) {
 	require_once $queries_file;

@@ -1,4 +1,4 @@
-@import 'variables';
+@import '_colors';
 @import 'mixins/media';
 
 .container-outer {
@@ -6,7 +6,9 @@
 
     display: grid;
     grid-gap: 20px;
-    grid: 'info table';
+    grid:
+        'info table'
+        / min-content 1fr;
 
     @include devices {
         grid:

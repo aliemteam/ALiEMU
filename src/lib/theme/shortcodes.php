@@ -5,9 +5,10 @@
  * @package ALiEMU
  */
 
-namespace ALIEMU\Shortcodes;
+namespace ALIEMU\Theme\Shortcodes;
 
-use ALIEMU\{Utils,Tags};
+use function ALIEMU\Theme\Tags\the_array_css;
+use function ALIEMU\Utils\unautop;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -62,7 +63,7 @@ function course_hours() : string {
 	// @codingStandardsIgnoreStart
 	if ( isset( $_GET['course_id'] ) ) {
 		// @codingStandardsIgnoreEnd
-		$course_id = intval( $_GET['course_id'] ); // Input var okay.
+		$course_id = intval( $_GET['course_id'] );
 		$meta      = get_post_meta( $course_id, '_sfwd-courses', true );
 		$hours     = $meta['sfwd-courses_recommendedHours'];
 	}
@@ -151,7 +152,7 @@ function person( $atts = [], $content = null ) : string {
 		}
 	}
 
-	$content = Utils\unautop( $content );
+	$content = unautop( $content );
 
 	?>
 	<div class="person" style="<?php echo esc_attr( $style ); ?>">
@@ -222,7 +223,7 @@ function grid( $atts = [], $content = null ) : string {
 		return '';
 	}
 
-	$content = Utils\unautop( $content );
+	$content = unautop( $content );
 
 	$css = [
 		'grid-template-columns' => "repeat(auto-fit, minmax($width, 1fr))",
@@ -233,7 +234,7 @@ function grid( $atts = [], $content = null ) : string {
 	?>
 		<div
 			class="grid"
-			style="<?php Tags\the_array_css( $css ); ?>"
+			style="<?php the_array_css( $css ); ?>"
 		><?php echo do_shortcode( $content ); ?></div>
 	<?php
 	return trim( ob_get_clean() );

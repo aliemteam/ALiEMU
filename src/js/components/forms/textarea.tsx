@@ -1,18 +1,14 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { HTMLProps, PureComponent } from 'react';
 
-import styles from './forms.scss';
+import styles from './textarea.scss';
 
-interface Props extends React.HTMLProps<HTMLTextAreaElement> {
-    large?: boolean;
-}
+type Props = HTMLProps<HTMLTextAreaElement>;
 
-export default class TextArea extends React.PureComponent<Props> {
+export default class TextArea extends PureComponent<Props> {
     render(): JSX.Element {
-        const { className, large, ...props } = this.props;
-        const classname = classNames(className, styles.textarea, {
-            [styles.textareaLarge]: large,
-        });
+        const { className, ...props } = this.props;
+        const classname = classNames(className, styles.textarea);
         return <textarea {...props} className={classname} />;
     }
 }

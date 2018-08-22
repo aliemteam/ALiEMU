@@ -17,3 +17,11 @@
 .align-right {
     float: right;
 }
+
+.fill {
+    width: 100%;
+
+    > * {
+        flex: auto;
+    }
+}

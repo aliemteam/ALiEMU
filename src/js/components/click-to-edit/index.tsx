@@ -17,7 +17,6 @@ interface Props {
     buttonProps?: HTMLProps<Element>;
     buttonElement?: SFC<HTMLProps<HTMLButtonElement>>;
     placeholder?: string;
-    flex?: boolean;
     onSave(value: string): any;
 }
 
@@ -71,12 +70,11 @@ export default class ClickToEdit extends Component<Props, State> {
         if (!this.state.isEditing) {
             return null;
         }
-        const { inputProps, flex } = this.props;
+        const { inputProps } = this.props;
         return (
             <Input
                 {...inputProps}
                 ref={this.ref}
-                flex={flex}
                 value={this.state.value}
                 onKeyUp={this.handleKeyUp}
                 onBlur={this.handleBlur}

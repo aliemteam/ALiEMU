@@ -1,5 +1,7 @@
-@import 'variables';
+@import '_colors';
 @import 'mixins/media';
+@import 'variables';
+
 @import './dashboard';
 
 .header {
@@ -39,7 +41,7 @@
 
 .institution {
     opacity: 0.5;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .institution-btn {

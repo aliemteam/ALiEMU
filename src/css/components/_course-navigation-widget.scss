@@ -76,7 +76,7 @@
                 }
 
                 &.topic-completed:before {
-                    background: $intent-primary;
+                    background: map-get($intent, 'primary');
                 }
             }
         }

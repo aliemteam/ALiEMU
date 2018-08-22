@@ -1,0 +1,19 @@
+@import 'variables';
+@import './shared';
+
+.input {
+    position: absolute;
+    padding: 0 $padding-size;
+    background-color: transparent;
+    border: none;
+    display: block;
+    margin: 0;
+    width: 100%;
+
+    color: #424770;
+    font-family: $font-mono;
+
+    &:focus {
+        outline: none;
+    }
+}

@@ -154,7 +154,6 @@ export default class Catalog extends Component {
                 <h1>Course Catalog</h1>
                 <div className={styles.search}>
                     <Input
-                        large
                         raised
                         type="search"
                         placeholder="Search"

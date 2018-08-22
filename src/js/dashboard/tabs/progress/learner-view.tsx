@@ -96,7 +96,6 @@ export default class LearnerView extends React.Component<Props> {
                         <div className={styles.tagHeading}>
                             <SectionHeading>Tags</SectionHeading>
                             <ClickToEdit
-                                flex
                                 buttonElement={addTagButton}
                                 onSave={this.handleAddTag}
                                 inputProps={{ list: 'tag-list' }}

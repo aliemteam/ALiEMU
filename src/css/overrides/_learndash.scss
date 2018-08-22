@@ -89,7 +89,7 @@
     padding: 0 $block-margin;
     background: $primary;
     color: white;
-    font-weight: 500;
+    font-weight: 600;
     border-radius: 2px 2px 0 0;
 
     &:hover {
@@ -184,11 +184,11 @@
     }
 
     &.wpProQuiz_answerIncorrect {
-        background: rgba($intent-danger, 0.15);
+        background: rgba(map-get($intent, 'danger'), 0.15);
     }
 
     &.wpProQuiz_answerCorrect {
-        background: rgba($intent-success, 0.15);
+        background: rgba(map-get($intent, 'success'), 0.15);
     }
 }
 
@@ -215,7 +215,7 @@ dd.course_progress {
         position: relative;
         text-align: right;
         width: 75%;
-        background-color: $intent-primary;
+        background-color: map-get($intent, 'primary');
         box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.15) inset;
         color: white;
         float: left;
@@ -244,7 +244,7 @@ dd.course_progress {
 }
 
 // The word "Incorrect" or "Correct" in the results panel
-@each $status, $color in (correct, $intent-success), (incorrect, $intent-danger)
+@each $status, $color in (correct, map-get($intent, 'success')), (incorrect, map-get($intent, 'danger'))
 {
     .wpProQuiz_#{$status} > span:first-of-type {
         display: block;

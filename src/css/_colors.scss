@@ -1,4 +1,4 @@
-$primary-light: #0288d1 !default;
+$primary-light: #03a9f4 !default;
 $primary: #01579b !default;
 $primary-dark: #003067 !default;
 
@@ -17,10 +17,13 @@ $text-color-light: #666 !default;
 
 $border-color: darken($gray-light, 8%) !default;
 
-$intent-primary: $primary !default;
-$intent-success: #0f9960 !default;
-$intent-danger: #b71c1c !default;
-$intent-warning: #d9822b !default;
+$intent: (
+    primary: $primary,
+    secondary: $secondary,
+    success: #0f9960,
+    warning: #ffc107,
+    danger: #d32f2f,
+);
 
 // NOTE: These will be deprecated soon
 $air-primary: #b91215 !default;

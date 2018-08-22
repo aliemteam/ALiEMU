@@ -1,0 +1,11 @@
+@import 'variables';
+@import './shared';
+
+.textarea {
+    @extend .container;
+    padding: $padding-size;
+    height: auto;
+    overflow: auto;
+    color: #424770;
+    font-family: $font-mono;
+}

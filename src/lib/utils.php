@@ -7,6 +7,8 @@
 
 namespace ALIEMU\Utils;
 
+use WP_Error;
+
 /**
  * Turns an associative array CSS keys and values into an inline CSS string.
  *
@@ -49,4 +51,68 @@ function post_type_normalized( string $post_type, $plural = false ) : string {
 	} else {
 		return $plural ? $value . 's' : $value;
 	}
+}
+
+/**
+ * Unwraps a WP_Error and returns the first error code and message that exists on it.
+ *
+ * @param WP_Error $error A WP_Error instance.
+ */
+function get_first_error( WP_Error $error ) : array {
+	return [
+		'code'    => $error->get_error_code(),
+		'message' => $error->get_error_message(),
+	];
+}
+
+
+/**
+ * Master handler for posting messages to Slack.
+ *
+ * Tries a total of five times to send the message to slack. If the message is
+ *  posted successfully (eg, if the HTTP response is 200), then functoin exits.
+ *
+ * @param  string  $route Enpoint to hit.
+ * @param  mixed[] $data  Associative array of data to send.
+ * @return WP_Error|array {
+ *     @type int    $code    Response code.
+ *     @type string $message Response message.
+ * }
+ */
+function slack_message( $route, $data ) {
+	// Don't message slack when developing / testing.
+	if ( WP_DEBUG ) {
+		// Debug code is not used in production here. So warning is incorrect.
+		// phpcs:disable
+		trigger_error(
+			wp_json_encode(
+				[
+					'route' => $route,
+					'data'  => $data,
+				]
+			)
+		);
+		// phpcs:enable
+		return [
+			'code'    => 200,
+			'message' => 'OK',
+		];
+	}
+	for ( $i = 0; $i < 5; $i++ ) {
+		$response = wp_remote_post(
+			"https://aliem-slackbot.now.sh/$route", [
+				'headers' => [
+					'ALIEM_API_KEY' => ALIEM_API_KEY,
+				],
+				'body'    => [
+					'data' => wp_json_encode( $data ),
+				],
+			]
+		);
+		if ( ! is_wp_error( $response ) ) {
+			break;
+		}
+	}
+
+	return is_wp_error( $response ) ? $response : $response['response'];
 }

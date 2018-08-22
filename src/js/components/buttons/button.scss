@@ -1,5 +1,85 @@
-@import 'mixins/button';
+@import '_colors';
+@import 'mixins/contrast';
+@import 'mixins/reset';
+@import 'mixins/state';
 
-.btn {
-    @include button;
+.button {
+    @include reset-button;
+
+    position: relative;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: 1px solid transparent;
+    border-radius: 3px;
+
+    background: rgba($black, 0.1);
+
+    padding: 0 20px;
+    height: 36px;
+    min-width: 64px;
+
+    &:focus {
+        @include focus;
+    }
+
+    &:hover {
+        background: rgba($black, 0.15);
+    }
+
+    &:active {
+        background: rgba($black, 0.18);
+    }
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    svg {
+        stroke: $black;
+    }
+
+    @each $_intent, $_color in $intent {
+        &.intent-#{$_intent} {
+            @include contrast-fg-color($_color);
+            background: $_color;
+
+            &:focus {
+                @include focus($_color);
+            }
+
+            &:hover:not(.loading) {
+                background: scale-color($_color, $lightness: -10%);
+            }
+
+            &:active:not(.loading) {
+                background: scale-color($_color, $lightness: -15%);
+            }
+
+            svg {
+                stroke: contrast-fg-color($_color);
+            }
+        }
+    }
+
+    &.loading {
+        cursor: wait;
+
+        span {
+            opacity: 0;
+        }
+    }
+}
+
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

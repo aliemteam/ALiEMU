@@ -179,7 +179,6 @@ export default class TabGroups extends React.Component {
         <form onSubmit={this.addCoach} className={styles.addCoachForm}>
             <Input
                 required
-                large
                 type="email"
                 placeholder="Email address"
                 aria-label="Add a coach using their email address"
@@ -189,7 +188,7 @@ export default class TabGroups extends React.Component {
             <Button
                 type="submit"
                 style={{ backgroundColor: '#345995' }}
-                primary
+                intent={Intent.PRIMARY}
             >
                 Add Coach
             </Button>

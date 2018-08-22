@@ -1,0 +1,44 @@
+@import '_colors';
+@import 'mixins/state';
+
+$padding-size: 10px;
+
+.disabled {
+    @include disabled;
+}
+
+.container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    width: 100%;
+    height: 36px;
+    font-size: 16px;
+
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba($black, 0.1), 0 0 0 1px transparent,
+        0 0 0 2px transparent, 0 1px 1px rgba(black, 0.05);
+
+    &.focused {
+        outline: none;
+        @include focus;
+    }
+
+    &.disabled {
+        border: 1px solid $border-color;
+        box-shadow: unset;
+    }
+}
+
+.container--raised {
+    box-shadow: 0 1px 3px 0 #e6ebf1;
+    border: 1px solid transparent;
+    transition: box-shadow 150ms ease;
+
+    &.focused {
+        @include focus-raised;
+    }
+}

@@ -1,9 +1,9 @@
 @import 'mixins/noselect';
+@import 'mixins/state';
 
 select {
     &:disabled {
-        opacity: 0.6;
-        pointer-events: none;
+        @include disabled;
     }
 }
 

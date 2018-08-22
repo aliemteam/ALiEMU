@@ -12,6 +12,8 @@
  * @package ALiEMU
  */
 
+defined( 'ABSPATH' ) || exit;
+
 get_header(); ?>
 
 <section id="content" class="content-area">

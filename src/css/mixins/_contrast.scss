@@ -1,0 +1,19 @@
+@import '_colors';
+
+@function contrast-fg-color($bgcolor) {
+    $r: red($bgcolor);
+    $g: green($bgcolor);
+    $b: blue($bgcolor);
+
+    $contrast: (($r * 299)+ ($g * 587)+ ($b * 114))/1000;
+
+    @if ($contrast >= 128) {
+        @return $black;
+    } @else {
+        @return white;
+    }
+}
+
+@mixin contrast-fg-color($bgcolor) {
+    color: contrast-fg-color($bgcolor);
+}

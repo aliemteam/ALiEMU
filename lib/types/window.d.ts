@@ -9,6 +9,7 @@ declare global {
             readonly nonce: string;
             readonly url: string;
         };
+        readonly AU_SESSION_TOKEN: string;
         readonly ajaxurl: string;
     }
 }

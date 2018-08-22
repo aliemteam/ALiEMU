@@ -1,3 +1,4 @@
+@import '_colors';
 @import 'variables';
 
 // FIXME: below needs to be refactored out into classes
@@ -14,7 +15,7 @@
     display: inline-block;
     transition: map-get($transitions, 'button');
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
     height: 36px;
     line-height: 36px;
     min-width: 64px;

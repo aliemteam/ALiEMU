@@ -9,12 +9,7 @@
  * @package ALiEMU
  */
 
-use ALIEMU\Tags;
-
-$user = wp_get_current_user();
-?>
-
-<?php get_header(); ?>
+get_header(); ?>
 
 <section id="content" class="content-area">
 	<main role="main">
@@ -25,56 +20,22 @@ $user = wp_get_current_user();
 					<path d="M423.498 91.28c.405-.35 4.02-2.374 6.029-3.374l1.745-.868.648.62c1.24 1.19 2.647 1.79 4.439 1.895 1.797.105 3.426-.424 4.82-1.565.375-.307.713-.558.752-.558.111 0 2.105 1.476 2.105 1.558 0 .226-4.237 1.316-6.767 1.74-3.327.558-4.93.68-9.607.737l-4.439.054.275-.238zm-9.212-1.028c-2.694-.62-6.39-1.824-6.727-2.191-.124-.134 3.059-4.438 5.443-7.362l.936-1.147 1.224.055c2.066.092 3.622-.476 5.137-1.875l.825-.761 1.41.504c1.78.637 5.236 2.025 6.567 2.637.948.436 1.011.487.914.744-.058.152-.143.662-.19 1.135l-.086.859-2.27 1.149c-3.59 1.817-6.797 3.682-9.85 5.728-.774.518-1.449.938-1.5.934a72.388 72.388 0 0 1-1.833-.409zm32.416-3.94a60.955 60.955 0 0 0-2.291-1.7l-.857-.585.076-.788c.042-.433.11-.823.151-.865.125-.13 3.79-1.024 5.773-1.409 3.001-.582 7.705-1.203 9.17-1.21l.474-.003-.413.435c-.915.96-3.381 2.99-4.852 3.991-1.408.958-4.382 2.654-5.399 3.08l-.398.166-1.434-1.113zm-44.052-.608c-3.64-2.07-7.419-5.46-9.922-8.9-.914-1.258-2.457-3.807-2.89-4.776l-.155-.348 2.135.082c2.896.111 7.41.492 10.172.857 1.926.255 6.574.998 6.609 1.057.005.01.106.37.223.798.261.955.686 1.822 1.207 2.464l.394.486-1.023 1.254c-1.213 1.488-4.306 5.598-5.07 6.74-.298.442-.595.803-.66.8-.067-.002-.525-.233-1.02-.515zm38.709-8.178c-2.14-2.016-5.687-2.384-8.12-.841-1.234.783-1.011.785-2.787-.024-2.014-.918-3.598-1.558-6.03-2.434l-1.919-.693-.027-.88c-.016-.483-.091-1.148-.169-1.476l-.14-.598 1.547-1.488a167.9 167.9 0 0 1 3.147-2.929l1.6-1.44 1.1-.162c2.59-.381 4.373-1.229 6.025-2.863 1.198-1.185 1.899-2.247 2.523-3.823l.387-.975 1.96-1.357c2.399-1.66 6.265-4.056 8.673-5.374l1.794-.983.485.391c1.266 1.02 2.684 1.516 4.324 1.515.616 0 1.337-.08 1.678-.183.471-.142.628-.15.734-.034.075.08.948 1.338 1.94 2.794 2.568 3.769 4.445 6.886 6.501 10.799l.636 1.21-.51 1.55c-.66 1.997-1.864 4.647-2.94 6.466l-.85 1.44-2.215.087c-5.748.227-11.814 1.141-16.99 2.56-.827.227-1.538.41-1.581.408-.043-.003-.392-.3-.776-.663zm-32.483-7.542c-.087-.087-4.366-.77-6.766-1.08-3.122-.403-7.847-.776-11.151-.88l-2.754-.088-.345-1.08c-.49-1.527-1.114-4.429-1.429-6.634l-.268-1.883-.038-28.76-.037-28.76h29.633l.04 26.72c.044 28.39.013 26.791.556 28.821.909 3.4 3.062 6.077 5.886 7.316.363.159.702.323.753.365.052.041-.632.76-1.518 1.596l-1.612 1.521-.88-.471c-1.252-.67-2.102-.886-3.479-.881-1.285.004-2.21.246-3.397.89-.902.488-2.143 1.75-2.587 2.63-.328.65-.466.799-.607.658zm58.803-11.236c-1.104-1.953-2.806-4.632-4.719-7.426l-1.847-2.7.265-.36c.747-1.012 1.239-2.426 1.28-3.68l.032-.921.96-.387c.527-.212 1.877-.721 2.999-1.131l2.039-.746.034 6.672c.033 6.256-.086 10.656-.309 11.459-.093.338-.117.313-.734-.78zm-28.441-17.74v-10.46l.39.322c1.512 1.253 5.142 4.67 7.425 6.989l2.718 2.76-.286.583c-.489.998-.681 2.005-.63 3.292l.047 1.162-1.863 1.021c-1.88 1.03-6.69 3.949-7.411 4.497l-.39.296V41.01zm21.233-1.89c-1.89-1.886-4.913-2.394-7.572-1.273l-.434.183-3.285-3.287c-3.29-3.293-5.552-5.38-8.412-7.759l-1.528-1.272V.818h29.51v36.289l-1.534.517c-.844.284-2.53.892-3.747 1.35-1.217.457-2.24.825-2.274.817-.035-.007-.36-.31-.722-.672z" fill="#00b092"/>
 				</svg>
 				<div class="card">
-					<?php if ( is_user_logged_in() ) : ?>
-						<h1>Welcome back, <?php echo esc_html( $user->first_name ); ?>!</h1>
-						<div>
-							<a class="btn btn--primary" href="/user">My Profile</a>
-							<a class="btn btn--secondary" href="/logout">Logout</a>
-						</div>
-					<?php else : ?>
-						<h1>General Members</h1>
-						<a class="btn btn--primary" href="#registration">Register Here</a>
-					<?php endif; ?>
+					<h1>General Members</h1>
+					<a class="btn btn--primary" href="/login">Register Here</a>
 				</div>
-				<?php if ( ! is_user_logged_in() ) : ?>
-					<div class="card">
-						<a class="btn btn--secondary" href="#about">Learn More</a>
-					</div>
-				<?php else : ?>
-					<div class="home__series-logos">
-						<a href="/in-training-exam">
-							<img src="/wp-content/uploads/2018/01/ALiEM-In-Training-Exam-Prep-Quiz-Sets-1-5-2nd-ed-cover-231x300.png" alt="In Training Exam Prep Button">
-						</a>
-						<a href="/air">
-							<img src="<?php Tags\the_asset_url( 'air-logo.svg' ); ?>" alt="AIR Button">
-						</a>
-						<a href="/air-pro">
-							<img src="<?php Tags\the_asset_url( 'air-pro-logo.svg' ); ?>" alt="AIR-Pro Button">
-						</a>
-						<a href="/capsules">
-							<img src="<?php Tags\the_asset_url( 'capsules-logo.svg' ); ?>" alt="Capsules Button">
-						</a>
-					</div>
-				<?php endif; ?>
+				<div class="card">
+					<a class="btn btn--secondary" href="#about">Learn More</a>
+				</div>
 			</div>
 		</div>
-
-		<?php if ( ! is_user_logged_in() ) : ?>
-			<div class="home__row" id="about">
-				<div class="card">
-					<h1>What is ALiEMU?</h1>
-					<p>ALiEMU is an open-access, on-demand, online school of e-courses for anyone practicing Emergency Medicine worldwide. We serve as a platform where educators can submit e-courses, whereupon each will undergo expert peer review and receive instructional design assistance to optimize online content delivery and learner retention. Only high-quality, vetted courses relevant to the EM community are published as an on-demand course on ALiEMU. <a href="/about" aria-label="Click here to learn more">Click here</a> to learn more about ALiEMU and the courses offered.</p>
-				</div>
+		<div class="home__row" id="about">
+			<div class="card">
+				<h1>What is ALiEMU?</h1>
+				<p>ALiEMU is an open-access, on-demand, online school of e-courses for anyone practicing Emergency Medicine worldwide. We serve as a platform where educators can submit e-courses, whereupon each will undergo expert peer review and receive instructional design assistance to optimize online content delivery and learner retention. Only high-quality, vetted courses relevant to the EM community are published as an on-demand course on ALiEMU. <a href="/about" aria-label="Click here to learn more">Click here</a> to learn more about ALiEMU and the courses offered.</p>
 			</div>
-			<div class="home__row" id="registration">
-				<div class="card">
-					<h1>General Registration</h1>
-					<p>We welcome learners from every discipline and training level to register and take our courses. Emergency Medicine Faculty with appointments at U.S. Emergency Medicine residency programs should register through our <a href="/faculty-start">faculty registration</a> for access to our Educator Dashboard.</p>
-					<?php echo do_shortcode( '[ultimatemember form_id=52]' ); ?>
-				</div>
-			</div>
-		<?php endif; ?>
+		</div>
 	</main>
 </section>
 
-<?php get_footer(); ?>
+<?php
+get_footer();

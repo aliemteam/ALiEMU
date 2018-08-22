@@ -1,5 +1,8 @@
 import React, { Component, FormEvent } from 'react';
 
+import { wpAjax } from 'utils/ajax';
+import { Intent } from 'utils/constants';
+
 import Button from 'components/buttons/button';
 import Card from 'components/card/';
 import Input from 'components/forms/input';
@@ -38,23 +41,19 @@ export default class Feedback extends Component<{}, State> {
         grecaptcha.execute();
     };
 
-    handleSubmit = (token: string): void => {
-        jQuery.post(
-            window.ajaxurl,
-            {
-                action: 'send_slack_message',
-                nonce: window.AU_AJAX.nonce,
+    handleSubmit = async (token: string): Promise<void> => {
+        try {
+            await wpAjax('send_slack_message', window.AU_AJAX.nonce, {
                 recaptcha_token: token,
                 ...this.state,
-            },
-            data => {
-                console.log(data);
-            }
-        );
+            });
+        } catch (_e) {
+            // FIXME: Display error for user.
+        }
     };
 
     handleChange = (
-        e: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     ): void => {
         const key = e.currentTarget.dataset.key as keyof State | undefined;
         const value = e.currentTarget.value;
@@ -67,7 +66,9 @@ export default class Feedback extends Component<{}, State> {
         return (
             <Card className={styles.container}>
                 <form className={styles.form} onSubmit={this.handleValidate}>
-                    <h1 className={styles.heading}>We {String.fromCharCode(0x2764)} Feedback!</h1>
+                    <h1 className={styles.heading}>
+                        We {String.fromCharCode(0x2764)} Feedback!
+                    </h1>
                     <p className={styles.text}>
                         Please contact us regarding anything you think we can do
                         better.
@@ -75,7 +76,6 @@ export default class Feedback extends Component<{}, State> {
                     <label className={styles.name}>
                         Name:
                         <Input
-                            large
                             required
                             data-key="name"
                             value={this.state.name}
@@ -86,7 +86,6 @@ export default class Feedback extends Component<{}, State> {
                         Email:
                         <Input
                             type="email"
-                            large
                             required
                             data-key="email"
                             value={this.state.email}
@@ -97,7 +96,6 @@ export default class Feedback extends Component<{}, State> {
                         Message:
                         <Textarea
                             rows={8}
-                            large
                             required
                             data-key="message"
                             value={this.state.message}
@@ -112,7 +110,7 @@ export default class Feedback extends Component<{}, State> {
                             data-callback="handleSubmit"
                             data-size="invisible"
                         />
-                        <Button primary>Send</Button>
+                        <Button intent={Intent.PRIMARY}>Send</Button>
                     </div>
                 </form>
             </Card>

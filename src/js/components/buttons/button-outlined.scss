@@ -1,9 +1,9 @@
-@import './shared';
-@import 'variables';
-@import 'mixins/_focus';
+@import '_colors';
+@import 'mixins/reset';
+@import 'mixins/state';
 
 .button-outlined {
-    @include reset;
+    @include reset-button;
 
     color: $primary;
 
@@ -14,9 +14,9 @@
     border: 1px solid $border-color;
     border-radius: 4px;
 
+    font-family: 'IBM Plex Sans', sans-serif;
     font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
+    font-weight: 600;
 
     padding: 0 16px;
 
@@ -27,35 +27,27 @@
     }
 
     &:focus {
-        @include focus-flat;
+        @include focus;
     }
 
     &:disabled {
-        cursor: default;
+        cursor: not-allowed;
         color: $black;
         border-color: $border-color;
-        background: rgba($black, 0.05);
         opacity: 0.5;
     }
 }
 
-@each $_intent,
-    $_color
-        in (
-            success: $intent-success,
-            danger: $intent-danger,
-            warning: $intent-warning
-        )
-{
-    .button-outlined--#{$_intent} {
-        color: $_color;
+@each $k, $v in $intent {
+    .button-outlined--#{$k} {
+        color: $v;
 
         &:hover {
-            border-color: $_color;
+            border-color: $v;
         }
 
         &:focus {
-            @include focus-flat($_color);
+            @include focus($v);
         }
     }
 }

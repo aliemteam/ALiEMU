@@ -9,12 +9,7 @@ namespace ALIEMU;
 
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Sets the max content width for WordPress to be aware of
- *
- * @link https://codex.wordpress.org/Content_Width
- */
-$content_width = 800;
+use function ALIEMU\Utils\slack_message;
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -32,9 +27,6 @@ function setup() : void {
 	 */
 	load_theme_textdomain( 'aliemu', get_template_directory() . '/languages' );
 
-	// Add default posts and comments RSS feed links to head.
-	add_theme_support( 'automatic-feed-links' );
-
 	/**
 	 * Let WordPress manage the document title.
 	 * By adding theme support, we declare that this theme does not use a
@@ -50,14 +42,6 @@ function setup() : void {
 	 */
 	add_theme_support( 'post-thumbnails' );
 
-	// This theme uses wp_nav_menu() in one location.
-	register_nav_menus(
-		[
-			'menu-primary' => esc_html__( 'Primary Navigation', 'aliemu' ),
-			'menu-footer'  => esc_html__( 'Footer Links', 'aliemu' ),
-		]
-	);
-
 	/**
 	 * Switch default core markup for search form, comment form, and comments
 	 * to output valid HTML5.
@@ -72,30 +56,14 @@ function setup() : void {
 		]
 	);
 
-	// Set up the WordPress core custom background feature.
-	add_theme_support(
-		'custom-background', apply_filters(
-			'aliemu_custom_background_args', [
-				'default-color' => 'ffffff',
-				'default-image' => '',
-			]
-		)
-	);
-
 	// Add theme support for selective refresh for widgets.
 	add_theme_support( 'customize-selective-refresh-widgets' );
 
-	/**
-	 * Add support for core custom logo.
-	 *
-	 * @link https://codex.wordpress.org/Theme_Logo
-	 */
-	add_theme_support(
-		'custom-logo', [
-			'height'      => 250,
-			'width'       => 250,
-			'flex-width'  => true,
-			'flex-height' => true,
+	// This theme uses wp_nav_menu() in one location.
+	register_nav_menus(
+		[
+			'menu-primary' => esc_html__( 'Primary Navigation', 'aliemu' ),
+			'menu-footer'  => esc_html__( 'Footer Links', 'aliemu' ),
 		]
 	);
 }
@@ -233,33 +201,27 @@ function avatars_via_https( array $args ) : array {
 add_filter( 'pre_get_avatar_data', __NAMESPACE__ . '\avatars_via_https' );
 
 /**
- * Utility / helper functions.
+ * Routes all comments to Slack.
+ *
+ * @param  string $comment_id The comment ID.
  */
-require_once __DIR__ . '/utils.php';
+function slack_comment( $comment_id ) {
+	$comment  = get_comment( $comment_id );
+	$post     = get_post( $comment->comment_post_ID );
+	$category = get_the_category( $post->ID )[0]->slug;
 
-/**
- * Custom template tags for this theme.
- */
-require_once __DIR__ . '/template-tags.php';
+	if ( ! in_array( $category, [ 'capsules', 'air', 'air-pro', 'in-training-exam-prep' ], true ) ) {
+		$category = 'aliemu';
+	}
 
-/**
- * Shortcodes.
- */
-require_once __DIR__ . '/shortcodes.php';
-
-/**
- * Custom embeds.
- */
-require_once __DIR__ . '/embeds.php';
-
-/**
- * Plugin customizations.
- */
-foreach ( glob( __DIR__ . '/plugins/*.php' ) as $plugin_file ) {
-	require_once $plugin_file;
+	slack_message(
+		"$category/messages/comments", [
+			'name'     => $comment->comment_author,
+			'email'    => $comment->comment_author_email,
+			'content'  => $comment->comment_content,
+			'postUrl'  => $post->guid,
+			'postName' => $post->post_title,
+		]
+	);
 }
-
-/**
- * Slack message routing.
- */
-require_once __DIR__ . '/slack.php';
+add_action( 'comment_post', __NAMESPACE__ . '\slack_comment' );

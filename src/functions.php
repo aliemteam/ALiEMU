@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
  * Globals
  */
 define( 'ALIEMU_VERSION', wp_get_theme()->get( 'Version' ) );
-define( 'ALIEMU_DB_VERSION', '0.1.0' );
 define( 'ALIEMU_ROOT_PATH', __DIR__ );
 define( 'ALIEMU_ROOT_URI', get_template_directory_uri() );
 define(
@@ -28,9 +27,4 @@ define(
 	]
 );
 
-require_once __DIR__ . '/lib/ajax.php';
-require_once __DIR__ . '/lib/database/index.php';
-require_once __DIR__ . '/lib/setup-theme.php';
-require_once __DIR__ . '/lib/class-script-loader.php';
-require_once __DIR__ . '/lib/class-structured-data.php';
-require_once __DIR__ . '/lib/rest-api/index.php';
+require_once __DIR__ . '/lib/index.php';

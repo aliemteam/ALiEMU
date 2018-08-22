@@ -5,7 +5,7 @@
  * @package ALiEMU
  */
 
-namespace ALIEMU\Embed;
+namespace ALIEMU\Theme\Embed;
 
 /**
  * Renderer for small-sized soundcloud embeds.

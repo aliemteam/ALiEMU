@@ -5,7 +5,7 @@
  * @package ALiEMU
  */
 
-// phpcs:disable WordPress.VIP.DirectDatabaseQuery.DirectQuery
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 namespace ALIEMU\Database\Queries;
 

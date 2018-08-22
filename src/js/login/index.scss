@@ -1,0 +1,24 @@
+@import 'variables';
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    display: grid;
+    grid-gap: 10px;
+    max-width: 400px;
+}
+
+.logo {
+    width: 100%;
+    padding: 20px;
+}
+
+.form {
+    display: grid;
+    grid-gap: 10px;
+    margin: 10px;
+}

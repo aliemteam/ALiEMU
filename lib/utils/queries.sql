@@ -23,7 +23,7 @@ WHERE grad_year >= YEAR(CURDATE())
 -- # of residency programs enrolled
 SELECT COUNT(DISTINCT meta_value) AS enrolled_program_count
 FROM wp_usermeta
-WHERE meta_key = 'residency_us_em'
+WHERE meta_key = 'institution'
 
 
 -- CATEGORY SPECIFIC QUERIES

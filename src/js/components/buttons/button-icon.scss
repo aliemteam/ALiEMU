@@ -1,7 +1,7 @@
-@import './shared';
+@import 'mixins/reset';
 
 .button {
-    @include reset;
+    @include reset-button;
     display: inline-flex;
     align-items: center;
     justify-content: center;

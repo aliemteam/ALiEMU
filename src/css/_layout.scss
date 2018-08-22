@@ -3,7 +3,6 @@
 @import 'mixins/media';
 
 body {
-    min-height: 100vh;
     background: white;
 
     &.home,
@@ -14,6 +13,10 @@ body {
     &.page-id-1248 {
         background: $gray-light;
     }
+}
+
+#body {
+    min-height: 100vh;
     display: grid;
     grid:
         'header' auto
@@ -80,16 +83,16 @@ main[role='main'] {
     }
 
     // Absolutely-centered content on select pages
-    .um-page-login &,
-    .um-page-password-reset {
-        display: flex;
+    // FIXME: This can be deleted when login form is done
+    // .um-page-login &,
+    // .um-page-password-reset {
+    //     display: flex;
 
-        article {
-            max-width: 100%;
-            width: auto;
-        }
-    }
-
+    //     article {
+    //         max-width: 100%;
+    //         width: auto;
+    //     }
+    // }
     .um-page-account & {
         display: flex;
 

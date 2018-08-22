@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
+import { Intent } from 'utils/constants';
 
 import Button from 'components/buttons/button';
 import ClickToEdit from 'components/click-to-edit';
@@ -36,7 +37,10 @@ export default class DashboardHeader extends React.Component<Props> {
                         {this.maybeRenderInstitution()}
                     </div>
                     {userKind === UserKind.OWNER && (
-                        <Button secondary onClick={this.toggleEditModal}>
+                        <Button
+                            intent={Intent.SECONDARY}
+                            onClick={this.toggleEditModal}
+                        >
                             Edit profile
                         </Button>
                     )}
@@ -83,7 +87,6 @@ export default class DashboardHeader extends React.Component<Props> {
                 <label>
                     First Name
                     <Input
-                        large
                         name="first_name"
                         defaultValue={user.first_name}
                         required
@@ -92,7 +95,6 @@ export default class DashboardHeader extends React.Component<Props> {
                 <label>
                     Last Name
                     <Input
-                        large
                         name="last_name"
                         defaultValue={user.last_name}
                         required
@@ -101,7 +103,6 @@ export default class DashboardHeader extends React.Component<Props> {
                 <label>
                     Display Name
                     <Input
-                        large
                         name="name"
                         defaultValue={user.name}
                         required
@@ -110,7 +111,6 @@ export default class DashboardHeader extends React.Component<Props> {
                 <label>
                     Email
                     <Input
-                        large
                         name="email"
                         defaultValue={user.email}
                         type="email"
@@ -120,13 +120,12 @@ export default class DashboardHeader extends React.Component<Props> {
                 <label>
                     Bio
                     <TextArea
-                        large
                         name="description"
                         defaultValue={user.description}
                     />
                 </label>
                 <div>
-                    <Button primary type="submit">
+                    <Button intent={Intent.PRIMARY} type="submit">
                         Update
                     </Button>
                 </div>

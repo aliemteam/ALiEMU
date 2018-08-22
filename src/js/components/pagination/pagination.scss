@@ -1,5 +1,7 @@
+@import '_colors';
 @import 'variables';
 @import 'mixins/clipped';
+@import 'mixins/state';
 
 .clipped {
     @include clipped;
@@ -61,11 +63,11 @@
     border-right-width: 0.5px;
 
     &:disabled {
+        @include disabled;
         cursor: default;
         // TODO: make this a variable
         background: darken($gray-light, 5%);
         border-color: $border-color !important;
-        opacity: 0.5;
     }
 }
 

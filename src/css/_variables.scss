@@ -1,4 +1,3 @@
-@import '_colors';
 
 $shadows: (
     border-bottom: 0 1px 0 rgba(16, 22, 26, 0.15),
@@ -50,7 +49,7 @@ $transitions: (
 );
 
 // Font
-$font-sans: 'Roboto', sans-serif !default;
+$font-sans: 'IBM Plex Sans', sans-serif !default;
 $font-serif: 'Roboto Slab', serif !default;
 $font-mono: 'Roboto Mono', monospace !default;
 $font-family: $font-sans !default;

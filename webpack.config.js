@@ -20,6 +20,15 @@ const VERSION = require('./package.json').version;
 execSync(`rm -rf ${__dirname}/dist/*`);
 
 const plugins = new Set([
+    new webpack.DefinePlugin({
+        'process.env': {
+            GOOGLE_PLACES_KEY: JSON.stringify(
+                IS_PRODUCTION
+                    ? process.env.GOOGLE_PLACES_KEY
+                    : process.env.GOOGLE_PLACES_KEY_DEV
+            ),
+        },
+    }),
     new webpack.BannerPlugin({
         banner: stripIndent`
             /*
@@ -102,6 +111,7 @@ module.exports = {
         'js/catalog': 'js/catalog',
         'js/dashboard': 'js/dashboard',
         'js/feedback': 'js/feedback',
+        'js/login': 'js/login',
         'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
         'js/polyfills': 'js/polyfills',
 

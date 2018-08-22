@@ -7,12 +7,12 @@ services:
         devices:
             - /dev/fuse
         environment:
-            ALIEM_API_KEY: ${ALIEM_API_KEY?ALIEM_API_KEY key not defined in .env}
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
             EXTRA_PHP: |
-              define( 'RECAPTCHA_KEY', '$RECAPTCHA_KEY' );
+              define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
+              define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
         volumes:
             - ./data:/data
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms

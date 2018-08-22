@@ -47,7 +47,7 @@ class Institution_Field extends Field {
 		// Ignoring because this is only an issue on WordPress VIP
 		// sites and won't affect us in any real measurable way.
 		// @codingStandardsIgnoreLine
-		return get_user_meta( $user['id'], 'residency_us_em', true );
+		return get_user_meta( $user['id'], 'institution', true );
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Institution_Field extends Field {
 		// Ignoring because this is only an issue on WordPress VIP
 		// sites and won't affect us in any real measurable way.
 		// @codingStandardsIgnoreLine
-		update_user_meta( $user->ID, 'residency_us_em', $value );
+		update_user_meta( $user->ID, 'institution', $value );
 		return null;
 	}
 }
