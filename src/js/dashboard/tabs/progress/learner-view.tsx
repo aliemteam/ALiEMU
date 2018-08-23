@@ -182,7 +182,9 @@ export default class LearnerView extends React.Component<Props> {
                                         course.title.rendered,
                                     )}
                                 >
-                                    {displayUnicode(course.title.rendered)}
+                                    <a href={course.link}>
+                                        {displayUnicode(course.title.rendered)}
+                                    </a>
                                 </div>
                             ),
                         },
