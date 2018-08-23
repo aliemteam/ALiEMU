@@ -1,11 +1,12 @@
 import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { Component, FormEvent, ReactNode } from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 import { Intent } from 'utils/constants';
 
 import Button from 'components/buttons/button';
+import ButtonOutlined from 'components/buttons/button-outlined';
 import ClickToEdit from 'components/click-to-edit';
 import Input from 'components/forms/input';
 import TextArea from 'components/forms/textarea';
@@ -18,7 +19,7 @@ interface Props {
 }
 
 @observer
-export default class DashboardHeader extends React.Component<Props> {
+export default class DashboardHeader extends Component<Props> {
     @observable
     isShowingEditModal: boolean = false;
 
@@ -54,7 +55,7 @@ export default class DashboardHeader extends React.Component<Props> {
         );
     }
 
-    private maybeRenderInstitution = (): React.ReactNode => {
+    private maybeRenderInstitution = (): ReactNode => {
         const {
             user: { institution },
             userKind,
@@ -62,7 +63,6 @@ export default class DashboardHeader extends React.Component<Props> {
         if (userKind === UserKind.OWNER) {
             return (
                 <ClickToEdit
-                    inputProps={{ className: styles.institutionInput }}
                     buttonProps={{ className: styles.institutionBtn }}
                     placeholder="Add your institution"
                     onSave={this.updateInstitution}
@@ -76,7 +76,7 @@ export default class DashboardHeader extends React.Component<Props> {
         ) : null;
     };
 
-    private editProfileForm = (): React.ReactNode => {
+    private editProfileForm = (): ReactNode => {
         const { user } = this.props.store;
         return (
             <form
@@ -84,47 +84,49 @@ export default class DashboardHeader extends React.Component<Props> {
                 onSubmit={this.handleSubmit}
             >
                 <h2>Edit Profile</h2>
-                <label>
-                    First Name
-                    <Input
-                        name="first_name"
-                        defaultValue={user.first_name}
-                        required
-                    />
-                </label>
-                <label>
-                    Last Name
-                    <Input
-                        name="last_name"
-                        defaultValue={user.last_name}
-                        required
-                    />
-                </label>
-                <label>
-                    Display Name
-                    <Input
-                        name="name"
-                        defaultValue={user.name}
-                        required
-                    />
-                </label>
-                <label>
-                    Email
-                    <Input
-                        name="email"
-                        defaultValue={user.email}
-                        type="email"
-                        required
-                    />
-                </label>
-                <label>
-                    Bio
-                    <TextArea
-                        name="description"
-                        defaultValue={user.description}
-                    />
-                </label>
+                <Input
+                    name="first_name"
+                    label="First name"
+                    autoComplete="given-name"
+                    defaultValue={user.first_name}
+                    required
+                />
+                <Input
+                    name="last_name"
+                    label="Last name"
+                    autoComplete="family-name"
+                    defaultValue={user.last_name}
+                    required
+                />
+                <Input
+                    name="name"
+                    label="Display name"
+                    autoComplete="name"
+                    defaultValue={user.name}
+                    required
+                />
+                <Input
+                    name="email"
+                    label="Email"
+                    type="email"
+                    autoComplete="email"
+                    defaultValue={user.email}
+                    required
+                />
+                <TextArea
+                    name="description"
+                    label="Bio"
+                    rows={3}
+                    defaultValue={user.description}
+                />
                 <div>
+                    <ButtonOutlined
+                        type="button"
+                        onClick={this.toggleEditModal}
+                        style={{ marginRight: 5 }}
+                    >
+                        Cancel
+                    </ButtonOutlined>
                     <Button intent={Intent.PRIMARY} type="submit">
                         Update
                     </Button>
@@ -133,7 +135,7 @@ export default class DashboardHeader extends React.Component<Props> {
         );
     };
 
-    private handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    private handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const data: Partial<WordPress.User<'view'>> = {};

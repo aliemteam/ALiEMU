@@ -67,20 +67,18 @@ export default class ClickToEdit extends Component<Props, State> {
     };
 
     private maybeRenderInput = (): ReactNode => {
-        if (!this.state.isEditing) {
-            return null;
-        }
         const { inputProps } = this.props;
-        return (
+        const { isEditing, value } = this.state;
+        return isEditing ? (
             <Input
                 {...inputProps}
                 ref={this.ref}
-                value={this.state.value}
+                value={value}
                 onKeyUp={this.handleKeyUp}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
             />
-        );
+        ) : null;
     };
 
     private handleBlur = () => {
@@ -107,15 +105,7 @@ export default class ClickToEdit extends Component<Props, State> {
                 if (this.props.children === this.state.value) {
                     return;
                 }
-                try {
-                    await this.props.onSave(this.state.value);
-                } catch (e) {
-                    console.error(
-                        `Error occured while attempting to change institution: ${
-                            e.message
-                        }`,
-                    );
-                }
+                await this.props.onSave(this.state.value);
                 this.setState(prev => ({
                     ...prev,
                     value: this.props.children || '',

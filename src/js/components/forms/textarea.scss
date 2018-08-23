@@ -2,16 +2,18 @@
 @import 'variables';
 @import './shared';
 
+@value padding-size: #{$padding-size};
+
 .textarea {
     @extend .container;
-    padding: $padding-size;
     height: auto;
     overflow: auto;
     color: #424770;
     font-family: $font-mono;
+    padding: $padding-size;
+    resize: vertical;
 
     &:focus {
-        outline: none;
         @include focus;
     }
 }

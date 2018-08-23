@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { HTMLProps, PureComponent } from 'react';
+import React, { CSSProperties, HTMLProps, PureComponent } from 'react';
 
 import { MaybeLabel } from './label';
 
@@ -13,9 +13,18 @@ export default class TextArea extends PureComponent<Props> {
     render(): JSX.Element {
         const { className, label, ...props } = this.props;
         const classname = classNames(className, styles.textarea);
+        const style: CSSProperties = {
+            ...(props.rows
+                ? {
+                      minHeight: `calc(${props.rows}em + (2 * ${
+                          styles.paddingSize
+                      }))`,
+                  }
+                : {}),
+        };
         return (
             <MaybeLabel label={label} disabled={props.disabled}>
-                <textarea {...props} className={classname} />
+                <textarea {...props} className={classname} style={style} />
             </MaybeLabel>
         );
     }

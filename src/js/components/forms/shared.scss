@@ -23,7 +23,6 @@ $padding-size: 10px;
         0 0 0 2px transparent, 0 1px 1px rgba(black, 0.05);
 
     &.focused {
-        outline: none;
         @include focus;
     }
 
