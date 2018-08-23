@@ -70,6 +70,7 @@ function get_user_course_progress( int $user_id ) : array {
 				WHERE a.activity_type = 'course'
 				AND m1.activity_meta_value > 0
 				AND a.user_id = %d
+				ORDER BY a.activity_id DESC
 				",
 				$user_id
 			)
