@@ -35,4 +35,5 @@ export const UserPracticeLevels: ReadonlyArray<string> = [
     'Resident',
     'Fellow',
     'Non-Trainee Practitioner',
+    'Other',
 ];
