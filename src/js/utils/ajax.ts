@@ -1,7 +1,3 @@
-interface AjaxData {
-    [k: string]: string | number | boolean;
-}
-
 interface AjaxSuccess<T> {
     success: true;
     data: T;
@@ -17,19 +13,29 @@ interface AjaxError {
 
 type AjaxResponse<T> = AjaxSuccess<T> | AjaxError;
 
-export async function wpAjax<T = any>(
+const { AU_AJAX } = window;
+
+export async function wpAjax<T>(
     action: string,
-    nonce: string,
-    data: AjaxData,
-): Promise<T> {
-    // tslint:disable-next-line:await-promise
-    const response: AjaxResponse<T> = await jQuery.post(window.ajaxurl, {
-        action,
-        _ajax_nonce: nonce,
-        ...data,
-    });
-    if (!response.success) {
-        throw response.data;
+    data: { [k: string]: Scalar },
+): Promise<AjaxResponse<T>> {
+    const { nonce, url } = AU_AJAX;
+    let response: AjaxResponse<T>;
+    try {
+        response = await jQuery.post(url, {
+            _ajax_nonce: nonce,
+            action,
+            ...data,
+        });
+    } catch (_e) {
+        response = {
+            success: false,
+            data: {
+                code: 'http_error',
+                message:
+                    'An unexpected error occurred while handling your request. Please try again later.',
+            },
+        };
     }
-    return response.data;
+    return response;
 }

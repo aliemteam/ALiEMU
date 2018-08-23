@@ -44,6 +44,9 @@
 		"no-submodule-imports": false,
 		"object-literal-sort-keys": false,
 
+		"no-suspicious-comment": {
+			"severity": "warning"
+		},
 		"await-promise": true,
 		"no-banned-terms": true,
 		"no-delete-expression": true,

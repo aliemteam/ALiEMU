@@ -19,7 +19,7 @@ export default class Button extends PureComponent<Props> {
     };
 
     render(): JSX.Element {
-        const { children, compact, intent, loading, ...btnProps } = this.props;
+        const { children, compact, intent, loading, ...props } = this.props;
         const classname = classNames(styles.button, {
             [styles.intentPrimary]: intent === Intent.PRIMARY,
             [styles.intentSecondary]: intent === Intent.SECONDARY,
@@ -31,7 +31,8 @@ export default class Button extends PureComponent<Props> {
         });
         return (
             <button
-                {...btnProps}
+                {...props}
+                disabled={props.disabled || loading}
                 className={classname}
                 onClick={this.handleClick}
             >

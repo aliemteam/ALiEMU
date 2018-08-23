@@ -1,56 +1,44 @@
 @import 'mixins/media';
 @import 'variables';
 
-.container {
+:global {
+    #feedback-root {
+        display: flex;
+    }
+}
+
+.card {
     padding: $block-padding;
+    max-width: 600px;
+    margin: auto;
 }
 
 .form {
     display: grid;
     grid-gap: 10px;
-    grid:
-        'head head'
-        'text text'
-        'name email'
-        'mesg mesg'
-        '.... send';
 
-    @include device-mobile {
-        grid:
-            'head'
-            'text'
-            'name'
-            'email'
-            'mesg'
-            'send';
+    > h1,
+    > p {
+        margin: 0;
+        text-align: center;
     }
 }
 
-.heading {
-    grid-area: head;
-    margin: 0;
-    text-align: center;
+.input-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+    }
 }
 
 .text {
-    grid-area: text;
     margin: 0;
     text-align: center;
 }
 
-.name {
-    grid-area: name;
-}
-
-.email {
-    grid-area: email;
-}
-
-.message {
-    grid-area: mesg;
-}
-
 .send {
-    grid-area: send;
     text-align: right;
 }

@@ -52,8 +52,8 @@ class Script_Loader {
 				};
 				var AU_AJAX = {
 					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>',
+					url: '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
 				};
-				var AU_SESSION_TOKEN = '<?php echo wp_generate_uuid4(); ?>';
 			</script>
 		<?php
 		// phpcs:enable

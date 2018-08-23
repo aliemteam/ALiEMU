@@ -341,41 +341,33 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         e.preventDefault();
         const { currentPage } = this.state;
         this.setState(prev => ({ ...prev, notice: undefined }));
-        if (currentPage < this.pages.length - 1) {
-            this.handlePagination(e);
-        } else {
-            grecaptcha.execute();
-        }
+        return currentPage < this.pages.length - 1
+            ? this.handlePagination(e)
+            : grecaptcha.execute();
     };
 
     private handleSubmit = async (token: string): Promise<void> => {
-        const { data } = this.state;
         this.setState(prev => ({ ...prev, loading: true }));
-        let notice = {
-            intent: Intent.SUCCESS,
-            title: 'Registration submitted',
-            message:
-                'To complete your registration, please confirm your identity by clicking the activation link in the email we just sent you.',
-        };
-        try {
-            await wpAjax('user_register', window.AU_AJAX.nonce, {
-                recaptcha_token: token,
-                ...data,
-            });
-        } catch (err) {
-            notice = {
-                intent: Intent.DANGER,
-                title: 'Registration failed',
-                message: err.message
-                    ? err.message
-                    : 'An internal error occurred. Please try again later.',
-            };
-        }
-        this.setState(prev => ({
-            ...prev,
-            loading: false,
-            notice,
-        }));
-        grecaptcha.reset();
+        const response = await wpAjax('user_register', {
+            recaptcha_token: token,
+            ...this.state.data,
+        });
+        this.setState(
+            prev => ({
+                ...prev,
+                loading: false,
+                notice: {
+                    intent: response.success ? Intent.SUCCESS : Intent.DANGER,
+                    title: response.success
+                        ? 'Registration submitted'
+                        : 'Registration failed',
+                    message: response.success
+                        ? 'To complete your registration, please confirm your identity by clicking the activation link in the email we just sent you.'
+                        : response.data.message ||
+                          'An internal error occurred. Please try again later.',
+                },
+            }),
+            grecaptcha.reset,
+        );
     };
 }

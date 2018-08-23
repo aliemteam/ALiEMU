@@ -10,9 +10,9 @@ import Notice from 'components/notice';
 import * as styles from './form-reset.scss';
 
 const enum Status {
-    PENDING = 'PENDING',
-    SUCCESS = 'SUCCESS',
-    ERROR = 'ERROR',
+    PENDING,
+    SUCCESS,
+    ERROR,
 }
 
 interface State {
@@ -24,7 +24,7 @@ interface State {
 }
 
 export default class ResetForm extends PureComponent<{}, State> {
-    state = {
+    state: State = {
         data: {
             user_login: '',
         },
@@ -112,15 +112,12 @@ export default class ResetForm extends PureComponent<{}, State> {
         e: FormEvent<HTMLFormElement>,
     ): Promise<void> => {
         e.preventDefault();
-        let status = Status.SUCCESS;
-        const { data } = this.state;
-
         this.setState(prev => ({ ...prev, loading: true }));
-        try {
-            await wpAjax('reset_password', window.AU_AJAX.nonce, { ...data });
-        } catch (_e) {
-            status = Status.ERROR;
-        }
-        this.setState(prev => ({ ...prev, status, loading: false }));
+        const response = await wpAjax('reset_password', { ...this.state.data });
+        this.setState(prev => ({
+            ...prev,
+            loading: false,
+            status: response.success ? Status.SUCCESS : Status.ERROR,
+        }));
     };
 }

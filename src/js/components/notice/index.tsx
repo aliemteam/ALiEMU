@@ -37,13 +37,13 @@ export default class Notice extends PureComponent<Props> {
         const { intent } = this.props;
         switch (intent) {
             case Intent.PRIMARY:
-                return <Icon icon="info" size={22} />;
+                return <Icon icon="info" size={26} />;
             case Intent.SUCCESS:
-                return <Icon icon="check_circle" size={22} />;
+                return <Icon icon="check_circle" size={26} />;
             case Intent.WARNING:
-                return <Icon icon="warning" size={22} />;
+                return <Icon icon="warning" size={26} />;
             case Intent.DANGER:
-                return <Icon icon="error" size={22} />;
+                return <Icon icon="error" size={26} />;
             default:
                 return null;
         }

@@ -117,32 +117,34 @@ export default class LoginForm extends PureComponent<Props, State> {
     ): Promise<void> => {
         e.preventDefault();
         this.setState(prev => ({ ...prev, notice: undefined, loading: true }));
-        try {
-            await wpAjax('user_login', window.AU_AJAX.nonce, {
-                ...this.state.data,
-            });
-            window.location.replace('user');
-        } catch (err) {
-            const notice: State['notice'] = {
-                intent: Intent.DANGER,
-                title: '',
-                message: '',
-            };
-            switch (err.code) {
-                case 'invalid_username':
-                case 'incorrect_password':
-                    notice.message = 'Invalid username or password.';
-                    break;
-                case 'awaiting_email_confirmation':
-                    notice.message =
-                        'Your account is awaiting email verification.';
-                    notice.intent = Intent.WARNING;
-                    break;
-                default:
-                    notice.message =
-                        'An unexpected error occurred while attempting to log in. Please try again later.';
-            }
-            this.setState(prev => ({ ...prev, notice, loading: false }));
+        const response = await wpAjax('user_login', { ...this.state.data });
+        if (response.success) {
+            return window.location.replace('user');
         }
+        const { code } = response.data;
+        let notice: State['notice'] = {
+            intent: Intent.DANGER,
+            title: '',
+            message:
+                'An unexpected error occurred while attempting to log in. Please try again later.',
+        };
+        switch (code) {
+            case 'invalid_username':
+            case 'incorrect_password':
+                notice = {
+                    ...notice,
+                    message: 'Invalid username or password.',
+                };
+                break;
+            case 'awaiting_email_confirmation':
+                notice = {
+                    ...notice,
+                    intent: Intent.WARNING,
+                    message: 'Your account is awaiting email verification.',
+                };
+                break;
+            default:
+        }
+        this.setState(prev => ({ ...prev, notice, loading: false }));
     };
 }

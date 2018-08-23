@@ -12,6 +12,8 @@
     background: $gray-light;
     border-radius: $border-radius;
 
+    text-align: initial;
+
     @each $k, $v in $intent {
         &.intent-#{$k} {
             color: $v;
@@ -29,7 +31,6 @@
         font-size: 14px;
         line-height: 1.4;
         word-break: break-word;
-        text-align: justify;
     }
 
     h1 {
@@ -38,6 +39,7 @@
         }
         font-size: 18px;
         font-family: $font-sans;
+        font-weight: 600;
     }
 
     i {
