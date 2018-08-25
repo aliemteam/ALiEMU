@@ -147,6 +147,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 <Input
                     name="user_institution"
                     label="Institution"
+                    autoComplete="organization"
                     disabled={this.state.loading}
                     value={this.state.data.user_institution}
                     onChange={this.handleChange}
@@ -154,6 +155,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 <Input
                     name="user_specialty"
                     label="Specialty"
+                    autoComplete="off"
                     disabled={this.state.loading}
                     value={this.state.data.user_specialty}
                     onChange={this.handleChange}
