@@ -10,8 +10,9 @@
     margin: 0;
     width: 100%;
 
+    // FIXME:
     color: #424770;
-    font-family: $font-mono;
+    font-family: $font-sans;
 
     &:focus {
         outline: none;

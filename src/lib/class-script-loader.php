@@ -70,8 +70,8 @@ class Script_Loader {
 					'family' => join(
 						'|',
 						[
-							'Roboto+Mono:400,500,700',
 							'Roboto+Slab:400,700',
+							'IBM+Plex+Mono:400,500,700',
 							'IBM+Plex+Sans:400,400i,600',
 							'Material+Icons',
 						]

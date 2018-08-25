@@ -8,8 +8,9 @@
     @extend .container;
     height: auto;
     overflow: auto;
+    // FIXME:
     color: #424770;
-    font-family: $font-mono;
+    font-family: $font-sans;
     padding: $padding-size;
     resize: vertical;
 
