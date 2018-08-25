@@ -1,3 +1,7 @@
+// Disabling below because jQuery.post actually DOES return a promise, but due
+// to the way the types are implemented, tslint doesn't catch it.
+// tslint:disable:await-promise
+
 interface AjaxSuccess<T> {
     success: true;
     data: T;

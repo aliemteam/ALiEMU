@@ -6,6 +6,9 @@ services:
         environment:
             SERVER_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
+            EXTRA_PHP: |
+                define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
+                define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
             PLUGINS: >-
                 academic-bloggers-toolkit
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip

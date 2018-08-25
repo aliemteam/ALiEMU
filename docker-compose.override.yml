@@ -6,6 +6,9 @@ services:
             WP_DEBUG_DISPLAY: 'true'
             WP_DEBUG: 'true'
             WP_VERSION: nightly
+            EXTRA_PHP: |
+                define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
+                define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
             PLUGINS: >-
                 academic-bloggers-toolkit
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip

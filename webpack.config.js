@@ -1,3 +1,4 @@
+require('dotenv').config();
 const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
 const { stripIndent } = require('common-tags');
 const { execSync } = require('child_process');
@@ -22,11 +23,7 @@ execSync(`rm -rf ${__dirname}/dist/*`);
 const plugins = new Set([
     new webpack.DefinePlugin({
         'process.env': {
-            GOOGLE_PLACES_KEY: JSON.stringify(
-                IS_PRODUCTION
-                    ? process.env.GOOGLE_PLACES_KEY
-                    : process.env.GOOGLE_PLACES_KEY_DEV
-            ),
+            GOOGLE_PLACES_KEY: assertEnv('GOOGLE_PLACES_KEY'),
         },
     }),
     new webpack.BannerPlugin({
@@ -245,3 +242,13 @@ module.exports = {
         ],
     },
 };
+
+function assertEnv(key) {
+    key = IS_PRODUCTION ? key : `${key}_DEV`;
+    const value = process.env[key];
+    if (value === undefined) {
+        console.log(`ERROR: required environment variable "${key}" is not defined.`);
+        process.exit(1);
+    }
+    return JSON.stringify(value);
+}

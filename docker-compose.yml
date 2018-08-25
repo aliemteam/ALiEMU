@@ -1,7 +1,7 @@
 version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.20.0-php7.2
+        image: visiblevc/wordpress:0.21.0-php7.2
         cap_add:
             - SYS_ADMIN
         devices:
@@ -10,9 +10,6 @@ services:
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
-            EXTRA_PHP: |
-                define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
-                define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
         volumes:
             - ./data:/data
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
