@@ -19,6 +19,10 @@
 
 .bio {
     grid-area: bio;
+
+    > div {
+        white-space: pre-line;
+    }
 }
 
 .stats {
