@@ -5,6 +5,7 @@ import Card from 'components/card/';
 import styles from './modal.scss';
 
 interface Props {
+    closeOnClickOutside?: boolean;
     onClose(): void;
 }
 
@@ -52,7 +53,7 @@ export default class Modal extends React.PureComponent<Props> {
         <div
             role="dialog"
             className={styles.modal}
-            onClick={this.props.onClose}
+            onClick={this.handleOutsideClick}
             onKeyDown={this.handleKeyDown}
         >
             <Card onClick={this.stopClickPropagation}>
@@ -61,8 +62,16 @@ export default class Modal extends React.PureComponent<Props> {
         </div>
     );
 
+    private handleOutsideClick = () => {
+        const { closeOnClickOutside, onClose } = this.props;
+        if (closeOnClickOutside) {
+            onClose();
+        }
+    };
+
     private stopClickPropagation = (e: React.MouseEvent<any>) => {
         e.stopPropagation();
+        e.nativeEvent.stopImmediatePropagation();
     };
 
     private handleKeyDown = (e: React.KeyboardEvent) => {
@@ -83,7 +92,7 @@ export default class Modal extends React.PureComponent<Props> {
         const firstElement = this.firstFocusableElement;
         const lastElement = this.lastFocusableElement;
         const { activeElement } = document;
-        if ( !firstElement || !lastElement ) {
+        if (!firstElement || !lastElement) {
             return true;
         }
         if (reverseOrder && activeElement === firstElement) {

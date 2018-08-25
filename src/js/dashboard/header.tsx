@@ -1,4 +1,3 @@
-import { action, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { Component, FormEvent, ReactNode } from 'react';
 
@@ -18,18 +17,19 @@ interface Props {
     store: UserStore;
 }
 
-@observer
-export default class DashboardHeader extends Component<Props> {
-    @observable
-    isShowingEditModal: boolean = false;
+interface State {
+    modalIsOpen: boolean;
+}
 
-    @action
-    toggleEditModal = () => {
-        this.isShowingEditModal = !this.isShowingEditModal;
+@observer
+export default class DashboardHeader extends Component<Props, State> {
+    state: State = {
+        modalIsOpen: false,
     };
 
     render(): JSX.Element {
         const { user, userKind } = this.props.store;
+        const { modalIsOpen } = this.state;
         return (
             <div className={styles.header}>
                 <div className={styles.headerContainer}>
@@ -40,14 +40,14 @@ export default class DashboardHeader extends Component<Props> {
                     {userKind === UserKind.OWNER && (
                         <Button
                             intent={Intent.SECONDARY}
-                            onClick={this.toggleEditModal}
+                            onClick={this.toggleModal}
                         >
                             Edit profile
                         </Button>
                     )}
                 </div>
-                {this.isShowingEditModal && (
-                    <Modal onClose={this.toggleEditModal}>
+                {modalIsOpen && (
+                    <Modal onClose={this.toggleModal}>
                         {this.editProfileForm()}
                     </Modal>
                 )}
@@ -117,12 +117,13 @@ export default class DashboardHeader extends Component<Props> {
                     name="description"
                     label="Bio"
                     rows={3}
+                    maxLength={500}
                     defaultValue={user.description}
                 />
                 <div>
                     <ButtonOutlined
                         type="button"
-                        onClick={this.toggleEditModal}
+                        onClick={this.toggleModal}
                         style={{ marginRight: 5 }}
                     >
                         Cancel
@@ -143,6 +144,11 @@ export default class DashboardHeader extends Component<Props> {
             data[k as keyof WordPress.User<'view'>] = v;
         }
         this.props.store.updateUser(data);
+        this.toggleModal();
+    };
+
+    private toggleModal = (): void => {
+        this.setState(prev => ({ ...prev, modalIsOpen: !prev.modalIsOpen }));
     };
 
     private updateInstitution = (institution: string): void => {
