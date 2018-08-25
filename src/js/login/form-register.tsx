@@ -369,7 +369,9 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                           'An internal error occurred. Please try again later.',
                 },
             }),
-            grecaptcha.reset,
+            () => {
+                grecaptcha.reset();
+            },
         );
     };
 }
