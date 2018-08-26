@@ -28,7 +28,7 @@ export default class Checkbox extends PureComponent<Props, State> {
         const className = classNames(styles.checkboxContainer, {
             [styles.disabled]: props.disabled,
         });
-        // TODO: Remove below when the following issue resolves.
+        // FIXME: Remove below when the following issue resolves.
         // https://github.com/Microsoft/tslint-microsoft-contrib/issues/409
         // tslint:disable:react-a11y-role-has-required-aria-props
         return (

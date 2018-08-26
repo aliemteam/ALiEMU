@@ -116,7 +116,7 @@ export default class DashboardHeader extends Component<Props, State> {
                 <TextArea
                     name="description"
                     label="Bio"
-                    rows={3}
+                    rows={5}
                     maxLength={500}
                     defaultValue={user.description}
                 />
