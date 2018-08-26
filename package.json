@@ -52,6 +52,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0-rc.3",
     "@babel/preset-env": "^7.0.0-rc.3",
     "@babel/preset-react": "^7.0.0-rc.3",
+    "@dsifford/stylelint-config": "^0.1.0",
     "@types/classnames": "^2.2.6",
     "@types/common-tags": "^1.4.0",
     "@types/copy-webpack-plugin": "^4.4.2",
