@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import Card from '../index';
+import Notice from '../index';
 
 it('renders correctly', () => {
-    const tree = renderer.create(<Card>Hello World</Card>);
+    const tree = renderer.create(<Notice>Hello World</Notice>);
     expect(tree).toMatchSnapshot();
 });

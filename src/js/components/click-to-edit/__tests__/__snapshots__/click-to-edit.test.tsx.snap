@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <a
+    className="btn"
+    onClick={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    
+  </a>,
+  <a
+    className="btn"
+    onClick={[Function]}
+    role="button"
+    tabIndex={0}
+  >
+    With Placeholder
+  </a>,
+]
+`;

@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <label
+    className=""
+  >
+    Labelled Input
+    <div
+      className="container"
+    >
+      <input
+        className="input"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+      />
+    </div>
+  </label>,
+  <div
+    className="container"
+  >
+    <input
+      className="input"
+      defaultValue="Unlabelled Input"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+    />
+  </div>,
+  <div
+    className="container"
+  >
+    <input
+      className="input"
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Placeholder Input"
+    />
+  </div>,
+  <div
+    className="container disabled"
+  >
+    <input
+      className="input"
+      disabled={true}
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+    />
+  </div>,
+  <label
+    className=""
+  >
+    Raised Input
+    <div
+      className="container containerRaised"
+    >
+      <input
+        className="input"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+      />
+    </div>
+  </label>,
+]
+`;

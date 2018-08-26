@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <label
+    className=""
+  >
+    <input
+      checked={false}
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      aria-checked={false}
+      role="checkbox"
+    />
+    <span>
+      Unchecked
+    </span>
+  </label>,
+  <label
+    className=""
+  >
+    <input
+      checked={true}
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      aria-checked={true}
+      role="checkbox"
+    >
+      <i
+        className="material-icons"
+        style={
+          Object {
+            "color": undefined,
+            "fontSize": 13,
+          }
+        }
+      >
+        check
+      </i>
+    </span>
+    <span>
+      Checked
+    </span>
+  </label>,
+]
+`;

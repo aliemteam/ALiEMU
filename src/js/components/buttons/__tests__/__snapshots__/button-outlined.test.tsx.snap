@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <button
+    className="buttonOutlined"
+  >
+    Default
+  </button>,
+  <button
+    className="buttonOutlined buttonOutlinedSuccess"
+  >
+    Success
+  </button>,
+  <button
+    className="buttonOutlined buttonOutlinedDanger"
+  >
+    Danger
+  </button>,
+]
+`;

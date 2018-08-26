@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Pagination /> should render correctly 1`] = `
+<nav
+  aria-labelledby="pagination-0"
+  className="nav alignRight"
+  role="navigation"
+>
+  <div
+    className="pager"
+  >
+    <span
+      aria-live="polite"
+      role="status"
+    >
+      <h2
+        className="clipped"
+        id="pagination-0"
+      >
+        Table Pagination - Page 3
+      </h2>
+    </span>
+    <button
+      aria-label="previous page"
+      className="buttonPrev"
+      data-page={2}
+      disabled={false}
+      onClick={[MockFunction]}
+      style={
+        Object {
+          "fontSize": 15,
+          "height": 30,
+          "minWidth": 30,
+        }
+      }
+    >
+      <i
+        className="material-icons"
+        style={
+          Object {
+            "color": undefined,
+            "fontSize": 18,
+          }
+        }
+      >
+        chevron_left
+      </i>
+    </button>
+    <div
+      className="pageList"
+      role="list"
+    >
+      <button
+        aria-label="page 1"
+        aria-posinset={1}
+        aria-setsize={5}
+        className="button"
+        data-page={1}
+        onClick={[MockFunction]}
+        role="listitem"
+        style={
+          Object {
+            "fontSize": 15,
+            "height": 30,
+            "minWidth": 30,
+          }
+        }
+      >
+        1
+      </button>
+      <button
+        aria-label="page 2"
+        aria-posinset={2}
+        aria-setsize={5}
+        className="button"
+        data-page={2}
+        onClick={[MockFunction]}
+        role="listitem"
+        style={
+          Object {
+            "fontSize": 15,
+            "height": 30,
+            "minWidth": 30,
+          }
+        }
+      >
+        2
+      </button>
+      <button
+        aria-current="page"
+        aria-label="page 3"
+        aria-posinset={3}
+        aria-setsize={5}
+        className="button"
+        data-page={3}
+        onClick={[MockFunction]}
+        role="listitem"
+        style={
+          Object {
+            "fontSize": 15,
+            "height": 30,
+            "minWidth": 30,
+          }
+        }
+      >
+        3
+      </button>
+      <button
+        aria-label="page 4"
+        aria-posinset={4}
+        aria-setsize={5}
+        className="button"
+        data-page={4}
+        onClick={[MockFunction]}
+        role="listitem"
+        style={
+          Object {
+            "fontSize": 15,
+            "height": 30,
+            "minWidth": 30,
+          }
+        }
+      >
+        4
+      </button>
+      <button
+        aria-label="page 5"
+        aria-posinset={5}
+        aria-setsize={5}
+        className="button"
+        data-page={5}
+        onClick={[MockFunction]}
+        role="listitem"
+        style={
+          Object {
+            "fontSize": 15,
+            "height": 30,
+            "minWidth": 30,
+          }
+        }
+      >
+        5
+      </button>
+    </div>
+    <button
+      aria-label="next page"
+      className="buttonNext"
+      data-page={4}
+      disabled={false}
+      onClick={[MockFunction]}
+      style={
+        Object {
+          "fontSize": 15,
+          "height": 30,
+          "minWidth": 30,
+        }
+      }
+    >
+      <i
+        className="material-icons"
+        style={
+          Object {
+            "color": undefined,
+            "fontSize": 18,
+          }
+        }
+      >
+        chevron_right
+      </i>
+    </button>
+  </div>
+</nav>
+`;

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+<nav
+  className="navbar"
+>
+  <div
+    className="container"
+  >
+    <div
+      className="navGroup"
+    >
+      <button
+        className="btn active"
+      >
+        One
+      </button>
+      <button
+        className="btn"
+      >
+        Two
+      </button>
+    </div>
+    <div
+      className="navGroup alignRight"
+    >
+      <button
+        className="btn"
+      >
+        Three
+      </button>
+    </div>
+  </div>
+</nav>
+`;

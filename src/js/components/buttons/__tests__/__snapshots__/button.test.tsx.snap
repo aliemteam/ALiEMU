@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <button
+    className="button"
+    onClick={[Function]}
+  >
+    <span>
+      Primary
+    </span>
+  </button>,
+  <button
+    className="button intentSuccess"
+    onClick={[Function]}
+  >
+    <span>
+      Success
+    </span>
+  </button>,
+  <button
+    className="button intentWarning"
+    onClick={[Function]}
+  >
+    <span>
+      Warning
+    </span>
+  </button>,
+  <button
+    className="button intentDanger"
+    onClick={[Function]}
+  >
+    <span>
+      Danger
+    </span>
+  </button>,
+  <button
+    className="button loading"
+    disabled={true}
+    onClick={[Function]}
+  >
+    <span>
+      Loading
+    </span>
+    <div
+      className="spinner"
+    >
+      <svg
+        className="spinner"
+        height={25}
+        style={
+          Object {
+            "strokeDasharray": "70.68583470577035px",
+            "strokeDashoffset": "56.54866776461628px",
+            "strokeWidth": "2.5px",
+          }
+        }
+        viewBox="0 0 25 25"
+        width={25}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle
+          cx={12.5}
+          cy={12.5}
+          r={11.25}
+        />
+      </svg>
+    </div>
+  </button>,
+]
+`;

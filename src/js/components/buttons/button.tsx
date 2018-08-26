@@ -9,7 +9,6 @@ import styles from './button.scss';
 
 interface Props extends HTMLProps<HTMLButtonElement> {
     intent?: Intent;
-    compact?: boolean;
     loading?: boolean;
 }
 
@@ -19,14 +18,13 @@ export default class Button extends PureComponent<Props> {
     };
 
     render(): JSX.Element {
-        const { children, compact, intent, loading, ...props } = this.props;
+        const { children, intent, loading, ...props } = this.props;
         const classname = classNames(styles.button, {
             [styles.intentPrimary]: intent === Intent.PRIMARY,
             [styles.intentSecondary]: intent === Intent.SECONDARY,
             [styles.intentSuccess]: intent === Intent.SUCCESS,
             [styles.intentWarning]: intent === Intent.WARNING,
             [styles.intentDanger]: intent === Intent.DANGER,
-            [styles.compact]: compact,
             [styles.loading]: loading,
         });
         return (
