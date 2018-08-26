@@ -4,11 +4,6 @@ tabWidth = 4
 trailingComma = 'all'
 
 [[overrides]]
-  files = '*.json'
-  [overrides.options]
-    tabWidth = 2
-
-[[overrides]]
   files = '*.js'
   [overrides.options]
     trailingComma = 'es5'
