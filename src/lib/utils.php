@@ -100,7 +100,8 @@ function slack_message( $route, $data ) {
 	}
 	for ( $i = 0; $i < 5; $i++ ) {
 		$response = wp_remote_post(
-			"https://aliem-slackbot.now.sh/$route", [
+			"https://aliem-slackbot.now.sh/$route",
+			[
 				'headers' => [
 					'ALIEM_API_KEY' => ALIEM_API_KEY,
 				],

@@ -47,7 +47,8 @@ function setup() : void {
 	 * to output valid HTML5.
 	 */
 	add_theme_support(
-		'html5', [
+		'html5',
+		[
 			'search-form',
 			'comment-form',
 			'comment-list',
@@ -152,7 +153,8 @@ function comments_args( $defaults ) : array {
 	$logged_in_as = ob_get_clean();
 
 	$defaults = array_merge(
-		$defaults, [
+		$defaults,
+		[
 			'cancel_reply_before' => '',
 			'cancel_reply_after'  => '',
 			'comment_field'       => $comment_field,
@@ -180,7 +182,8 @@ add_filter( 'comment_form_defaults', __NAMESPACE__ . '\comments_args' );
 function filter_post_classes( array $classes, array $class, int $id ) : array {
 	$filtered = array_values(
 		array_filter(
-			$classes, function ( string $cls ) : bool {
+			$classes,
+			function ( string $cls ) : bool {
 				return ! in_array( $cls, [ 'hentry' ], true );
 			}
 		)
@@ -215,7 +218,8 @@ function slack_comment( $comment_id ) {
 	}
 
 	slack_message(
-		"$category/messages/comments", [
+		"$category/messages/comments",
+		[
 			'name'     => $comment->comment_author,
 			'email'    => $comment->comment_author_email,
 			'content'  => $comment->comment_content,

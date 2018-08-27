@@ -8,7 +8,8 @@
 defined( 'ABSPATH' ) || exit;
 
 add_action(
-	'template_redirect', function () {
+	'template_redirect',
+	function () {
 		$user_is_logged_in = is_user_logged_in();
 
 		if ( is_page( 'login' ) && $user_is_logged_in ) {

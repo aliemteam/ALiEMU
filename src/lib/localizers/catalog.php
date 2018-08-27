@@ -17,8 +17,10 @@ function localize() {
 
 	$courses_req = new \WP_Rest_Request( 'GET', '/aliemu/v1/courses' );
 	$courses_req->set_param(
-		'_fields', join(
-			',', [
+		'_fields',
+		join(
+			',',
+			[
 				'_links',
 				'categories',
 				'course_short_description',

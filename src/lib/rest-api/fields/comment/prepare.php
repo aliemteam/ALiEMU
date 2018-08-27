@@ -12,7 +12,8 @@ namespace ALIEMU\API\Comments\Prepare;
 defined( 'ABSPATH' ) || exit;
 
 add_filter(
-	'rest_prepare_comment', function( $response, $comment, $request ) {
+	'rest_prepare_comment',
+	function( $response, $comment, $request ) {
 		$prepare_funcs = [
 			'link_up',
 		];
@@ -23,7 +24,9 @@ add_filter(
 		}
 
 		return rest_ensure_response( $response );
-	}, 10, 3
+	},
+	10,
+	3
 );
 
 /**
@@ -47,7 +50,8 @@ function link_up( $response, $comment, $request ) {
 				'up',
 				rest_url(
 					'aliemu/v1/' . $base . '/' . $comment->comment_post_ID
-				), [ 'embeddable' => true ]
+				),
+				[ 'embeddable' => true ]
 			);
 		}
 	}

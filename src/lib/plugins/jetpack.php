@@ -23,7 +23,8 @@ if ( defined( 'JETPACK__VERSION' ) ) :
 
 		// Add theme support for Content Options.
 		add_theme_support(
-			'jetpack-content-options', [
+			'jetpack-content-options',
+			[
 				'post-details'    => [
 					'stylesheet' => 'aliemu',
 					'date'       => '.posted-on',

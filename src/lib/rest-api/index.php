@@ -10,7 +10,8 @@ namespace ALIEMU\API;
 defined( 'ABSPATH' ) || exit;
 
 add_action(
-	'rest_api_init', function() {
+	'rest_api_init',
+	function() {
 		$controllers = [
 			'Courses_Controller'     => __DIR__ . '/endpoints/class-courses-controller.php',
 			'Lessons_Controller'     => __DIR__ . '/endpoints/class-lessons-controller.php',

@@ -42,7 +42,8 @@ class Structured_Data {
 
 		// Disables Yoast SEO's handling of the JSON-LD.
 		add_filter(
-			'wpseo_json_ld_output', function () {
+			'wpseo_json_ld_output',
+			function () {
 				return [];
 			}
 		);

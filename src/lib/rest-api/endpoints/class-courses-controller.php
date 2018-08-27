@@ -35,7 +35,9 @@ class Courses_Controller extends \WP_REST_Posts_Controller {
 	 */
 	public function register_routes() {
 		register_rest_route(
-			$this->namespace, '/' . $this->rest_base, [
+			$this->namespace,
+			'/' . $this->rest_base,
+			[
 				[
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_items' ],
@@ -47,7 +49,9 @@ class Courses_Controller extends \WP_REST_Posts_Controller {
 		);
 
 		register_rest_route(
-			$this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<id>[\d]+)',
+			[
 				'args'   => [
 					'id' => [
 						'description' => __( 'Unique identifier for the object.' ),

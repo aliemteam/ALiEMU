@@ -65,7 +65,8 @@ class Script_Loader {
 	 */
 	public function register() : void {
 		wp_register_style(
-			'aliemu-fonts', add_query_arg(
+			'aliemu-fonts',
+			add_query_arg(
 				[
 					'family' => join(
 						'|',
@@ -77,7 +78,8 @@ class Script_Loader {
 						]
 					),
 					'subset' => 'greek,greek-ext,latin-ext',
-				], 'https://fonts.googleapis.com/css'
+				],
+				'https://fonts.googleapis.com/css'
 			),
 			[],
 			ALIEMU_VERSION
@@ -90,14 +92,14 @@ class Script_Loader {
 		}
 
 		// Header scripts.
-		wp_register_script( 'aliemu-polyfills', ALIEMU_ROOT_URI . '/js/polyfills.js', [], ALIEMU_VERSION, false );
-		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION, false );
+		wp_register_script( 'aliemu-polyfills', ALIEMU_ROOT_URI . '/js/polyfills.js', [], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/polyfills.js' ), false );
+		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ), false );
 
 		// Footer scripts.
-		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'aliemu-polyfills' ], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'aliemu-polyfills', 'wp-util' ], ALIEMU_VERSION, true );
-		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'aliemu-polyfills', 'wp-util' ], ALIEMU_VERSION, true );
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'aliemu-polyfills' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'aliemu-polyfills' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
+		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'aliemu-polyfills', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
+		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'aliemu-polyfills', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/login.js' ), true );
 
 		$this->delegate();
 	}

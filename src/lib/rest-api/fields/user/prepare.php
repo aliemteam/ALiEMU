@@ -29,7 +29,8 @@ add_filter(
 	 * @param array $sizes An array of int values that are the pixel sizes for avatars.
 	 *                     Default `[ 24, 48, 96 ]`.
 	 */
-	'rest_avatar_sizes', function( array $sizes ) : array {
+	'rest_avatar_sizes',
+	function( array $sizes ) : array {
 		$sizes[] = 150;
 		return $sizes;
 	}
@@ -45,10 +46,13 @@ add_filter(
 	 * @param array           $prepared_args Array of arguments for WP_User_Query.
 	 * @param WP_REST_Request $request       The current request.
 	 */
-	'rest_user_query', function( array $prepared_args, WP_REST_Request $request ) : array {
+	'rest_user_query',
+	function( array $prepared_args, WP_REST_Request $request ) : array {
 		unset( $prepared_args['has_published_posts'] );
 		return $prepared_args;
-	}, 10, 2
+	},
+	10,
+	2
 );
 
 add_filter(
@@ -82,7 +86,9 @@ add_filter(
 		}
 
 		return rest_ensure_response( $response );
-	}, 10, 3
+	},
+	10,
+	3
 );
 
 /**

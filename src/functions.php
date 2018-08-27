@@ -18,7 +18,8 @@ define( 'ALIEMU_VERSION', wp_get_theme()->get( 'Version' ) );
 define( 'ALIEMU_ROOT_PATH', __DIR__ );
 define( 'ALIEMU_ROOT_URI', get_template_directory_uri() );
 define(
-	'ALIEMU_POST_TYPES', [
+	'ALIEMU_POST_TYPES',
+	[
 		'course'      => 'sfwd-courses',
 		'lesson'      => 'sfwd-lessons',
 		'quiz'        => 'sfwd-quiz',

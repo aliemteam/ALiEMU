@@ -39,7 +39,9 @@ abstract class Field {
 	 */
 	final public function register() : void {
 		register_rest_field(
-			$this->obj_type, $this->field_name, [
+			$this->obj_type,
+			$this->field_name,
+			[
 				'get_callback'    => [ $this, 'get_callback' ],
 				'update_callback' => method_exists( $this, 'update_callback' )
 					? [ $this, 'update_callback' ]

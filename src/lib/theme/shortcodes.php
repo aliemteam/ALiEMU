@@ -28,7 +28,8 @@ function capsule( $atts, $content ) : string {
 	] = shortcode_atts(
 		[
 			'heading' => 'CAPSULE',
-		], $atts
+		],
+		$atts
 	);
 
 	$body_class = 'CAPSULE' === $heading
@@ -88,7 +89,8 @@ function learn_more( $atts, $content ) : string {
 	] = shortcode_atts(
 		[
 			'caption' => 'Details',
-		], $atts
+		],
+		$atts
 	);
 
 	ob_start();
@@ -125,7 +127,8 @@ function person( $atts = [], $content = null ) : string {
 			'image'   => '',
 			'twitter' => '',
 			'align'   => '',
-		], $atts
+		],
+		$atts
 	);
 
 	if ( ! in_array( $atts['align'], [ 'left', 'right' ], true ) ) {
@@ -216,7 +219,8 @@ function grid( $atts = [], $content = null ) : string {
 		[
 			'min-width' => '250px',
 			'gap'       => '1em',
-		], $atts
+		],
+		$atts
 	);
 
 	if ( is_null( $content ) ) {

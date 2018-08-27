@@ -23,7 +23,8 @@ function send_slack_message(): void {
 	if ( isset( $_POST['recaptcha_token'], $_POST['email'], $_POST['name'], $_POST['message'] )
 		&& recaptcha_token_is_valid( $_POST['recaptcha_token'] ) ) { // phpcs:ignore
 			slack_message(
-				'aliemu/messages/contact-form', [
+				'aliemu/messages/contact-form',
+				[
 					'name'    => sanitize_text_field( wp_unslash( $_POST['name'] ) ),
 					'email'   => sanitize_text_field( wp_unslash( $_POST['email'] ) ),
 					'message' => stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) ) ),
@@ -141,7 +142,8 @@ add_action( 'wp_ajax_nopriv_user_register', __NAMESPACE__ . '\user_register' );
  */
 function recaptcha_token_is_valid( string $token ) : bool {
 	$response = wp_remote_post(
-		'https://www.google.com/recaptcha/api/siteverify', [
+		'https://www.google.com/recaptcha/api/siteverify',
+		[
 			'body' => [
 				'secret'   => RECAPTCHA_KEY,
 				'response' => $token,

@@ -432,7 +432,8 @@ class User_Groups_Controller extends WP_REST_Controller {
 
 		$response->set_status( 201 );
 		$response->header(
-			'Location', rest_url(
+			'Location',
+			rest_url(
 				sprintf(
 					'%s/%s/%d',
 					$this->namespace,
@@ -469,7 +470,8 @@ class User_Groups_Controller extends WP_REST_Controller {
 
 		$response->set_status( 201 );
 		$response->header(
-			'Location', rest_url(
+			'Location',
+			rest_url(
 				sprintf(
 					'%s/%s/%d/%s/learners/%d/tags',
 					$this->namespace,
