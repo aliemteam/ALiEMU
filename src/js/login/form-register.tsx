@@ -214,7 +214,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
 
     componentWillUnmount(): void {
         let child = document.querySelector(
-            'iframe[title="recaptcha challenge"',
+            'iframe[title="recaptcha challenge"]',
         );
         if (child && child.parentElement && child.parentElement.parentElement) {
             child = child.parentElement.parentElement;
