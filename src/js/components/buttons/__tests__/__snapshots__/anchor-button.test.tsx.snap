@@ -3,6 +3,7 @@
 exports[`should render correctly 1`] = `
 <a
   className="btn"
+  onClick={[Function]}
   role="button"
   tabIndex={0}
 >
