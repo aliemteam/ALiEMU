@@ -370,7 +370,9 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 },
             }),
             () => {
-                grecaptcha.reset();
+                if (!response.success) {
+                    grecaptcha.reset();
+                }
             },
         );
     };
