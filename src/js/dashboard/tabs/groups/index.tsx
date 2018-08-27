@@ -123,6 +123,8 @@ export default class TabGroups extends React.Component {
                     emptyState={this.emptyCoachesRenderer}
                     isEmpty={this.coaches.length === 0}
                     isLoading={this.coachesAreLoading}
+                    defaultSortKey="name"
+                    rowsPerPage={5}
                 />
                 <SimpleTable
                     fixed
@@ -134,6 +136,8 @@ export default class TabGroups extends React.Component {
                     emptyState={this.emptyLearnersRenderer}
                     isEmpty={this.learners.length === 0}
                     isLoading={this.learnersAreLoading}
+                    defaultSortKey="name"
+                    rowsPerPage={5}
                 />
             </>
         );
@@ -150,7 +154,10 @@ export default class TabGroups extends React.Component {
 
     private emptyCoachesRenderer = () => (
         <div className={styles.emptyState}>
-            <Observer>{this.addCoachForm}</Observer>
+            <div className={styles.coachesCaption}>
+                <SectionHeading>My Coaches</SectionHeading>
+                <Observer>{this.addCoachForm}</Observer>
+            </div>
             <Card>
                 <Icon icon="supervised_user_circle" size={100} />
                 <h3>No coaches yet</h3>
@@ -252,18 +259,22 @@ const header: HeaderRow = {
             kind: String,
             content: 'Name',
             scope: 'col',
+            width: 200,
+            sortable: true,
         },
         {
             key: 'email',
             kind: String,
             content: 'Email',
             scope: 'col',
+            width: 200,
+            sortable: true,
         },
         {
             key: 'actions',
             content: 'Actions',
             scope: 'col',
-            width: 110,
+            width: 100,
         },
     ],
 };

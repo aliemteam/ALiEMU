@@ -3,11 +3,13 @@
 
 .figure {
     margin: $block-margin 0 $section-margin 0;
+    display: grid;
 }
 
 .container {
     position: relative;
     min-height: 75px;
+    overflow-x: auto;
 }
 
 .loading-state {
@@ -61,4 +63,11 @@
 
 .fixed {
     table-layout: fixed;
+
+    td,
+    th {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

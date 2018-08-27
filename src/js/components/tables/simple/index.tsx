@@ -207,7 +207,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
                 {...this.cellKind(kind)}
                 {...props}
             >
-                <span>{content}</span>
+                {typeof content === 'string' ? <span>{content}</span> : content}
                 {sortable && (
                     <SortIcon
                         order={sortOrder!}

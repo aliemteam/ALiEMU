@@ -3,12 +3,12 @@
 @import 'variables';
 
 .coaches-caption {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
     align-items: center;
 
-    h2 {
-        margin-bottom: 0;
-        flex: auto;
+    @include device-mobile {
+        grid-template-columns: 1fr;
     }
 }
 

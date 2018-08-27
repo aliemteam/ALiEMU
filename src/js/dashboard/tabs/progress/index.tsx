@@ -143,7 +143,6 @@ export default class TabProgress extends React.Component<Props> {
                 />
                 <SimpleTable
                     caption={this.renderTableCaption}
-                    containerClassName={styles.tableContainer}
                     header={header}
                     rows={this.learnerRows}
                     rowsPerPage={5}
