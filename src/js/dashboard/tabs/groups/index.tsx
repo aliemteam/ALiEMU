@@ -64,20 +64,21 @@ export default class TabGroups extends React.Component {
         }
         this.toggleLoadingFor(kind);
 
-        let response: Response;
-        switch (kind) {
-            case MemberKind.COACH:
-                response = yield Groups.removeCoach(id);
-                break;
-            case MemberKind.LEARNER:
-                response = yield Groups.removeLearner(id);
-                break;
-            default:
-                throw new Error('Invalid member kind given.');
-        }
-
-        if (response.ok) {
+        try {
+            switch (kind) {
+                case MemberKind.COACH:
+                    yield Groups.removeCoach(id);
+                    break;
+                case MemberKind.LEARNER:
+                    yield Groups.removeLearner(id);
+                    break;
+                default:
+                    throw new Error('Invalid member kind given.');
+            }
             this[kind].replace(this[kind].filter(member => member.id !== id));
+        } catch (e) {
+            // FIXME:
+            console.error(e);
         }
 
         this.toggleLoadingFor(kind);

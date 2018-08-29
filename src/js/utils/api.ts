@@ -12,9 +12,7 @@ export class Comments {
     private static endpoint = '/wp-json/wp/v2/comments';
 
     static async fetchOne(id: number, params?: Params): Promise<IComment> {
-        return _get(`${Comments.endpoint}/${id}`, params).then(async data =>
-            data.json(),
-        );
+        return _get<IComment>(`${Comments.endpoint}/${id}`, params);
     }
     // }}}
 }
@@ -24,9 +22,7 @@ export class Courses {
     private static endpoint = '/wp-json/aliemu/v1/courses';
 
     static async fetchOne(id: number, params?: Params): Promise<ICourse> {
-        return _get(`${Courses.endpoint}/${id}`, params).then(async res =>
-            res.json(),
-        );
+        return _get<ICourse>(`${Courses.endpoint}/${id}`, params);
     }
 
     static async fetchMany(
@@ -51,7 +47,7 @@ export class Groups {
         return _post<ICoach>(`${Groups.endpoint}/coaches`, { email });
     }
 
-    static async removeCoach(id: number): Promise<Response> {
+    static async removeCoach(id: number): Promise<void> {
         return _delete(`${Groups.endpoint}/coaches/${id}`);
     }
 
@@ -59,7 +55,7 @@ export class Groups {
         return _getMany<ILearner>(`${Groups.endpoint}/learners`, params);
     }
 
-    static async removeLearner(id: number): Promise<Response> {
+    static async removeLearner(id: number): Promise<void> {
         return _delete(`${Groups.endpoint}/learners/${id}`);
     }
 
@@ -69,7 +65,7 @@ export class Groups {
         });
     }
 
-    static async removeLearnerTag(id: number, tag: string): Promise<Response> {
+    static async removeLearnerTag(id: number, tag: string): Promise<void> {
         return _delete(`${Groups.endpoint}/learners/${id}/tags`, { tag });
     }
     // }}}
@@ -88,18 +84,22 @@ export class Users {
     // }}}
 }
 
-async function _get(endpoint: string, params?: Params): Promise<Response> {
+async function _get<T>(endpoint: string, params?: Params): Promise<T> {
     // {{{
-    if (params) {
-        endpoint = endpoint + parseParams(params);
+    try {
+        const response: T = await jQuery.ajax(endpoint, {
+            headers: {
+                'X-WP-Nonce': window.AU_API.nonce,
+            },
+            dataType: 'json',
+            data: params,
+        });
+        return response;
+    } catch (e) {
+        // FIXME:
+        console.log(e);
+        throw e;
     }
-    return fetch(endpoint, {
-        headers: {
-            'X-WP-Nonce': window.AU_API.nonce,
-        },
-        mode: 'same-origin',
-        credentials: 'include',
-    });
     // }}}
 }
 
@@ -108,55 +108,41 @@ async function _post<T>(
     params: object | FormData,
 ): Promise<T> {
     // {{{
-    return fetch(endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-WP-Nonce': window.AU_API.nonce,
-        },
-        body: JSON.stringify(params),
-        mode: 'same-origin',
-        credentials: 'include',
-    }).then(async data => data.json());
+    try {
+        const response: T = await jQuery.ajax(endpoint, {
+            method: 'POST',
+            data: JSON.stringify(params),
+            dataType: 'json',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-WP-Nonce': window.AU_API.nonce,
+            },
+        });
+        return response;
+    } catch (e) {
+        // FIXME:
+        console.log(e);
+        throw e;
+    }
     // }}}
 }
 
 async function _delete(
     endpoint: string,
     params: object = {},
-): Promise<Response> {
+): Promise<void> {
     // {{{
-    return fetch(endpoint, {
+    const response = await jQuery.ajax(endpoint, {
         method: 'DELETE',
+        data: JSON.stringify(params),
+        dataType: 'json',
         headers: {
             'Content-Type': 'application/json',
             'X-WP-Nonce': window.AU_API.nonce,
         },
-        body: JSON.stringify(params),
-        mode: 'same-origin',
-        credentials: 'include',
     });
-    // }}}
-}
-
-function parseParams(params: Params): string {
-    // {{{
-    return (
-        '?' +
-        [...Object.entries(params)]
-            .reduce(
-                (arr, [key, val]) => [
-                    ...arr,
-                    `${key}=${
-                        Array.isArray(val)
-                            ? encodeURIComponent(val.join(','))
-                            : val
-                    }`,
-                ],
-                <string[]>[],
-            )
-            .join('&')
-    );
+    console.log(response);
+    return response;
     // }}}
 }
 
@@ -172,16 +158,23 @@ async function _getMany<T>(
         ...params,
         page,
     };
-    const response = await _get(endpoint, params);
-
-    if (!response.headers.has('X-WP-TotalPages')) {
+    const request = jQuery.ajax(endpoint, {
+        headers: {
+            'X-WP-Nonce': window.AU_API.nonce,
+        },
+        dataType: 'json',
+        data: params,
+    });
+    const response = await request;
+    const pages = request.getResponseHeader('X-WP-TotalPages');
+    if (!pages) {
         throw new Error(
             'X-WP-TotalPages header must be set to iterate entire collection.',
         );
     }
-    const totalPages = parseInt(response.headers.get('X-WP-TotalPages')!, 10);
+    const totalPages = parseInt(pages, 10);
 
-    collection = [...collection, ...(await response.json())];
+    collection = [...collection, ...response];
 
     return page >= totalPages || page === endPage
         ? collection

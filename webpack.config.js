@@ -106,11 +106,10 @@ module.exports = {
          * JS Entrypoints
          */
         'js/catalog': 'js/catalog',
-        'js/dashboard': 'js/dashboard',
+        'js/dashboard': ['datalist-polyfill', 'js/dashboard'],
         'js/feedback': 'js/feedback',
         'js/login': 'js/login',
         'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
-        'js/polyfills': 'js/polyfills',
 
         /**
          * Stylesheet entrypoints
@@ -131,7 +130,7 @@ module.exports = {
         plugins: [new TsConfigPathsPlugin()],
     },
     plugins: [...plugins],
-    stats: IS_PRODUCTION ? 'verbose' : 'minimal',
+    // stats: IS_PRODUCTION ? 'verbose' : 'minimal',
     module: {
         rules: [
             {
@@ -247,7 +246,9 @@ function assertEnv(key) {
     key = IS_PRODUCTION ? key : `${key}_DEV`;
     const value = process.env[key];
     if (value === undefined) {
-        console.log(`ERROR: required environment variable "${key}" is not defined.`);
+        console.log(
+            `ERROR: required environment variable "${key}" is not defined.`
+        );
         process.exit(1);
     }
     return JSON.stringify(value);

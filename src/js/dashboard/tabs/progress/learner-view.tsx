@@ -52,14 +52,11 @@ export default class LearnerView extends React.Component<Props> {
         const oldTags = learner.learner_tags.slice();
         learner.learner_tags = learner.learner_tags.filter(t => t !== tag);
         try {
-            const response = yield Groups.removeLearnerTag(learner.id, tag);
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
+            yield Groups.removeLearnerTag(learner.id, tag);
         } catch (e) {
+            // FIXME:
             console.error(`Error occurred: ${e.message}`);
             learner.learner_tags = oldTags;
-            return;
         }
     }).bind(this);
 
