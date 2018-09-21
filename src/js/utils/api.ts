@@ -1,3 +1,4 @@
+// tslint:disable:await-promise
 import { ICoach, ICourse, ILearner } from 'utils/types';
 
 interface Params {

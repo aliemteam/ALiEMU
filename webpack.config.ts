@@ -1,21 +1,22 @@
+// tslint:disable:no-var-requires no-console
 require('dotenv').config();
-const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
-const { stripIndent } = require('common-tags');
-const { execSync } = require('child_process');
-const path = require('path');
-const webpack = require('webpack');
 
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
+import { execSync } from 'child_process';
+import { stripIndent } from 'common-tags';
+import path from 'path';
+import webpack from 'webpack';
+
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
 const svgo = require('imagemin-svgo');
 
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const VERSION = require('./package.json').version;
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Clean out dist directory
 execSync(`rm -rf ${__dirname}/dist/*`);
@@ -91,12 +92,13 @@ if (!IS_PRODUCTION) {
             },
             {
                 injectCss: true,
-            }
-        )
+            },
+        ),
     );
 }
 
-module.exports = {
+// tslint:disable-next-line
+export default <webpack.Configuration> {
     mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
     devtool: IS_PRODUCTION ? 'none' : 'cheap-module-eval-source-map',
@@ -130,7 +132,7 @@ module.exports = {
         plugins: [new TsConfigPathsPlugin()],
     },
     plugins: [...plugins],
-    // stats: IS_PRODUCTION ? 'verbose' : 'minimal',
+    stats: IS_PRODUCTION ? 'verbose' : 'minimal',
     module: {
         rules: [
             {
@@ -145,7 +147,7 @@ module.exports = {
                             useCache: !IS_PRODUCTION,
                             cacheDirectory: path.resolve(
                                 __dirname,
-                                'node_modules/.cache/awesome-typescript-loader'
+                                'node_modules/.cache/awesome-typescript-loader',
                             ),
                             babelCore: '@babel/core',
                             reportFiles: ['src/**/*.{ts,tsx}'],
@@ -242,12 +244,12 @@ module.exports = {
     },
 };
 
-function assertEnv(key) {
+function assertEnv(key: string): string {
     key = IS_PRODUCTION ? key : `${key}_DEV`;
     const value = process.env[key];
     if (value === undefined) {
         console.log(
-            `ERROR: required environment variable "${key}" is not defined.`
+            `ERROR: required environment variable "${key}" is not defined.`,
         );
         process.exit(1);
     }
