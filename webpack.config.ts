@@ -7,9 +7,9 @@ import { stripIndent } from 'common-tags';
 import path from 'path';
 import webpack from 'webpack';
 
-import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
