@@ -317,9 +317,8 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $parent_user;
 		}
 
-		$groups      = new Groups( $parent_user->ID );
-		$sub_request = new WP_Rest_Request( 'GET', '/wp/v2/users' );
-		$sub_request->set_query_params(
+		$groups = new Groups( $parent_user->ID );
+		$request->set_query_params(
 			array_merge(
 				$request->get_query_params(),
 				[
@@ -327,8 +326,9 @@ class User_Groups_Controller extends WP_REST_Controller {
 				]
 			)
 		);
-		$response = rest_do_request( $sub_request );
 
+		$users_controller = new WP_REST_Users_Controller();
+		$response         = $users_controller->get_items( $request );
 		return rest_ensure_response( $response );
 	}
 
@@ -344,9 +344,8 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $parent_user;
 		}
 
-		$groups      = new Groups( $parent_user->ID );
-		$sub_request = new WP_Rest_Request( 'GET', '/wp/v2/users' );
-		$sub_request->set_query_params(
+		$groups = new Groups( $parent_user->ID );
+		$request->set_query_params(
 			array_merge(
 				$request->get_query_params(),
 				[
@@ -354,8 +353,9 @@ class User_Groups_Controller extends WP_REST_Controller {
 				]
 			)
 		);
-		$response = rest_do_request( $sub_request );
 
+		$users_controller = new WP_REST_Users_Controller();
+		$response         = $users_controller->get_items( $request );
 		return rest_ensure_response( $response );
 	}
 
@@ -410,8 +410,9 @@ class User_Groups_Controller extends WP_REST_Controller {
 			return $error;
 		}
 
-		$sub_request = new WP_Rest_Request( 'GET', '/wp/v2/users/' . $coach_id );
-		$response    = rest_do_request( $sub_request );
+		$request['id']    = $coach_id;
+		$users_controller = new WP_REST_Users_Controller();
+		$response         = $users_controller->get_item( $request );
 
 		$response->remove_link( 'collection' );
 		$response->add_link(
