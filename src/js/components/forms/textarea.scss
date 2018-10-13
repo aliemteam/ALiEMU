@@ -2,7 +2,7 @@
 @import 'variables';
 @import './shared';
 
-@value padding-size: #{$padding-size};
+@value padding-size #{$padding-size};
 
 .textarea {
     @extend .container;

@@ -5,7 +5,7 @@
 .button-outlined {
     @include reset-button;
 
-    color: $primary;
+    color: $black;
 
     min-width: 64px;
     height: 36px;
@@ -16,14 +16,14 @@
 
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
 
     padding: 0 16px;
 
     cursor: pointer;
 
     &:hover {
-        border-color: $primary;
+        border-color: $black;
     }
 
     &:focus {
@@ -40,10 +40,9 @@
 
 @each $k, $v in $intent {
     .button-outlined--#{$k} {
-        color: $v;
-
         &:hover {
             border-color: $v;
+            color: $v;
         }
 
         &:focus {

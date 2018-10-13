@@ -13,6 +13,8 @@ export default class ButtonOutlined extends PureComponent<Props> {
     render(): JSX.Element {
         const { children, intent, ...props } = this.props;
         const classname = classNames(styles.buttonOutlined, {
+            [styles.buttonOutlinedPrimary]: intent === Intent.PRIMARY,
+            [styles.buttonOutlinedSecondary]: intent === Intent.SECONDARY,
             [styles.buttonOutlinedDanger]: intent === Intent.DANGER,
             [styles.buttonOutlinedSuccess]: intent === Intent.SUCCESS,
             [styles.buttonOutlinedWarning]: intent === Intent.WARNING,

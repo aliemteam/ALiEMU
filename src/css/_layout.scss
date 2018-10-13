@@ -15,24 +15,6 @@ body {
     }
 }
 
-#body {
-    min-height: 100vh;
-    display: grid;
-    grid:
-        'header' auto
-        'body' 1fr
-        'comments' auto
-        'footer' auto;
-}
-
-.header {
-    grid-area: header;
-}
-
-.footer {
-    grid-area: footer;
-}
-
 .skip-link {
     position: absolute;
     clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
@@ -53,8 +35,14 @@ body {
     }
 }
 
+#body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    grid-auto-rows: min-content;
+}
+
 .content-area {
-    grid-area: body;
     max-width: 100vw;
     display: flex;
     justify-content: center;

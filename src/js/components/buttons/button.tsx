@@ -1,5 +1,10 @@
 import classNames from 'classnames';
-import React, { HTMLProps, MouseEvent, PureComponent } from 'react';
+import React, {
+    CSSProperties,
+    HTMLProps,
+    MouseEvent,
+    PureComponent,
+} from 'react';
 
 import { Intent } from 'utils/constants';
 
@@ -10,6 +15,7 @@ import styles from './button.scss';
 interface Props extends HTMLProps<HTMLButtonElement> {
     intent?: Intent;
     loading?: boolean;
+    scale?: number;
 }
 
 export default class Button extends PureComponent<Props> {
@@ -18,7 +24,15 @@ export default class Button extends PureComponent<Props> {
     };
 
     render(): JSX.Element {
-        const { children, intent, loading, ...props } = this.props;
+        const {
+            children,
+            href,
+            intent,
+            loading,
+            scale,
+            style,
+            ...props
+        } = this.props;
         const classname = classNames(styles.button, {
             [styles.intentPrimary]: intent === Intent.PRIMARY,
             [styles.intentSecondary]: intent === Intent.SECONDARY,
@@ -27,9 +41,18 @@ export default class Button extends PureComponent<Props> {
             [styles.intentDanger]: intent === Intent.DANGER,
             [styles.loading]: loading,
         });
+        const computedStyle: CSSProperties = scale
+            ? {
+                  fontSize: `calc(${styles.fontSize} * ${scale})`,
+                  height: `calc(${styles.height} * ${scale})`,
+                  ...style,
+              }
+            : { ...style };
         return (
             <button
                 {...props}
+                role={href ? 'link' : undefined}
+                style={computedStyle}
                 disabled={props.disabled || loading}
                 className={classname}
                 onClick={this.handleClick}
@@ -45,9 +68,13 @@ export default class Button extends PureComponent<Props> {
     }
 
     private handleClick = (e: MouseEvent<HTMLButtonElement>): void => {
-        const { loading, onClick } = this.props;
+        const { href, loading, onClick } = this.props;
         if (loading) {
             return e.preventDefault();
+        }
+        if (href) {
+            window.location.href = href;
+            return;
         }
         onClick!(e);
     };

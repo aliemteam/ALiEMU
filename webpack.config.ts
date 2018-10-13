@@ -110,6 +110,7 @@ export default <webpack.Configuration>{
         'js/catalog': 'js/catalog',
         'js/dashboard': ['datalist-polyfill', 'js/dashboard'],
         'js/feedback': 'js/feedback',
+        'js/landing-page': 'js/landing-page',
         'js/login': 'js/login',
         'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
 

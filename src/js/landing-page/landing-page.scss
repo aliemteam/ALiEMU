@@ -1,0 +1,182 @@
+@import '_colors';
+@import 'variables';
+@import 'mixins/media';
+
+.main {
+    display: grid;
+    grid-template-rows:
+        $header-height
+        calc(100vh - #{$header-height})
+        minmax(50vh, auto);
+    overflow: hidden;
+
+    > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:nth-of-type(2n + 3) {
+            background: $primary;
+            color: white;
+        }
+
+        &:nth-of-type(n + 3) {
+            padding: 40px 0;
+        }
+    }
+}
+
+%row {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-width: $max-width-wide;
+    margin: 40px;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+
+    %text,
+    p {
+        margin: 0;
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    h1 {
+        @extend %text;
+        font-family: $font-sans;
+        font-weight: bold;
+        font-size: 60px;
+        line-height: 1;
+    }
+}
+
+.header {
+    @extend %row;
+    justify-content: flex-end;
+
+    @include device-mobile {
+        margin: 0;
+    }
+
+    header {
+        height: $header-height;
+        max-width: 100%;
+        overflow: hidden;
+        display: flex;
+
+        nav {
+            display: flex;
+            align-items: center;
+
+            a {
+                font-size: 1rem;
+            }
+
+            a,
+            button {
+                margin: 0 15px;
+            }
+        }
+    }
+}
+
+.hero {
+    @extend %row;
+    grid-template-columns: min-content fit-content(500px);
+    justify-content: space-around;
+    justify-content: space-evenly; // progressive enhancement
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 0;
+    }
+
+    &-rocket {
+        align-self: flex-end;
+        height: 1000px;
+        max-height: 90vh;
+
+        @include device-mobile {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            height: 90%;
+            transform: translateX(-50%);
+            opacity: 0.5;
+        }
+    }
+
+    &-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+
+        @include device-mobile {
+            z-index: 2;
+        }
+    }
+
+    &-logo {
+        margin: auto;
+        width: 100%;
+        height: auto;
+    }
+
+    p {
+        font-weight: bold;
+        color: $primary;
+
+        @include device-mobile {
+            text-shadow: 1px 1px 1px white;
+        }
+    }
+
+    &-logo,
+    p {
+        grid-column: 1 / span 2;
+    }
+}
+
+.mission {
+    @extend %row;
+    grid-template-columns: 2fr 1fr;
+
+    &-content {
+        display: grid;
+        gap: 20px;
+    }
+
+    svg {
+        max-width: 100%;
+    }
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+        gap: 0;
+
+        svg {
+            grid-row: 1;
+        }
+    }
+}
+
+.community {
+    @extend %row;
+    gap: 20px;
+
+    h1 {
+        @include device-mobile {
+            font-size: 40px;
+        }
+    }
+}
+
+.donorbox {
+    height: 630px;
+    max-height: 90vh;
+    width: 425px;
+    max-width: 95vw;
+    border: 0;
+}

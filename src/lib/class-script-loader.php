@@ -73,7 +73,7 @@ class Script_Loader {
 						[
 							'Roboto+Slab:400,700',
 							'IBM+Plex+Mono:400,500,700',
-							'IBM+Plex+Sans:400,400i,600',
+							'IBM+Plex+Sans:400,400i,500,600',
 							'Material+Icons',
 						]
 					),
@@ -98,6 +98,7 @@ class Script_Loader {
 		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
 		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
 		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
+		wp_register_script( 'aliemu-landing-page', ALIEMU_ROOT_URI . '/js/landing-page.js', [], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/landing-page.js' ), true );
 		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/login.js' ), true );
 
 		$this->delegate();
@@ -142,6 +143,11 @@ class Script_Loader {
 			'scripts' => [],
 			'styles'  => [],
 		];
+
+		if ( is_front_page() ) {
+			array_push( $load->scripts, 'aliemu-landing-page' );
+			array_push( $load->styles, 'aliemu-landing-page' );
+		}
 
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			array_push( $load->scripts, 'comment-reply' );

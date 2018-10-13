@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { createPortal } from 'react-dom';
 
 import Card from 'components/card/';
@@ -9,32 +9,38 @@ interface Props {
     onClose(): void;
 }
 
-export default class Modal extends React.PureComponent<Props> {
+export abstract class AbstractModal<P = {}, S = {}> extends PureComponent<
+    P & Props,
+    S
+> {
     private static readonly FOCUSABLE_SELECTORS =
         '[href], input, select, textarea, button';
+    private static BODY_OVERFLOW_CLASS = 'overflow-hidden';
+
     private rootNode: HTMLDivElement;
 
     private get firstFocusableElement(): HTMLElement | undefined {
         const elements = this.rootNode.querySelectorAll<HTMLElement>(
-            Modal.FOCUSABLE_SELECTORS,
+            AbstractModal.FOCUSABLE_SELECTORS,
         );
         return elements[0];
     }
 
     private get lastFocusableElement(): HTMLElement | undefined {
         const elements = this.rootNode.querySelectorAll<HTMLElement>(
-            Modal.FOCUSABLE_SELECTORS,
+            AbstractModal.FOCUSABLE_SELECTORS,
         );
         return elements[elements.length - 1];
     }
 
-    constructor(props: Props) {
+    constructor(props: P & Props) {
         super(props);
         this.rootNode = document.createElement('div');
     }
 
     componentDidMount(): void {
         document.body.appendChild(this.rootNode);
+        document.body.classList.add(AbstractModal.BODY_OVERFLOW_CLASS);
         const firstElement = this.firstFocusableElement;
         if (firstElement) {
             firstElement.focus();
@@ -43,22 +49,25 @@ export default class Modal extends React.PureComponent<Props> {
 
     componentWillUnmount(): void {
         document.body.removeChild(this.rootNode);
+        document.body.classList.remove(AbstractModal.BODY_OVERFLOW_CLASS);
     }
 
     render(): React.ReactPortal {
-        return createPortal(this.modal(), this.rootNode);
+        return createPortal(this.renderModal(), this.rootNode);
     }
 
-    private modal = (): JSX.Element => (
+    protected abstract renderContent(): JSX.Element;
+
+    private renderModal = (): JSX.Element => (
+        // tslint:disable-next-line:react-a11y-event-has-role
         <div
-            role="dialog"
             className={styles.modal}
             onClick={this.handleOutsideClick}
             onKeyDown={this.handleKeyDown}
         >
-            <Card onClick={this.stopClickPropagation}>
-                {this.props.children}
-            </Card>
+            <div role="dialog" onClick={this.stopClickPropagation}>
+                {this.renderContent()}
+            </div>
         </div>
     );
 
@@ -104,4 +113,8 @@ export default class Modal extends React.PureComponent<Props> {
         }
         return false;
     };
+}
+
+export default class Modal extends AbstractModal {
+    protected renderContent = () => <Card>{this.props.children}</Card>;
 }
