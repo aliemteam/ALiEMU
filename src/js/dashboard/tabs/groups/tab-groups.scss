@@ -29,34 +29,11 @@
 }
 
 .empty-state {
-    display: grid;
-    grid:
-        'a b' auto
-        'c c' 1fr
-        / 1fr 1fr;
-
-    @include device-mobile {
-        grid:
-            'b'
-            'c';
-    }
-
     margin: $block-margin 0 $section-margin 0;
 
-    form {
-        grid-area: b;
-    }
-
-    > div {
-        grid-area: c;
-        display: grid;
-        justify-content: center;
+    &-content {
         text-align: center;
-        grid-gap: 10px;
-
-        > * {
-            margin: 0;
-        }
+        display: grid;
     }
 
     i {
@@ -65,5 +42,6 @@
 
     h3 {
         font-weight: initial;
+        margin: 0;
     }
 }

@@ -7,6 +7,7 @@ import React from 'react';
 import { HeaderRow, Row } from 'components/tables/base';
 import UserStore from 'dashboard/user-store';
 import { Groups } from 'utils/api';
+import { Intent } from 'utils/constants';
 import { ILearner } from 'utils/types';
 
 import ButtonOutlined from 'components/buttons/button-outlined';
@@ -239,6 +240,7 @@ export default class TabProgress extends React.Component<Props> {
                     key: `${id}-actions`,
                     content: (
                         <ButtonOutlined
+                            intent={Intent.PRIMARY}
                             data-user={id}
                             disabled={this.selectedLearnerId === id}
                             onClick={this.handleLearnerSelect}

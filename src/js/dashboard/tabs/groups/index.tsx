@@ -159,7 +159,7 @@ export default class TabGroups extends React.Component {
                 <SectionHeading>My Coaches</SectionHeading>
                 <Observer>{this.addCoachForm}</Observer>
             </div>
-            <Card>
+            <Card className={styles.emptyStateContent}>
                 <Icon icon="supervised_user_circle" size={100} />
                 <h3>No coaches yet</h3>
                 <p>
@@ -172,7 +172,8 @@ export default class TabGroups extends React.Component {
 
     private emptyLearnersRenderer = () => (
         <div className={styles.emptyState}>
-            <Card>
+            <SectionHeading>My Learners</SectionHeading>
+            <Card className={styles.emptyStateContent}>
                 <Icon icon="supervised_user_circle" size={100} />
                 <h3>No learners yet</h3>
                 <p>
