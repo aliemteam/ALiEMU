@@ -21,11 +21,9 @@
         "phpcs": "docker run -it --rm -v $(pwd):/app dsifford/phpcs",
         "lint": "npm run lint:scss && npm run lint:ts && npm run lint:php",
         "pretest": "PHPCS_REPORT=full npm run lint",
-        "pull-subtree": "git subtree pull -P lib/scripts --squash devops master",
         "start": "TS_NODE_PROJECT=./tsconfig.jest.json webpack",
         "sync": "./lib/scripts/sync.py",
         "test": "jest --coverage",
-        "version": "ts-node ./lib/utils/version.ts && git add -A",
         "view-coverage": "$(test $(uname) == Linux && echo xdg-open || echo open) ./node_modules/.cache/coverage/lcov-report/index.html",
         "up": "docker-compose up -d && docker-compose logs -f wordpress",
         "down": "docker-compose down -v"
