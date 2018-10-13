@@ -98,7 +98,7 @@ if (!IS_PRODUCTION) {
 }
 
 // tslint:disable-next-line
-export default <webpack.Configuration> {
+export default <webpack.Configuration>{
     mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
     devtool: IS_PRODUCTION ? 'none' : 'cheap-module-eval-source-map',
@@ -227,18 +227,7 @@ export default <webpack.Configuration> {
             },
             {
                 test: /\.svg$/,
-                use: [
-                    'babel-loader',
-                    {
-                        loader: 'react-svg-loader',
-                        options: {
-                            svgo: {
-                                plugins: [{ removeTitle: false }],
-                                floatPrecision: 2,
-                            },
-                        },
-                    },
-                ],
+                use: ['@svgr/webpack'],
             },
         ],
     },

@@ -46,7 +46,7 @@ add_filter( 'register_post_type_args', __NAMESPACE__ . '\modify_post_types', 10,
  */
 function course_fields( $posts ) : array {
 	foreach ( $posts as $key => $post ) {
-		// TODO: this guards against a bug introduced in LearnDash 2.5.8.
+		// guards against a bug introduced in LearnDash 2.5.8.
 		if ( ! array_key_exists( 'post_type', $post ) || 'sfwd-courses' !== $post['post_type'] ) {
 			continue;
 		}
