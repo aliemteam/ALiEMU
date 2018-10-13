@@ -1,5 +1,7 @@
 import React, { Component, MouseEvent } from 'react';
 
+import { mapUrlParams } from 'utils/helpers';
+
 import Card from 'components/card/';
 import { Navbar, NavGroup, NavTab } from 'components/navbar/';
 
@@ -22,7 +24,10 @@ interface State {
 
 export default class Login extends Component<{}, State> {
     state = {
-        activeForm: FormKind.LOGIN,
+        activeForm:
+            mapUrlParams().get('tab') === 'register'
+                ? FormKind.REGISTER
+                : FormKind.LOGIN,
     };
 
     handleFormSwitch = (

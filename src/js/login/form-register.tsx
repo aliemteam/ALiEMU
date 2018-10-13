@@ -78,6 +78,8 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         () => (
             <>
                 <Input
+                    autoFocus
+                    required
                     name="user_login"
                     label="Username"
                     pattern="[a-zA-Z0-9_-]{4,}"
@@ -85,18 +87,18 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     value={this.state.data.user_login}
                     onChange={this.handleChange}
                     validityMessage="Valid characters: A-Z, a-z, 0-9, dash, and underscore."
-                    required
                 />
                 <Input
+                    required
                     name="user_email"
                     label="Email"
                     type="email"
                     autoComplete="email"
                     value={this.state.data.user_email}
                     onChange={this.handleChange}
-                    required
                 />
                 <Input
+                    required
                     name="user_pass"
                     label="Password"
                     type="password"
@@ -105,7 +107,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     autoComplete="new-password"
                     value={this.state.data.user_pass}
                     onChange={this.handleChange}
-                    required
                 />
             </>
         ),
@@ -113,22 +114,24 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             <>
                 <strong>Personal Information</strong>
                 <Input
+                    autoFocus
+                    required
                     name="user_first_name"
                     label="First Name"
                     autoComplete="given-name"
                     value={this.state.data.user_first_name}
                     onChange={this.handleChange}
-                    required
                 />
                 <Input
+                    required
                     name="user_last_name"
                     label="Last Name"
                     autoComplete="family-name"
                     value={this.state.data.user_last_name}
                     onChange={this.handleChange}
-                    required
                 />
                 <PlacesAutocomplete
+                    required
                     label="City"
                     placeholder=""
                     defaultValue={this.state.data.user_formatted_address}
@@ -137,7 +140,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                         types: ['(cities)'],
                     }}
                     onPlaceChange={this.handlePlaceChange}
-                    required
                 />
             </>
         ),
@@ -145,6 +147,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             <>
                 <strong>Professional Information</strong>
                 <Input
+                    autoFocus
                     name="user_institution"
                     label="Institution"
                     autoComplete="organization"
@@ -161,12 +164,12 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     onChange={this.handleChange}
                 />
                 <Select
+                    required
                     name="user_title"
                     label="Role"
                     disabled={this.state.loading}
                     value={this.state.data.user_title}
                     onChange={this.handleChange}
-                    required
                 >
                     {UserTitles.map(title => (
                         // FIXME: Remove this after this issue resolves:
@@ -178,12 +181,12 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     ))}
                 </Select>
                 <Select
+                    required
                     name="user_practice_level"
                     label="Practice Level"
                     disabled={this.state.loading}
                     value={this.state.data.user_practice_level}
                     onChange={this.handleChange}
-                    required
                 >
                     {UserPracticeLevels.map(level => (
                         // FIXME: Remove this after this issue resolves:
@@ -244,6 +247,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 </form>
                 <div className={styles.pagination}>
                     <ButtonOutlined
+                        intent={Intent.PRIMARY}
                         name="prev"
                         disabled={currentPage === 0 || loading}
                         onClick={this.handlePagination}
@@ -255,6 +259,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                         currentStep={currentPage}
                     />
                     <ButtonOutlined
+                        intent={Intent.PRIMARY}
                         disabled={isLastPage || loading}
                         form={styles.form}
                         name="next"

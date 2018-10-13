@@ -85,12 +85,13 @@ export default class ResetForm extends PureComponent<{}, State> {
                             link to reset your password.
                         </span>
                         <Input
+                            autoFocus
+                            required
                             type="email"
                             label="Email"
                             disabled={loading}
                             value={user_login}
                             onChange={this.handleChange}
-                            required
                         />
                     </>
                 );

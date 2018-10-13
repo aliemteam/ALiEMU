@@ -51,6 +51,7 @@ export default class LoginForm extends PureComponent<Props, State> {
                 {this.maybeRenderNotice()}
                 <Input
                     required
+                    autoFocus
                     label="Username or Email"
                     disabled={loading}
                     autoComplete="username"
