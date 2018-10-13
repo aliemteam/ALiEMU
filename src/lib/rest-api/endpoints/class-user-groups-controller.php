@@ -323,6 +323,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 				$request->get_query_params(),
 				[
 					'include' => $groups->coaches,
+					'orderby' => 'name',
 				]
 			)
 		);
@@ -350,6 +351,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 				$request->get_query_params(),
 				[
 					'include' => $groups->learners,
+					'orderby' => 'name',
 				]
 			)
 		);
