@@ -10,9 +10,9 @@ namespace ALIEMU\Database\Upgrades;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Upgrader function for v1.9.0.
+ * Upgrader function for v2.0.1.
  */
-function upgrade_1_9_0() {
+function upgrade_2_0_1() {
 	// {{{ phpcs:ignore-line
 	$add_groups_table = function() {
 		// {{{ phpcs:ignore-line
