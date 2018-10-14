@@ -1,15 +1,8 @@
 {
-    "name": "aliemu",
+    "name": "aliemu.com",
     "version": "2.0.0",
     "license": "MIT",
     "repository": "https://github.com/aliemteam/ALiEMU",
-    "server": {
-        "name": "aliemu",
-        "plugins": [
-            "learndash-propanel",
-            "sfwd-lms"
-        ]
-    },
     "scripts": {
         "build": "TS_NODE_PROJECT=./tsconfig.jest.json NODE_ENV=production webpack",
         "lint:scss": "stylelint \"src/**/*.scss\"",
