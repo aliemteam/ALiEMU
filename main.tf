@@ -17,15 +17,11 @@ locals {
 }
 
 provider "cloudflare" {
-  version = "~> 1.1"
-
   email = "dereksifford@gmail.com"
   token = "${var.cf_token}"
 }
 
 provider "digitalocean" {
-  version = "~> 0.1"
-
   token = "${var.do_token}"
 }
 

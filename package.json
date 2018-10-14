@@ -11,10 +11,7 @@
         ]
     },
     "scripts": {
-        "foo": "./lib/sync.sh",
         "build": "TS_NODE_PROJECT=./tsconfig.jest.json NODE_ENV=production webpack",
-        "deploy-all": "npm run test && npm run build && ./lib/scripts/deploy.py -a",
-        "deploy": "npm run test && npm run build && ./lib/scripts/deploy.py",
         "lint:scss": "stylelint \"src/**/*.scss\"",
         "lint:ts": "tslint -p . -t stylish",
         "lint:php": "npm run phpcs -- --ignore=src/learndash --report=${PHPCS_REPORT:-summary} --basepath=. ./src",
@@ -22,7 +19,7 @@
         "lint": "npm run lint:scss && npm run lint:ts && npm run lint:php",
         "pretest": "PHPCS_REPORT=full npm run lint",
         "start": "TS_NODE_PROJECT=./tsconfig.jest.json webpack",
-        "sync": "./lib/scripts/sync.py",
+        "sync": "./lib/sync.sh",
         "test": "jest --coverage",
         "view-coverage": "$(test $(uname) == Linux && echo xdg-open || echo open) ./node_modules/.cache/coverage/lcov-report/index.html",
         "up": "docker-compose up -d && docker-compose logs -f wordpress",
