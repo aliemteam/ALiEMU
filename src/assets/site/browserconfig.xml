@@ -2,7 +2,7 @@
 <browserconfig>
     <msapplication>
         <tile>
-            <square150x150logo src="/wp-content/themes/aliemu/assets/mstile-150x150.png?v=gAanNp5YW7"/>
+            <square150x150logo src="/wp-content/themes/aliemu.com/assets/mstile-150x150.png?v=gAanNp5YW7"/>
             <TileColor>#00b092</TileColor>
         </tile>
     </msapplication>

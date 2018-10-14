@@ -8,12 +8,12 @@
     "theme_color": "#345995",
     "icons": [
         {
-            "src": "/wp-content/themes/aliemu/assets/site/android-chrome-192x192.png?v=gAanNp5YW7",
+            "src": "/wp-content/themes/aliemu.com/assets/site/android-chrome-192x192.png?v=gAanNp5YW7",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/wp-content/themes/aliemu/assets/site/android-chrome-512x512.png?v=gAanNp5YW7",
+            "src": "/wp-content/themes/aliemu.com/assets/site/android-chrome-512x512.png?v=gAanNp5YW7",
             "sizes": "512x512",
             "type": "image/png"
         }
