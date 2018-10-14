@@ -128,7 +128,7 @@ const Mission = (): JSX.Element => (
                 ALiEMU is an open-access, on-demand, online institution of
                 e-courses for healthcare providers in Emergency Medicine and
                 health professions education. All content on our platform has
-                undergone export peer review and follows best practices in
+                undergone expert peer review and follows best practices in
                 instructional design for learners.
             </p>
         </div>
