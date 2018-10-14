@@ -1,0 +1,21 @@
+@import '_colors';
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle {
+    transform: rotate(-90deg);
+    fill: none;
+    stroke-linecap: round;
+}
+
+.circle__background {
+    stroke: $gray-light;
+}
+
+.circle__fill {
+    stroke: $primary;
+}

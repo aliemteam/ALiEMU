@@ -7,7 +7,9 @@
 
 get_header(); ?>
 
-<main role="main" id="catalog-root"></main>
+<section>
+	<main role="main" id="catalog-root"></main>
+</section>
 
 <?php
 get_footer();

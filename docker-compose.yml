@@ -1,32 +1,17 @@
 version: '3'
 services:
     wordpress:
-        image: visiblevc/wordpress:0.19.0-php7.2
+        image: visiblevc/wordpress:0.21.0-php7.2
         cap_add:
-          - SYS_ADMIN
+            - SYS_ADMIN
         devices:
-          - /dev/fuse
+            - /dev/fuse
         environment:
-            ALIEM_API_KEY: ${ALIEM_API_KEY?ALIEM_API_KEY key not defined in .env}
-            EXTRA_PHP: |
-                define( 'LEARNDASH_REST_API_ENABLED', true );
             DB_NAME: aliemu
             DB_PASS: root
             DB_USER: root
-            PLUGINS: >-
-                academic-bloggers-toolkit
-                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
-                jetpack
-                mce-table-buttons
-                query-monitor
-                sendgrid-email-delivery-simplified
-                ultimate-member
-                [um-recaptcha]https://ultimatemember.com/free-extensions/um-recaptcha.zip
-                w3-total-cache
-                wp-smushit
         volumes:
             - ./data:/data
-            - ./wp-content/plugins/learndash-propanel:/app/wp-content/plugins/learndash-propanel
             - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
             - ./wp-content/uploads:/app/wp-content/uploads
     db:
@@ -35,11 +20,13 @@ services:
             MYSQL_ROOT_PASSWORD: root
         volumes:
             - data:/var/lib/mysql
+    redis:
+        image: redis
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        environment:
-            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - data:/var/lib/mysql
         ports:
             - 22222:80
 volumes:
-    data:
+    ? data

@@ -1,0 +1,70 @@
+@import 'variables';
+@import '../card/card';
+
+.listing {
+    margin: 10px 0;
+    display: grid;
+    grid:
+        'title   date'
+        'comment comment'
+        / 1fr auto;
+    grid-gap: 5px 10px;
+}
+
+.title {
+    grid-area: title;
+    font-size: inherit;
+    font-family: inherit;
+    margin: 0;
+    line-height: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.date {
+    grid-area: date;
+    font-size: 14px;
+    float: right;
+}
+
+.comment {
+    grid-area: comment;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+// TODO: Below should probably be a mixin
+.line-clamp {
+    position: relative;
+    height: calc(1.6em * 3);
+
+    &:after {
+        content: '';
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 25%;
+        height: 1.6em;
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 1) 50%
+        );
+    }
+}
+
+@supports (-webkit-line-clamp: 3) {
+    .line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        max-height: calc(1.6em * 3);
+        height: auto;
+    }
+
+    .line-clamp:after {
+        display: none;
+    }
+}

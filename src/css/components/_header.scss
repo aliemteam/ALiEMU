@@ -1,5 +1,5 @@
-@import '../variables';
-@import '../colors';
+@import 'variables';
+@import 'mixins/media';
 
 .header {
     display: flex;
@@ -17,23 +17,29 @@
 
 .nav {
     font-size: 0.8em;
-    font-weight: 500;
+    font-weight: 600;
     white-space: nowrap;
+
     ul {
         list-style: none;
         padding: 0;
         margin: 0;
     }
+
     a {
         text-decoration: none;
         color: $gray;
     }
+
     .menu {
         display: flex;
+        z-index: 1;
+
         > .menu-item {
             position: relative;
             margin: 0 20px;
             height: $header-height;
+
             > a {
                 display: block;
                 height: $header-height;
@@ -41,28 +47,33 @@
             }
         }
     }
+
     .menu-item-has-children {
         > ul {
             display: none;
         }
+
         &:hover {
             > ul {
                 display: block;
             }
         }
     }
+
     .sub-menu {
         position: absolute;
         min-width: 150px;
         background: white;
         box-shadow: map-get($shadows, 'depth-6');
-        border-top: solid 3px $secondary;
+        border-top: solid 3px $primary;
         right: -20px;
         z-index: 2;
+
         > .menu-item > a {
             display: block;
             width: 100%;
             padding: 8px 10px;
+
             &:hover {
                 background: $gray-light;
             }
@@ -70,31 +81,38 @@
     }
 
     @include device-mobile {
+        font-size: 1.1em;
+
         .menu {
             display: none;
+
             &.menu--open {
                 display: flex;
             }
-            background: $secondary;
+            background: $primary;
             flex-direction: column;
             position: absolute;
             left: 0;
-            margin: 7px 0 0 0;
+            margin: 15px 0 0 0;
             width: 100%;
             box-shadow: map-get($shadows, 'depth-6');
+
             > .menu-item {
                 margin: unset;
                 height: unset;
+
                 > a {
                     color: white;
                 }
+
                 a {
                     height: auto;
                     line-height: normal;
-                    padding: 8px;
+                    padding: 15px;
                 }
             }
         }
+
         .sub-menu {
             display: block !important;
             position: relative;
@@ -107,6 +125,7 @@
 
 .nav__toggle-button {
     display: none;
+
     &:before {
         font-family: Dashicons, sans-serif;
         content: '\f333';
@@ -117,6 +136,7 @@
         height: $icon-height;
         width: $icon-height;
     }
+
     &.nav__toggle-button--open:before {
         content: '\f335';
     }

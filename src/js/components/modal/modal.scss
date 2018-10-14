@@ -1,0 +1,17 @@
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(black, 0.3);
+
+    > div {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}

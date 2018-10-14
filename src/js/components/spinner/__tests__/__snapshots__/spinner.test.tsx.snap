@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Spinner /> should render size 50 1`] = `
+<svg
+  className="spinner"
+  height={50}
+  style={
+    Object {
+      "strokeDasharray": "141.3716694115407px",
+      "strokeDashoffset": "113.09733552923257px",
+      "strokeWidth": "5px",
+    }
+  }
+  viewBox="0 0 50 50"
+  width={50}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle
+    cx={25}
+    cy={25}
+    r={22.5}
+  />
+</svg>
+`;
+
+exports[`<Spinner /> should render size 100 1`] = `
+<svg
+  className="spinner"
+  height={100}
+  style={
+    Object {
+      "strokeDasharray": "282.7433388230814px",
+      "strokeDashoffset": "226.19467105846513px",
+      "strokeWidth": "10px",
+    }
+  }
+  viewBox="0 0 100 100"
+  width={100}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle
+    cx={50}
+    cy={50}
+    r={45}
+  />
+</svg>
+`;

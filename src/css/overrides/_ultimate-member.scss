@@ -31,14 +31,17 @@
 
 .um-account {
     max-width: 900px;
+
     &-side {
         width: 35%;
         flex: auto;
     }
+
     &-main {
         width: 65%;
         flex: auto;
     }
+
     form {
         display: flex;
     }

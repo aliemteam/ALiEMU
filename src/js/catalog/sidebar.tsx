@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React, { MouseEvent, PureComponent } from 'react';
 
-import * as styles from './sidebar.scss';
+import styles from './sidebar.scss';
 
 import Menu from 'components/menu';
 import MenuDivider from 'components/menu/divider';
@@ -23,14 +23,14 @@ interface Props {
     onDurationChange(duration: Duration): void;
 }
 
-export default class Sidebar extends React.PureComponent<Props> {
+export default class Sidebar extends PureComponent<Props> {
     static readonly categories: ReadonlyMap<number, string> = new Map(
         [...Object.entries(AU_Catalog.categories)].map(
             ([id, name]) => [parseInt(id, 10), name] as [number, string],
         ),
     );
 
-    handleCategoryClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    handleCategoryClick = (e: MouseEvent<HTMLButtonElement>): void => {
         const id = parseInt(e.currentTarget.id, 10);
         const newId =
             this.props.category !== id
@@ -41,7 +41,7 @@ export default class Sidebar extends React.PureComponent<Props> {
         return this.props.onCategoryChange(newId);
     };
 
-    handleDurationClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    handleDurationClick = (e: MouseEvent<HTMLButtonElement>): void => {
         const selection = e.currentTarget.dataset.duration as
             | Duration
             | undefined;

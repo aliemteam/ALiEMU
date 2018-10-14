@@ -15,22 +15,37 @@ defined( 'ABSPATH' ) || exit;
 function localize() {
 	global $wp_rest_server;
 
-	$courses_req = new \WP_Rest_Request( 'GET', '/ldlms/v1/courses' );
-	$response    = rest_do_request( $courses_req );
+	$courses_req = new \WP_Rest_Request( 'GET', '/aliemu/v1/courses' );
+	$courses_req->set_param(
+		'_fields',
+		join(
+			',',
+			[
+				'_links',
+				'categories',
+				'course_short_description',
+				'date_gmt',
+				'featured_media',
+				'id',
+				'link',
+				'recommendedHours',
+				'title',
+			]
+		)
+	);
+	$response = rest_do_request( $courses_req );
 
 	if ( $response->is_error() ) {
-		$error      = $response->as_error();
-		$msg        = $response->get_error_message();
-		$error_data = $response->get_error_data();
-		$status     = isset( $error_data['status'] ) ? $error_data['status'] : 500;
-		wp_die( printf( '<p>An error occurred: %s (%d)</p>', $message, $error_data ) ); // @codingStandardsIgnoreLine
+		wp_die(
+			printf( '<p>An unanticipated error occurred: %s</p>', $response->as_error()->get_error_message() ) // phpcs:ignore
+		);
 	}
 
 	$headers = $response->get_headers();
 	$data    = $wp_rest_server->response_to_data( $response, true );
 
-	$visible_course_ids = get_transient( 'aliemu_catalog_categories' );
-	if ( ! $visible_course_ids ) {
+	$categories = wp_cache_get( 'aliemu_catalog_categories' );
+	if ( ! $categories ) {
 		$query = new \WP_Query(
 			[
 				'post_type'   => 'sfwd-courses',
@@ -42,8 +57,13 @@ function localize() {
 
 		$visible_course_ids = $query->posts;
 
-		// Put the results in a transient. Expire after 24 hours.
-		set_transient( 'aliemu_catalog_categories', $visible_course_ids, DAY_IN_SECONDS );
+		$categories = get_categories(
+			[
+				'fields'     => 'id=>name',
+				'object_ids' => $visible_course_ids,
+			]
+		);
+		wp_cache_set( 'aliemu_catalog_categories', $categories, '', DAY_IN_SECONDS );
 	}
 
 	return [
@@ -51,11 +71,6 @@ function localize() {
 			'courses' => $headers,
 		],
 		'courses'    => $data,
-		'categories' => get_categories(
-			[
-				'fields'     => 'id=>name',
-				'object_ids' => $visible_course_ids,
-			]
-		),
+		'categories' => $categories,
 	];
 }

@@ -1,0 +1,54 @@
+@import '_colors';
+@import 'mixins/state';
+@import './shared';
+
+.checkbox-container {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: -1;
+}
+
+.checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.1em;
+    height: 1.1em;
+    border-radius: 3px;
+    background: $gray-light;
+    background-image: linear-gradient(to bottom, $gray-light, #fff 30%);
+    border: 1px solid #a8a8a8;
+    cursor: pointer;
+
+    i {
+        font-weight: bold;
+        color: $primary;
+    }
+
+    input:active + & {
+        background: darken($gray-light, 5%);
+        background-image: linear-gradient(
+            to bottom,
+            darken($gray-light, 5%),
+            darken(#fff, 2%) 30%
+        );
+    }
+
+    input:focus + & {
+        @include focus;
+    }
+
+    input:disabled + & {
+        @include disabled;
+    }
+}

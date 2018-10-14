@@ -1,17 +1,24 @@
-data
-.env
-Desktop.ini
-Thumbs.db
+# System-generated Noise
 .DS_Store
-._*
 .Spotlight-V100
 .Trashes
+._*
 .apdisk
 .fseventsd
 .listing
-npm-debug.log
-tmp
-wp-content
-node_modules
-dist
+Desktop.ini
+Thumbs.db
+
+# Directories
+.terraform/
+data/
+dist/
+node_modules/
+wp-content/
+
+# Files
+*.backup
+*.tfstate
+.env
 NOTES.md
+npm-debug.log

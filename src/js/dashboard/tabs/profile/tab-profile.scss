@@ -1,0 +1,41 @@
+@import 'mixins/media';
+
+.profile {
+    display: grid;
+    grid:
+        'bio   bio'
+        'stats comments' 1fr
+        / 1fr 1fr;
+    justify-content: space-around;
+    grid-gap: 20px 50px;
+
+    @include device-mobile {
+        grid:
+            'bio'
+            'stats'
+            'comments';
+    }
+}
+
+.bio {
+    grid-area: bio;
+
+    > div {
+        white-space: pre-line;
+    }
+}
+
+.stats {
+    grid-area: stats;
+}
+
+.comments {
+    grid-area: comments;
+}
+
+.view-more {
+    font-size: 16px;
+    opacity: 0.8;
+    float: right;
+    padding: 0 5px;
+}

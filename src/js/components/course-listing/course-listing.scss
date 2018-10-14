@@ -1,18 +1,29 @@
-@import 'mixins';
+@import '_colors';
+@import 'mixins/media';
 @import 'variables';
 
 .listing {
     background-color: white;
     display: grid;
     grid:
-        'img head head head'
-        'img desc desc desc' 1fr
-        / 1fr 1fr 1fr 1fr;
+        'img head'
+        'img desc'
+        / 1fr 3fr;
     grid-gap: 20px;
+    align-items: center;
     padding: 30px $block-margin;
+
+    @include device-mobile {
+        grid:
+            'img'
+            'head'
+            'desc';
+    }
+
     &:nth-of-type(n + 2) {
         border-top: 1px solid $border-color;
     }
+
     div {
         line-height: 1.5rem;
         font-size: 16px;
@@ -22,11 +33,12 @@
 .image {
     grid-area: img;
     width: 100%;
+    height: auto;
 }
 
 .overlay {
     opacity: 0.8;
-    background: $secondary;
+    background: $primary;
     height: 100%;
     width: 100%;
 }
@@ -34,6 +46,7 @@
 .heading {
     grid-area: head;
     display: flex;
+
     strong {
         flex-shrink: 0;
     }
@@ -60,22 +73,14 @@
     margin-right: 10px;
     border-radius: $border-radius;
     font-family: $font-mono;
+    font-weight: 500;
     text-transform: uppercase;
     font-size: 12px;
     line-height: initial;
-    background: $secondary;
+    background: $primary;
     color: white;
-}
 
-@include device-mobile {
-    .listing {
-        grid:
-            'img'
-            'head'
-            'desc';
-        grid-template-rows: 175px auto auto;
-    }
-    .new-tag {
+    @include device-mobile {
         display: none;
     }
 }

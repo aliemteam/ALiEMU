@@ -1,0 +1,27 @@
+@import 'mixins/media';
+
+.nav-group {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    @include device-mobile {
+        margin: auto;
+    }
+}
+
+.align-left {
+    float: left;
+}
+
+.align-right {
+    float: right;
+}
+
+.fill {
+    width: 100%;
+
+    > * {
+        flex: auto;
+    }
+}

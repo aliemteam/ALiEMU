@@ -1,21 +1,18 @@
-/*
-Theme Name: ALiEMU
-Author: ALiEM
-Description: Theme for ALiEMU.com
-Version: 1.9.0
-License: MIT
-License URI: https://opensource.org/licenses/MIT
-Text Domain: aliemu
-*/
-
 @import '~normalize.css';
+
 html {
     box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
     box-sizing: inherit;
+}
+
+// Misc generic classes
+.overflow-hidden {
+    overflow: hidden
 }
 
 @import 'overrides/academic-bloggers-toolkit';
@@ -37,8 +34,3 @@ html {
 @import 'components/header';
 @import 'components/person';
 @import 'components/table';
-
-// FIXME: Fix files below
-@import 'FIXME';
-@import 'FIXME-dashboard';
-@import 'FIXME-homepage';

@@ -12,7 +12,7 @@ if ( ! empty( $category ) ) :
 	$category           = $category[0]->cat_name;
 	$category_lowercase = strtolower( $category );
 
-?>
+	?>
 <a
 	class="course-box"
 	role="listitem"
@@ -49,6 +49,6 @@ if ( ! empty( $category ) ) :
 		</div>
 	</div>
 </a>
-<?php
+	<?php
 
 endif;

@@ -1,0 +1,9 @@
+@import './index.scss';
+
+.pagination {
+    display: grid;
+    grid:
+        'prev dots next'
+        / min-content 1fr min-content;
+    grid-gap: 20px;
+}

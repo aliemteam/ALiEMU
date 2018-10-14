@@ -78,7 +78,7 @@ defined( 'ABSPATH' ) || exit;
 										<ul>
 											<?php $odd_class = ''; ?>
 											<?php foreach ( $topics as $key => $topic ) : ?>
-												<?php $odd_class       = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
+												<?php $odd_class = empty( $odd_class ) ? 'nth-of-type-odd' : ''; ?>
 												<?php $completed_class = empty( $topic->completed ) ? 'topic-notcompleted' : 'topic-completed'; ?>
 												<li class='<?php echo $odd_class; ?>'>
 													<span class='topic_item'>

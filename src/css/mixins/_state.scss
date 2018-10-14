@@ -1,0 +1,17 @@
+@import '_colors';
+
+@mixin disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@mixin focus($color: $primary) {
+    outline: 0;
+    border: solid 1px rgba($color, 0.65);
+    box-shadow: 0 0 0 0.2em rgba($color, 0.3);
+}
+
+@mixin focus-raised {
+    border-color: transparent;
+    box-shadow: rgba($primary, 0.11) 0px 4px 6px, rgba(black, 0.08) 0px 1px 3px;
+}

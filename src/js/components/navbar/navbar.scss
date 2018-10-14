@@ -1,0 +1,28 @@
+@import '_colors';
+@import 'mixins/media';
+@import 'variables';
+
+.navbar {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: auto;
+    background: white;
+    border-top: solid $border-color 1px;
+    border-bottom: solid $border-color 1px;
+    height: 50px;
+    line-height: 50px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: $max-width-medium;
+    margin: 0 $block-margin;
+
+    @include device-mobile {
+        margin: 0;
+    }
+}

@@ -1,10 +1,11 @@
-@import '../colors';
-@import '../mixins';
-@import '../variables';
+@import 'variables';
+@import 'mixins/button';
+@import 'mixins/hard-boundary';
 
 #comments {
     margin: ($block-margin * 2);
     margin-top: 0;
+
     a {
         overflow-wrap: break-word;
     }
@@ -14,7 +15,8 @@
     @include hard-boundary(top);
     margin: auto;
     padding-top: $block-margin;
-    max-width: 1250px;
+    max-width: $max-width-wide;
+
     ol {
         list-style: none;
         margin: 0;
@@ -28,19 +30,24 @@
     > a {
         font-size: 0.8em;
     }
+
     .comment-form {
         > p {
             margin: 0;
         }
+
         .logged-in-as {
             font-size: 0.8em;
         }
+
         .form-submit {
             text-align: right;
+
             .submit {
-                @include button($secondary);
+                @include button($primary);
             }
         }
+
         textarea {
             width: 100%;
             height: 100px;
@@ -82,16 +89,19 @@
 
 .comment-author.vcard {
     display: flex;
+
     .fn {
         margin-right: 10px;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
+
     .avatar {
         margin-right: 10px;
         width: auto;
     }
+
     .says {
         display: none;
     }

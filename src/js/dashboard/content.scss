@@ -1,0 +1,11 @@
+@import 'variables';
+@import './dashboard';
+
+.body {
+    @extend %container-outer;
+    margin: $block-margin 0;
+}
+
+.body-container {
+    @extend %container-inner;
+}

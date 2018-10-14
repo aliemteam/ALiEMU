@@ -1,0 +1,43 @@
+@import 'mixins/media';
+@import 'variables';
+
+.home {
+    display: grid;
+    grid:
+        'title  title'
+        'left   right' 1fr
+        / 1fr 1fr;
+    justify-content: space-around;
+    grid-gap: 20px 50px;
+
+    h1 {
+        margin: 0;
+    }
+
+    @include devices {
+        grid:
+            'title'
+            'left'
+            'right'
+            / 1fr;
+    }
+}
+
+.title {
+    grid-area: title;
+}
+
+.in-progress {
+    grid-area: left;
+}
+
+.completed {
+    grid-area: right;
+}
+
+.view-more {
+    font-size: 16px;
+    opacity: 0.8;
+    float: right;
+    padding: 0 5px;
+}

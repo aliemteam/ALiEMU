@@ -1,10 +1,8 @@
-@import '../colors';
-@import '../variables';
+@import 'variables';
 
 //
 // Course list -----------------------------------------------------------------
 //
-
 .course-list {
     max-width: 100%;
     width: 1000px;
@@ -20,7 +18,6 @@
 //
 // Course Boxes ----------------------------------------------------------------
 //
-
 .course-boxes {
     display: grid;
     grid-gap: 20px;
@@ -31,7 +28,6 @@
 //
 // Course Box ------------------------------------------------------------------
 //
-
 .course-box {
     display: block;
     background-color: white;
@@ -42,6 +38,7 @@
     transition-property: box-shadow, transform;
     transition-timing-function: ease;
     transition-duration: 0.15s;
+
     &:hover {
         text-decoration: none;
         box-shadow: map-get($shadows, 'depth-4');
@@ -53,19 +50,22 @@
     text-align: right;
     font-size: 20px;
     color: white;
-    background: $primary;
-    font-weight: 500;
+    background: $secondary;
+    font-weight: 600;
     border-radius: 2px 2px 0 0;
     box-shadow: map-get($shadows, 'depth-2');
     height: 50px;
     line-height: 50px;
     padding: 0 20px;
+
     &--air {
         background: $air-primary;
     }
+
     &--air-pro {
         background: $airpro-primary;
     }
+
     &--capsules {
         background: $capsules-primary;
     }
@@ -77,9 +77,11 @@
     flex-flow: column;
     height: 300px;
     padding: 10px;
+
     code {
         font-size: 16px;
     }
+
     h3 {
         height: 60px;
         font-size: 20px;

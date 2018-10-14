@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <select
+    className=""
+  >
+    <option
+      value=""
+    />
+    <option>
+      Foo
+    </option>
+    <option>
+      Bar
+    </option>
+    <option>
+      Baz
+    </option>
+  </select>,
+  <label
+    className=""
+  >
+    Labelled Select
+    <select
+      className=""
+    >
+      <option
+        value=""
+      />
+      <option>
+        Foo
+      </option>
+      <option>
+        Bar
+      </option>
+      <option>
+        Baz
+      </option>
+    </select>
+  </label>,
+  <label
+    className="undefined"
+  >
+    Disabled Label Select
+    <select
+      className=""
+      disabled={true}
+    >
+      <option
+        value=""
+      />
+      <option>
+        Foo
+      </option>
+      <option>
+        Bar
+      </option>
+      <option>
+        Baz
+      </option>
+    </select>
+  </label>,
+]
+`;

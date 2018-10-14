@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  role="tablist"
+>
+  <button
+    aria-selected={false}
+    className=""
+    data-step={0}
+    onClick={[Function]}
+    role="tab"
+    tabIndex={-1}
+    type="button"
+  />
+  <button
+    aria-selected={false}
+    className=""
+    data-step={1}
+    onClick={[Function]}
+    role="tab"
+    tabIndex={-1}
+    type="button"
+  />
+  <button
+    aria-selected={false}
+    className=""
+    data-step={2}
+    onClick={[Function]}
+    role="tab"
+    tabIndex={-1}
+    type="button"
+  />
+  <button
+    aria-selected={true}
+    className="undefined"
+    data-step={3}
+    onClick={[Function]}
+    role="tab"
+    tabIndex={-1}
+    type="button"
+  />
+  <button
+    aria-selected={false}
+    className=""
+    data-step={4}
+    onClick={[Function]}
+    role="tab"
+    tabIndex={-1}
+    type="button"
+  />
+</div>
+`;

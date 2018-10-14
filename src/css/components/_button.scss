@@ -1,7 +1,5 @@
-@import '../mixins';
-@import '../variables';
-@import '../colors';
-@import '../typography';
+@import 'variables';
+@import 'mixins/button';
 
 .btn {
     @include button;
@@ -11,31 +9,10 @@
     @include button($primary);
 }
 
-.btn--primary-alt {
+.btn--secondary {
     @include button($secondary);
 }
 
 .btn--flat {
     @include button($modifiers: flat);
-}
-
-.btn--narrow {
-    min-width: 32px;
-    padding: 0;
-}
-
-.btn--active {
-    color: $primary !important;
-}
-
-.btn--air-pro {
-    color: $airpro-primary !important;
-}
-
-.btn--air {
-    color: $air-primary !important;
-}
-
-.btn--capsules {
-    color: $capsules-primary !important;
 }

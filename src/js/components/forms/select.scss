@@ -1,0 +1,14 @@
+@import './shared';
+
+.select {
+    @extend .container;
+
+    &:focus {
+        @extend .container.focused;
+    }
+
+    option {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 18px;
+    }
+}

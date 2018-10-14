@@ -1,6 +1,5 @@
-@import 'colors';
+@import '_colors';
 @import 'variables';
-@import 'mixins';
 
 html {
     font-size: 16px;
@@ -24,11 +23,13 @@ h6 {
     margin: 0 0 0.75em;
     line-height: 1.4;
     font-family: $font-serif;
+    clear: both;
 }
 
 h1 {
     font-size: 2rem;
     font-weight: 500;
+
     &.entry-title {
         font-weight: bolder;
     }
@@ -59,16 +60,17 @@ h6 {
 // }}}
 // Inline Text: {{{
 a {
-    color: $secondary;
+    color: $primary;
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
+
     &:hover {
         text-decoration: underline;
     }
 }
 
 strong {
-    font-weight: 500;
+    font-weight: 600;
 }
 
 sub,
@@ -78,9 +80,11 @@ sup {
     position: relative;
     vertical-align: baseline;
 }
+
 sub {
     bottom: -0.25em;
 }
+
 sup {
     top: -0.5em;
 }

@@ -1,28 +1,47 @@
+// tslint:disable:no-var-requires no-console
+require('dotenv').config();
+
 import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
 import { execSync } from 'child_process';
-import * as path from 'path';
-import * as webpack from 'webpack';
+import { stripIndent } from 'common-tags';
+import path from 'path';
+import webpack from 'webpack';
 
-import * as BroswerSyncPlugin from 'browser-sync-webpack-plugin';
-import * as CopyWebpackPlugin from 'copy-webpack-plugin';
-import * as UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
 const svgo = require('imagemin-svgo');
 
+const VERSION = require('./package.json').version;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Clean out dist directory
 execSync(`rm -rf ${__dirname}/dist/*`);
 
-const plugins: Set<webpack.Plugin> = new Set([
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.EnvironmentPlugin({
-        NODE_ENV: 'development',
+const plugins = new Set([
+    new webpack.DefinePlugin({
+        'process.env': {
+            GOOGLE_PLACES_KEY: assertEnv('GOOGLE_PLACES_KEY'),
+        },
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.BannerPlugin({
+        banner: stripIndent`
+            /*
+            Theme Name: ALiEMU
+            Author: ALiEM
+            Description: Theme for ALiEMU.com
+            Version: ${VERSION}
+            License: MIT
+            License URI: https://opensource.org/licenses/MIT
+            Text Domain: aliemu
+            */
+        `,
+        raw: true,
+        include: /style\.css$/,
+    }),
     new webpack.WatchIgnorePlugin([
         /(node_modules|gulpfile|dist|webpack.config)/,
         path.resolve(__dirname, 'lib', 'tmp'),
@@ -44,7 +63,7 @@ const plugins: Set<webpack.Plugin> = new Set([
         },
         {
             from: 'assets/**',
-            transform: (content, pathname): any => {
+            transform: (content, pathname) => {
                 switch (path.extname(pathname)) {
                     case '.png':
                         return imagemin.buffer(content, {
@@ -55,11 +74,7 @@ const plugins: Set<webpack.Plugin> = new Set([
                             plugins: [svgo()],
                         });
                     default:
-                        throw new Error(
-                            `Need to install imagemin plugin for ${path.extname(
-                                pathname,
-                            )}`,
-                        );
+                        return content;
                 }
             },
         },
@@ -68,7 +83,7 @@ const plugins: Set<webpack.Plugin> = new Set([
 
 if (!IS_PRODUCTION) {
     plugins.add(
-        new BroswerSyncPlugin(
+        new BrowserSyncPlugin(
             {
                 proxy: 'localhost:8080',
                 open: false,
@@ -82,49 +97,48 @@ if (!IS_PRODUCTION) {
     );
 }
 
-if (IS_PRODUCTION) {
-    plugins
-        .add(new webpack.optimize.ModuleConcatenationPlugin())
-        .add(new webpack.optimize.OccurrenceOrderPlugin(true))
-        .add(new UglifyJsPlugin({ sourceMap: true }));
-}
-
+// tslint:disable-next-line
 export default <webpack.Configuration>{
     mode: IS_PRODUCTION ? 'production' : 'development',
     watch: !IS_PRODUCTION,
-    devtool: IS_PRODUCTION ? 'cheap-module-source-map' : 'source-map',
+    devtool: IS_PRODUCTION ? 'none' : 'cheap-module-eval-source-map',
     context: path.resolve(__dirname, 'src'),
     entry: {
         /**
          * JS Entrypoints
          */
-        'js/catalog': 'js/_entrypoints/catalog',
-        'js/educator-dashboard': 'js/_entrypoints/educator-dashboard',
-        'js/mobile-nav-menu-helper': 'js/_entrypoints/mobile-nav-menu-helper',
+        'js/catalog': 'js/catalog',
+        'js/dashboard': ['datalist-polyfill', 'js/dashboard'],
+        'js/feedback': 'js/feedback',
+        'js/landing-page': 'js/landing-page',
+        'js/login': 'js/login',
+        'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
 
         /**
          * Stylesheet entrypoints
          */
-        style: 'css/_entrypoints/style',
         'css/editor': 'css/_entrypoints/editor',
+        style: 'css/_entrypoints/style',
     },
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
+        alias: {
+            css: path.resolve(__dirname, 'src/css/'),
+        },
         modules: [path.resolve(__dirname, 'src'), 'node_modules'],
         extensions: ['*', '.ts', '.tsx', '.js', '.scss'],
         plugins: [new TsConfigPathsPlugin()],
     },
     plugins: [...plugins],
-    stats: {
-        children: IS_PRODUCTION,
-    },
+    stats: IS_PRODUCTION ? 'verbose' : 'minimal',
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
+                sideEffects: false,
                 exclude: /(?:__tests__|node_modules)/,
                 use: [
                     {
@@ -214,19 +228,20 @@ export default <webpack.Configuration>{
             },
             {
                 test: /\.svg$/,
-                use: [
-                    'babel-loader',
-                    {
-                        loader: 'react-svg-loader',
-                        options: {
-                            svgo: {
-                                plugins: [{ removeTitle: false }],
-                                floatPrecision: 2,
-                            },
-                        },
-                    },
-                ],
+                use: ['@svgr/webpack'],
             },
         ],
     },
 };
+
+function assertEnv(key: string): string {
+    key = IS_PRODUCTION ? key : `${key}_DEV`;
+    const value = process.env[key];
+    if (value === undefined) {
+        console.log(
+            `ERROR: required environment variable "${key}" is not defined.`,
+        );
+        process.exit(1);
+    }
+    return JSON.stringify(value);
+}

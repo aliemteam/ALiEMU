@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
  * @package LearnDash\Course
  */
 
-use ALIEMU\Tags;
+use function ALIEMU\Theme\Tags\the_asset_url;
 
 /**
  * Display course status
@@ -76,7 +76,7 @@ if ( $logged_in ) : ?>
 	endif;
 
 	if ( $show_course_content ) :
-	?>
+		?>
 		<div id="learndash_course_content">
 			<h1 id="learndash_course_content_title">
 				<?php printf( _x( '%s Content', 'Course Content Label', 'learndash' ), LearnDash_Custom_Label::get_label( 'course' ) ); ?>
@@ -87,7 +87,7 @@ if ( $logged_in ) : ?>
 			 * Display lesson list
 			 */
 			if ( ! empty( $lessons ) ) :
-			?>
+				?>
 
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
@@ -100,7 +100,7 @@ if ( $logged_in ) : ?>
 								<a class="content-table__link" href='<?php echo esc_attr( $lesson['permalink'] ); ?>'><?php echo $lesson['post']->post_title; ?></a>
 							</div>
 							<div class="content-table__cell content-table__cell--padded">
-								<img src="<?php Tags\the_asset_url( $lesson['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
+								<img src="<?php the_asset_url( $lesson['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -113,7 +113,7 @@ if ( $logged_in ) : ?>
 			 * Display quiz list
 			 */
 			if ( ! empty( $quizzes ) ) :
-			?>
+				?>
 				<div class="content-table">
 					<div class="content-table__row content-table__row--header">
 						<div class="content-table__cell">Quizzes</div>
@@ -125,7 +125,7 @@ if ( $logged_in ) : ?>
 								<a class="content-table__link" href='<?php echo esc_attr( $quiz['permalink'] ); ?>'><?php echo $quiz['post']->post_title; ?></a>
 							</div>
 							<div class="content-table__cell content-table__cell--padded">
-								<img src="<?php Tags\the_asset_url( $quiz['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
+								<img src="<?php the_asset_url( $quiz['status'] . '.svg' ); ?>" height="40px" width="40px" role="presentation"/>
 							</div>
 						</div>
 					<?php endforeach; ?>

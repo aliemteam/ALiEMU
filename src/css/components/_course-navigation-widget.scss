@@ -1,5 +1,5 @@
-@import '../variables';
-@import '../mixins';
+@import 'variables';
+@import 'mixins/hard-boundary';
 
 #course_navigation {
     .widget_course_return {
@@ -8,21 +8,26 @@
         line-height: 1.5;
         padding-top: 10px;
         margin-top: $block-margin;
+
         a {
             font-weight: normal;
         }
     }
+
     .learndash_navigation_lesson_topics_list {
         margin: 0;
         margin-top: -$block-margin;
     }
+
     .learndash_topic_widget_list {
         // Ensures that the subitems are always visible (quizzes, lessons, etc)
         display: block !important;
+
         ul {
             margin: 0 0 0 10px;
         }
     }
+
     .list_arrow {
         // this is important -- prevents LearnDash's really sloppy and non a11y
         // clickable arrows from being shown to screen readers / functioning
@@ -50,11 +55,13 @@
         list-style: none;
         position: relative;
         font-size: 0.8em;
+
         .topic_item {
             a {
                 display: inline-block;
                 padding-left: 20px;
                 line-height: 1.5;
+
                 &:before {
                     content: '';
                     position: absolute;
@@ -67,8 +74,9 @@
                     box-shadow: inset 0 0 0 1px $border-color;
                     border-radius: 50%;
                 }
+
                 &.topic-completed:before {
-                    background: $intent-primary;
+                    background: map-get($intent, 'primary');
                 }
             }
         }

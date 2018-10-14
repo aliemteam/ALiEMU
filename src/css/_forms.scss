@@ -1,19 +1,13 @@
-@import 'mixins';
-
-input {
-    @extend body;
-}
+@import 'mixins/noselect';
+@import 'mixins/state';
 
 select {
-    @extend body;
     &:disabled {
-        opacity: 0.6;
-        pointer-events: none;
+        @include disabled;
     }
 }
 
 textarea {
-    @extend body;
     line-height: normal;
 }
 

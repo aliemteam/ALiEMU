@@ -1,0 +1,12 @@
+@import '_colors';
+@import './index.scss';
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+}
+
+.anchor-button {
+    color: $primary;
+}

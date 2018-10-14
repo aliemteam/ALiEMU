@@ -1,0 +1,18 @@
+@import 'mixins/state';
+
+.btn {
+    cursor: pointer;
+}
+
+.disabled {
+    @include disabled;
+    user-select: none;
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    &:focus {
+        outline: 0;
+    }
+}

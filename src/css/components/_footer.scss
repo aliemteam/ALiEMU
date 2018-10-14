@@ -1,5 +1,5 @@
-@import '../mixins';
-@import '../variables';
+@import 'variables';
+@import 'mixins/media';
 
 .footer {
     background: #252525;
@@ -14,7 +14,7 @@
     justify-content: space-between;
     margin: auto;
     padding: 0 40px;
-    max-width: $article-max-width;
+    max-width: $max-width-narrow;
 }
 
 .footer__logo {
@@ -30,11 +30,14 @@
     flex-flow: row wrap;
     justify-content: center;
     justify-content: space-evenly; // progressive enhancement
+
     li {
         margin: 0 20px;
+
         a {
             color: white;
             font-size: 0.8em;
+            opacity: 0.5;
         }
     }
 }
@@ -45,15 +48,19 @@
 
 .footer__icon {
     margin: 0 10px;
+
     &:hover {
         text-decoration: none;
     }
+
     svg {
         fill: $gray;
     }
+
     &--facebook:hover svg {
         fill: #3b579d;
     }
+
     &--twitter:hover svg {
         fill: #1da1f2;
     }
@@ -67,6 +74,7 @@
             / max-content max-content;
         justify-content: center;
     }
+
     .footer__links {
         flex-flow: column;
     }

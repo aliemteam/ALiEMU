@@ -1,0 +1,19 @@
+@import '_colors';
+
+$height: 8px;
+
+.progress-bar {
+    position: relative;
+    width: 100%;
+    height: $height;
+    border-radius: $height / 2;
+    background-color: $border-color;
+}
+
+.progress-meter {
+    position: absolute;
+    height: $height;
+    border-radius: $height / 2;
+    background-color: $primary;
+    transition: width 0.2s cubic-bezier(0.4, 1, 0.75, 0.9);
+}

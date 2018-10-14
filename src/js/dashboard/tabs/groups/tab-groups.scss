@@ -1,0 +1,47 @@
+@import '_colors';
+@import 'mixins/media';
+@import 'variables';
+
+.coaches-caption {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    align-items: center;
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.add-coach-form {
+    display: flex;
+    flex: auto;
+    justify-content: center;
+    margin-bottom: 4px;
+
+    > button {
+        margin-left: 5px;
+        flex-shrink: 0;
+    }
+}
+
+.table {
+    grid-area: table;
+}
+
+.empty-state {
+    margin: $block-margin 0 $section-margin 0;
+
+    &-content {
+        text-align: center;
+        display: grid;
+    }
+
+    i {
+        color: $primary;
+    }
+
+    h3 {
+        font-weight: initial;
+        margin: 0;
+    }
+}

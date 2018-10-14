@@ -1,0 +1,44 @@
+@import 'mixins/media';
+@import 'variables';
+
+:global {
+    #feedback-root {
+        display: flex;
+    }
+}
+
+.card {
+    padding: $block-padding;
+    max-width: 600px;
+    margin: auto;
+}
+
+.form {
+    display: grid;
+    grid-gap: 10px;
+
+    > h1,
+    > p {
+        margin: 0;
+        text-align: center;
+    }
+}
+
+.input-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+
+    @include device-mobile {
+        grid-template-columns: 1fr;
+    }
+}
+
+.text {
+    margin: 0;
+    text-align: center;
+}
+
+.send {
+    text-align: right;
+}

@@ -1,0 +1,18 @@
+/**
+ * Mixin to hide a given element to the user, but still make it visible to
+ * screen readers.
+ */
+@mixin clipped {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    margin: 0;
+    padding: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    @supports (clip-path: inset(100% 100%)) {
+        clip: auto;
+        clip-path: inset(100% 100%);
+    }
+}

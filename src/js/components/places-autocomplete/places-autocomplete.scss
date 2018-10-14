@@ -1,0 +1,25 @@
+@import '_colors';
+
+:global {
+    .pac-container {
+        transform: translateY(9px);
+        font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .pac-item {
+        line-height: 36px;
+    }
+
+    .pac-icon {
+        display: none;
+    }
+
+    .pac-item-query {
+        color: $black;
+        font-size: 1rem;
+    }
+
+    .pac-matched {
+        color: $primary;
+    }
+}

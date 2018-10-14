@@ -1,9 +1,24 @@
 version: '3'
 services:
     wordpress:
+        security_opt:
+            - apparmor:unconfined
         environment:
             SERVER_NAME: aliemu.com
             DB_PASS: ${DB_PASS}
+            EXTRA_PHP: |
+                define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
+                define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
+            PLUGINS: >-
+                academic-bloggers-toolkit
+                [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
+                jetpack
+                mce-table-buttons
+                sendgrid-email-delivery-simplified
+                ultimate-member
+                w3-total-cache
+                wordfence
+                wp-smushit
         logging:
             options:
                 max-size: 1m
@@ -18,8 +33,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASS}
         restart: always
+    redis:
+        restart: always
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASS?DB_PASS not defined in .env}
         restart: always

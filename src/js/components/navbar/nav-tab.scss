@@ -1,0 +1,23 @@
+@import '_colors';
+
+.btn {
+    padding: 0 20px;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: solid transparent 4px;
+    height: 100%;
+    cursor: pointer;
+    font-weight: 600;
+    color: $black;
+
+    &:hover {
+        border-bottom: solid $border-color 4px;
+    }
+}
+
+.active,
+.active:hover {
+    color: $primary;
+    border-bottom: solid $primary 4px;
+}

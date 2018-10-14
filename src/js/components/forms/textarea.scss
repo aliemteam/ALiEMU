@@ -1,0 +1,26 @@
+@import 'mixins/state';
+@import 'variables';
+@import './shared';
+
+@value padding-size #{$padding-size};
+
+.textarea {
+    @extend .container;
+    height: auto;
+    overflow: auto;
+    // FIXME:
+    color: #424770;
+    font-family: $font-sans;
+    padding: $padding-size;
+    resize: vertical;
+
+    &:focus {
+        @include focus;
+    }
+}
+
+.progress-row {
+    > div {
+        margin: 5px 0 10px 0;
+    }
+}

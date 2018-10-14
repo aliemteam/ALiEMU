@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render correctly 1`] = `
+Array [
+  <button
+    className="button"
+  >
+    <i
+      className="material-icons"
+      style={
+        Object {
+          "color": undefined,
+          "fontSize": 18,
+        }
+      }
+    >
+      accessible_forward
+    </i>
+  </button>,
+  <button
+    className="button"
+  >
+    <i
+      className="material-icons"
+      style={
+        Object {
+          "color": undefined,
+          "fontSize": 50,
+        }
+      }
+    >
+      done_outline
+    </i>
+  </button>,
+  <button
+    className="button"
+  >
+    <i
+      className="material-icons"
+      style={
+        Object {
+          "color": "red",
+          "fontSize": 25,
+        }
+      }
+    >
+      pets
+    </i>
+  </button>,
+]
+`;

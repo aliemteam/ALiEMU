@@ -1,0 +1,52 @@
+@import '_colors';
+@import 'mixins/reset';
+@import 'mixins/state';
+
+.button-outlined {
+    @include reset-button;
+
+    color: $black;
+
+    min-width: 64px;
+    height: 36px;
+    line-height: 36px;
+
+    border: 1px solid $border-color;
+    border-radius: 4px;
+
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    padding: 0 16px;
+
+    cursor: pointer;
+
+    &:hover {
+        border-color: $black;
+    }
+
+    &:focus {
+        @include focus;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        color: $black;
+        border-color: $border-color;
+        opacity: 0.5;
+    }
+}
+
+@each $k, $v in $intent {
+    .button-outlined--#{$k} {
+        &:hover {
+            border-color: $v;
+            color: $v;
+        }
+
+        &:focus {
+            @include focus($v);
+        }
+    }
+}

@@ -1,0 +1,107 @@
+@import '_colors';
+@import 'mixins/media';
+
+.container-outer {
+    min-height: 300px;
+
+    display: grid;
+    grid-gap: 20px;
+    grid:
+        'info table'
+        / min-content 1fr;
+
+    @include devices {
+        grid:
+            'info'
+            'table';
+    }
+}
+
+.container-inner {
+    display: grid;
+    grid-gap: 20px;
+    grid:
+        'img' min-content
+        'meta';
+
+    @include devices {
+        grid: 'img meta' / min-content 1fr;
+    }
+}
+
+.img {
+    grid-area: img;
+    border-radius: 4px;
+}
+
+.metadata {
+    grid-area: meta;
+    display: flex;
+    flex-flow: column;
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+}
+
+.tag-heading {
+    display: flex;
+    margin: 0 {
+        bottom: 10px;
+    }
+
+    h2 {
+        margin: 0 {
+            right: 10px;
+        }
+    }
+
+    button {
+        color: $black;
+    }
+}
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        margin-bottom: 5px !important;
+    }
+}
+
+.table-container {
+    display: grid;
+    grid-area: table;
+    margin: 0;
+    position: relative;
+
+    > div {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
+
+.empty {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.course-name-cell {
+    max-width: 500px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @include device-tablet {
+        max-width: 300px;
+    }
+
+    @include device-mobile {
+        max-width: 200px;
+    }
+}

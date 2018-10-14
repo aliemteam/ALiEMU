@@ -25,48 +25,38 @@ class Script_Loader {
 	 * @var array $localized
 	 */
 	private static $localized = [
-		'catalog'            => 'AU_Catalog',
-		'educator-dashboard' => 'AU_EducatorData',
+		'aliemu-catalog'   => 'AU_Catalog',
+		'aliemu-dashboard' => 'AU_Dashboard',
+		'aliemu-feedback'  => 'AU_Feedback',
 	];
-
-	/**
-	 * The current URL path split by `/`.
-	 *
-	 * @var string[] $path
-	 */
-	private $path;
-
-	/**
-	 * The current URL query (if it exists).
-	 *
-	 * @var string[] $query Key-value array of query params.
-	 */
-	private $query;
 
 	/**
 	 * Constructor. Initializes WordPress hooks.
 	 */
 	public function __construct() {
-		$url = wp_parse_url(
-			isset( $_SERVER['REQUEST_URI'] ) // Input var okay.
-			? wp_unslash( $_SERVER['REQUEST_URI'] ) // Input var okay; sanitization okay.
-			: ''
-		);
-
-		// `array_values` is important. Without it, keys will be preserved.
-		$this->path  = array_values(
-			array_filter(
-				explode( '/', $url['path'] )
-			)
-		);
-		$this->query = [];
-
-		if ( ! empty( $url['query'] ) ) {
-			parse_str( $url['query'], $this->query );
-		}
-
-		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
 		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
+		add_action( 'wp_head', [ $this, 'print_globals' ] );
+	}
+
+	/**
+	 * Prints global variables needed in most or all pages in the head
+	 */
+	public function print_globals(): void {
+		// phpcs:disable
+		?>
+			<script>
+				var AU_API = {
+					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
+					url: '<?php echo esc_url_raw( rest_url() ); ?>',
+				};
+				var AU_AJAX = {
+					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>',
+					url: '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
+				};
+			</script>
+		<?php
+		// phpcs:enable
 	}
 
 	/**
@@ -75,23 +65,41 @@ class Script_Loader {
 	 */
 	public function register() : void {
 		wp_register_style(
-			'aliemu-fonts', add_query_arg(
+			'aliemu-fonts',
+			add_query_arg(
 				[
-					'family' => 'Roboto+Mono:400,500,700|Roboto+Slab:300,400,700|Roboto:300,400,400i,500,700',
+					'family' => join(
+						'|',
+						[
+							'Roboto+Slab:400,700',
+							'IBM+Plex+Mono:400,500,700',
+							'IBM+Plex+Sans:400,400i,500,600',
+							'Material+Icons',
+						]
+					),
 					'subset' => 'greek,greek-ext,latin-ext',
-				], 'https://fonts.googleapis.com/css'
-			)
+				],
+				'https://fonts.googleapis.com/css'
+			),
+			[],
+			ALIEMU_VERSION
 		);
-		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ] );
+		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ], hash_file( 'md5', get_stylesheet_directory( 'style.css' ) ) );
 
 		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
 			$style = pathinfo( $stylesheet );
-			wp_register_style( $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
+			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
 		}
 
-		wp_register_script( 'catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'wp-api' ], ALIEMU_VERSION, true );
-		wp_register_script( 'educator-dashboard', ALIEMU_ROOT_URI . '/js/educator-dashboard.js', [], ALIEMU_VERSION, true );
-		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], ALIEMU_VERSION );
+		// Header scripts.
+		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ), false );
+
+		// Footer scripts.
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
+		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
+		wp_register_script( 'aliemu-landing-page', ALIEMU_ROOT_URI . '/js/landing-page.js', [], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/landing-page.js' ), true );
+		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/login.js' ), true );
 
 		$this->delegate();
 	}
@@ -107,25 +115,11 @@ class Script_Loader {
 	 * Removes unnecessary garbage styles/scripts unless they're actually needed.
 	 */
 	private function remove_junk(): void {
-		$styles  = wp_styles();
-		$scripts = wp_scripts();
-		foreach ( $styles->queue as $style ) {
-			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $style, 'um_', 3 ) === 0 ) {
-				wp_dequeue_style( $style );
-			}
-			if ( strncmp( $style, 'learndash_', 10 ) === 0 || strncmp( $style, 'sfwd_', 5 ) === 0 ) {
-				wp_dequeue_style( $style );
-			}
-		}
-
-		foreach ( $scripts->queue as $script ) {
-			if ( ( ! is_ultimatemember() && ! is_front_page() ) && strncmp( $script, 'um_', 3 ) === 0 ) {
-				wp_dequeue_script( $script );
-			}
-			if ( strncmp( $script, 'learndash_', 10 ) === 0 || strncmp( $script, 'sfwd_', 5 ) === 0 ) {
-				wp_dequeue_script( $script );
-			}
-		}
+		$filter_func = function ( string $item ) : bool {
+			return preg_match( '/^(?:um[-_]|learndash|sfwd|select2)/', $item );
+		};
+		wp_dequeue_style( array_filter( wp_styles()->queue, $filter_func ) );
+		wp_dequeue_script( array_filter( wp_scripts()->queue, $filter_func ) );
 	}
 
 	/**
@@ -134,7 +128,10 @@ class Script_Loader {
 	 * Loads/Unloads scripts and styles based on the current page.
 	 */
 	private function delegate() : void {
-		$this->remove_junk();
+		// TODO: This is temporary until we can get forms styled better.
+		if ( ! is_page( 'account' ) ) {
+			$this->remove_junk();
+		}
 
 		// Always load these.
 		$load = (object) [
@@ -147,27 +144,33 @@ class Script_Loader {
 			'styles'  => [],
 		];
 
+		if ( is_front_page() ) {
+			array_push( $load->scripts, 'aliemu-landing-page' );
+			array_push( $load->styles, 'aliemu-landing-page' );
+		}
+
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			array_push( $load->scripts, 'comment-reply' );
 		}
 
 		if ( is_post_type_archive( 'sfwd-courses' ) ) {
-			array_push( $load->scripts, 'catalog' );
-			array_push( $load->styles, 'catalog' );
+			array_push( $load->scripts, 'aliemu-catalog' );
+			array_push( $load->styles, 'aliemu-catalog' );
 		}
 
-		switch ( $this->path[0] ?? '' ) {
-			case 'user':
-				switch ( $this->query['profiletab'] ?? '' ) {
-					case 'educator_dashboard':
-						array_push( $load->scripts, 'educator-dashboard' );
-						array_push( $load->styles, 'educator-dashboard' );
-						break 2;
-					case 'user_progress':
-						array_push( $load->styles, 'learndash_template_style_css' );
-						break 2;
-				}
-				break;
+		if ( is_page( 'user' ) ) {
+			array_push( $load->scripts, 'aliemu-dashboard' );
+			array_push( $load->styles, 'aliemu-dashboard' );
+		}
+
+		if ( is_page( 'feedback' ) ) {
+			array_push( $load->scripts, 'aliemu-feedback' );
+			array_push( $load->styles, 'aliemu-feedback' );
+		}
+
+		if ( is_page( 'login' ) ) {
+			array_push( $load->scripts, 'aliemu-login' );
+			array_push( $load->styles, 'aliemu-login' );
 		}
 
 		$this->unload( $unload->scripts, $unload->styles );
@@ -216,7 +219,12 @@ class Script_Loader {
 	 * @param string $varname Name of the global JS variable to set.
 	 */
 	private function localize( $script, $varname ) : void {
-		require_once __DIR__ . "/localizers/$script.php";
+		$scriptname = preg_replace( '/^aliemu-/', '', $script );
+		if ( file_exists( __DIR__ . "/localizers/$scriptname.php" ) ) {
+			require_once __DIR__ . "/localizers/$scriptname.php";
+		} else {
+			wp_die( 'Could not locate required localizer script' );
+		}
 		wp_localize_script( $script, $varname, localize() );
 	}
 }
