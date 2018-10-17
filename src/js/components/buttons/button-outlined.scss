@@ -40,7 +40,7 @@
 
 @each $k, $v in $intent {
     .button-outlined--#{$k} {
-        &:hover {
+        &:hover:not([disabled]) {
             border-color: $v;
             color: $v;
         }
