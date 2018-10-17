@@ -22,4 +22,4 @@ services:
         ports:
             - 8080:80
         volumes:
-            - ./dist:/app/wp-content/themes/aliemu
+            - ./dist:/app/wp-content/themes/aliemu.com

@@ -20,5 +20,15 @@
 	<meta name="msapplication-TileColor" content="#00b092">
 	<meta name="msapplication-config" content="<?php echo esc_attr( ALIEMU_ROOT_URI ); ?>/assets/site/browserconfig.xml?v=<?php echo esc_attr( ALIEMU_VERSION_HASH ); ?>">
 	<meta name="theme-color" content="#ffffff">
+<?php if ( 'localhost' !== $_SERVER['SERVER_NAME'] ): // phpcs:disable ?>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63669604-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'UA-63669604-1');
+	</script>
+<?php endif; // phpcs:enable ?>
 	<?php wp_head(); ?>
 </head>
