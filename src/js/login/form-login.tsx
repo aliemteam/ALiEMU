@@ -24,9 +24,10 @@ interface State {
     };
     loading: boolean;
     notice?: {
-        intent: Intent;
-        title: string;
-        message: string;
+        message: ReactNode;
+        renderWithForm: boolean;
+        intent?: Intent;
+        title?: string;
     };
 }
 
@@ -42,13 +43,25 @@ export default class LoginForm extends PureComponent<Props, State> {
     };
 
     render(): JSX.Element {
-        const {
-            data: { user_login, user_password, remember },
-            loading,
-        } = this.state;
         return (
             <form className={styles.form} onSubmit={this.handleSubmit}>
                 {this.maybeRenderNotice()}
+                {this.maybeRenderForm()}
+            </form>
+        );
+    }
+
+    private maybeRenderForm = (): ReactNode => {
+        const {
+            data: { user_login, user_password, remember },
+            loading,
+            notice,
+        } = this.state;
+        if (notice && !notice.renderWithForm) {
+            return null;
+        }
+        return (
+            <>
                 <Input
                     required
                     autoFocus
@@ -89,9 +102,9 @@ export default class LoginForm extends PureComponent<Props, State> {
                 <Button intent={Intent.PRIMARY} loading={loading}>
                     Login
                 </Button>
-            </form>
+            </>
         );
-    }
+    };
 
     private maybeRenderNotice = (): ReactNode => {
         const { notice } = this.state;
@@ -117,8 +130,9 @@ export default class LoginForm extends PureComponent<Props, State> {
         e: FormEvent<HTMLFormElement>,
     ): Promise<void> => {
         e.preventDefault();
+        const { data } = this.state;
         this.setState(prev => ({ ...prev, notice: undefined, loading: true }));
-        const response = await wpAjax('user_login', { ...this.state.data });
+        const response = await wpAjax('user_login', { ...data });
         if (response.success) {
             return window.location.replace('user');
         }
@@ -126,6 +140,7 @@ export default class LoginForm extends PureComponent<Props, State> {
         let notice: State['notice'] = {
             intent: Intent.DANGER,
             title: '',
+            renderWithForm: false,
             message:
                 'An unexpected error occurred while attempting to log in. Please try again later.',
         };
@@ -134,18 +149,86 @@ export default class LoginForm extends PureComponent<Props, State> {
             case 'incorrect_password':
                 notice = {
                     ...notice,
+                    renderWithForm: true,
                     message: 'Invalid username or password.',
                 };
                 break;
             case 'awaiting_email_confirmation':
                 notice = {
                     ...notice,
-                    intent: Intent.WARNING,
-                    message: 'Your account is awaiting email verification.',
+                    intent: Intent.PRIMARY,
+                    title: 'Activation Required',
+                    message: <ActivationNotice user_login={data.user_login} />,
                 };
                 break;
             default:
         }
         this.setState(prev => ({ ...prev, notice, loading: false }));
+    };
+}
+
+interface ANProps {
+    user_login: string;
+}
+
+interface ANState {
+    emailSent: boolean;
+    loading: boolean;
+}
+
+class ActivationNotice extends PureComponent<ANProps, ANState> {
+    state = {
+        emailSent: false,
+        loading: false,
+    };
+
+    render() {
+        const { emailSent, loading } = this.state;
+        return (
+            <div className={styles.activationNotice}>
+                {!emailSent && (
+                    <>
+                        <div>Your account is awaiting email verification.</div>
+                        <Button
+                            type="button"
+                            intent={Intent.PRIMARY}
+                            loading={loading}
+                            onClick={this.handleClick}
+                        >
+                            Resend activation email
+                        </Button>
+                    </>
+                )}
+                {emailSent && (
+                    <div>
+                        <div>
+                            <strong>Activation sent successfully.</strong>
+                        </div>
+                        <div>
+                            To complete your activation, please click the link
+                            in the email.
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    private handleClick = async () => {
+        const { user_login } = this.props;
+        this.setState(prev => ({ ...prev, loading: true }));
+        const response = await wpAjax('user_resend_activation', { user_login });
+        if (response.success) {
+            this.setState(prev => ({
+                ...prev,
+                emailSent: true,
+                loading: false,
+            }));
+        } else {
+            // FIXME:
+            console.error(
+                'An error occurred while attempting to send confirmation email',
+            );
+        }
     };
 }

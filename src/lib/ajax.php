@@ -134,6 +134,28 @@ function user_register(): void {
 add_action( 'wp_ajax_nopriv_user_register', __NAMESPACE__ . '\user_register' );
 
 /**
+ * AJAX handler responsible for resending a user's email confirmation.
+ */
+function user_resend_activation(): void {
+	check_ajax_referer( 'wp_ajax' );
+
+	if ( isset( $_POST['user_login'] ) ) {
+
+		$email = sanitize_email( wp_unslash( $_POST['user_login'] ) );
+		$login = sanitize_user( wp_unslash( $_POST['user_login'] ), true );
+		$user  = is_email( $email ) ? get_user_by( 'email', $email ) : get_user_by( 'login', $login );
+
+		if ( $user ) {
+			um_post_registration_checkmail_hook( $user->ID, $_POST );
+			wp_send_json_success();
+		}
+	}
+
+	wp_send_json_error();
+}
+add_action( 'wp_ajax_nopriv_user_resend_activation', __NAMESPACE__ . '\user_resend_activation' );
+
+/**
  * Helper function that validates recaptcha-generated tokens with Google and
  * returns whether or not the token was valid.
  *
