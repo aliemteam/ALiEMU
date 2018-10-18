@@ -25,32 +25,40 @@ export default class Notice extends PureComponent<Props> {
         return (
             <div className={className}>
                 {this.maybeRenderIcon()}
-                <div>
-                    {this.maybeRenderTitle()}
-                    {children}
-                </div>
+                {this.maybeRenderTitle()}
+                <div className={styles.content}>{children}</div>
             </div>
         );
     }
 
     private maybeRenderIcon = (): ReactNode => {
         const { intent } = this.props;
+        let iconProps = {
+            icon: '',
+            size: styles.iconSize,
+            className: styles.icon,
+        };
         switch (intent) {
             case Intent.PRIMARY:
-                return <Icon icon="info" size={26} />;
+                iconProps = { ...iconProps, icon: 'info' };
+                break;
             case Intent.SUCCESS:
-                return <Icon icon="check_circle" size={26} />;
+                iconProps = { ...iconProps, icon: 'check_circle' };
+                break;
             case Intent.WARNING:
-                return <Icon icon="warning" size={26} />;
+                iconProps = { ...iconProps, icon: 'warning' };
+                break;
             case Intent.DANGER:
-                return <Icon icon="error" size={26} />;
+                iconProps = { ...iconProps, icon: 'error' };
+                break;
             default:
                 return null;
         }
+        return <Icon {...iconProps} />;
     };
 
     private maybeRenderTitle = (): ReactNode => {
         const { title } = this.props;
-        return title ? <h1>{title}</h1> : null;
+        return title ? <h1 className={styles.heading}>{title}</h1> : null;
     };
 }

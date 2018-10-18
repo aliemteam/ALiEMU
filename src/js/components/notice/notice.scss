@@ -1,48 +1,44 @@
 @import '_colors';
 @import 'variables';
 
-.notice {
-    display: grid;
-    grid:
-        'icon message'
-        / min-content 1fr;
-    grid-gap: 10px;
-    padding: 10px;
+@value icon-size 26px;
 
+$padding-size: 10px;
+
+.notice {
+    padding: $padding-size;
     background: $gray-light;
     border-radius: $border-radius;
-
     text-align: initial;
 
     @each $k, $v in $intent {
         &.intent-#{$k} {
-            color: $v;
             background-color: lighten(rgba($v, 0.15), 10%);
 
-            h1 {
+            .heading,
+            .icon {
                 color: $v;
             }
         }
     }
+}
 
-    div {
-        grid-area: message;
-        color: initial;
-        font-size: 14px;
-        line-height: 1.4;
-        word-break: break-word;
-    }
+.icon {
+    float: left;
+    margin-right: $padding-size;
+}
 
-    h1 {
-        margin: 0 {
-            bottom: 5px;
-        }
-        font-size: 18px;
-        font-family: $font-sans;
-        font-weight: 600;
+.heading {
+    margin: 0 {
+        bottom: 5px;
     }
+    font-size: 18px;
+    font-family: $font-sans;
+    font-weight: 600;
+    line-height: icon-size;
+    clear: right;
+}
 
-    i {
-        grid-area: icon;
-    }
+.content {
+    font-size: 16px;
 }
