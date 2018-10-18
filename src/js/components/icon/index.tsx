@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React, { PureComponent } from 'react';
 
 export interface Props {
@@ -25,6 +26,11 @@ export interface Props {
     color?: string;
 
     /**
+     * An optional class name for the icon
+     */
+    className?: string;
+
+    /**
      * This component doesn't support children
      */
     children?: never;
@@ -41,8 +47,9 @@ export default class Icon extends PureComponent<Props> {
             color,
             fontSize: size,
         };
+        const className = classNames('material-icons', this.props.className);
         return (
-            <i className="material-icons" style={style}>
+            <i className={className} style={style}>
                 {icon}
             </i>
         );
