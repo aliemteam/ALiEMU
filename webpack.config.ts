@@ -62,7 +62,11 @@ const plugins = new Set([
             from: 'vendor/*',
         },
         {
+            from: 'assets/icons/*',
+        },
+        {
             from: 'assets/**',
+            ignore: ['assets/icons'],
             transform: (content, pathname) => {
                 switch (path.extname(pathname)) {
                     case '.png':
