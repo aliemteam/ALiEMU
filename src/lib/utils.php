@@ -79,7 +79,7 @@ function get_first_error( WP_Error $error ) : array {
  *     @type string $message Response message.
  * }
  */
-function slack_message( $route, $data ) {
+function slack_message( string $route, $data ) {
 	// Don't message slack when developing / testing.
 	if ( WP_DEBUG ) {
 		// Debug code is not used in production here. So warning is incorrect.
@@ -116,4 +116,27 @@ function slack_message( $route, $data ) {
 	}
 
 	return is_wp_error( $response ) ? $response : $response['response'];
+}
+
+/**
+ * Fetch profile data from gravatar for a given email address.
+ *
+ * @param string $email The email address of the user.
+ */
+function gravatar_profile_data( string $email ) : object {
+	$hash = md5( strtolower( trim( $email ) ) );
+	$data = wp_cache_get( 'gravatar_json', $hash );
+	if ( ! $data ) {
+		$response = wp_remote_get( 'https://www.gravatar.com/' . $hash . '.json' );
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$data = json_decode( $response['body'] );
+			$data = $data->entry[0];
+		} else {
+			$data = (object) [
+				'thumbnailUrl' => 'https://secure.gravatar.com/avatar/' . $hash,
+			];
+		}
+		wp_cache_set( 'gravatar_json', $data, $hash, DAY_IN_SECONDS );
+	}
+	return $data;
 }
