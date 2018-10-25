@@ -1,32 +1,32 @@
 version: '3'
 services:
-    wordpress:
-        image: visiblevc/wordpress:0.21.0-php7.2
-        cap_add:
-            - SYS_ADMIN
-        devices:
-            - /dev/fuse
-        environment:
-            DB_NAME: aliemu
-            DB_PASS: root
-            DB_USER: root
-        volumes:
-            - ./data:/data
-            - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
-            - ./wp-content/uploads:/app/wp-content/uploads
-    db:
-        image: mariadb:10
-        environment:
-            MYSQL_ROOT_PASSWORD: root
-        volumes:
-            - data:/var/lib/mysql
-    redis:
-        image: redis
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        volumes:
-            - data:/var/lib/mysql
-        ports:
-            - 22222:80
+  wordpress:
+    image: visiblevc/wordpress:0.21.0-php7.2
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - /dev/fuse
+    environment:
+      DB_NAME: aliemu
+      DB_PASS: root
+      DB_USER: root
+    volumes:
+      - ./data:/data
+      - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
+      - ./wp-content/uploads:/app/wp-content/uploads
+  db:
+    image: mariadb:10
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - data:/var/lib/mysql
+  redis:
+    image: redis
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    volumes:
+      - data:/var/lib/mysql
+    ports:
+      - 22222:80
 volumes:
-    ? data
+  ? data

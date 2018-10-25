@@ -1,2 +1,2 @@
 extends:
-    - '@dsifford/stylelint-config'
+  - '@dsifford/stylelint-config'

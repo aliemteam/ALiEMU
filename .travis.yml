@@ -14,7 +14,7 @@ branches:
 
 cache:
   directories:
-    - "$HOME/.npm"
+    - '$HOME/.npm'
 
 before_install:
   - docker pull dsifford/phpcs
