@@ -1,6 +1,14 @@
-version: '3'
+version: '3.7'
+x-shared-options: &shared
+    logging:
+        driver: json-file
+        options:
+            max-size: 10m
+    restart: always
+
 services:
     wordpress:
+        *shared
         security_opt:
             - apparmor:unconfined
         environment:
@@ -11,6 +19,9 @@ services:
                 define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
                 define( 'WP_POST_REVISIONS', 3 );
                 define( 'IMAGE_EDIT_OVERWRITE', true );
+                if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $$_SERVER['HTTP_HOST'] ) ) {
+                    $$_SERVER['HTTP_HOST'] = 'aliemu.com';
+                }
             PLUGINS: >-
                 academic-bloggers-toolkit
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
@@ -21,21 +32,17 @@ services:
                 w3-total-cache
                 wordfence
                 wp-smushit
-        logging:
-            options:
-                max-size: 1m
         ports:
             - 443:443
             - 80:80
-        restart: always
         volumes:
             - ./wp-content/themes:/app/wp-content/themes
             - ./letsencrypt:/etc/letsencrypt
     db:
+        *shared
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASS}
-        restart: always
     redis:
-        restart: always
+        *shared
     phpmyadmin:
-        restart: always
+        *shared

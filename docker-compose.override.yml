@@ -11,6 +11,9 @@ services:
                 define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
                 define( 'WP_POST_REVISIONS', 3 );
                 define( 'IMAGE_EDIT_OVERWRITE', true );
+                if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $$_SERVER['HTTP_HOST'] ) ) {
+                    $$_SERVER['HTTP_HOST'] = 'localhost';
+                }
             PLUGINS: >-
                 academic-bloggers-toolkit
                 [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
