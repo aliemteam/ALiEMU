@@ -65,54 +65,65 @@ function get_first_error( WP_Error $error ) : array {
 	];
 }
 
-
 /**
  * Master handler for posting messages to Slack.
  *
  * Tries a total of five times to send the message to slack. If the message is
  *  posted successfully (eg, if the HTTP response is 200), then functoin exits.
  *
- * @param  string  $route Enpoint to hit.
- * @param  mixed[] $data  Associative array of data to send.
+ * @param  string $channel  Name of the channel to post the message to, including leading #.
+ * @param  array  $message {
+ *     Optional. A single Slack "attachment" object to post.
+ *     @see https://api.slack.com/docs/message-attachments#attachment_parameters
+ * }
  * @return WP_Error|array {
  *     @type int    $code    Response code.
  *     @type string $message Response message.
  * }
  */
-function slack_message( string $route, $data ) {
-	// Don't message slack when developing / testing.
+function slack_message( string $channel, array $message ) {
+	$message = array_merge(
+		[
+			'color'     => '#01579b',
+			'footer'    => 'ALiEMU',
+			'ts'        => time(),
+			'mrkdwn_in' => [ 'pretext' ],
+		],
+		$message
+	);
 	if ( WP_DEBUG ) {
-		// Debug code is not used in production here. So warning is incorrect.
-		// phpcs:disable
-		trigger_error(
-			wp_json_encode(
-				[
-					'route' => $route,
-					'data'  => $data,
-				]
-			)
-		);
-		// phpcs:enable
-		return [
-			'code'    => 200,
-			'message' => 'OK',
+		if ( class_exists( 'QM' ) ) {
+			QM::notice(
+				wp_json_encode(
+					[
+						'channel' => $channel,
+						'message' => $message,
+					]
+				)
+			);
+		}
+		$response = [
+			'response' => [
+				'code'    => 200,
+				'message' => 'OK',
+			],
 		];
-	}
-	for ( $i = 0; $i < 5; $i++ ) {
+	} else {
 		$response = wp_remote_post(
-			"https://aliem-slackbot.now.sh/$route",
+			'https://us-central1-aliem-1136.cloudfunctions.net/slack_msg',
 			[
 				'headers' => [
-					'ALIEM_API_KEY' => ALIEM_API_KEY,
+					'Content-Type' => 'application/json',
 				],
-				'body'    => [
-					'data' => wp_json_encode( $data ),
-				],
+				'body'    => wp_json_encode(
+					[
+						'token'   => ALIEM_API_KEY,
+						'channel' => $channel,
+						'message' => $message,
+					]
+				),
 			]
 		);
-		if ( ! is_wp_error( $response ) ) {
-			break;
-		}
 	}
 
 	return is_wp_error( $response ) ? $response : $response['response'];

@@ -107,7 +107,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\widgets_init' );
  *
  * @param mixed[] $defaults The default comment form arguments.
  */
-function comments_args( $defaults ) : array {
+function comments_args( $defaults ): array {
 
 	$user = wp_get_current_user();
 
@@ -208,23 +208,42 @@ add_filter( 'pre_get_avatar_data', __NAMESPACE__ . '\avatars_via_https' );
  *
  * @param  string $comment_id The comment ID.
  */
-function slack_comment( $comment_id ) {
+function slack_comment( $comment_id ) : void {
 	$comment  = get_comment( $comment_id );
 	$post     = get_post( $comment->comment_post_ID );
 	$category = get_the_category( $post->ID )[0]->slug;
+	$author   = get_user_by( 'id', $comment->user_id );
+	$message  = stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $comment->comment_content ) ) ) );
 
-	if ( ! in_array( $category, [ 'capsules', 'air', 'air-pro', 'in-training-exam-prep' ], true ) ) {
-		$category = 'aliemu';
-	}
+	$channel = [
+		'air'                   => '#airseries',
+		'air-pro'               => '#airseries-pro',
+		'capsules'              => '#capsules',
+		'in-training-exam-prep' => '#ite-prep',
+	][ $category ] ?? '#aliemu';
 
 	slack_message(
-		"$category/messages/comments",
+		$channel,
 		[
-			'name'     => $comment->comment_author,
-			'email'    => $comment->comment_author_email,
-			'content'  => $comment->comment_content,
-			'postUrl'  => $post->guid,
-			'postName' => $post->post_title,
+			'fallback'    => "Comment from {$comment->comment_author} on {$post->post_title}: {$message}",
+			'pretext'     => "*Comment Received: <{$post->guid}|{$post->post_title}>*",
+			'author_name' => $comment->comment_author,
+			'author_link' => "https://www.aliemu.com/user/{$author->user_login}",
+			'author_icon' => add_query_arg(
+				[
+					'size'    => 16,
+					'default' => 'mp',
+				],
+				'https://www.gravatar.com/avatar/' . md5( strtolower( trim( $author->user_email ) ) )
+			),
+			'text'        => $message,
+			'actions'     => [
+				(object) [
+					'type' => 'button',
+					'text' => 'View Comment',
+					'url'  => get_comment_link( $comment ),
+				],
+			],
 		]
 	);
 }

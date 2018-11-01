@@ -24,7 +24,9 @@ execSync(`rm -rf ${__dirname}/dist/*`);
 const plugins = new Set([
     new webpack.DefinePlugin({
         'process.env': {
-            GOOGLE_PLACES_KEY: assertEnv('GOOGLE_PLACES_KEY'),
+            GOOGLE_PLACES_KEY: IS_PRODUCTION
+                ? assertEnv('GOOGLE_PLACES_KEY')
+                : assertEnv('GOOGLE_DEV_KEY'),
         },
     }),
     new webpack.BannerPlugin({
@@ -239,7 +241,6 @@ export default <webpack.Configuration>{
 };
 
 function assertEnv(key: string): string {
-    key = IS_PRODUCTION ? key : `${key}_DEV`;
     const value = process.env[key];
     if (value === undefined) {
         console.log(

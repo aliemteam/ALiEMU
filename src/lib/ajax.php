@@ -17,17 +17,29 @@ use function ALIEMU\Utils\{
 /**
  * AJAX Handler that sends messages from the feedback form into slack if recaptcha validates.
  */
-function send_slack_message(): void {
+function send_slack_message() : void {
 	check_ajax_referer( 'wp_ajax' );
 
 	if ( isset( $_POST['recaptcha_token'], $_POST['email'], $_POST['name'], $_POST['message'] )
 		&& recaptcha_token_is_valid( $_POST['recaptcha_token'] ) ) { // phpcs:ignore
+			$name    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
+			$email   = sanitize_text_field( wp_unslash( $_POST['email'] ) );
+			$message = stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) ) );
 			slack_message(
-				'aliemu/messages/contact-form',
+				'#aliemu',
 				[
-					'name'    => sanitize_text_field( wp_unslash( $_POST['name'] ) ),
-					'email'   => sanitize_text_field( wp_unslash( $_POST['email'] ) ),
-					'message' => stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) ) ),
+					'fallback'    => "Contact form message from {$name} ({$email}): {$message}",
+					'pretext'     => '*Feedback Form Message Received*',
+					'author_name' => $name,
+					'author_link' => "mailto:{$email}",
+					'author_icon' => add_query_arg(
+						[
+							'size'    => 16,
+							'default' => 'mp',
+						],
+						'https://www.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) )
+					),
+					'text'        => $message,
 				]
 			);
 			wp_send_json_success();
@@ -41,7 +53,7 @@ add_action( 'wp_ajax_nopriv_send_slack_message', __NAMESPACE__ . '\send_slack_me
 /**
  * AJAX Handler that initiates a password reset operation for users.
  */
-function reset_password(): void {
+function reset_password() : void {
 	check_ajax_referer( 'wp_ajax' );
 
 	if ( isset( $_POST['user_login'] ) ) {
@@ -64,7 +76,7 @@ add_action( 'wp_ajax_nopriv_reset_password', __NAMESPACE__ . '\reset_password' )
 /**
  * AJAX Handler responsible for user authentication.
  */
-function user_login(): void {
+function user_login() : void {
 	check_ajax_referer( 'wp_ajax' );
 
 	if ( isset( $_POST['user_login'], $_POST['user_password'], $_POST['remember'] ) ) {
@@ -92,7 +104,7 @@ add_action( 'wp_ajax_nopriv_user_login', __NAMESPACE__ . '\user_login' );
 /**
  * AJAX Handler responsible for new user registration.
  */
-function user_register(): void {
+function user_register() : void {
 	check_ajax_referer( 'wp_ajax' );
 
 	if ( isset( $_POST['recaptcha_token'], $_POST['user_login'], $_POST['user_email'], $_POST['user_pass'], $_POST['user_first_name'], $_POST['user_last_name'] )
@@ -136,7 +148,7 @@ add_action( 'wp_ajax_nopriv_user_register', __NAMESPACE__ . '\user_register' );
 /**
  * AJAX handler responsible for resending a user's email confirmation.
  */
-function user_resend_activation(): void {
+function user_resend_activation() : void {
 	check_ajax_referer( 'wp_ajax' );
 
 	if ( isset( $_POST['user_login'] ) ) {
