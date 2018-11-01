@@ -577,7 +577,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 	 *
 	 * @return array Item schema data.
 	 */
-	public function get_public_item_schema(): array {
+	public function get_public_item_schema() : array {
 		$users_controller = new WP_REST_Users_Controller();
 		$schema           = $users_controller->get_public_item_schema();
 		return $schema;

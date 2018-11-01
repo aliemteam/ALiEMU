@@ -42,7 +42,7 @@ class Script_Loader {
 	/**
 	 * Prints global variables needed in most or all pages in the head
 	 */
-	public function print_globals(): void {
+	public function print_globals() : void {
 		// phpcs:disable
 		?>
 			<script>
@@ -114,7 +114,7 @@ class Script_Loader {
 	/**
 	 * Removes unnecessary garbage styles/scripts unless they're actually needed.
 	 */
-	private function remove_junk(): void {
+	private function remove_junk() : void {
 		$filter_func = function ( string $item ) : bool {
 			return preg_match( '/^(?:um[-_]|learndash|sfwd|select2)/', $item );
 		};
