@@ -12,13 +12,13 @@ import Spinner from 'components/spinner';
 
 import styles from './button.scss';
 
-interface Props extends HTMLProps<HTMLButtonElement> {
+interface Props extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
     intent?: Intent;
     loading?: boolean;
     scale?: number;
 }
 
-export default class Button extends PureComponent<Props> {
+class Button extends PureComponent<Props> {
     static defaultProps = {
         onClick: () => void 0,
     };
@@ -79,3 +79,6 @@ export default class Button extends PureComponent<Props> {
         onClick!(e);
     };
 }
+
+export { Props as ButtonProps };
+export default Button;

@@ -25,6 +25,10 @@ $intent: (
     danger: #d32f2f,
 );
 
+@each $key, $value in $intent {
+    @value intent-#{$key} #{$value};
+}
+
 $social-media-colors: (
     blogger: #ff5722,
     facebook: #3b5998,

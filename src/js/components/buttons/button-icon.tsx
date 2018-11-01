@@ -2,7 +2,7 @@ import React, { MouseEvent, PureComponent } from 'react';
 
 import styles from './button-icon.scss';
 
-import Icon, { Props as IconProps } from 'components/icon/';
+import Icon, { IconProps } from 'components/icon/';
 
 interface Props extends IconProps {
     onClick?(e: MouseEvent<HTMLButtonElement>): void;

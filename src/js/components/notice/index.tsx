@@ -3,7 +3,7 @@ import React, { PureComponent, ReactNode } from 'react';
 
 import { Intent } from 'utils/constants';
 
-import Icon from 'components/icon';
+import { IntentIcon } from 'components/icon';
 
 import * as styles from './notice.scss';
 
@@ -33,28 +33,13 @@ export default class Notice extends PureComponent<Props> {
 
     private maybeRenderIcon = (): ReactNode => {
         const { intent } = this.props;
-        let iconProps = {
-            icon: '',
-            size: styles.iconSize,
-            className: styles.icon,
-        };
-        switch (intent) {
-            case Intent.PRIMARY:
-                iconProps = { ...iconProps, icon: 'info' };
-                break;
-            case Intent.SUCCESS:
-                iconProps = { ...iconProps, icon: 'check_circle' };
-                break;
-            case Intent.WARNING:
-                iconProps = { ...iconProps, icon: 'warning' };
-                break;
-            case Intent.DANGER:
-                iconProps = { ...iconProps, icon: 'error' };
-                break;
-            default:
-                return null;
-        }
-        return <Icon {...iconProps} />;
+        return intent ? (
+            <IntentIcon
+                className={styles.icon}
+                size={styles.iconSize}
+                intent={intent}
+            />
+        ) : null;
     };
 
     private maybeRenderTitle = (): ReactNode => {
