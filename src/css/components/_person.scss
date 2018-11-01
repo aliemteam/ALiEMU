@@ -26,6 +26,17 @@
 .person__meta {
     flex: auto;
     padding: 10px;
+    overflow: auto;
+    max-height: 250px;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+
+        &-thumb {
+            background: #c4c4c4;
+            border-radius: 2px;
+        }
+    }
 }
 
 .person__name {
@@ -60,7 +71,7 @@
         }
 
         @each $site, $color in $social-media-colors {
-            &[href*="#{$site}" i] {
+            &[href*='#{$site}' i] {
                 fill: $color;
             }
         }

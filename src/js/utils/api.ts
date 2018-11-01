@@ -97,8 +97,8 @@ async function _get<T>(endpoint: string, params?: Params): Promise<T> {
         });
         return response;
     } catch (e) {
-        // FIXME:
-        console.log(e);
+        // FIXME: Look into adding a logging service here.
+        console.error(e);
         throw e;
     }
     // }}}
@@ -121,8 +121,8 @@ async function _post<T>(
         });
         return response;
     } catch (e) {
-        // FIXME:
-        console.log(e);
+        // FIXME: Look into adding a logging service here.
+        console.error(e);
         throw e;
     }
     // }}}

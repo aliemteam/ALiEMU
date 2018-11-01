@@ -26,7 +26,7 @@ body {
     color: white;
     left: $block-margin;
     padding: 5px 20px;
-    box-shadow: map-get($shadows, 'depth-8');
+    box-shadow: map-get($shadows, 'depth-6');
 
     &:focus {
         clip: unset;
