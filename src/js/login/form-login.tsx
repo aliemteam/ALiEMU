@@ -9,6 +9,7 @@ import Button from 'components/buttons/button';
 import Checkbox from 'components/forms/checkbox';
 import Input from 'components/forms/input';
 import Notice from 'components/notice';
+import ActivationNotice from './activation-notice';
 
 import * as styles from './form-login.scss';
 
@@ -164,71 +165,5 @@ export default class LoginForm extends PureComponent<Props, State> {
             default:
         }
         this.setState(prev => ({ ...prev, notice, loading: false }));
-    };
-}
-
-interface ANProps {
-    user_login: string;
-}
-
-interface ANState {
-    emailSent: boolean;
-    loading: boolean;
-}
-
-class ActivationNotice extends PureComponent<ANProps, ANState> {
-    state = {
-        emailSent: false,
-        loading: false,
-    };
-
-    render() {
-        const { emailSent, loading } = this.state;
-        return (
-            <div className={styles.activationNotice}>
-                {!emailSent && (
-                    <>
-                        <div>Your account is awaiting email verification.</div>
-                        <Button
-                            type="button"
-                            intent={Intent.PRIMARY}
-                            loading={loading}
-                            onClick={this.handleClick}
-                        >
-                            Resend activation email
-                        </Button>
-                    </>
-                )}
-                {emailSent && (
-                    <div>
-                        <div>
-                            <strong>Activation sent successfully.</strong>
-                        </div>
-                        <div>
-                            To complete your activation, please click the link
-                            in the email.
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    }
-
-    private handleClick = async () => {
-        const { user_login } = this.props;
-        this.setState(prev => ({ ...prev, loading: true }));
-        const response = await wpAjax('user_resend_activation', { user_login });
-        if (response.success) {
-            this.setState(prev => ({
-                ...prev,
-                emailSent: true,
-                loading: false,
-            }));
-        } else {
-            // FIXME:
-            console.error(
-                'An error occurred while attempting to send confirmation email',
-            );
-        }
     };
 }
