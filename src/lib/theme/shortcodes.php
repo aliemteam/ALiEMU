@@ -64,9 +64,8 @@ function course_hours() : string {
 	// Ignoring nonce verification here because learndash sets dynamic nonce
 	// action names using data that I don't have access to because they are the
 	// worst programmers ever.
-	// @codingStandardsIgnoreStart
+	// phpcs:ignore
 	if ( isset( $_GET['course_id'] ) ) {
-		// @codingStandardsIgnoreEnd
 		$course_id = intval( $_GET['course_id'] );
 		$meta      = get_post_meta( $course_id, '_sfwd-courses', true );
 		$hours     = $meta['sfwd-courses_recommendedHours'];
@@ -123,7 +122,7 @@ add_shortcode( 'learn_more', __NAMESPACE__ . '\learn_more' );
  * @param string  $content The person's background information / supporting details.
  */
 function person( $atts = [], $content = null ) : string {
-	$atts = (object) shortcode_atts(
+	$atts     = shortcode_atts(
 		[
 			'title'   => '',
 			'name'    => null,
@@ -135,7 +134,9 @@ function person( $atts = [], $content = null ) : string {
 		$atts,
 		'person'
 	);
-	$data = $atts->email ? gravatar_profile_data( $atts->email ) : (object) [];
+	$atts_arr = $atts;
+	$atts     = (object) $atts;
+	$data     = $atts->email ? gravatar_profile_data( $atts->email ) : (object) [];
 
 	// phpcs:disable WordPress.NamingConventions
 	$name  = $atts->name ?? $data->displayName ?? '';
@@ -169,10 +170,20 @@ function person( $atts = [], $content = null ) : string {
 
 	ob_start();
 	if ( ! $name ) {
+		$atts_str = array_reduce(
+			array_keys( $atts_arr ),
+			function( $str, $k ) use ( $atts_arr ) {
+				if ( $atts_arr[ $k ] ) {
+					$str .= ' ' . $k . '=' . $atts_arr[ $k ];
+				}
+				return $str;
+			},
+			''
+		);
 		?>
-			<h1 style='color: red'>
-				Could not resolve a name for the given person.
-			</h1>
+			<code style="word-break: break-all;">
+				[person <?php echo esc_html( $atts_str ); ?>]<?php echo esc_html( trim( $content ) ); ?>[/person]
+			</code>
 		<?php
 	} else {
 		?>
