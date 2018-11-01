@@ -1,0 +1,18 @@
+@import '_colors';
+@import 'mixins/state';
+@import 'variables';
+
+.manager {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 500px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.message-container {
+    padding: 8px;
+}

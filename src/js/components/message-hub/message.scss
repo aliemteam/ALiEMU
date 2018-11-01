@@ -1,0 +1,70 @@
+@import 'mixins/state';
+@import 'variables';
+
+$border-radius: 3px;
+$gap: 10px;
+
+.container {
+    padding: 8px;
+}
+
+.message {
+    display: grid;
+    grid-template-columns: min-content min-content 1fr min-content;
+    gap: $gap;
+    background: white;
+    border-radius: $border-radius;
+    box-shadow: map-get($shadows, 'depth-6');
+    pointer-events: all;
+
+    &::before {
+        content: '';
+        width: $gap / 2;
+        background: map-get($intent, 'danger');
+        border-radius: $border-radius;
+    }
+}
+
+.icon-container {
+    display: flex;
+    align-self: flex-start;
+    margin-top: $gap;
+}
+
+.content {
+    display: grid;
+    gap: $gap / 2;
+    margin: $gap 0;
+    font-size: 14px;
+}
+
+.heading {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    font-family: $font-sans;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dismiss {
+    align-self: flex-start;
+    margin: $gap $gap 0 0;
+
+    > button {
+        padding: 4px;
+        border-radius: $border-radius;
+        border: 1px solid transparent;
+
+        &:hover {
+            background: rgba($black, 0.05);
+        }
+
+        &:focus {
+            @include focus;
+        }
+    }
+}
