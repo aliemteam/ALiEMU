@@ -3,7 +3,6 @@ require('dotenv').config();
 
 import { TsConfigPathsPlugin } from 'awesome-typescript-loader';
 import { execSync } from 'child_process';
-import { stripIndent } from 'common-tags';
 import path from 'path';
 import webpack from 'webpack';
 
@@ -15,8 +14,18 @@ const imagemin = require('imagemin');
 const pngquant = require('imagemin-pngquant');
 const svgo = require('imagemin-svgo');
 
-const VERSION = require('./package.json').version;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const STYLE_BANNER = `
+/*
+Theme Name: ALiEMU
+Author: ALiEM
+Description: Theme for ALiEMU.com
+Version: ${require('./package.json').version}
+License: MIT
+License URI: https://opensource.org/licenses/MIT
+Text Domain: aliemu
+*/
+`
 
 // Clean out dist directory
 execSync(`rm -rf ${__dirname}/dist/*`);
@@ -30,17 +39,7 @@ const plugins = new Set([
         },
     }),
     new webpack.BannerPlugin({
-        banner: stripIndent`
-            /*
-            Theme Name: ALiEMU
-            Author: ALiEM
-            Description: Theme for ALiEMU.com
-            Version: ${VERSION}
-            License: MIT
-            License URI: https://opensource.org/licenses/MIT
-            Text Domain: aliemu
-            */
-        `,
+        banner: STYLE_BANNER,
         raw: true,
         include: /style\.css$/,
     }),
