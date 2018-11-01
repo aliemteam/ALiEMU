@@ -13,9 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Upgrader function for v2.0.1.
  */
 function upgrade_2_0_1() {
-	// {{{ phpcs:ignore-line
 	$add_groups_table = function() {
-		// {{{ phpcs:ignore-line
 		global $wpdb;
 
 		$table_name      = $wpdb->prefix . 'user_groups';
@@ -30,7 +28,7 @@ function upgrade_2_0_1() {
 		* - There is no need for caching the response here because this response is one
 		*   that should fundamentally not be cached.
 		*/
-		// @codingStandardsIgnoreStart
+		// phpcs:disable
 		$sql = "
 			CREATE TABLE IF NOT EXISTS $table_name (
 				PRIMARY KEY (id),
@@ -57,12 +55,10 @@ function upgrade_2_0_1() {
 		if ( ! $wpdb->query( $sql ) ) {
 			wp_die( esc_html( $wpdb->last_error ) );
 		}
-		// @codingStandardsIgnoreEnd
-		// }}} phpcs:ignore-line
+		// phpcs:enable
 	};
 
 	$update_institution_meta_key = function() {
-		// {{{ phpcs:ignore-line
 		global $wpdb;
 
 		// phpcs:disable
@@ -82,12 +78,10 @@ function upgrade_2_0_1() {
 		if ( false === $success ) {
 			wp_die( esc_html( $wpdb->last_error ) );
 		}
-		// }}} phpcs:ignore-line
 	};
 
 	$add_groups_table();
 	$update_institution_meta_key();
-	// }}} phpcs:ignore-line
 }
 
 // vim: set fdm=marker: .

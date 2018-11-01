@@ -46,7 +46,7 @@ class Description_Field extends Field {
 	public function get_callback( $course, $field, $req ) {
 		// Ignoring because this is only an issue on WordPress VIP
 		// sites and won't affect us in any real measurable way.
-		// @codingStandardsIgnoreLine
+		// phpcs:ignore
 		$meta = get_post_meta( $course['id'], '_sfwd-courses', true );
 		return $meta[ $this->obj_type . '_course_short_description' ] ?? '';
 	}

@@ -51,7 +51,7 @@ function localize() {
 				'post_type'   => 'sfwd-courses',
 				'post_status' => 'publish',
 				'fields'      => 'ids',
-				'nopaging'    => true, // @codingStandardsIgnoreLine
+				'nopaging'    => true, // phpcs:ignore
 			]
 		);
 

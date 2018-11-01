@@ -46,7 +46,7 @@ class Institution_Field extends Field {
 	public function get_callback( $user, $field, $req ) {
 		// Ignoring because this is only an issue on WordPress VIP
 		// sites and won't affect us in any real measurable way.
-		// @codingStandardsIgnoreLine
+		// phpcs:ignore
 		return get_user_meta( $user['id'], 'institution', true );
 	}
 
@@ -61,7 +61,7 @@ class Institution_Field extends Field {
 	public function update_callback( $value, $user, $field, $req ) {
 		// Ignoring because this is only an issue on WordPress VIP
 		// sites and won't affect us in any real measurable way.
-		// @codingStandardsIgnoreLine
+		// phpcs:ignore
 		update_user_meta( $user->ID, 'institution', $value );
 		return null;
 	}

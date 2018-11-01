@@ -50,9 +50,8 @@ else :
 		>
 			<?php
 			// Ignoring this because it's already sanitized -- Came from a shortcode.
-			// @codingStandardsIgnoreStart
+			// phpcs:ignore
 			echo $boxes;
-			// @codingStandardsIgnoreEnd
 			?>
 		</div>
 	<?php endforeach; ?>
