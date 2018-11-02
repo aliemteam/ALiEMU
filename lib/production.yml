@@ -31,7 +31,6 @@ services:
         ultimate-member
         w3-total-cache
         wordfence
-        wp-smushit
     ports:
       - 443:443
       - 80:80
