@@ -5,6 +5,7 @@ import { wpAjax } from 'utils/ajax';
 import { Intent } from 'utils/constants';
 
 import Button from 'components/buttons/button';
+import Notice from 'components/notice';
 
 interface Props extends MessageContext {
     user_login: string;
@@ -23,10 +24,20 @@ class ActivationNoticePre extends PureComponent<Props, State> {
 
     render() {
         const { emailSent, loading } = this.state;
-        return (
-            <div style={{ display: 'grid', gap: 10 }}>
-                {!emailSent && (
-                    <>
+        if (emailSent) {
+            return (
+                <Notice
+                    intent={Intent.SUCCESS}
+                    title="Activation sent successfully!"
+                >
+                    To complete your activation, please click the link in the
+                    email.
+                </Notice>
+            );
+        } else {
+            return (
+                <Notice intent={Intent.PRIMARY} title="Activation required">
+                    <div style={{ display: 'grid', gap: 10 }}>
                         <div>Your account is awaiting email verification.</div>
                         <Button
                             type="button"
@@ -36,21 +47,10 @@ class ActivationNoticePre extends PureComponent<Props, State> {
                         >
                             Resend activation email
                         </Button>
-                    </>
-                )}
-                {emailSent && (
-                    <div>
-                        <div>
-                            <strong>Activation sent successfully.</strong>
-                        </div>
-                        <div>
-                            To complete your activation, please click the link
-                            in the email.
-                        </div>
                     </div>
-                )}
-            </div>
-        );
+                </Notice>
+            );
+        }
     }
 
     private handleClick = async () => {

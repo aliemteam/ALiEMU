@@ -13,6 +13,7 @@ import Spinner from 'components/spinner';
 import styles from './button.scss';
 
 interface Props extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
+    children: string;
     intent?: Intent;
     loading?: boolean;
     scale?: number;

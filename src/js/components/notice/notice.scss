@@ -1,44 +1,39 @@
 @import '_colors';
 @import 'variables';
 
-@value icon-size 26px;
-
 $padding-size: 10px;
 
 .notice {
+    display: grid;
+    justify-content: flex-start;
+    grid-auto-flow: column;
+    gap: 10px;
     padding: $padding-size;
     background: $gray-light;
     border-radius: $border-radius;
     text-align: initial;
+    font-size: 16px;
+
+    i {
+        align-self: flex-start;
+    }
 
     @each $k, $v in $intent {
         &.intent-#{$k} {
             background-color: lighten(rgba($v, 0.15), 10%);
 
-            .heading,
-            .icon {
+            .heading {
                 color: $v;
             }
         }
     }
 }
 
-.icon {
-    float: left;
-    margin-right: $padding-size;
-}
-
 .heading {
-    margin: 0 {
-        bottom: 5px;
-    }
+    margin: 0;
+    margin-bottom: 5px;
     font-size: 18px;
     font-family: $font-sans;
     font-weight: 600;
-    line-height: icon-size;
-    clear: right;
-}
-
-.content {
-    font-size: 16px;
+    line-height: 22px;
 }

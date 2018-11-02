@@ -15,7 +15,7 @@ interface Props {
 
 export default class Notice extends PureComponent<Props> {
     render(): JSX.Element {
-        const { children, intent } = this.props;
+        const { children, intent, title } = this.props;
         const className = classNames(styles.notice, {
             [styles.intentPrimary]: intent === Intent.PRIMARY,
             [styles.intentSuccess]: intent === Intent.SUCCESS,
@@ -24,26 +24,12 @@ export default class Notice extends PureComponent<Props> {
         });
         return (
             <div className={className}>
-                {this.maybeRenderIcon()}
-                {this.maybeRenderTitle()}
-                <div className={styles.content}>{children}</div>
+                {intent && <IntentIcon size={22} intent={intent} />}
+                <div>
+                    {title && <h1 className={styles.heading}>{title}</h1>}
+                    {children}
+                </div>
             </div>
         );
     }
-
-    private maybeRenderIcon = (): ReactNode => {
-        const { intent } = this.props;
-        return intent ? (
-            <IntentIcon
-                className={styles.icon}
-                size={styles.iconSize}
-                intent={intent}
-            />
-        ) : null;
-    };
-
-    private maybeRenderTitle = (): ReactNode => {
-        const { title } = this.props;
-        return title ? <h1 className={styles.heading}>{title}</h1> : null;
-    };
 }

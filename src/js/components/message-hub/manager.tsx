@@ -33,6 +33,7 @@ const Manager = (props: IProps) => {
                     } as any
                 }
                 enter={{
+                    overflow: 'hidden',
                     height: 'auto',
                     transform: 'translateY(0)',
                     opacity: 1,

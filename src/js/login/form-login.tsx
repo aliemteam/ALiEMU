@@ -24,13 +24,11 @@ interface State {
         remember: boolean;
     };
     loading: boolean;
-    notice?: {
-        message: ReactNode;
-        renderWithForm: boolean;
-        intent?: Intent;
-        title?: string;
-    };
+    shouldRenderForm: boolean;
+    notice(): ReactNode;
 }
+
+const renderNoop = () => null;
 
 export default class LoginForm extends PureComponent<Props, State> {
     state: State = {
@@ -40,13 +38,14 @@ export default class LoginForm extends PureComponent<Props, State> {
             remember: false,
         },
         loading: false,
-        notice: undefined,
+        shouldRenderForm: true,
+        notice: renderNoop,
     };
 
     render(): JSX.Element {
         return (
             <form className={styles.form} onSubmit={this.handleSubmit}>
-                {this.maybeRenderNotice()}
+                {this.state.notice()}
                 {this.maybeRenderForm()}
             </form>
         );
@@ -56,9 +55,9 @@ export default class LoginForm extends PureComponent<Props, State> {
         const {
             data: { user_login, user_password, remember },
             loading,
-            notice,
+            shouldRenderForm,
         } = this.state;
-        if (notice && !notice.renderWithForm) {
+        if (!shouldRenderForm) {
             return null;
         }
         return (
@@ -107,15 +106,6 @@ export default class LoginForm extends PureComponent<Props, State> {
         );
     };
 
-    private maybeRenderNotice = (): ReactNode => {
-        const { notice } = this.state;
-        return notice ? (
-            <Notice intent={notice.intent} title={notice.title}>
-                {notice.message}
-            </Notice>
-        ) : null;
-    };
-
     private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { value, checked, name, type } = e.currentTarget;
         this.setState(prev => ({
@@ -132,38 +122,37 @@ export default class LoginForm extends PureComponent<Props, State> {
     ): Promise<void> => {
         e.preventDefault();
         const { data } = this.state;
-        this.setState(prev => ({ ...prev, notice: undefined, loading: true }));
+        this.setState({ notice: renderNoop, loading: true });
         const response = await wpAjax('user_login', { ...data });
         if (response.success) {
             return window.location.replace('user');
         }
         const { code } = response.data;
-        let notice: State['notice'] = {
-            intent: Intent.DANGER,
-            title: '',
-            renderWithForm: false,
-            message:
-                'An unexpected error occurred while attempting to log in. Please try again later.',
-        };
+        let notice: () => ReactNode;
+        let shouldRenderForm = false;
         switch (code) {
+            case 'awaiting_email_confirmation':
+                notice = () => (
+                    <ActivationNotice user_login={data.user_login} />
+                );
+                break;
             case 'invalid_username':
             case 'incorrect_password':
-                notice = {
-                    ...notice,
-                    renderWithForm: true,
-                    message: 'Invalid username or password.',
-                };
-                break;
-            case 'awaiting_email_confirmation':
-                notice = {
-                    ...notice,
-                    intent: Intent.PRIMARY,
-                    title: 'Activation Required',
-                    message: <ActivationNotice user_login={data.user_login} />,
-                };
+                notice = () => (
+                    <Notice intent={Intent.DANGER}>
+                        Invalid username or password.
+                    </Notice>
+                );
+                shouldRenderForm = true;
                 break;
             default:
+                notice = () => (
+                    <Notice intent={Intent.DANGER}>
+                        An unexpected error occurred while attempting to log in.
+                        Please try again later.
+                    </Notice>
+                );
         }
-        this.setState(prev => ({ ...prev, notice, loading: false }));
+        this.setState({ notice, shouldRenderForm, loading: false });
     };
 }

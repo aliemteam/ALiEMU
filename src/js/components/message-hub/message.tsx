@@ -21,23 +21,23 @@ const Message = ({ dismiss, message }: IProps): JSX.Element => {
             <div className={styles.message}>
                 {intent && (
                     <div className={styles.iconContainer}>
-                        <IntentIcon intent={intent} size={18} />
+                        <IntentIcon intent={intent} size={22} />
                     </div>
                 )}
                 <div className={styles.content}>
                     <h1 className={styles.heading}>{text}</h1>
                     {details && <div>{details}</div>}
-                    {actions && (
-                        <div className={styles.actions}>
-                            {actions.map(action => (
-                                <Button key={'adsf'} {...action} />
-                            ))}
-                        </div>
-                    )}
                 </div>
                 <div className={styles.dismiss}>
                     <ButtonIcon onClick={onClick} icon="close" />
                 </div>
+                {actions && (
+                    <div className={styles.actions}>
+                        {actions.map(action => (
+                            <Button key={action.children} {...action} />
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

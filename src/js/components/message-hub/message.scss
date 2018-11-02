@@ -5,55 +5,60 @@ $border-radius: 3px;
 $gap: 10px;
 
 .container {
-    padding: 8px;
-}
-
-.message {
-    display: grid;
-    grid-template-columns: min-content min-content 1fr min-content;
-    gap: $gap;
-    background: white;
+    margin: 8px;
     border-radius: $border-radius;
     box-shadow: map-get($shadows, 'depth-6');
     pointer-events: all;
+    background: white;
 
     &::before {
         content: '';
         width: $gap / 2;
         background: map-get($intent, 'danger');
         border-radius: $border-radius;
+        height: 100%;
+        position: absolute;
     }
+}
+
+.message {
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    gap: $gap;
+    padding: 10px;
+    padding-left: 15px;
 }
 
 .icon-container {
     display: flex;
     align-self: flex-start;
-    margin-top: $gap;
 }
 
 .content {
     display: grid;
-    gap: $gap / 2;
-    margin: $gap 0;
-    font-size: 14px;
+    gap: $gap;
+    font-size: 16px;
 }
 
 .heading {
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 22px;
     font-weight: 600;
     margin: 0;
     font-family: $font-sans;
 }
 
 .actions {
+    grid-column: 1 / span 3;
     display: flex;
     justify-content: flex-end;
+
+    > button {
+        margin-left: 10px;
+    }
 }
 
 .dismiss {
-    align-self: flex-start;
-    margin: $gap $gap 0 0;
-
     > button {
         padding: 4px;
         border-radius: $border-radius;
