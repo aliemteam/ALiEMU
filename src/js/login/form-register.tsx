@@ -294,7 +294,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
     ): void => {
         const { name, value } = e.currentTarget;
         this.setState(prev => ({
-            ...prev,
             data: {
                 ...prev.data,
                 [name]: value,
@@ -326,7 +325,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             }
         }
         this.setState(prev => ({
-            ...prev,
             notice: undefined,
             data: { ...prev.data, ...components },
         }));
@@ -338,7 +336,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         e.preventDefault();
         const amount = e.currentTarget.name === 'prev' ? -1 : 1;
         this.setState(prev => ({
-            ...prev,
             notice: undefined,
             currentPage: prev.currentPage + amount,
         }));
@@ -347,38 +344,33 @@ export default class RegistrationForm extends PureComponent<{}, State> {
     private handleValidate = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         const { currentPage } = this.state;
-        this.setState(prev => ({ ...prev, notice: undefined }));
+        this.setState({ notice: undefined });
         return currentPage < this.pages.length - 1
             ? this.handlePagination(e)
             : grecaptcha.execute();
     };
 
     private handleSubmit = async (token: string): Promise<void> => {
-        this.setState(prev => ({ ...prev, loading: true }));
+        this.setState({ loading: true });
         const response = await wpAjax('user_register', {
             recaptcha_token: token,
             ...this.state.data,
         });
-        this.setState(
-            prev => ({
-                ...prev,
-                loading: false,
-                notice: {
-                    intent: response.success ? Intent.SUCCESS : Intent.DANGER,
-                    title: response.success
-                        ? 'Registration submitted'
-                        : 'Registration failed',
-                    message: response.success
-                        ? 'To complete your registration, please confirm your identity by clicking the activation link in the email we just sent you.'
-                        : response.data.message ||
-                          'An internal error occurred. Please try again later.',
-                },
-            }),
-            () => {
-                if (!response.success) {
-                    grecaptcha.reset();
-                }
+        if (!response.success) {
+            grecaptcha.reset();
+        }
+        this.setState({
+            loading: false,
+            notice: {
+                intent: response.success ? Intent.SUCCESS : Intent.DANGER,
+                title: response.success
+                    ? 'Registration submitted'
+                    : 'Registration failed',
+                message: response.success
+                    ? 'To complete your registration, please confirm your identity by clicking the activation link in the email we just sent you.'
+                    : response.data.message ||
+                      'An internal error occurred. Please try again later.',
             },
-        );
+        });
     };
 }

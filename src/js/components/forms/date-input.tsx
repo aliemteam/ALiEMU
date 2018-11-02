@@ -55,7 +55,7 @@ export default class DateInput extends PureComponent<Props, State> {
             ? this.handleInsert(value)
             : this.handleDelete(value);
         this.setState(
-            prev => ({ ...prev, value: parsed }),
+            () => ({ value: parsed }),
             () => this.props.onChange && this.props.onChange(parsed),
         );
     };

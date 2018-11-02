@@ -35,7 +35,7 @@ export default class Login extends Component<{}, State> {
     ): void => {
         const activeForm = e.currentTarget.dataset.form as FormKind | undefined;
         if (activeForm) {
-            this.setState(prev => ({ ...prev, activeForm }));
+            this.setState({ activeForm });
         }
     };
 

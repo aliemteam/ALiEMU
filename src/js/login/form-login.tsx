@@ -109,7 +109,6 @@ export default class LoginForm extends PureComponent<Props, State> {
     private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { value, checked, name, type } = e.currentTarget;
         this.setState(prev => ({
-            ...prev,
             data: {
                 ...prev.data,
                 [name]: type === 'checkbox' ? checked : value,

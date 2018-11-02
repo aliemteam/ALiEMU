@@ -148,7 +148,7 @@ export default class DashboardHeader extends Component<Props, State> {
     };
 
     private toggleModal = (): void => {
-        this.setState(prev => ({ ...prev, modalIsOpen: !prev.modalIsOpen }));
+        this.setState(prev => ({ modalIsOpen: !prev.modalIsOpen }));
     };
 
     private updateInstitution = (institution: string): void => {

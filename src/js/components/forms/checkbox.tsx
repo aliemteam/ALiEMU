@@ -55,6 +55,6 @@ export default class Checkbox extends PureComponent<Props, State> {
     private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { checked } = e.currentTarget;
         this.props.onChange!(e);
-        this.setState(prev => ({ ...prev, checked }));
+        this.setState({ checked });
     };
 }

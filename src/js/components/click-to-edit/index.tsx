@@ -82,10 +82,7 @@ export default class ClickToEdit extends Component<Props, State> {
     };
 
     private handleBlur = () => {
-        this.setState(prev => ({
-            ...prev,
-            value: this.props.children || '',
-        }));
+        this.setState({ value: this.props.children || '' });
         this.toggleEdit();
     };
 

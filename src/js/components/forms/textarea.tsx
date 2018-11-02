@@ -61,7 +61,7 @@ export default class TextArea extends PureComponent<Props, State> {
 
     private handleChange = (e: FormEvent<HTMLTextAreaElement>): void => {
         const { value } = e.currentTarget;
-        this.setState(prev => ({ ...prev, length: value.length }));
+        this.setState({ length: value.length });
         this.props.onChange!(e);
     };
 }

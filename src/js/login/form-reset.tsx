@@ -101,7 +101,6 @@ export default class ResetForm extends PureComponent<{}, State> {
     private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { value } = e.currentTarget;
         this.setState(prev => ({
-            ...prev,
             data: {
                 ...prev.data,
                 user_login: value,
@@ -113,12 +112,11 @@ export default class ResetForm extends PureComponent<{}, State> {
         e: FormEvent<HTMLFormElement>,
     ): Promise<void> => {
         e.preventDefault();
-        this.setState(prev => ({ ...prev, loading: true }));
+        this.setState({ loading: true });
         const response = await wpAjax('reset_password', { ...this.state.data });
-        this.setState(prev => ({
-            ...prev,
+        this.setState({
             loading: false,
             status: response.success ? Status.SUCCESS : Status.ERROR,
-        }));
+        });
     };
 }

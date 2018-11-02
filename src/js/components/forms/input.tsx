@@ -74,12 +74,12 @@ class Input extends PureComponent<Props, State> {
     }
 
     private handleBlur = (e: FocusEvent<HTMLInputElement>): void => {
-        this.setState(prev => ({ ...prev, isFocused: false }));
+        this.setState({ isFocused: false });
         this.props.onBlur!(e);
     };
 
     private handleFocus = (e: FocusEvent<HTMLInputElement>): void => {
-        this.setState(prev => ({ ...prev, isFocused: true }));
+        this.setState({ isFocused: true });
         this.props.onFocus!(e);
     };
 

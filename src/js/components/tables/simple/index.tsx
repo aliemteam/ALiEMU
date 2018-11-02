@@ -63,7 +63,6 @@ export default class SimpleTable extends BaseTable<Props, State> {
             return;
         }
         this.setState(prev => ({
-            ...prev,
             sortKey,
             sortOrder:
                 sortKey === prev.sortKey
@@ -79,10 +78,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
         if (!page) {
             return;
         }
-        this.setState(prev => ({
-            ...prev,
-            page: parseInt(page, 10),
-        }));
+        this.setState({ page: parseInt(page, 10) });
     };
 
     render(): JSX.Element {
