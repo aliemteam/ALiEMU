@@ -24,7 +24,6 @@ services:
         }
       PLUGINS: >-
         academic-bloggers-toolkit
-        [Basic-Auth]https://github.com/WP-API/Basic-Auth/archive/master.zip
         jetpack
         mce-table-buttons
         sendgrid-email-delivery-simplified
