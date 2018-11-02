@@ -194,10 +194,10 @@ declare namespace WordPress {
             }>;
         };
         _embedded?: {
-            author: any[]; // TODO
-            replies: any[]; // TODO
+            author: any[];
+            replies: any[];
             'wp:featuredmedia': Media[];
-            'wp:term': any[]; // TODO
+            'wp:term': any[];
         };
     }
     // }}}

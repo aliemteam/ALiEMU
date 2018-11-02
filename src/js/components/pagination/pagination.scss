@@ -65,7 +65,6 @@
     &:disabled {
         @include disabled;
         cursor: default;
-        // TODO: make this a variable
         background: darken($gray-light, 5%);
         border-color: $border-color !important;
     }

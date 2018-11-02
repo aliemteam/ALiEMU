@@ -87,20 +87,14 @@ export class Users {
 
 async function _get<T>(endpoint: string, params?: Params): Promise<T> {
     // {{{
-    try {
-        const response: T = await jQuery.ajax(endpoint, {
-            headers: {
-                'X-WP-Nonce': window.AU_API.nonce,
-            },
-            dataType: 'json',
-            data: params,
-        });
-        return response;
-    } catch (e) {
-        // FIXME: Look into adding a logging service here.
-        console.error(e);
-        throw e;
-    }
+    const response: T = await jQuery.ajax(endpoint, {
+        headers: {
+            'X-WP-Nonce': window.AU_API.nonce,
+        },
+        dataType: 'json',
+        data: params,
+    });
+    return response;
     // }}}
 }
 
@@ -109,29 +103,20 @@ async function _post<T>(
     params: object | FormData,
 ): Promise<T> {
     // {{{
-    try {
-        const response: T = await jQuery.ajax(endpoint, {
-            method: 'POST',
-            data: JSON.stringify(params),
-            dataType: 'json',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-WP-Nonce': window.AU_API.nonce,
-            },
-        });
-        return response;
-    } catch (e) {
-        // FIXME: Look into adding a logging service here.
-        console.error(e);
-        throw e;
-    }
+    const response: T = await jQuery.ajax(endpoint, {
+        method: 'POST',
+        data: JSON.stringify(params),
+        dataType: 'json',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': window.AU_API.nonce,
+        },
+    });
+    return response;
     // }}}
 }
 
-async function _delete(
-    endpoint: string,
-    params: object = {},
-): Promise<void> {
+async function _delete(endpoint: string, params: object = {}): Promise<void> {
     // {{{
     const response = await jQuery.ajax(endpoint, {
         method: 'DELETE',
@@ -142,7 +127,6 @@ async function _delete(
             'X-WP-Nonce': window.AU_API.nonce,
         },
     });
-    console.log(response);
     return response;
     // }}}
 }

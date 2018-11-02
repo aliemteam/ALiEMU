@@ -126,15 +126,15 @@ export default class SimpleTable extends BaseTable<Props, State> {
     }
 
     private maybeRenderCaption = (id: string): React.ReactNode => {
-        const { caption, isLoading } = this.props;
-        if (typeof caption === 'string' && !isLoading) {
+        const { caption } = this.props;
+        if (typeof caption === 'string') {
             return (
                 <figcaption>
                     <SectionHeading id={id}>{caption}</SectionHeading>
                 </figcaption>
             );
         }
-        if (typeof caption === 'function' && !isLoading) {
+        if (typeof caption === 'function') {
             return <figcaption>{caption(id)}</figcaption>;
         }
         return null;
