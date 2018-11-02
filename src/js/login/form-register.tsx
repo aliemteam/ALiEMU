@@ -345,9 +345,12 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         e.preventDefault();
         const { currentPage } = this.state;
         this.setState({ notice: undefined });
-        return currentPage < this.pages.length - 1
-            ? this.handlePagination(e)
-            : grecaptcha.execute();
+        if (currentPage < this.pages.length - 1) {
+            return this.handlePagination(e);
+        } else {
+            this.setState({ loading: true });
+            return grecaptcha.execute();
+        }
     };
 
     private handleSubmit = async (token: string): Promise<void> => {
