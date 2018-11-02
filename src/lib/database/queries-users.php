@@ -77,8 +77,12 @@ function get_user_course_progress( int $user_id ) : array {
 		);
 
 		$course_progress = [];
+
 		foreach ( $results as $result ) {
-			$meta              = get_post_meta( $result->post_id, '_sfwd-courses', true );
+			$meta = get_post_meta( $result->post_id, '_sfwd-courses', true );
+			if ( empty( $meta ) ) {
+				continue;
+			}
 			$course_progress[] = [
 				'status'             => (
 					1 === (int) $result->activity_status

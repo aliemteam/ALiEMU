@@ -144,8 +144,9 @@ class LearnerViewPre extends React.Component<Props> {
             .filter(progress => {
                 const { status, activity_completed } = progress;
                 if (
-                    status === CourseStatus.COMPLETED &&
-                    !isWithinDateRange(activity_completed, dateRange)
+                    (status === CourseStatus.COMPLETED &&
+                        !isWithinDateRange(activity_completed, dateRange)) ||
+                    !this.courses.has(progress.id)
                 ) {
                     return false;
                 }

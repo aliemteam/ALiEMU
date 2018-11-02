@@ -73,8 +73,9 @@
 
 .table-container {
     display: grid;
+    grid-template-rows: min-content 1fr;
     grid-area: table;
-    margin: 0 !important;
+    margin: 0;
     position: relative;
 
     > div {
