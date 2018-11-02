@@ -2,12 +2,12 @@ import { computed, flow, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 
-import { ICourse, ILearner } from 'utils/types';
-
+import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
 import { HeaderRow, Row } from 'components/tables/base';
 import { Courses, Groups } from 'utils/api';
-import { CourseStatus } from 'utils/constants';
+import { CourseStatus, Intent } from 'utils/constants';
 import { displayUnicode } from 'utils/text-utils';
+import { ICourse, ILearner } from 'utils/types';
 import { DateRange, isWithinDateRange } from './';
 import styles from './learner-view.scss';
 
@@ -20,19 +20,19 @@ import SimpleTable from 'components/tables/simple/';
 import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/headings';
 
-interface Props {
+type Props = {
     learner: ILearner;
     dateRange?: DateRange;
-}
+} & MessageContext;
 
 @observer
-export default class LearnerView extends React.Component<Props> {
+class LearnerViewPre extends React.Component<Props> {
     @observable
     coursesLoading = true;
 
     courses = observable.map<number, ICourse>([], { deep: false });
 
-    fetchCourses = flow(function*(this: LearnerView): IterableIterator<any> {
+    fetchCourses = flow(function*(this: LearnerViewPre): IterableIterator<any> {
         this.coursesLoading = true;
         this.courses.clear();
 
@@ -45,7 +45,7 @@ export default class LearnerView extends React.Component<Props> {
     });
 
     handleRemoveTag = flow(function*(
-        this: LearnerView,
+        this: LearnerViewPre,
         tag: string,
     ): IterableIterator<any> {
         const { learner } = this.props;
@@ -53,15 +53,19 @@ export default class LearnerView extends React.Component<Props> {
         learner.learner_tags = learner.learner_tags.filter(t => t !== tag);
         try {
             yield Groups.removeLearnerTag(learner.id, tag);
-        } catch (e) {
-            // FIXME:
-            console.error(`Error occurred: ${e.message}`);
+        } catch {
             learner.learner_tags = oldTags;
+            this.props.dispatchMessage({
+                text: 'Uh oh!',
+                details:
+                    'An error occurred while attempting to remove the selected learner tag. Please try again later.',
+                intent: Intent.DANGER,
+            });
         }
     }).bind(this);
 
     handleAddTag = flow(function*(
-        this: LearnerView,
+        this: LearnerViewPre,
         tag: string,
     ): IterableIterator<any> {
         const { learner } = this.props;
@@ -72,9 +76,14 @@ export default class LearnerView extends React.Component<Props> {
         learner.learner_tags.push(tag);
         try {
             yield Groups.addLearnerTag(learner.id, tag);
-        } catch (_e) {
-            console.error('Error occurred while attempting to add learner tag');
+        } catch {
             learner.learner_tags = oldTags;
+            this.props.dispatchMessage({
+                text: 'Uh oh!',
+                details:
+                    'An error occurred while attempting to add learner tag. Please try again later.',
+                intent: Intent.DANGER,
+            });
         }
     }).bind(this);
 
@@ -252,3 +261,6 @@ const header: HeaderRow = {
         },
     ],
 };
+
+const LearnerView = withMessageDispatcher(LearnerViewPre);
+export default LearnerView;

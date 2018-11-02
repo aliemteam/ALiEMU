@@ -2,11 +2,11 @@ import { action, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
 import React from 'react';
 
-import { ICoach, ILearner } from 'utils/types';
-
+import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
 import { HeaderRow, Row } from 'components/tables/base';
 import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
+import { ICoach, ILearner } from 'utils/types';
 import styles from './tab-groups.scss';
 
 import Button from 'components/buttons/button';
@@ -25,7 +25,7 @@ const enum MemberKind {
 }
 
 @observer
-export default class TabGroups extends React.Component {
+class TabGroupsPre extends React.Component<MessageContext> {
     @observable
     coachesSortByColumn: number = 0;
     @observable
@@ -42,7 +42,7 @@ export default class TabGroups extends React.Component {
     coaches = observable.array<Member>([], { deep: false });
     learners = observable.array<Member>([], { deep: false });
 
-    fetchGroups = flow(function*(this: TabGroups): IterableIterator<any> {
+    fetchGroups = flow(function*(this: TabGroupsPre): IterableIterator<any> {
         const [coaches, learners] = yield Promise.all([
             Groups.fetchCoaches(),
             Groups.fetchLearners(),
@@ -54,7 +54,7 @@ export default class TabGroups extends React.Component {
     }).bind(this);
 
     removeMember = flow(function*(
-        this: TabGroups,
+        this: TabGroupsPre,
         e: React.MouseEvent<HTMLButtonElement>,
     ): IterableIterator<any> {
         const kind = e.currentTarget.dataset.kind as MemberKind;
@@ -76,16 +76,20 @@ export default class TabGroups extends React.Component {
                     throw new Error('Invalid member kind given.');
             }
             this[kind].replace(this[kind].filter(member => member.id !== id));
-        } catch (e) {
-            // FIXME:
-            console.error(e);
+        } catch {
+            this.props.dispatchMessage({
+                text: 'Uh oh!',
+                details:
+                    'An error occurred while attempting to remove the requested user. Please try again later.',
+                intent: Intent.DANGER,
+            });
         }
 
         this.toggleLoadingFor(kind);
     }).bind(this);
 
     addCoach = flow(function*(
-        this: TabGroups,
+        this: TabGroupsPre,
         e: React.FormEvent<HTMLFormElement>,
     ): IterableIterator<any> {
         e.preventDefault();
@@ -95,8 +99,13 @@ export default class TabGroups extends React.Component {
         try {
             const newCoach: ICoach = yield Groups.addCoach(email);
             this.coaches.push(newCoach);
-        } catch (e) {
-            console.error(e);
+        } catch {
+            this.props.dispatchMessage({
+                text: 'Uh oh!',
+                details:
+                    'An error occurred while attempting to remove the requested user. Please try again later.',
+                intent: Intent.DANGER,
+            });
         }
         this.coachesAreLoading = false;
     }).bind(this);
@@ -280,3 +289,6 @@ const header: HeaderRow = {
         },
     ],
 };
+
+const TabGroups = withMessageDispatcher(TabGroupsPre);
+export default TabGroups;

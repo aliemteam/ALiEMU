@@ -11,6 +11,10 @@
     max-width: 500px;
     pointer-events: none;
     z-index: 5;
+
+    @at-root :global(.admin-bar) & {
+        margin-top: $admin-bar-height;
+    }
 }
 
 .message-container {

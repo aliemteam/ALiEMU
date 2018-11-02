@@ -5,6 +5,7 @@ $border-radius: 3px;
 $gap: 10px;
 
 .container {
+    position: relative;
     margin: 8px;
     border-radius: $border-radius;
     box-shadow: map-get($shadows, 'depth-6');

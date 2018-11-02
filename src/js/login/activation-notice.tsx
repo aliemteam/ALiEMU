@@ -65,15 +65,6 @@ class ActivationNoticePre extends PureComponent<Props, State> {
                 details:
                     'An error occurred when attempting to communicate with our email server. Please try again later.',
                 intent: Intent.DANGER,
-                actions: [
-                    {
-                        children: 'See ya!',
-                    },
-                    {
-                        children: 'Hello World',
-                        intent: Intent.PRIMARY,
-                    },
-                ],
             });
         }
         this.setState({ emailSent: success, loading: false });
