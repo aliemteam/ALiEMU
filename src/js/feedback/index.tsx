@@ -51,11 +51,11 @@ export default class Feedback extends Component<{}, State> {
 
     handleValidate = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
+        this.setState({ loading: true });
         grecaptcha.execute();
     };
 
     handleSubmit = async (token: string): Promise<void> => {
-        this.setState(prev => ({ ...prev, loading: true }));
         const { success } = await wpAjax('send_slack_message', {
             recaptcha_token: token,
             ...this.state.data,
@@ -69,16 +69,15 @@ export default class Feedback extends Component<{}, State> {
                 ? 'Your feedback has been sent successfully. If warranted, we will reply to you via email in the next 48-72 hours.'
                 : 'An internal error prevented your message from sending successfully. Please contact us via email at mlin@aliem.com',
         };
-        this.setState(prev => ({ ...prev, notice, loading: false }));
+        this.setState({ notice, loading: false });
     };
 
     handleChange = (
         e: FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     ): void => {
         const { name, value } = e.currentTarget;
-        this.setState(prev => ({
-            ...prev,
-            data: { ...prev.data, [name]: value },
+        this.setState(state => ({
+            data: { ...state.data, [name]: value },
         }));
     };
 

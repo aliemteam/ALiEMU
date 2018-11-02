@@ -92,16 +92,6 @@ function slack_message( string $channel, array $message ) {
 		$message
 	);
 	if ( WP_DEBUG ) {
-		if ( class_exists( 'QM' ) ) {
-			QM::notice(
-				wp_json_encode(
-					[
-						'channel' => $channel,
-						'message' => $message,
-					]
-				)
-			);
-		}
 		$response = [
 			'response' => [
 				'code'    => 200,
