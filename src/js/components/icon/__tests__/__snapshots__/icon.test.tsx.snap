@@ -6,7 +6,7 @@ exports[`<Icon /> should render an accessibility icon 1`] = `
   style={
     Object {
       "color": undefined,
-      "fontSize": 18,
+      "fontSize": 16,
     }
   }
 >

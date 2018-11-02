@@ -39,7 +39,7 @@ exports[`<Pagination /> should render correctly 1`] = `
         style={
           Object {
             "color": undefined,
-            "fontSize": 18,
+            "fontSize": 16,
           }
         }
       >
@@ -161,7 +161,7 @@ exports[`<Pagination /> should render correctly 1`] = `
         style={
           Object {
             "color": undefined,
-            "fontSize": 18,
+            "fontSize": 16,
           }
         }
       >
