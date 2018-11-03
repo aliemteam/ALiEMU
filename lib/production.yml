@@ -1,5 +1,6 @@
 version: '3.7'
-x-shared-options: &shared
+x-shared-options:
+  &shared
   logging:
     driver: json-file
     options:
@@ -8,7 +9,7 @@ x-shared-options: &shared
 
 services:
   wordpress:
-    *shared
+    <<: *shared
     security_opt:
       - apparmor:unconfined
     environment:
@@ -37,10 +38,10 @@ services:
       - ./wp-content/themes:/app/wp-content/themes
       - ./letsencrypt:/etc/letsencrypt
   db:
-    *shared
+    <<: *shared
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASS}
   redis:
-    *shared
+    <<: *shared
   phpmyadmin:
-    *shared
+    <<: *shared
