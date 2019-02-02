@@ -19,6 +19,7 @@ wp-content/
 # Files
 *.backup
 *.tfstate
+*.tfvars
 .env
 NOTES.md
 npm-debug.log

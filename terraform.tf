@@ -1,15 +1,27 @@
+terraform {
+  backend "local" {
+    path = "lib/terraform.tfstate"
+  }
+}
+
+output "droplet_name" {
+  value = "${module.digitalocean_web.name}"
+}
+
+output "droplet_ip" {
+  value = "${module.digitalocean_web.ipv4_address}"
+}
+
+output "droplet_region" {
+  value = "${module.digitalocean_web.region}"
+}
+
 variable "do_token" {
   description = "DigitalOcean Access Token."
 }
 
 variable "cf_token" {
-  description = "Cloudflare Global API Key."
-}
-
-terraform {
-  backend "local" {
-    path = "lib/terraform.tfstate"
-  }
+  description = "Cloudflare API Key."
 }
 
 locals {
@@ -17,11 +29,15 @@ locals {
 }
 
 provider "cloudflare" {
-  email = "dereksifford@gmail.com"
+  version = "~> 1.11"
+
+  email = "mlin@aliem.com"
   token = "${var.cf_token}"
 }
 
 provider "digitalocean" {
+  version = "~> 1.1"
+
   token = "${var.do_token}"
 }
 
@@ -29,6 +45,7 @@ module "digitalocean_web" {
   source = "github.com/aliemteam/infrastructure//compute/digitalocean/wordpress"
 
   domain = "${local.domain}"
+  image  = "docker-18-04"
 }
 
 module "cloudflare_dns" {
