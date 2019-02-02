@@ -2,7 +2,7 @@ import React, { createRef, PureComponent, RefObject } from 'react';
 
 import inject from 'utils/inject-script';
 
-import Input, { InputProps } from 'components/forms/input';
+import Input from 'components/forms/input';
 
 import './places-autocomplete.scss';
 
@@ -11,7 +11,7 @@ type Options = google.maps.places.AutocompleteOptions & {
     fields: Array<keyof Result>;
 };
 
-interface Props extends InputProps {
+interface Props extends Input.Props {
     options?: Options;
     onPlaceChange(result?: Partial<Result>): void;
 }
@@ -54,7 +54,7 @@ export default class PlacesAutocomplete extends PureComponent<Props> {
         const { options, onPlaceChange, ...props } = this.props;
         return (
             <Input
-                ref={this.inputRef}
+                inputRef={this.inputRef}
                 onChange={this.handleChange}
                 {...props}
             />

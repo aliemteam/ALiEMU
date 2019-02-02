@@ -1,6 +1,5 @@
-declare module 'classnames';
 declare module 'browser-sync-webpack-plugin';
-declare module 'uglifyjs-webpack-plugin';
+declare module 'webpack-fix-style-only-entries';
 
 declare module '*.scss' {
     const content: {

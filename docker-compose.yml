@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   wordpress:
-    image: visiblevc/wordpress:0.21.0-php7.2
+    image: visiblevc/wordpress:0.22.0-php7.3
     cap_add:
       - SYS_ADMIN
     devices:
@@ -14,19 +14,23 @@ services:
       - ./data:/data
       - ./wp-content/plugins/sfwd-lms:/app/wp-content/plugins/sfwd-lms
       - ./wp-content/uploads:/app/wp-content/uploads
+
   db:
     image: mariadb:10
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - data:/var/lib/mysql
-  redis:
-    image: redis
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     volumes:
       - data:/var/lib/mysql
     ports:
       - 22222:80
+
+  redis:
+    image: redis
+
 volumes:
-  ? data
+  data:

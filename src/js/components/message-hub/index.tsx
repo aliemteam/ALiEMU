@@ -1,9 +1,4 @@
-import React, {
-    ComponentType,
-    createContext,
-    PureComponent,
-    ReactNode,
-} from 'react';
+import React, { createContext, PureComponent, ReactNode } from 'react';
 
 import { ButtonProps } from 'components/buttons/button';
 import { Intent } from 'utils/constants';
@@ -76,19 +71,16 @@ class MessageHub extends PureComponent<{}, State> {
     };
 }
 
-const withMessageDispatcher = <P extends Context>(C: ComponentType<P>) => {
-    return (props: Omit<P, 'dispatchMessage'>) => (
+// FIXME: types are being a pain in my ass here
+function withMessageDispatcher(C: any) {
+    return (props: any) => (
         <Consumer>
             {({ dispatchMessage }) => (
                 <C dispatchMessage={dispatchMessage} {...props} />
             )}
         </Consumer>
     );
-};
-
-export {
-    Context as MessageContext,
-    Msg,
-    withMessageDispatcher,
 }
+
+export { Context as MessageContext, Msg, withMessageDispatcher };
 export default MessageHub;

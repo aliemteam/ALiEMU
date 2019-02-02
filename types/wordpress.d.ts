@@ -1,4 +1,3 @@
-// tslint:disable:no-namespace no-reserved-keywords
 declare namespace WordPress {
     namespace API {
         type Context = 'view' | 'embed' | 'edit';

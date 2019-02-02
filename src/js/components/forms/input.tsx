@@ -3,7 +3,6 @@ import React, {
     createRef,
     FocusEvent,
     FormEvent,
-    forwardRef,
     HTMLProps,
     PureComponent,
     RefObject,
@@ -13,20 +12,18 @@ import { MaybeLabel } from './label';
 
 import styles from './input.scss';
 
-interface Props extends HTMLProps<HTMLInputElement> {
-    forwardedRef?: RefObject<HTMLInputElement>;
-    validityMessage?: string;
-    label?: string;
-    raised?: boolean;
+namespace Input {
+    export interface Props extends Omit<HTMLProps<HTMLInputElement>, 'ref'> {
+        inputRef?: RefObject<HTMLInputElement>;
+        validityMessage?: string;
+        label?: string;
+        raised?: boolean;
+    }
+    export interface State {
+        isFocused: boolean;
+    }
 }
-
-export type InputProps = Omit<Props, 'forwardedRef'>;
-
-interface State {
-    isFocused: boolean;
-}
-
-class Input extends PureComponent<Props, State> {
+class Input extends PureComponent<Input.Props, Input.State> {
     static defaultProps = {
         onBlur: () => void 0,
         onChange: () => void 0,
@@ -37,14 +34,14 @@ class Input extends PureComponent<Props, State> {
         isFocused: false,
     };
 
-    private ref = this.props.forwardedRef || createRef<HTMLInputElement>();
+    private ref = this.props.inputRef || createRef<HTMLInputElement>();
 
     render(): JSX.Element {
         const {
             className,
-            forwardedRef,
-            raised,
+            inputRef,
             label,
+            raised,
             validityMessage,
             ...props
         } = this.props;
@@ -100,6 +97,4 @@ class Input extends PureComponent<Props, State> {
     };
 }
 
-export default forwardRef<HTMLInputElement, InputProps>((props: any, ref) => (
-    <Input {...props} forwardedRef={ref} />
-));
+export default Input;

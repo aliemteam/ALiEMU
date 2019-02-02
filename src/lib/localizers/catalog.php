@@ -23,12 +23,12 @@ function localize() {
 			[
 				'_links',
 				'categories',
-				'course_short_description',
+				'description',
 				'date_gmt',
 				'featured_media',
 				'id',
 				'link',
-				'recommendedHours',
+				'hours',
 				'title',
 			]
 		)

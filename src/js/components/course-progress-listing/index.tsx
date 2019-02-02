@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import React from 'react';
-import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
+import ContentLoader, { IContentLoaderProps } from 'react-content-loader';
 
 import { ICourse } from 'utils/types';
 
@@ -70,7 +70,7 @@ export default class CourseProgressListing extends React.Component<Props> {
     }
 }
 
-const LoadingListing = (props: ContentLoaderProps) => (
+const LoadingListing = (props: IContentLoaderProps) => (
     <ContentLoader
         height={75}
         width={475}

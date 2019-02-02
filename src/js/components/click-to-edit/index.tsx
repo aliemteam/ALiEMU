@@ -13,7 +13,7 @@ import Input from 'components/forms/input';
 
 interface Props {
     children?: string;
-    inputProps?: HTMLProps<HTMLInputElement>;
+    inputProps?: Omit<HTMLProps<HTMLInputElement>, 'ref'>;
     buttonProps?: HTMLProps<Element>;
     buttonElement?: SFC<HTMLProps<HTMLButtonElement>>;
     placeholder?: string;
@@ -72,7 +72,7 @@ export default class ClickToEdit extends Component<Props, State> {
         return isEditing ? (
             <Input
                 {...inputProps}
-                ref={this.ref}
+                inputRef={this.ref}
                 value={value}
                 onKeyUp={this.handleKeyUp}
                 onBlur={this.handleBlur}

@@ -3,7 +3,7 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
 import { observer } from 'mobx-react';
 import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
 import React from 'react';
-import ContentLoader, { ContentLoaderProps } from 'react-content-loader';
+import ContentLoader, { IContentLoaderProps } from 'react-content-loader';
 import striptags from 'striptags';
 
 import { Comments } from 'utils/api';
@@ -56,7 +56,7 @@ export default class CommentListing extends React.Component<Props> {
     }
 }
 
-const LoadingListing = (props: ContentLoaderProps) => (
+const LoadingListing = (props: IContentLoaderProps) => (
     <ContentLoader
         height={100}
         width={475}

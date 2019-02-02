@@ -1,8 +1,8 @@
 import React, { FormEvent, KeyboardEvent, PureComponent } from 'react';
 
-import Input, { InputProps } from './input';
+import Input from './input';
 
-interface Props extends Omit<InputProps, 'onChange'> {
+interface Props extends Omit<Input.Props, 'onChange'> {
     value: string;
     delimiter?: string;
     onChange?(value: string): void;

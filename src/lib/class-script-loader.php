@@ -82,24 +82,24 @@ class Script_Loader {
 				'https://fonts.googleapis.com/css'
 			),
 			[],
-			ALIEMU_VERSION
+			filemtime( get_stylesheet_directory( 'style.css' ) )
 		);
-		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ], hash_file( 'md5', get_stylesheet_directory( 'style.css' ) ) );
+		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ], filemtime( get_stylesheet_directory( 'style.css' ) ) );
 
 		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
 			$style = pathinfo( $stylesheet );
-			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], hash_file( 'md5', $stylesheet ) );
+			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], filemtime( $stylesheet ) );
 		}
 
 		// Header scripts.
-		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ), false );
+		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ), false );
 
 		// Footer scripts.
-		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
-		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'jquery' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
-		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
-		wp_register_script( 'aliemu-landing-page', ALIEMU_ROOT_URI . '/js/landing-page.js', [], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/landing-page.js' ), true );
-		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'jquery', 'wp-util' ], hash_file( 'md5', ALIEMU_ROOT_PATH . '/js/login.js' ), true );
+		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
+		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
+		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'jquery', 'wp-util' ], filemtime( ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
+		wp_register_script( 'aliemu-landing-page', ALIEMU_ROOT_URI . '/js/landing-page.js', [], filemtime( ALIEMU_ROOT_PATH . '/js/landing-page.js' ), true );
+		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'jquery', 'wp-util' ], filemtime( ALIEMU_ROOT_PATH . '/js/login.js' ), true );
 
 		$this->delegate();
 	}
