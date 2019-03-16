@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { animated, config, Transition } from 'react-spring';
+import { animated, config, Transition } from 'react-spring/renderprops';
 
 import { Msg } from './';
 
