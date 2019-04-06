@@ -21,32 +21,31 @@
 else :
 
 	$current_year = (int) get_gmt_from_date( null, 'Y' );
-	$year         = 2014;
+	$course_year  = 2014;
 	$courses      = [];
 
-	while ( $year <= $current_year ) {
-		$list = do_shortcode( "[ld_course_list category_name='$post->post_name' tag='$year']" );
+	while ( $course_year <= $current_year ) {
+		$list = do_shortcode( "[ld_course_list category_name='$post->post_name' tag='$course_year']" );
 		if ( ! empty( $list ) ) {
-			$courses[ (string) $year ] = $list;
+			$courses[ (string) $course_year ] = $list;
 		}
-		$year++;
+		$course_year++;
 	}
 
-	$years = array_keys( $courses );
 	?>
 
 	<div class="course-list">
-	<?php foreach ( array_reverse( $courses, true ) as $year => $boxes ) : ?>
+	<?php foreach ( array_reverse( $courses, true ) as $course_year => $boxes ) : ?>
 		<h1
 			class="course-list__year-heading"
-			id="year-<?php echo esc_attr( $year ); ?>"
+			id="year-<?php echo esc_attr( $course_year ); ?>"
 		>
-			<?php echo esc_html( $year ); ?>
+			<?php echo esc_html( $course_year ); ?>
 		</h1>
 		<div
 			class="course-boxes"
 			role="list"
-			aria-labelledby="year-<?php echo esc_attr( $year ); ?>"
+			aria-labelledby="year-<?php echo esc_attr( $course_year ); ?>"
 		>
 			<?php
 			// Ignoring this because it's already sanitized -- Came from a shortcode.

@@ -35,6 +35,7 @@
                 "ban-keywords"
             ]
         },
+        "function-constructor": true,
         "interface-name": false,
         "jsx-boolean-value": false,
         "max-classes-per-file": false,
@@ -53,7 +54,6 @@
         "no-delete-expression": true,
         "no-document-write": true,
         "no-for-in": true,
-        "no-function-constructor-with-string-args": true,
         "no-function-expression": true,
         "no-invalid-regexp": true,
         "no-regex-spaces": true,
@@ -61,10 +61,10 @@
         "no-string-based-set-interval": true,
         "no-string-based-set-timeout": true,
         "no-typeof-undefined": true,
-        "no-unnecessary-bind": true,
         "no-unnecessary-field-initialization": true,
         "no-unnecessary-override": true,
         "no-useless-files": true,
+        "unnecessary-bind": true,
         "possible-timing-attack": true,
         "prefer-type-cast": true,
         "promise-function-async": true,
