@@ -17,6 +17,7 @@ interface Props extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
     intent?: Intent;
     loading?: boolean;
     scale?: number;
+    type?: 'button' | 'reset' | 'submit';
 }
 
 class Button extends PureComponent<Props> {

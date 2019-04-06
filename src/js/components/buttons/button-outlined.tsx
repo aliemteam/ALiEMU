@@ -7,6 +7,7 @@ import styles from './button-outlined.scss';
 interface IProps extends HTMLProps<HTMLButtonElement> {
     children: string;
     intent?: Intent;
+    type?: 'button' | 'reset' | 'submit';
 }
 
 const ButtonOutlined = (props: IProps): JSX.Element => {

@@ -57,7 +57,6 @@
         "no-function-expression": true,
         "no-invalid-regexp": true,
         "no-regex-spaces": true,
-        "no-reserved-keywords": true,
         "no-string-based-set-immediate": true,
         "no-string-based-set-interval": true,
         "no-string-based-set-timeout": true,

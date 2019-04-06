@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './nav-tab.scss';
 
 interface Props extends React.HTMLProps<HTMLButtonElement> {
+    type?: 'button' | 'reset' | 'submit';
     active?: boolean;
 }
 

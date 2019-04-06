@@ -5,6 +5,7 @@ import styles from './item.scss';
 
 interface Props extends React.HTMLProps<HTMLButtonElement> {
     selected?: boolean;
+    type?: 'button' | 'reset' | 'submit';
 }
 
 export default class MenuItem extends React.PureComponent<Props> {
