@@ -10,6 +10,31 @@ namespace ALIEMU\Plugins\Learndash;
 defined( 'ABSPATH' ) || exit;
 
 /**
+ * Adds missing capabilities to the "editor" role.
+ */
+function adjust_editor_capabilities() {
+	$editor = get_role( 'editor' );
+
+	$capabilities = [
+		'delete_courses',
+		'delete_others_courses',
+		'delete_private_courses',
+		'delete_published_courses',
+		'edit_courses',
+		'edit_others_courses',
+		'edit_private_courses',
+		'edit_published_courses',
+		'publish_courses',
+		'read_private_courses',
+	];
+
+	foreach ( $capabilities as $cap ) {
+		$editor->add_cap( $cap );
+	}
+}
+add_action( 'init', __NAMESPACE__ . '\adjust_editor_capabilities' );
+
+/**
  * Adds "Course Short Description" field to the block meta.
  *
  * @param WP_Post[] $posts Array of posts.
