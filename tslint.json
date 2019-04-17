@@ -55,6 +55,7 @@
     "function-constructor": true,
     "interface-name": false,
     "jsx-boolean-value": false,
+    "jsx-no-lambda": false,
     "max-classes-per-file": false,
     "no-angle-bracket-type-assertion": false,
     "no-default-export": false,

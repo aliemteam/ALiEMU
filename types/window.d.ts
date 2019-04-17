@@ -8,4 +8,5 @@ interface Window {
         readonly nonce: string;
         readonly url: string;
     };
+    readonly AU_NONCE: string;
 }

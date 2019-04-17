@@ -2,10 +2,16 @@
 @import 'mixins/media';
 @import 'variables';
 
-.coaches-caption {
+.table-caption {
     display: grid;
     grid-template-columns: 1fr 2fr;
     align-items: center;
+    margin-bottom: 4px;
+    gap: 4px;
+
+    h2 {
+        margin: 0;
+    }
 
     @include device-mobile {
         grid-template-columns: 1fr;
@@ -16,11 +22,24 @@
     display: flex;
     flex: auto;
     justify-content: center;
-    margin-bottom: 4px;
 
     > button {
         margin-left: 5px;
         flex-shrink: 0;
+    }
+}
+
+.export-learner-form {
+    display: grid;
+    gap: 4px;
+    grid-template-columns: 1fr 1fr auto;
+
+    @include device-mobile {
+        grid-template-columns: 1fr 1fr;
+
+        button {
+            grid-column: span 2;
+        }
     }
 }
 
@@ -29,7 +48,7 @@
 }
 
 .empty-state {
-    margin: $block-margin 0 $section-margin 0;
+    margin: $block-margin 0;
 
     &-content {
         text-align: center;

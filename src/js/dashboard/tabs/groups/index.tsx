@@ -2,20 +2,22 @@ import { action, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
 import React from 'react';
 
-import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
-import { HeaderRow, Row } from 'components/tables/base';
 import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
 import { ICoach, ILearner } from 'utils/types';
-import styles from './tab-groups.scss';
 
 import Button from 'components/buttons/button';
 import ButtonOutlined from 'components/buttons/button-outlined';
 import Card from 'components/card/';
+import DateInput from 'components/forms/date-input';
 import Input from 'components/forms/input';
 import Icon from 'components/icon/';
+import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
+import { HeaderRow, Row } from 'components/tables/base';
 import SimpleTable from 'components/tables/simple/';
 import { SectionHeading } from 'components/typography/headings';
+
+import styles from './tab-groups.scss';
 
 type Member = ILearner | ICoach;
 
@@ -23,6 +25,8 @@ const enum MemberKind {
     LEARNER = 'learners',
     COACH = 'coaches',
 }
+
+const { AU_NONCE } = window;
 
 @observer
 class TabGroupsPre extends React.Component<MessageContext> {
@@ -140,7 +144,7 @@ class TabGroupsPre extends React.Component<MessageContext> {
                 />
                 <SimpleTable
                     fixed
-                    caption="My Learners"
+                    caption={this.learnersTableCaption}
                     header={header}
                     rows={this.learners.map(
                         this.makeRowCreator(MemberKind.LEARNER),
@@ -155,18 +159,37 @@ class TabGroupsPre extends React.Component<MessageContext> {
         );
     }
 
-    private coachesTableCaption = (id: string) => {
-        return (
-            <div className={styles.coachesCaption}>
-                <SectionHeading id={id}>My Coaches</SectionHeading>
-                <Observer>{this.addCoachForm}</Observer>
-            </div>
-        );
-    };
+    private coachesTableCaption = (id: string) => (
+        <div className={styles.tableCaption}>
+            <SectionHeading id={id}>My Coaches</SectionHeading>
+            <Observer>{this.addCoachForm}</Observer>
+        </div>
+    );
+
+    private learnersTableCaption = (id: string) => (
+        <div className={styles.tableCaption}>
+            <SectionHeading id={id}>My Learners</SectionHeading>
+            <form
+                method="GET"
+                className={styles.exportLearnerForm}
+                style={{ textAlign: 'right' }}
+            >
+                <input
+                    type="hidden"
+                    name="action"
+                    value="export_learner_data"
+                />
+                <input type="hidden" name="nonce" value={AU_NONCE} />
+                <DateInput name="start_date" placeholder="Start date" />
+                <DateInput name="end_date" placeholder="End date" />
+                <Button>Export learner data</Button>
+            </form>
+        </div>
+    );
 
     private emptyCoachesRenderer = () => (
         <div className={styles.emptyState}>
-            <div className={styles.coachesCaption}>
+            <div className={styles.tableCaption}>
                 <SectionHeading>My Coaches</SectionHeading>
                 <Observer>{this.addCoachForm}</Observer>
             </div>

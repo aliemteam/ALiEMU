@@ -1,88 +1,73 @@
-import React, { FormEvent, KeyboardEvent, PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Input from './input';
 
-interface Props extends Omit<Input.Props, 'onChange'> {
-    value: string;
-    delimiter?: string;
-    onChange?(value: string): void;
-}
-
-interface State {
-    value: string;
-}
-
-type KBEvent = KeyboardEvent<HTMLInputElement>;
-type InputEvent = FormEvent<HTMLInputElement>;
-
-export default class DateInput extends PureComponent<Props, State> {
-    static defaultProps = {
-        delimiter: '/',
-    };
-
-    state = {
-        value: this.props.value,
-    };
-
-    render(): JSX.Element {
-        const { delimiter, ...props } = this.props;
-        return (
-            <Input
-                {...props}
-                value={this.state.value}
-                type="search"
-                pattern="\d{4}/\d{2}/\d{2}"
-                onKeyPress={this.handleKeyPress}
-                onChange={this.handleChange}
-            />
-        );
+namespace DateInput {
+    export interface Props extends Omit<Input.Props, 'onChange'> {
+        delimiter?: string;
+        value?: string;
+        onChange?(value: string): void;
     }
-    private handleKeyPress = (e: KBEvent): void => {
-        const code = e.key.charCodeAt(0);
-        if (code < 48 || 57 < code) {
-            e.preventDefault();
-        }
-    };
-
-    private handleChange = (e: InputEvent): void => {
-        const { value } = e.currentTarget;
-        const currentLength = this.props.value.length;
-        const isInserting = value.length > currentLength;
-        if (isInserting && currentLength === 10) {
-            return;
-        }
-        const parsed = isInserting
-            ? this.handleInsert(value)
-            : this.handleDelete(value);
-        this.setState(
-            () => ({ value: parsed }),
-            () => this.props.onChange && this.props.onChange(parsed),
-        );
-    };
-
-    private handleInsert = (value: string): string => {
-        const { delimiter } = this.props;
-        const [year, month, day] = value.split(delimiter!);
-        return [
-            parseYear(year, delimiter),
-            parseMonth(month, delimiter),
-            parseDay(day),
-        ]
-            .filter(Boolean)
-            .join('');
-    };
-
-    private handleDelete = (input: string): string => {
-        const { delimiter, value } = this.props;
-        return value.endsWith(delimiter!) ? input.slice(0, -1) : input;
-    };
 }
 
-function parseYear(input: string, delimiter = '/'): string {
+function DateInput({
+    delimiter = '/',
+    value = '',
+    onChange = () => void 0,
+    ...props
+}: DateInput.Props) {
+    const [inputValue, setValue] = useState(value);
+    useEffect(() => onChange(inputValue));
+    return (
+        <Input
+            {...props}
+            validityMessage="Date must be in the form 'YYYY/MM/DD'"
+            value={inputValue}
+            type="search"
+            pattern="\d{4}/\d{2}/\d{2}"
+            onKeyPress={e => {
+                const code = e.key.charCodeAt(0);
+                if (code < 48 || 57 < code) {
+                    e.preventDefault();
+                }
+            }}
+            onChange={e => {
+                const { value: currentValue } = e.currentTarget;
+                const previousLength = inputValue.length;
+                const isInserting = currentValue.length > previousLength;
+                if (isInserting && previousLength === 10) {
+                    return;
+                }
+                if (isInserting) {
+                    const [year, month, day] = currentValue.split(delimiter);
+                    setValue(
+                        [
+                            parseYear(year, delimiter),
+                            parseMonth(month, delimiter),
+                            parseDay(day),
+                        ]
+                            .filter(Boolean)
+                            .join(''),
+                    );
+                } else {
+                    setValue(
+                        inputValue.endsWith(delimiter)
+                            ? currentValue.slice(0, -1)
+                            : currentValue,
+                    );
+                }
+            }}
+        />
+    );
+}
+
+export default DateInput;
+
+function parseYear(input: string = '', delimiter: string): string {
     return input.length === 4 ? `${input}${delimiter}` : input;
 }
 
-function parseMonth(input: string = '', delimiter = '/'): string {
+function parseMonth(input: string = '', delimiter: string): string {
     if (!input) {
         return input;
     }

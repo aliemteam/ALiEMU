@@ -54,6 +54,7 @@ class Script_Loader {
 					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>',
 					url: '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
 				};
+				var AU_NONCE = '<?php echo esc_html( wp_create_nonce( 'aliemu' ) ); ?>';
 			</script>
 		<?php
 		// phpcs:enable
