@@ -394,7 +394,7 @@ class User_Groups_Controller extends WP_REST_Controller {
 		if ( ! $coach_id ) {
 			return new WP_Error(
 				'rest_user_invalid_email',
-				'Invalid email address.',
+				'Invalid email address. User does not exist.',
 				[ 'status' => 400 ]
 			);
 		}

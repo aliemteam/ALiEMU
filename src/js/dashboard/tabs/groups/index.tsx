@@ -99,11 +99,13 @@ class TabGroupsPre extends React.Component<MessageContext> {
         try {
             const newCoach: ICoach = yield Groups.addCoach(email);
             this.coaches.push(newCoach);
-        } catch {
+        } catch (e) {
             this.props.dispatchMessage({
                 text: 'Uh oh!',
                 details:
-                    'An error occurred while attempting to remove the requested user. Please try again later.',
+                    e.responseJSON && e.responseJSON.message
+                        ? e.responseJSON.message
+                        : 'An error occurred while attempting to add the requested user as a coach. Please try again later.',
                 intent: Intent.DANGER,
             });
         }
@@ -208,7 +210,7 @@ class TabGroupsPre extends React.Component<MessageContext> {
                 style={{ backgroundColor: '#345995' }}
                 intent={Intent.PRIMARY}
             >
-                Add Coach
+                Add coach
             </Button>
         </form>
     );
