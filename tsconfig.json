@@ -1,28 +1,44 @@
 {
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "baseUrl": "./src/js",
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "jsx": "preserve",
-        "lib": ["esnext", "dom", "dom.iterable"],
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "sourceMap": true,
-        "strict": true,
-        "target": "es2018",
-        "typeRoots": ["node_modules/@types", "types"],
-        "plugins": [
-            {
-                "name": "typescript-tslint-plugin"
-            }
-        ]
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./src/js",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "jsx": "preserve",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2018"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2018",
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ],
+    "paths": {
+      "@wordpress/*": [
+        "../../types/wordpress__*"
+      ]
     },
-    "include": ["types/*.d.ts", "webpack.config.ts",  "webpack.config.new.ts", "src/js/**/*"]
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "include": [
+    "src/js/**/*",
+    "types/*.d.ts",
+    "webpack.config.ts"
+  ]
 }

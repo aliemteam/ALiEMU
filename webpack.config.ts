@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import path from 'path';
+import { promisify } from 'util';
 
 import { CheckerPlugin, TsConfigPathsPlugin } from 'awesome-typescript-loader';
 import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
@@ -9,7 +10,7 @@ import imagemin from 'imagemin';
 import imageminPngquant from 'imagemin-pngquant';
 import imageminSvgo from 'imagemin-svgo';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import rimraf from 'rimraf';
+import rimrafLib from 'rimraf';
 import { BannerPlugin, Configuration, DefinePlugin, Plugin } from 'webpack';
 import FixStyleOnlyEntriesPlugin from 'webpack-fix-style-only-entries';
 
@@ -27,20 +28,12 @@ Text Domain: aliemu
 */
 `;
 
-function assertEnv(key: string): string {
-    const value = process.env[key];
-    if (value === undefined) {
-        throw new Error(
-            `Required environment variable "${key}" is not defined.`,
-        );
-    }
-    return JSON.stringify(value);
-}
+const rimraf = promisify(rimrafLib);
 
-export default (_: any, argv: any): Configuration => {
+export default async (_: any, argv: any): Promise<Configuration> => {
     const IS_PRODUCTION = argv.mode === 'production';
 
-    rimraf.sync(path.join(__dirname, 'dist', '*'));
+    await rimraf(path.join(__dirname, 'dist', '*'));
 
     const plugins = new Set<Plugin>([
         new FixStyleOnlyEntriesPlugin({ silent: !IS_PRODUCTION }),
@@ -114,6 +107,9 @@ export default (_: any, argv: any): Configuration => {
             ignored: /(node_modules|__tests__)/,
         },
         context: path.resolve(__dirname, 'src'),
+        externals: {
+            '@wordpress/url': 'wp.url',
+        },
         entry: {
             /**
              * JS Entrypoints
@@ -268,3 +264,13 @@ export default (_: any, argv: any): Configuration => {
         },
     };
 };
+
+function assertEnv(key: string): string {
+    const value = process.env[key];
+    if (value === undefined) {
+        throw new Error(
+            `Required environment variable "${key}" is not defined.`,
+        );
+    }
+    return JSON.stringify(value);
+}
