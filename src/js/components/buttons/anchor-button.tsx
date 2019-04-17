@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { HTMLProps, MouseEvent, PureComponent } from 'react';
+import React, { HTMLProps, PureComponent } from 'react';
 
 import styles from './anchor-button.scss';
 
@@ -10,7 +10,13 @@ export default class Button extends PureComponent<Props> {
         onClick: () => void 0,
     };
     render(): JSX.Element {
-        const { children, className, disabled, ...btnProps } = this.props;
+        const {
+            children,
+            className,
+            disabled,
+            onClick,
+            ...btnProps
+        } = this.props;
         const classname = classNames(styles.btn, className, {
             [styles.disabled]: disabled,
         });
@@ -20,17 +26,10 @@ export default class Button extends PureComponent<Props> {
                 role="button"
                 tabIndex={disabled ? -1 : 0}
                 className={classname}
-                onClick={this.handleClick}
+                onClick={disabled ? undefined : onClick}
             >
                 {children}
             </a>
         );
     }
-
-    private handleClick = (e: MouseEvent<HTMLAnchorElement>): void => {
-        const { disabled, onClick } = this.props;
-        if (!disabled) {
-            onClick!(e);
-        }
-    };
 }

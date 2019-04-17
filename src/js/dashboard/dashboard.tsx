@@ -11,8 +11,8 @@ import Header from './header';
 import Navbar from './navbar';
 
 export interface Globals {
-    user: ICoach & ILearner;
     recent_comments: number[];
+    user: ICoach & ILearner;
 }
 
 export const enum Tabs {

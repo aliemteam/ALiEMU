@@ -18,7 +18,6 @@ function localize() {
 	$profile_id = um_profile_id();
 
 	return [
-		'user'            => DB\get_user( $profile_id ),
 		'recent_comments' => get_comments(
 			[
 				'author__in' => [ $profile_id ],
@@ -27,6 +26,7 @@ function localize() {
 				'number'     => 25,
 			]
 		),
+		'user'            => DB\get_user( $profile_id ),
 	];
 }
 

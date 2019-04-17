@@ -173,12 +173,12 @@ export default class TabProgress extends React.Component<Props> {
                 <form className={styles.captionRight} ref={this.dateRangeForm}>
                     <DateInput
                         value={this.startDateFilter}
-                        placeholder="Start Date"
+                        placeholder="Start date"
                         onChange={this.handleStartDateChange}
                     />
                     <DateInput
                         value={this.endDateFilter}
-                        placeholder="End Date"
+                        placeholder="End date"
                         onChange={this.handleEndDateChange}
                     />
                 </form>
