@@ -107,9 +107,6 @@ export default async (_: any, argv: any): Promise<Configuration> => {
             ignored: /(node_modules|__tests__)/,
         },
         context: path.resolve(__dirname, 'src'),
-        externals: {
-            '@wordpress/url': 'wp.url',
-        },
         entry: {
             /**
              * JS Entrypoints

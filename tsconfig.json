@@ -25,11 +25,6 @@
       "node_modules/@types",
       "types"
     ],
-    "paths": {
-      "@wordpress/*": [
-        "../../types/wordpress__*"
-      ]
-    },
     "plugins": [
       {
         "name": "typescript-tslint-plugin"
