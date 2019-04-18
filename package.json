@@ -6,10 +6,8 @@
   "scripts": {
     "lint:scss": "stylelint \"src/**/*.scss\"",
     "lint:ts": "tslint -p . -t stylish",
-    "lint:php": "npm run phpcs -- --ignore=src/learndash --report=${PHPCS_REPORT:-summary} --basepath=. ./src",
-    "phpcs": "[[ -z $CI ]] || docker run -it --rm -v $(pwd):/app dsifford/phpcs",
-    "lint": "npm run lint:scss && npm run lint:ts && npm run lint:php",
-    "pretest": "PHPCS_REPORT=full npm run lint",
+    "lint": "npm run lint:scss && npm run lint:ts",
+    "pretest": "npm run lint",
     "sync": "./lib/sync.sh",
     "test": "jest --coverage ./src",
     "view-coverage": "$(test $(uname) == Linux && echo xdg-open || echo open) ./node_modules/.cache/coverage/lcov-report/index.html",
