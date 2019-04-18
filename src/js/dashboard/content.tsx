@@ -12,7 +12,7 @@ import UserStore from 'dashboard/user-store';
 
 interface Props {
     store: UserStore;
-    getCurrentTab(): Tabs;
+    currentTab: Tabs;
 }
 
 @observer
@@ -26,8 +26,8 @@ export default class DashboardContent extends React.Component<Props> {
     }
 
     private renderTab(): JSX.Element {
-        const { store } = this.props;
-        switch (this.props.getCurrentTab()) {
+        const { currentTab, store } = this.props;
+        switch (currentTab) {
             case Tabs.HOME:
                 return <TabHome store={store} />;
             case Tabs.PROFILE:

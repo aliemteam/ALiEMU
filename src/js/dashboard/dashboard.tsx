@@ -1,6 +1,4 @@
-import { action, observable } from 'mobx';
-import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 import DevTool from 'utils/dev-tools';
@@ -24,46 +22,25 @@ export const enum Tabs {
 
 declare const AU_Dashboard: Globals;
 
-@observer
-export default class Dashboard extends React.Component {
-    store: UserStore;
+const store = new UserStore(AU_Dashboard.user, AU_Dashboard.recent_comments);
 
-    @observable
-    private _currentTab: Tabs;
+function Dashboard() {
+    const [currentTab, setCurrentTab] = useState(
+        store.userKind === UserKind.OWNER ? Tabs.HOME : Tabs.PROFILE,
+    );
 
-    constructor(props: {}) {
-        super(props);
-        const { recent_comments, user } = AU_Dashboard;
-        this.store = new UserStore(user, recent_comments);
-        this._currentTab =
-            this.store.userKind === UserKind.OWNER ? Tabs.HOME : Tabs.PROFILE;
-    }
-
-    getCurrentTab = (): Tabs => this._currentTab;
-
-    render(): JSX.Element {
-        return (
-            <>
-                <DevTool />
-                <Header store={this.store} />
-                <Navbar
-                    store={this.store}
-                    getCurrentTab={this.getCurrentTab}
-                    onClick={this.handleTabClick}
-                />
-                <Content
-                    getCurrentTab={this.getCurrentTab}
-                    store={this.store}
-                />
-            </>
-        );
-    }
-
-    @action
-    private handleTabClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        const tab = e.currentTarget.dataset.tab as Tabs | undefined;
-        if (tab && tab !== this._currentTab) {
-            this._currentTab = tab;
-        }
-    };
+    return (
+        <>
+            <DevTool />
+            <Header store={store} />
+            <Navbar
+                store={store}
+                currentTab={currentTab}
+                onTabClick={setCurrentTab}
+            />
+            <Content currentTab={currentTab} store={store} />
+        </>
+    );
 }
+
+export default Dashboard;
