@@ -4,6 +4,7 @@ import { action, computed, flow, observable } from 'mobx';
 import { observer, Observer } from 'mobx-react';
 import React from 'react';
 
+import Button from 'components/buttons/button';
 import { HeaderRow, Row } from 'components/tables/base';
 import UserStore from 'dashboard/user-store';
 import { Groups } from 'utils/api';
@@ -27,6 +28,8 @@ export interface DateRange {
 interface Props {
     store: UserStore;
 }
+
+const { AU_NONCE } = window;
 
 @observer
 export default class TabProgress extends React.Component<Props> {
@@ -170,17 +173,30 @@ export default class TabProgress extends React.Component<Props> {
                         </Tag>
                     ))}
                 </div>
-                <form className={styles.captionRight} ref={this.dateRangeForm}>
+                <form
+                    method="GET"
+                    className={styles.exportLearnerForm}
+                    ref={this.dateRangeForm}
+                >
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="export_learner_data"
+                    />
+                    <input type="hidden" name="nonce" value={AU_NONCE} />
                     <DateInput
                         value={this.startDateFilter}
+                        name="start_date"
                         placeholder="Start date"
                         onChange={this.handleStartDateChange}
                     />
                     <DateInput
                         value={this.endDateFilter}
+                        name="end_date"
                         placeholder="End date"
                         onChange={this.handleEndDateChange}
                     />
+                    <Button>Export learner data</Button>
                 </form>
             </div>
         );

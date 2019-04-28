@@ -1,8 +1,6 @@
 import classNames from 'classnames';
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import { observer } from 'mobx-react';
-import { fromPromise, IPromiseBasedObservable } from 'mobx-utils';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ContentLoader, { IContentLoaderProps } from 'react-content-loader';
 import striptags from 'striptags';
 
@@ -16,44 +14,36 @@ interface Props {
     commentId: number;
 }
 
-@observer
-export default class CommentListing extends React.Component<Props> {
-    fetchResult: IPromiseBasedObservable<WordPress.Comment> = fromPromise(
-        Comments.fetchOne(this.props.commentId, { _embed: true }),
-    );
-
-    render(): JSX.Element | null {
-        return this.fetchResult.case({
-            pending: () => <LoadingListing />,
-            rejected: _error => null,
-            fulfilled: data => this.renderListing(data),
-        });
+export default function CommentListing({ commentId }: Props) {
+    const [comment, setComment] = useState<WordPress.Comment | null>(null);
+    useEffect(() => {
+        Comments.fetchOne(commentId, { _embed: true }).then(c => setComment(c));
+    }, [commentId]);
+    if (!comment) {
+        return <LoadingListing />;
     }
-
-    private renderListing(data: WordPress.Comment): JSX.Element {
-        const content = striptags(displayUnicode(data.content.rendered));
-        return (
-            <Card className={styles.listing}>
-                <h3 className={styles.title}>
-                    <a href={data._embedded.up[0].link}>
-                        {displayUnicode(data._embedded.up[0].title.rendered)}
-                    </a>
-                </h3>
-                <a className={styles.date} href={data.link}>
-                    {distanceInWordsToNow(data.date_gmt, {
-                        addSuffix: true,
-                    })}
+    const content = striptags(displayUnicode(comment.content.rendered));
+    return (
+        <Card className={styles.listing}>
+            <h3 className={styles.title}>
+                <a href={comment._embedded.up[0].link}>
+                    {displayUnicode(comment._embedded.up[0].title.rendered)}
                 </a>
-                <div className={styles.comment}>
-                    <div className={styles.lineClamp}>
-                        {content.length > 250
-                            ? `${content.slice(0, 250)}…`
-                            : content}
-                    </div>
+            </h3>
+            <a className={styles.date} href={comment.link}>
+                {distanceInWordsToNow(comment.date_gmt, {
+                    addSuffix: true,
+                })}
+            </a>
+            <div className={styles.comment}>
+                <div className={styles.lineClamp}>
+                    {content.length > 250
+                        ? `${content.slice(0, 250)}…`
+                        : content}
                 </div>
-            </Card>
-        );
-    }
+            </div>
+        </Card>
+    );
 }
 
 const LoadingListing = (props: IContentLoaderProps) => (

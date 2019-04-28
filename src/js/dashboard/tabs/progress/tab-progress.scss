@@ -2,7 +2,7 @@
 
 .caption__container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
     margin-bottom: 5px;
 
     @include device-mobile {
@@ -26,8 +26,16 @@
     }
 }
 
-.caption__right {
+.export-learner-form {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 5px;
+    gap: 4px;
+    grid-template-columns: 1fr 1fr auto;
+
+    @include device-mobile {
+        grid-template-columns: 1fr 1fr;
+
+        button {
+            grid-column: span 2;
+        }
+    }
 }

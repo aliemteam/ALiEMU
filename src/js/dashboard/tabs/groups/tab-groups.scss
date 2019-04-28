@@ -29,20 +29,6 @@
     }
 }
 
-.export-learner-form {
-    display: grid;
-    gap: 4px;
-    grid-template-columns: 1fr 1fr auto;
-
-    @include device-mobile {
-        grid-template-columns: 1fr 1fr;
-
-        button {
-            grid-column: span 2;
-        }
-    }
-}
-
 .table {
     grid-area: table;
 }
