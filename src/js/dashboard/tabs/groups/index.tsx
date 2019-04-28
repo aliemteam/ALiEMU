@@ -9,7 +9,6 @@ import { ICoach, ILearner } from 'utils/types';
 import Button from 'components/buttons/button';
 import ButtonOutlined from 'components/buttons/button-outlined';
 import Card from 'components/card/';
-import DateInput from 'components/forms/date-input';
 import Input from 'components/forms/input';
 import Icon from 'components/icon/';
 import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
@@ -25,8 +24,6 @@ const enum MemberKind {
     LEARNER = 'learners',
     COACH = 'coaches',
 }
-
-const { AU_NONCE } = window;
 
 @observer
 class TabGroupsPre extends React.Component<MessageContext> {
@@ -169,21 +166,6 @@ class TabGroupsPre extends React.Component<MessageContext> {
     private learnersTableCaption = (id: string) => (
         <div className={styles.tableCaption}>
             <SectionHeading id={id}>My Learners</SectionHeading>
-            <form
-                method="GET"
-                className={styles.exportLearnerForm}
-                style={{ textAlign: 'right' }}
-            >
-                <input
-                    type="hidden"
-                    name="action"
-                    value="export_learner_data"
-                />
-                <input type="hidden" name="nonce" value={AU_NONCE} />
-                <DateInput name="start_date" placeholder="Start date" />
-                <DateInput name="end_date" placeholder="End date" />
-                <Button>Export learner data</Button>
-            </form>
         </div>
     );
 
