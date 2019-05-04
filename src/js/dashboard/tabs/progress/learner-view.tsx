@@ -95,10 +95,10 @@ class LearnerViewPre extends React.Component<Props> {
         const { avatar_urls, id, learner_tags, name } = this.props.learner;
         return (
             <div className={styles.containerOuter} key={id}>
+                <h1 className={styles.name}>{name}</h1>
                 <div className={styles.containerInner}>
                     <img className={styles.img} src={avatar_urls[150]} />
                     <div className={styles.metadata}>
-                        <h1>{name}</h1>
                         <div className={styles.tagHeading}>
                             <SectionHeading>Tags</SectionHeading>
                             <ClickToEdit

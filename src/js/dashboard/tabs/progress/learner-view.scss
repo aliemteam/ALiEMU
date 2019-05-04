@@ -7,14 +7,20 @@
     display: grid;
     grid-gap: 20px;
     grid:
+        'name name'
         'info table'
-        / min-content 1fr;
+        / 150px 1fr;
 
     @include devices {
         grid:
             'info'
             'table';
     }
+}
+
+.name {
+    grid-area: name;
+    margin: 0;
 }
 
 .container-inner {

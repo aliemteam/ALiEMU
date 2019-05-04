@@ -4,6 +4,10 @@
 .figure {
     margin: $block-margin 0;
     display: grid;
+
+    figcaption {
+        margin: 0;
+    }
 }
 
 .container {
