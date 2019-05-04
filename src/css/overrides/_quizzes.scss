@@ -1,0 +1,75 @@
+@import 'colors';
+@import 'variables';
+
+// "Question x of n" text
+.wpProQuiz_question_page {
+    font-weight: bold;
+}
+
+.wpProQuiz_list,
+.wpProQuiz_questionList {
+    list-style-type: none;
+}
+
+// The question headers
+.wpProQuiz_header {
+    font-size: 1.5rem;
+}
+
+// The question and answer choices as well as the hint box.
+.wpProQuiz_questionList,
+.wpProQuiz_tipp {
+    background: $gray-light;
+    border-radius: 3px;
+    border: 1px solid $border-color;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+// Spacing between each question of a quiz.
+.wpProQuiz_listItem {
+    margin: $block-margin 0;
+}
+
+// Buttons.
+.wpProQuiz_button,
+.wpProQuiz_QuestionButton,
+.quiz_continue_link a {
+    @include button($primary);
+    margin: 0 !important;
+}
+
+// The highlights of correct or incorrect answers.
+.wpProQuiz_questionListItem {
+    &.wpProQuiz_answerIncorrect {
+        background: rgba(map-get($intent, 'danger'), 0.15);
+    }
+
+    &.wpProQuiz_answerCorrect {
+        background: rgba(map-get($intent, 'success'), 0.15);
+    }
+}
+
+.wpProQuiz_answerMessage,
+.wpProQuiz_question_text {
+    > p:first-of-type {
+        margin-top: 0;
+    }
+
+    > p:last-of-type {
+        margin-bottom: 0;
+    }
+}
+
+// The word "Incorrect" or "Correct" in the results panel.
+@each $status, $color in (correct, map-get($intent, 'success')),
+    (incorrect, map-get($intent, 'danger'))
+{
+    .wpProQuiz_#{$status} > span:first-of-type {
+        display: block;
+        color: $color;
+        font-weight: bold;
+        font-size: 1.75rem;
+        margin: 10px 0;
+    }
+}

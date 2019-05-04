@@ -15,25 +15,6 @@ ul {
 
 // Exclude comments from this
 .content-area > main {
-    ol {
-        padding: 0;
-        margin: 0 0 $block-margin 25px;
-        counter-reset: item;
-
-        > li {
-            display: block;
-            position: relative;
-
-            &:before {
-                content: counter(item) '.';
-                counter-increment: item;
-                font-weight: 600;
-                left: -$block-margin;
-                position: absolute;
-            }
-        }
-    }
-
     li > ul,
     li > ol {
         margin-bottom: 0;
