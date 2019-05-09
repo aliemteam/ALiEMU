@@ -7,7 +7,7 @@ it('should render correctly', () => {
     const tree = renderer.create(
         <>
             <ClickToEdit onSave={jest.fn()} />
-            <ClickToEdit onSave={jest.fn()} placeholder="With Placeholder" />
+            <ClickToEdit placeholder="With Placeholder" onSave={jest.fn()} />
         </>,
     );
     expect(tree).toMatchSnapshot();

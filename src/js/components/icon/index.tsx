@@ -26,7 +26,7 @@ interface SharedProps {
     children?: never;
 }
 
-interface IProps extends SharedProps {
+export interface IconProps extends SharedProps {
     /**
      * Id of material icon to use.
      *
@@ -44,14 +44,14 @@ interface IProps extends SharedProps {
     color?: string;
 }
 
-interface IIProps extends SharedProps {
+export interface IntentIconProps extends SharedProps {
     /**
      * The icon's intended intent
      */
     intent: Intent;
 }
 
-const Icon = (props: IProps): JSX.Element => {
+const Icon = (props: IconProps): JSX.Element => {
     const { className, color, icon, size } = props;
     const style = {
         color,
@@ -66,7 +66,7 @@ const Icon = (props: IProps): JSX.Element => {
 };
 Icon.defaultProps = { size: 16 };
 
-const IntentIcon = (props: IIProps): JSX.Element => {
+export const IntentIcon = (props: IntentIconProps): JSX.Element => {
     const { intent, ...iconProps } = props;
     const icon: IntentMapper = {
         danger: 'error',
@@ -82,9 +82,8 @@ const IntentIcon = (props: IIProps): JSX.Element => {
         success: colors.intentSuccess,
         warning: colors.intentWarning,
     };
-    return <Icon {...iconProps} icon={icon[intent]} color={color[intent]} />;
+    return <Icon {...iconProps} color={color[intent]} icon={icon[intent]} />;
 };
 IntentIcon.defaultProps = { size: 16 };
 
-export { IntentIcon, IProps as IconProps, IIProps as IntentIconProps };
 export default Icon;

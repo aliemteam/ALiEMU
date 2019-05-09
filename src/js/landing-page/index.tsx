@@ -25,8 +25,8 @@ export default class LandingPage extends PureComponent<{}, State> {
             <>
                 {donationModalIsOpen && (
                     <DonationModal
-                        onClose={this.toggleDonationModal}
                         closeOnClickOutside
+                        onClose={this.toggleDonationModal}
                     />
                 )}
                 <main className={styles.main}>
@@ -58,13 +58,13 @@ export default class LandingPage extends PureComponent<{}, State> {
 class DonationModal extends AbstractModal {
     renderContent() {
         return (
-            // tslint:disable-next-line:react-iframe-missing-sandbox
             <iframe
-                src="https://donorbox.org/embed/aliemu"
-                name="donorbox"
-                className={styles.donorbox}
-                scrolling="no"
                 seamless
+                className={styles.donorbox}
+                name="donorbox"
+                scrolling="no"
+                src="https://donorbox.org/embed/aliemu"
+                title="Donation form"
             />
         );
     }
@@ -77,7 +77,7 @@ const Header = (): JSX.Element => (
                 <Anchor href="/courses">Catalog</Anchor>
                 <Anchor href="/feedback">Contact</Anchor>
                 <Anchor href="/about">About</Anchor>
-                <Button intent={Intent.PRIMARY} href="/login">
+                <Button href="/login" intent={Intent.PRIMARY}>
                     Sign in
                 </Button>
             </nav>
@@ -99,9 +99,9 @@ const Hero = ({ onDonateClick }: HeroProps): JSX.Element => (
                 professions education
             </p>
             <Button
+                href="/login?tab=register"
                 intent={Intent.PRIMARY}
                 scale={1.5}
-                href="/login?tab=register"
             >
                 Sign up
             </Button>
@@ -143,7 +143,7 @@ const Community = (): JSX.Element => (
             Users can designate coaches, who can track their progress on courses
         </p>
         <div style={{ textAlign: 'center' }}>
-            <Button intent={Intent.SECONDARY} scale={1.5} href="/courses">
+            <Button href="/courses" intent={Intent.SECONDARY} scale={1.5}>
                 Explore our catalog
             </Button>
         </div>

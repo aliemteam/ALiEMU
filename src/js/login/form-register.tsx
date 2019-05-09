@@ -20,6 +20,13 @@ import ProgressDots from 'components/progress-dots';
 
 import * as styles from './form-register.scss';
 
+declare global {
+    interface Window {
+        grecaptcha: ReCaptchaV2.ReCaptcha;
+        handleSubmit(token: string): Promise<void>;
+    }
+}
+
 interface UserData {
     // Built-in meta fields
     user_first_name: string;
@@ -78,33 +85,32 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         () => (
             <>
                 <Input
-                    autoFocus
                     required
-                    name="user_login"
-                    label="Username"
-                    pattern="[a-zA-Z0-9_-]{4,}"
                     autoComplete="username"
+                    label="Username"
+                    name="user_login"
+                    pattern="[a-zA-Z0-9_-]{4,}"
+                    validityMessage="Valid characters: A-Z, a-z, 0-9, dash, and underscore."
                     value={this.state.data.user_login}
                     onChange={this.handleChange}
-                    validityMessage="Valid characters: A-Z, a-z, 0-9, dash, and underscore."
                 />
                 <Input
                     required
-                    name="user_email"
-                    label="Email"
-                    type="email"
                     autoComplete="email"
+                    label="Email"
+                    name="user_email"
+                    type="email"
                     value={this.state.data.user_email}
                     onChange={this.handleChange}
                 />
                 <Input
                     required
-                    name="user_pass"
-                    label="Password"
-                    type="password"
-                    pattern="[a-zA-Z0-9!@#$%^&*()]{8,}"
-                    validityMessage="Password must be 8 or more characters."
                     autoComplete="new-password"
+                    label="Password"
+                    name="user_pass"
+                    pattern="[a-zA-Z0-9!@#$%^&*()]{8,}"
+                    type="password"
+                    validityMessage="Password must be 8 or more characters."
                     value={this.state.data.user_pass}
                     onChange={this.handleChange}
                 />
@@ -114,31 +120,30 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             <>
                 <strong>Personal Information</strong>
                 <Input
-                    autoFocus
                     required
-                    name="user_first_name"
-                    label="First Name"
                     autoComplete="given-name"
+                    label="First Name"
+                    name="user_first_name"
                     value={this.state.data.user_first_name}
                     onChange={this.handleChange}
                 />
                 <Input
                     required
-                    name="user_last_name"
-                    label="Last Name"
                     autoComplete="family-name"
+                    label="Last Name"
+                    name="user_last_name"
                     value={this.state.data.user_last_name}
                     onChange={this.handleChange}
                 />
                 <PlacesAutocomplete
                     required
-                    label="City"
-                    placeholder=""
                     defaultValue={this.state.data.user_formatted_address}
+                    label="City"
                     options={{
                         fields: ['address_components', 'formatted_address'],
                         types: ['(cities)'],
                     }}
+                    placeholder=""
                     onPlaceChange={this.handlePlaceChange}
                 />
             </>
@@ -147,27 +152,26 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             <>
                 <strong>Professional Information</strong>
                 <Input
-                    autoFocus
-                    name="user_institution"
-                    label="Institution"
                     autoComplete="organization"
                     disabled={this.state.loading}
+                    label="Institution"
+                    name="user_institution"
                     value={this.state.data.user_institution}
                     onChange={this.handleChange}
                 />
                 <Input
-                    name="user_specialty"
-                    label="Specialty"
                     autoComplete="off"
                     disabled={this.state.loading}
+                    label="Specialty"
+                    name="user_specialty"
                     value={this.state.data.user_specialty}
                     onChange={this.handleChange}
                 />
                 <Select
                     required
-                    name="user_title"
-                    label="Role"
                     disabled={this.state.loading}
+                    label="Role"
+                    name="user_title"
                     value={this.state.data.user_title}
                     onChange={this.handleChange}
                 >
@@ -182,9 +186,9 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 </Select>
                 <Select
                     required
-                    name="user_practice_level"
-                    label="Practice Level"
                     disabled={this.state.loading}
+                    label="Practice Level"
+                    name="user_practice_level"
                     value={this.state.data.user_practice_level}
                     onChange={this.handleChange}
                 >
@@ -207,11 +211,11 @@ export default class RegistrationForm extends PureComponent<{}, State> {
     private recaptchaRef = createRef<HTMLDivElement>();
 
     async componentDidMount(): Promise<void> {
-        (window as any).handleSubmit = this.handleSubmit;
+        window.handleSubmit = this.handleSubmit;
         await inject('https://www.google.com/recaptcha/api.js', 'grecaptcha');
         const { current: recaptchaRef } = this.recaptchaRef;
         if (recaptchaRef && !recaptchaRef.childElementCount) {
-            grecaptcha.render(recaptchaRef.id);
+            window.grecaptcha.render(recaptchaRef.id);
         }
     }
 
@@ -221,7 +225,9 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         );
         if (child && child.parentElement && child.parentElement.parentElement) {
             child = child.parentElement.parentElement;
-            child.parentElement!.removeChild(child);
+            if (child.parentElement) {
+                child.parentElement.removeChild(child);
+            }
         }
     }
 
@@ -238,8 +244,8 @@ export default class RegistrationForm extends PureComponent<{}, State> {
         return (
             <>
                 <form
-                    id={styles.form}
                     className={styles.form}
+                    id={styles.form}
                     onSubmit={this.handleValidate}
                 >
                     {this.maybeRenderNotice()}
@@ -247,33 +253,33 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 </form>
                 <div className={styles.pagination}>
                     <ButtonOutlined
+                        disabled={currentPage === 0 || loading}
                         intent={Intent.PRIMARY}
                         name="prev"
-                        disabled={currentPage === 0 || loading}
                         onClick={this.handlePagination}
                     >
                         Prev
                     </ButtonOutlined>
                     <ProgressDots
-                        steps={this.pages.length}
                         currentStep={currentPage}
+                        steps={this.pages.length}
                     />
                     <ButtonOutlined
-                        intent={Intent.PRIMARY}
                         disabled={isLastPage || loading}
                         form={styles.form}
+                        intent={Intent.PRIMARY}
                         name="next"
                     >
                         Next
                     </ButtonOutlined>
                 </div>
                 <div
-                    id="recaptcha"
                     ref={this.recaptchaRef}
                     className="g-recaptcha"
-                    data-sitekey="6LcsqWgUAAAAABL-m1UecnZLk3Ijg7l-9kyrNfi_"
                     data-callback="handleSubmit"
+                    data-sitekey="6LcsqWgUAAAAABL-m1UecnZLk3Ijg7l-9kyrNfi_"
                     data-size="invisible"
+                    id="recaptcha"
                     style={{ position: 'absolute' }}
                 />
             </>
@@ -349,7 +355,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             return this.handlePagination(e);
         } else {
             this.setState({ loading: true });
-            return grecaptcha.execute();
+            return window.grecaptcha.execute();
         }
     };
 
@@ -360,7 +366,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             ...this.state.data,
         });
         if (!response.success) {
-            grecaptcha.reset();
+            window.grecaptcha.reset();
         }
         this.setState({
             loading: false,

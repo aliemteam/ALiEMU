@@ -9,7 +9,7 @@ describe('<Pagination />', () => {
     });
     it('should render correctly', () => {
         const tree = renderer.create(
-            <Pagination value={3} total={5} onChange={jest.fn()} />,
+            <Pagination total={5} value={3} onChange={jest.fn()} />,
         );
         expect(tree).toMatchSnapshot();
     });

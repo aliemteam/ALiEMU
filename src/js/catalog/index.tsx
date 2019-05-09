@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import React, { Component, FormEvent } from 'react';
 
 import { Courses } from 'utils/api';
-import { ICourse } from 'utils/types';
+import { Course } from 'utils/types';
 
 import CourseListing from 'components/course-listing/';
 import Input from 'components/forms/input';
@@ -12,7 +12,7 @@ import Sidebar, { Duration } from './sidebar';
 import styles from './catalog.scss';
 
 export type CourseSubset = Pick<
-    ICourse,
+    Course,
     | 'categories'
     | 'description'
     | 'date_gmt'
@@ -21,7 +21,7 @@ export type CourseSubset = Pick<
     | 'link'
     | 'hours'
     | 'title'
-> & { _embedded: { [k: string]: any } };
+    > & { _embedded: { [k: string]: any } }; // eslint-disable-line
 
 export interface CatalogGlobals {
     categories: {
@@ -46,7 +46,7 @@ export default class Catalog extends Component {
     @observable categorySelection: number = 0;
     @observable durationSelection: Duration = Duration.NONE;
 
-    fetchCourses = flow(function*(this: Catalog): any {
+    fetchCourses = flow(function*(this: Catalog) {
         const courses: CourseSubset[] = yield Courses.fetchMany(
             {
                 _fields: [
@@ -155,9 +155,9 @@ export default class Catalog extends Component {
                 <div className={styles.search}>
                     <Input
                         raised
-                        type="search"
-                        placeholder="Search"
                         aria-label="course catalog search"
+                        placeholder="Search"
+                        type="search"
                         value={this.filterText}
                         onChange={this.handleFilterChange}
                     />
@@ -165,18 +165,17 @@ export default class Catalog extends Component {
                 <Sidebar
                     category={this.categorySelection}
                     duration={this.durationSelection}
-                    onDurationChange={this.setDuration}
                     onCategoryChange={this.setCategory}
+                    onDurationChange={this.setDuration}
                 />
-                <section id="content" className={styles.courseList}>
+                <section className={styles.courseList} id="content">
                     {this.courses.map(course => (
                         <CourseListing key={course.id} course={course} />
                     ))}
                 </section>
-                {/* tslint:disable-next-line:react-no-dangerous-html */}
                 <script
-                    type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: this.structuredData }}
+                    type="application/ld+json"
                 />
             </div>
         );

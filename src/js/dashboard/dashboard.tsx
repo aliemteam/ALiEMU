@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import UserStore, { UserKind } from 'dashboard/user-store';
 import DevTool from 'utils/dev-tools';
-import { ICoach, ILearner } from 'utils/types';
+import { Coach, Learner } from 'utils/types';
 
 import Content from './content';
 import Header from './header';
@@ -10,7 +10,7 @@ import Navbar from './navbar';
 
 export interface Globals {
     recent_comments: number[];
-    user: ICoach & ILearner;
+    user: Coach & Learner;
 }
 
 export const enum Tabs {
@@ -34,8 +34,8 @@ function Dashboard() {
             <DevTool />
             <Header store={store} />
             <Navbar
-                store={store}
                 currentTab={currentTab}
+                store={store}
                 onTabClick={setCurrentTab}
             />
             <Content currentTab={currentTab} store={store} />

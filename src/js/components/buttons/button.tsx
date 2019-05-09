@@ -12,7 +12,7 @@ import Spinner from 'components/spinner';
 
 import styles from './button.scss';
 
-interface Props extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
+export interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
     children: string;
     intent?: Intent;
     loading?: boolean;
@@ -20,7 +20,7 @@ interface Props extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
     type?: 'button' | 'reset' | 'submit';
 }
 
-class Button extends PureComponent<Props> {
+class Button extends PureComponent<ButtonProps> {
     static defaultProps = {
         onClick: () => void 0,
     };
@@ -53,10 +53,10 @@ class Button extends PureComponent<Props> {
         return (
             <button
                 {...props}
+                className={classname}
+                disabled={props.disabled || loading}
                 role={href ? 'link' : undefined}
                 style={computedStyle}
-                disabled={props.disabled || loading}
-                className={classname}
                 onClick={this.handleClick}
             >
                 <span>{children}</span>
@@ -70,7 +70,7 @@ class Button extends PureComponent<Props> {
     }
 
     private handleClick = (e: MouseEvent<HTMLButtonElement>): void => {
-        const { href, loading, onClick } = this.props;
+        const { href, loading, onClick = () => void 0 } = this.props;
         if (loading) {
             return e.preventDefault();
         }
@@ -78,9 +78,8 @@ class Button extends PureComponent<Props> {
             window.location.href = href;
             return;
         }
-        onClick!(e);
+        onClick(e);
     };
 }
 
-export { Props as ButtonProps };
 export default Button;

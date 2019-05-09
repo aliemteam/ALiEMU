@@ -20,6 +20,13 @@ export interface FeedbackGlobals {
 
 declare const AU_Feedback: FeedbackGlobals;
 
+declare global {
+    interface Window {
+        grecaptcha: ReCaptchaV2.ReCaptcha;
+        handleSubmit(token: string): Promise<void>;
+    }
+}
+
 interface State {
     data: {
         name: string;
@@ -46,13 +53,13 @@ export default class Feedback extends Component<{}, State> {
     };
 
     componentDidMount() {
-        (window as any).handleSubmit = this.handleSubmit;
+        window.handleSubmit = this.handleSubmit;
     }
 
     handleValidate = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         this.setState({ loading: true });
-        grecaptcha.execute();
+        window.grecaptcha.execute();
     };
 
     handleSubmit = async (token: string): Promise<void> => {
@@ -94,11 +101,11 @@ export default class Feedback extends Component<{}, State> {
                     {this.maybeRenderFields()}
                 </form>
                 <div
-                    id="recaptcha"
                     className="g-recaptcha"
-                    data-sitekey="6LcsqWgUAAAAABL-m1UecnZLk3Ijg7l-9kyrNfi_"
                     data-callback="handleSubmit"
+                    data-sitekey="6LcsqWgUAAAAABL-m1UecnZLk3Ijg7l-9kyrNfi_"
                     data-size="invisible"
+                    id="recaptcha"
                 />
             </Card>
         );
@@ -115,37 +122,37 @@ export default class Feedback extends Component<{}, State> {
                 <>
                     <div className={styles.inputContainer}>
                         <Input
-                            name="name"
-                            label="Name"
-                            value={name}
-                            disabled={loading}
-                            onChange={this.handleChange}
                             required
+                            disabled={loading}
+                            label="Name"
+                            name="name"
+                            value={name}
+                            onChange={this.handleChange}
                         />
                         <Input
+                            required
+                            disabled={loading}
+                            label="Email"
                             name="email"
                             type="email"
-                            label="Email"
                             value={email}
-                            disabled={loading}
                             onChange={this.handleChange}
-                            required
                         />
                     </div>
                     <Textarea
-                        name="message"
+                        required
+                        disabled={loading}
                         label="Message"
+                        name="message"
                         rows={8}
                         value={message}
-                        disabled={loading}
                         onChange={this.handleChange}
-                        required
                     />
                     <div className={styles.send}>
                         <Button
-                            loading={loading}
                             disabled={notice !== undefined}
                             intent={Intent.PRIMARY}
+                            loading={loading}
                         >
                             Send
                         </Button>

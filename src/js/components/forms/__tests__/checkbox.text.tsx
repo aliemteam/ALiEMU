@@ -7,7 +7,7 @@ it('should render correctly', () => {
     const tree = renderer.create(
         <>
             <Checkbox label="Unchecked" />
-            <Checkbox label="Checked" checked />
+            <Checkbox checked label="Checked" />
         </>,
     );
     expect(tree).toMatchSnapshot();

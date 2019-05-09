@@ -40,9 +40,9 @@ class ActivationNoticePre extends PureComponent<Props, State> {
                     <div style={{ display: 'grid', gap: 10 }}>
                         <div>Your account is awaiting email verification.</div>
                         <Button
-                            type="button"
                             intent={Intent.PRIMARY}
                             loading={loading}
+                            type="button"
                             onClick={this.handleClick}
                         >
                             Resend activation email

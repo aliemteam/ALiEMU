@@ -1,14 +1,14 @@
 import { flow, observable, set, toJS } from 'mobx';
 
 import { Users } from 'utils/api';
-import { ICoach, ILearner } from 'utils/types';
+import { Coach, Learner } from 'utils/types';
 
 export const enum UserKind {
     OWNER = 'owner',
     VISITOR = 'visitor',
 }
 
-type ProfileUser = ICoach & ILearner;
+type ProfileUser = Coach & Learner;
 
 export default class UserStore {
     readonly userKind: UserKind;
@@ -16,10 +16,7 @@ export default class UserStore {
 
     user: ProfileUser;
 
-    updateUser = flow(function*(
-        this: UserStore,
-        data: Partial<ProfileUser>,
-    ): IterableIterator<any> {
+    updateUser = flow(function*(this: UserStore, data: Partial<ProfileUser>) {
         const oldUser = toJS(this.user);
         set(this.user, { ...data });
         try {

@@ -3,7 +3,7 @@ import React, { HTMLProps, PureComponent } from 'react';
 
 import styles from './anchor-button.scss';
 
-interface Props extends HTMLProps<HTMLAnchorElement> {}
+type Props = HTMLProps<HTMLAnchorElement>;
 
 export default class Button extends PureComponent<Props> {
     static defaultProps = {
@@ -23,9 +23,9 @@ export default class Button extends PureComponent<Props> {
         return (
             <a
                 {...btnProps}
+                className={classname}
                 role="button"
                 tabIndex={disabled ? -1 : 0}
-                className={classname}
                 onClick={disabled ? undefined : onClick}
             >
                 {children}

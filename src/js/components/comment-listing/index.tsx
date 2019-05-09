@@ -48,24 +48,24 @@ export default function CommentListing({ commentId }: Props) {
 
 const LoadingListing = (props: IContentLoaderProps) => (
     <ContentLoader
+        className={classNames('no-inherit', styles.card)}
         height={100}
-        width={475}
-        speed={2}
         primaryColor="#f3f3f3"
         secondaryColor="#ecebeb"
-        className={classNames('no-inherit', styles.card)}
+        speed={2}
         style={{ padding: 0 }}
+        width={475}
         {...props}
     >
-        <rect x="14" y="15" rx="3" ry="3" width="115.5" height="10.5" />
-        <rect x="146" y="15" rx="3" ry="3" width="165" height="10.5" />
-        <rect x="328" y="15" rx="3" ry="3" width="132" height="10.5" />
-        <rect x="14" y="36" rx="3" ry="3" width="215" height="10.5" />
-        <rect x="245" y="36" rx="3" ry="3" width="215" height="10.5" />
-        <rect x="14" y="57" rx="3" ry="3" width="149" height="10.5" />
-        <rect x="179.06" y="57" rx="3" ry="3" width="99" height="10.5" />
-        <rect x="295" y="57" rx="3" ry="3" width="165" height="10.5" />
-        <rect x="14" y="78" rx="3" ry="3" width="190" height="10.5" />
-        <rect x="220" y="78" rx="3" ry="3" width="240" height="10.5" />
+        <rect height="10.5" rx="3" ry="3" width="115.5" x="14" y="15" />
+        <rect height="10.5" rx="3" ry="3" width="165" x="146" y="15" />
+        <rect height="10.5" rx="3" ry="3" width="132" x="328" y="15" />
+        <rect height="10.5" rx="3" ry="3" width="215" x="14" y="36" />
+        <rect height="10.5" rx="3" ry="3" width="215" x="245" y="36" />
+        <rect height="10.5" rx="3" ry="3" width="149" x="14" y="57" />
+        <rect height="10.5" rx="3" ry="3" width="99" x="179.06" y="57" />
+        <rect height="10.5" rx="3" ry="3" width="165" x="295" y="57" />
+        <rect height="10.5" rx="3" ry="3" width="190" x="14" y="78" />
+        <rect height="10.5" rx="3" ry="3" width="240" x="220" y="78" />
     </ContentLoader>
 );

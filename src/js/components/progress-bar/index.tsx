@@ -10,21 +10,18 @@ interface Props {
 }
 
 export default class ProgressBar extends PureComponent<Props> {
-    static defaultProps = {
-        min: 0,
-    };
     render(): JSX.Element {
-        const { max, min, value } = this.props;
+        const { max, min = 0, value } = this.props;
         const style = {
-            width: `${((value - min!) / (max - min!)) * 100}%`,
+            width: `${((value - min) / (max - min)) * 100}%`,
         };
         return (
             <div
+                aria-valuemax={max}
+                aria-valuemin={min}
+                aria-valuenow={value}
                 className={styles.progressBar}
                 role="progressbar"
-                aria-valuemin={min!}
-                aria-valuenow={value}
-                aria-valuemax={max}
             >
                 <div className={styles.progressMeter} style={style} />
             </div>

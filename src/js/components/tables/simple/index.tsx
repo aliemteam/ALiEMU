@@ -53,8 +53,8 @@ export default class SimpleTable extends BaseTable<Props, State> {
 
     state = {
         page: 1,
-        sortOrder: this.props.defaultSortOrder!,
-        sortKey: this.props.defaultSortKey!,
+        sortOrder: this.props.defaultSortOrder || SortOrder.ASC,
+        sortKey: this.props.defaultSortKey || '',
     };
 
     handleSortClick = (e: React.MouseEvent<HTMLElement>): void => {
@@ -105,7 +105,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
                 {this.maybeRenderCaption(uid)}
                 <Card className={styles.container}>
                     {!isEmpty && (
-                        <table className={tableClass} aria-labelledby={uid}>
+                        <table aria-labelledby={uid} className={tableClass}>
                             {this.maybeRenderHeader()}
                             {this.renderBody()}
                         </table>
@@ -137,16 +137,16 @@ export default class SimpleTable extends BaseTable<Props, State> {
     };
 
     private maybeRenderPagination = (): React.ReactNode => {
-        const { rowsPerPage, rows } = this.props;
+        const { rowsPerPage = Infinity, rows } = this.props;
         const { page } = this.state;
-        if (rowsPerPage! > rows.length) {
+        if (rowsPerPage > rows.length) {
             return null;
         }
         return (
             <Pagination
                 align="right"
+                total={Math.ceil(rows.length / rowsPerPage)}
                 value={page}
-                total={Math.ceil(rows.length / rowsPerPage!)}
                 onChange={this.handlePageChange}
             />
         );
@@ -169,14 +169,14 @@ export default class SimpleTable extends BaseTable<Props, State> {
         this.state.sortKey ? rows.sort(this.sortRows) : rows;
 
     private renderBody = (): JSX.Element => {
-        const { header, rows, rowsPerPage } = this.props;
+        const { header, rows, rowsPerPage = Infinity } = this.props;
         if (header) {
             const { page } = this.state;
-            const startIndex = (page - 1) * rowsPerPage! || 0;
+            const startIndex = (page - 1) * rowsPerPage || 0;
             return (
                 <tbody>
                     {this.maybeSortRows([...rows])
-                        .slice(startIndex, startIndex + rowsPerPage!)
+                        .slice(startIndex, startIndex + rowsPerPage)
                         .map(this.renderRow)}
                 </tbody>
             );
@@ -186,7 +186,7 @@ export default class SimpleTable extends BaseTable<Props, State> {
 
     private renderHeaderCell = (cell: HeaderCell): JSX.Element => {
         const { content, width, kind, sortable, ...props } = cell;
-        const { sortKey, sortOrder } = this.state;
+        const { sortKey, sortOrder = SortOrder.ASC } = this.state;
         const style = {
             width,
             cursor: sortable ? 'pointer' : 'default',
@@ -196,9 +196,9 @@ export default class SimpleTable extends BaseTable<Props, State> {
                 aria-sort={
                     sortable && sortKey === props.key ? sortOrder : undefined
                 }
-                style={style}
                 data-sort-key={props.key}
                 data-sortable={sortable}
+                style={style}
                 onClick={this.handleSortClick}
                 {...this.cellKind(kind)}
                 {...props}
@@ -206,8 +206,8 @@ export default class SimpleTable extends BaseTable<Props, State> {
                 {typeof content === 'string' ? <span>{content}</span> : content}
                 {sortable && (
                     <SortIcon
-                        order={sortOrder!}
                         active={sortKey === props.key}
+                        order={sortOrder}
                     />
                 )}
             </th>
@@ -216,7 +216,10 @@ export default class SimpleTable extends BaseTable<Props, State> {
 
     private sortRows = (a: Row, b: Row): number => {
         const { sortKey, sortOrder } = this.state;
-        const { cells } = this.props.header!;
+        if (!this.props.header) {
+            throw new Error('Header not defined.');
+        }
+        const { cells } = this.props.header;
         const sortIndex = cells.findIndex(
             cell => cell.key === sortKey && cell.sortable === true,
         );

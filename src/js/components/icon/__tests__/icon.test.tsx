@@ -10,7 +10,7 @@ describe('<Icon />', () => {
     });
     it('should render an account_circle icon with custom attributes', () => {
         const tree = renderer.create(
-            <Icon icon="account_circle" size={50} color="red" />,
+            <Icon color="red" icon="account_circle" size={50} />,
         );
         expect(tree).toMatchSnapshot();
     });

@@ -59,12 +59,13 @@ export abstract class AbstractModal<P = {}, S = {}> extends PureComponent<
     protected abstract renderContent(): JSX.Element;
 
     private renderModal = (): JSX.Element => (
-        // tslint:disable-next-line:react-a11y-event-has-role
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
             className={styles.modal}
             onClick={this.handleOutsideClick}
             onKeyDown={this.handleKeyDown}
         >
+            {/* eslint-disable-next-line */}
             <div role="dialog" onClick={this.stopClickPropagation}>
                 {this.renderContent()}
             </div>
@@ -78,7 +79,7 @@ export abstract class AbstractModal<P = {}, S = {}> extends PureComponent<
         }
     };
 
-    private stopClickPropagation = (e: React.MouseEvent<any>) => {
+    private stopClickPropagation = (e: React.MouseEvent) => {
         e.stopPropagation();
         e.nativeEvent.stopImmediatePropagation();
     };

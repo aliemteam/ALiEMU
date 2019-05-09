@@ -11,8 +11,8 @@ it('should render correctly', () => {
             <Textarea disabled label="Labelled Disabled Textarea" />
             <Textarea defaultValue="12345" maxLength={10} />
             <Textarea
-                label="Labelled with maxlength"
                 defaultValue="12345"
+                label="Labelled with maxlength"
                 maxLength={10}
             />
         </>,

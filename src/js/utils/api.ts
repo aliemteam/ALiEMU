@@ -1,5 +1,5 @@
 // tslint:disable:await-promise
-import { ICoach, ICourse, ILearner } from 'utils/types';
+import { Coach, Course, Learner } from 'utils/types';
 
 interface Params {
     [k: string]: string | number | boolean | string[] | number[];
@@ -22,16 +22,16 @@ export class Courses {
     // {{{
     private static endpoint = '/wp-json/aliemu/v1/courses';
 
-    static async fetchOne(id: number, params?: Params): Promise<ICourse> {
-        return _get<ICourse>(`${Courses.endpoint}/${id}`, params);
+    static async fetchOne(id: number, params?: Params): Promise<Course> {
+        return _get<Course>(`${Courses.endpoint}/${id}`, params);
     }
 
     static async fetchMany(
         params: Params = {},
         startPage = 1,
         endPage = Infinity,
-    ): Promise<ICourse[]> {
-        return _getMany<ICourse>(Courses.endpoint, params, startPage, endPage);
+    ): Promise<Course[]> {
+        return _getMany<Course>(Courses.endpoint, params, startPage, endPage);
     }
     // }}}
 }
@@ -40,20 +40,20 @@ export class Groups {
     // {{{
     private static endpoint = '/wp-json/wp/v2/users/me/groups';
 
-    static async fetchCoaches(params: Params = {}): Promise<ICoach[]> {
-        return _getMany<ICoach>(`${Groups.endpoint}/coaches`, params);
+    static async fetchCoaches(params: Params = {}): Promise<Coach[]> {
+        return _getMany<Coach>(`${Groups.endpoint}/coaches`, params);
     }
 
-    static async addCoach(email: string): Promise<ICoach> {
-        return _post<ICoach>(`${Groups.endpoint}/coaches`, { email });
+    static async addCoach(email: string): Promise<Coach> {
+        return _post<Coach>(`${Groups.endpoint}/coaches`, { email });
     }
 
     static async removeCoach(id: number): Promise<void> {
         return _delete(`${Groups.endpoint}/coaches/${id}`);
     }
 
-    static async fetchLearners(params: Params = {}): Promise<ILearner[]> {
-        return _getMany<ILearner>(`${Groups.endpoint}/learners`, params);
+    static async fetchLearners(params: Params = {}): Promise<Learner[]> {
+        return _getMany<Learner>(`${Groups.endpoint}/learners`, params);
     }
 
     static async removeLearner(id: number): Promise<void> {

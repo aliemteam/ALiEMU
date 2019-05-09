@@ -14,10 +14,10 @@ import Input from 'components/forms/input';
 interface Props {
     children?: string;
     inputProps?: Omit<HTMLProps<HTMLInputElement>, 'ref'>;
-    buttonProps?: HTMLProps<Element>;
+    buttonProps?: Omit<HTMLProps<HTMLAnchorElement>, 'ref'>;
     buttonElement?: SFC<HTMLProps<HTMLButtonElement>>;
     placeholder?: string;
-    onSave(value: string): any;
+    onSave(value: string): void;
 }
 
 interface State {
@@ -60,7 +60,7 @@ export default class ClickToEdit extends Component<Props, State> {
         return Button ? (
             <Button onClick={this.toggleEdit} />
         ) : (
-            <AnchorButton {...buttonProps as any} onClick={this.toggleEdit}>
+            <AnchorButton {...buttonProps} onClick={this.toggleEdit}>
                 {value}
             </AnchorButton>
         );
@@ -74,9 +74,9 @@ export default class ClickToEdit extends Component<Props, State> {
                 {...inputProps}
                 inputRef={this.ref}
                 value={value}
-                onKeyUp={this.handleKeyUp}
                 onBlur={this.handleBlur}
                 onChange={this.handleChange}
+                onKeyUp={this.handleKeyUp}
             />
         ) : null;
     };

@@ -38,9 +38,9 @@ export default class CourseListing extends React.PureComponent<Props> {
         };
         return (
             <article
-                className={styles.listing}
-                aria-labelledby={labels.title}
                 aria-describedby={labels.hours + ' ' + labels.desc}
+                aria-labelledby={labels.title}
+                className={styles.listing}
             >
                 {media && (
                     <div
@@ -72,10 +72,11 @@ export default class CourseListing extends React.PureComponent<Props> {
                             <span className={styles.newTag}>new</span>
                         )}
                         <a
-                            id={`${labels.title}`}
-                            role="heading"
                             aria-level={1}
                             href={link}
+                            id={`${labels.title}`}
+                            // eslint-disable-next-line
+                            role="heading"
                         >
                             {displayUnicode(title)}
                         </a>
@@ -86,7 +87,7 @@ export default class CourseListing extends React.PureComponent<Props> {
                         </strong>
                     )}
                 </div>
-                <div id={labels.desc} className={styles.desc}>
+                <div className={styles.desc} id={labels.desc}>
                     {description}
                 </div>
             </article>

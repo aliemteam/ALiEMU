@@ -7,7 +7,7 @@ it('should render correctly', () => {
     const tree = renderer.create(
         <>
             <DateInput value="2018/11/12" />
-            <DateInput value="201" delimiter="." />
+            <DateInput delimiter="." value="201" />
         </>,
     );
     expect(tree).toMatchSnapshot();

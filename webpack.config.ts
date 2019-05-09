@@ -30,7 +30,7 @@ Text Domain: aliemu
 
 const rimraf = promisify(rimrafLib);
 
-export default async (_: any, argv: any): Promise<Configuration> => {
+export default async (_: never, argv: any): Promise<Configuration> => { // eslint-disable-line
     const IS_PRODUCTION = argv.mode === 'production';
 
     await rimraf(path.join(__dirname, 'dist', '*'));
@@ -68,7 +68,7 @@ export default async (_: any, argv: any): Promise<Configuration> => {
             {
                 from: 'assets/**',
                 ignore: ['assets/icons'],
-                transform(content: any, contentPath) {
+                async transform(content, contentPath) {
                     if (!IS_PRODUCTION) {
                         return content;
                     }

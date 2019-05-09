@@ -24,7 +24,7 @@ export default class Notice extends PureComponent<Props> {
         });
         return (
             <div className={className}>
-                {intent && <IntentIcon size={22} intent={intent} />}
+                {intent && <IntentIcon intent={intent} size={22} />}
                 <div>
                     {title && <h1 className={styles.heading}>{title}</h1>}
                     {children}

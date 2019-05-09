@@ -9,7 +9,7 @@ import { HeaderRow, Row } from 'components/tables/base';
 import UserStore from 'dashboard/user-store';
 import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
-import { ILearner } from 'utils/types';
+import { Learner } from 'utils/types';
 
 import ButtonOutlined from 'components/buttons/button-outlined';
 import DateInput from 'components/forms/date-input';
@@ -33,7 +33,7 @@ const { AU_NONCE } = window;
 
 @observer
 export default class TabProgress extends React.Component<Props> {
-    learners = observable.array<ILearner>([], { deep: true });
+    learners = observable.array<Learner>([], { deep: true });
     tagFilters = observable.array<string>([], { deep: false });
 
     @observable
@@ -50,9 +50,9 @@ export default class TabProgress extends React.Component<Props> {
 
     dateRangeForm = React.createRef<HTMLFormElement>();
 
-    fetchLearners = flow(function*(this: TabProgress): IterableIterator<any> {
-        const learners: ILearner[] = yield Groups.fetchLearners();
-        this.learners.replace([this.props.store.user as ILearner, ...learners]);
+    fetchLearners = flow(function*(this: TabProgress) {
+        const learners: Learner[] = yield Groups.fetchLearners();
+        this.learners.replace([this.props.store.user as Learner, ...learners]);
         this.learnersAreLoading = false;
     }).bind(this);
 
@@ -80,13 +80,13 @@ export default class TabProgress extends React.Component<Props> {
     }
 
     @computed
-    get selectedLearner(): ILearner {
+    get selectedLearner(): Learner {
         return (
             this.learners.find(({ id }) => id === this.selectedLearnerId) ||
             this.props.store.user
         );
     }
-    set selectedLearner({ id }: ILearner) {
+    set selectedLearner({ id }: Learner) {
         this.selectedLearnerId = id;
     }
 
@@ -142,20 +142,20 @@ export default class TabProgress extends React.Component<Props> {
             <>
                 <LearnerView
                     key={this.selectedLearner.id}
-                    learner={this.selectedLearner}
                     dateRange={this.dateRange}
+                    learner={this.selectedLearner}
                 />
                 <SimpleTable
                     caption={this.renderTableCaption}
                     header={header}
+                    isEmpty={this.learnersAreLoading}
+                    isLoading={this.learnersAreLoading}
                     rows={this.learnerRows}
                     rowsPerPage={5}
-                    isLoading={this.learnersAreLoading}
-                    isEmpty={this.learnersAreLoading}
                 />
                 <datalist id="tag-list">
                     {this.tagList.map(t => (
-                        <option key={t} value={t} role="listitem" />
+                        <option key={t} value={t} />
                     ))}
                 </datalist>
             </>
@@ -168,32 +168,32 @@ export default class TabProgress extends React.Component<Props> {
                 <div className={styles.captionLeft}>
                     <SectionHeading id={id}>My Learners</SectionHeading>
                     {this.tagFilters.map(t => (
-                        <Tag onClick={this.handleTagClick} key={t}>
+                        <Tag key={t} onClick={this.handleTagClick}>
                             {t}
                         </Tag>
                     ))}
                 </div>
                 <form
-                    method="GET"
-                    className={styles.exportLearnerForm}
                     ref={this.dateRangeForm}
+                    className={styles.exportLearnerForm}
+                    method="GET"
                 >
                     <input
-                        type="hidden"
                         name="action"
+                        type="hidden"
                         value="export_learner_data"
                     />
-                    <input type="hidden" name="nonce" value={AU_NONCE} />
+                    <input name="nonce" type="hidden" value={AU_NONCE} />
                     <DateInput
-                        value={this.startDateFilter}
                         name="start_date"
                         placeholder="Start date"
+                        value={this.startDateFilter}
                         onChange={this.handleStartDateChange}
                     />
                     <DateInput
-                        value={this.endDateFilter}
                         name="end_date"
                         placeholder="End date"
+                        value={this.endDateFilter}
                         onChange={this.handleEndDateChange}
                     />
                     <Button>Export learner data</Button>
@@ -209,7 +209,7 @@ export default class TabProgress extends React.Component<Props> {
         learner_tags,
         last_name,
         course_progress,
-    }: ILearner): Row => {
+    }: Learner): Row => {
         const completed = course_progress.filter(progress => {
             const { activity_completed } = progress;
             if (!isWithinDateRange(activity_completed, this.dateRange)) {
@@ -234,7 +234,7 @@ export default class TabProgress extends React.Component<Props> {
                     key: `${id}-tags`,
                     kind: String,
                     content: learner_tags.map(t => (
-                        <Tag onClick={this.handleTagClick} key={t}>
+                        <Tag key={t} onClick={this.handleTagClick}>
                             {t}
                         </Tag>
                     )),
@@ -256,9 +256,9 @@ export default class TabProgress extends React.Component<Props> {
                     key: `${id}-actions`,
                     content: (
                         <ButtonOutlined
-                            intent={Intent.PRIMARY}
                             data-user={id}
                             disabled={this.selectedLearnerId === id}
+                            intent={Intent.PRIMARY}
                             onClick={this.handleLearnerSelect}
                         >
                             View

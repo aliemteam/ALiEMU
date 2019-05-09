@@ -13,15 +13,15 @@ interface MsgParams {
     onDismiss?(): void;
 }
 
-interface Msg extends MsgParams {
+export interface Msg extends MsgParams {
     key: number;
 }
 
-interface Context {
+export interface MessageContext {
     dispatchMessage(message: MsgParams): void;
 }
 
-const { Consumer, Provider } = createContext<Context>({
+const { Consumer, Provider } = createContext<MessageContext>({
     dispatchMessage: () => void 0,
 });
 
@@ -29,7 +29,7 @@ interface State {
     messages: Msg[];
 }
 
-class MessageHub extends PureComponent<{}, State> {
+export default class MessageHub extends PureComponent<{}, State> {
     private static counter = 0;
 
     state: State = {
@@ -42,8 +42,8 @@ class MessageHub extends PureComponent<{}, State> {
                 <>
                     {this.props.children}
                     <Manager
-                        messages={this.state.messages}
                         dismiss={this.dismiss}
+                        messages={this.state.messages}
                     />
                 </>
             </Provider>
@@ -71,8 +71,9 @@ class MessageHub extends PureComponent<{}, State> {
     };
 }
 
+/* eslint-disable */
 // FIXME: types are being a pain in my ass here
-function withMessageDispatcher(C: any) {
+export function withMessageDispatcher(C: any) {
     return (props: any) => (
         <Consumer>
             {({ dispatchMessage }) => (
@@ -81,6 +82,3 @@ function withMessageDispatcher(C: any) {
         </Consumer>
     );
 }
-
-export { Context as MessageContext, Msg, withMessageDispatcher };
-export default MessageHub;

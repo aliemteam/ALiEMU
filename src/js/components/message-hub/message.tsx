@@ -8,12 +8,12 @@ import { IntentIcon } from 'components/icon';
 
 import * as styles from './message.scss';
 
-interface IProps {
+interface Props {
     readonly message: Msg;
     dismiss(message: Msg): void;
 }
 
-const Message = ({ dismiss, message }: IProps): JSX.Element => {
+const Message = ({ dismiss, message }: Props): JSX.Element => {
     const { actions, details, intent, text } = message;
     const onClick = () => dismiss(message);
     return (
@@ -29,7 +29,7 @@ const Message = ({ dismiss, message }: IProps): JSX.Element => {
                     {details && <div>{details}</div>}
                 </div>
                 <div className={styles.dismiss}>
-                    <ButtonIcon onClick={onClick} icon="close" />
+                    <ButtonIcon icon="close" onClick={onClick} />
                 </div>
                 {actions && (
                     <div className={styles.actions}>

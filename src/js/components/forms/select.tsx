@@ -23,7 +23,7 @@ export default class Select extends PureComponent<Props> {
         } = this.props;
         const classname = classNames(styles.select, className);
         return (
-            <MaybeLabel label={label} disabled={props.disabled}>
+            <MaybeLabel disabled={props.disabled} label={label}>
                 <select {...props} className={classname}>
                     <>
                         <option key="empty" value="">

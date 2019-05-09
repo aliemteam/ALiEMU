@@ -10,5 +10,6 @@ declare module '*.scss' {
 
 declare module '*.svg' {
     import * as React from 'react';
+    // eslint-disable-next-line react/display-name
     export default class extends React.Component<any> {}
 }

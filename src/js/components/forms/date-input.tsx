@@ -21,16 +21,10 @@ function DateInput({
     return (
         <Input
             {...props}
+            pattern="\d{4}/\d{2}/\d{2}"
+            type="search"
             validityMessage="Date must be in the form 'YYYY/MM/DD'"
             value={inputValue}
-            type="search"
-            pattern="\d{4}/\d{2}/\d{2}"
-            onKeyPress={e => {
-                const code = e.key.charCodeAt(0);
-                if (code < 48 || 57 < code) {
-                    e.preventDefault();
-                }
-            }}
             onChange={e => {
                 const { value: currentValue } = e.currentTarget;
                 const previousLength = inputValue.length;
@@ -55,6 +49,12 @@ function DateInput({
                             ? currentValue.slice(0, -1)
                             : currentValue,
                     );
+                }
+            }}
+            onKeyPress={e => {
+                const code = e.key.charCodeAt(0);
+                if (code < 48 || 57 < code) {
+                    e.preventDefault();
                 }
             }}
         />

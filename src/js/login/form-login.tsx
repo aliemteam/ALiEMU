@@ -64,36 +64,35 @@ export default class LoginForm extends PureComponent<Props, State> {
             <>
                 <Input
                     required
-                    autoFocus
-                    label="Username or Email"
-                    disabled={loading}
                     autoComplete="username"
+                    disabled={loading}
+                    label="Username or Email"
                     name="user_login"
                     value={user_login}
                     onChange={this.handleChange}
                 />
                 <Input
                     required
-                    label="Password"
-                    disabled={loading}
                     autoComplete="current-password"
-                    type="password"
+                    disabled={loading}
+                    label="Password"
                     name="user_password"
+                    type="password"
                     value={user_password}
                     onChange={this.handleChange}
                 />
                 <div className={styles.metaRow}>
                     <Checkbox
+                        checked={remember}
                         disabled={loading}
                         label="Remember me"
                         name="remember"
-                        checked={remember}
                         onChange={this.handleChange}
                     />
                     <AnchorButton
-                        disabled={loading}
                         className={styles.anchorButton}
                         data-form={FormKind.RESET}
+                        disabled={loading}
                         onClick={this.props.onForgotClick}
                     >
                         Forgot your password?

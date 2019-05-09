@@ -20,18 +20,18 @@ export default class ProgressDots extends PureComponent<Props> {
     render(): JSX.Element {
         const { currentStep, onStepClick, steps } = this.props;
         return (
-            <div role="tablist" className={styles.container}>
+            <div className={styles.container} role="tablist">
                 {[...Array(steps).keys()].map(k => (
                     <button
                         key={`progress-dots-${k}`}
-                        type="button"
+                        aria-selected={k === currentStep}
                         className={classNames(styles.dot, {
                             [styles.active]: k === currentStep,
                         })}
-                        role="tab"
-                        aria-selected={k === currentStep}
                         data-step={k}
+                        role="tab"
                         tabIndex={k === currentStep && onStepClick ? 0 : -1}
+                        type="button"
                         onClick={this.handleClick}
                     />
                 ))}

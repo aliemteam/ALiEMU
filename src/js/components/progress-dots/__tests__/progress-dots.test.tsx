@@ -4,6 +4,6 @@ import renderer from 'react-test-renderer';
 import ProgressDots from '../index';
 
 it('renders correctly', () => {
-    const tree = renderer.create(<ProgressDots steps={5} currentStep={3} />);
+    const tree = renderer.create(<ProgressDots currentStep={3} steps={5} />);
     expect(tree).toMatchSnapshot();
 });

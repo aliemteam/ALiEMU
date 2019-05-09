@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Groups } from 'utils/api';
 import { Intent } from 'utils/constants';
-import { ICoach, ILearner } from 'utils/types';
+import { Coach, Learner } from 'utils/types';
 
 import Button from 'components/buttons/button';
 import ButtonOutlined from 'components/buttons/button-outlined';
@@ -18,7 +18,7 @@ import { SectionHeading } from 'components/typography/headings';
 
 import styles from './tab-groups.scss';
 
-type Member = ILearner | ICoach;
+type Member = Learner | Coach;
 
 const enum MemberKind {
     LEARNER = 'learners',
@@ -43,7 +43,7 @@ class TabGroupsPre extends React.Component<MessageContext> {
     coaches = observable.array<Member>([], { deep: false });
     learners = observable.array<Member>([], { deep: false });
 
-    fetchGroups = flow(function*(this: TabGroupsPre): IterableIterator<any> {
+    fetchGroups = flow(function*(this: TabGroupsPre) {
         const [coaches, learners] = yield Promise.all([
             Groups.fetchCoaches(),
             Groups.fetchLearners(),
@@ -57,9 +57,9 @@ class TabGroupsPre extends React.Component<MessageContext> {
     removeMember = flow(function*(
         this: TabGroupsPre,
         e: React.MouseEvent<HTMLButtonElement>,
-    ): IterableIterator<any> {
+    ) {
         const kind = e.currentTarget.dataset.kind as MemberKind;
-        const id = parseInt(e.currentTarget.dataset.id!, 10);
+        const id = parseInt(e.currentTarget.dataset.id || '0', 10);
         if (!kind || isNaN(id)) {
             return;
         }
@@ -92,13 +92,13 @@ class TabGroupsPre extends React.Component<MessageContext> {
     addCoach = flow(function*(
         this: TabGroupsPre,
         e: React.FormEvent<HTMLFormElement>,
-    ): IterableIterator<any> {
+    ) {
         e.preventDefault();
         const email = this.emailInput;
         this.emailInput = '';
         this.coachesAreLoading = true;
         try {
-            const newCoach: ICoach = yield Groups.addCoach(email);
+            const newCoach: Coach = yield Groups.addCoach(email);
             this.coaches.push(newCoach);
         } catch (e) {
             this.props.dispatchMessage({
@@ -129,27 +129,27 @@ class TabGroupsPre extends React.Component<MessageContext> {
                 <SimpleTable
                     fixed
                     caption={this.coachesTableCaption}
+                    defaultSortKey="name"
+                    emptyState={this.emptyCoachesRenderer}
                     header={header}
+                    isEmpty={this.coaches.length === 0}
+                    isLoading={this.coachesAreLoading}
                     rows={this.coaches.map(
                         this.makeRowCreator(MemberKind.COACH),
                     )}
-                    emptyState={this.emptyCoachesRenderer}
-                    isEmpty={this.coaches.length === 0}
-                    isLoading={this.coachesAreLoading}
-                    defaultSortKey="name"
                     rowsPerPage={5}
                 />
                 <SimpleTable
                     fixed
                     caption={this.learnersTableCaption}
+                    defaultSortKey="name"
+                    emptyState={this.emptyLearnersRenderer}
                     header={header}
+                    isEmpty={this.learners.length === 0}
+                    isLoading={this.learnersAreLoading}
                     rows={this.learners.map(
                         this.makeRowCreator(MemberKind.LEARNER),
                     )}
-                    emptyState={this.emptyLearnersRenderer}
-                    isEmpty={this.learners.length === 0}
-                    isLoading={this.learnersAreLoading}
-                    defaultSortKey="name"
                     rowsPerPage={5}
                 />
             </>
@@ -201,19 +201,19 @@ class TabGroupsPre extends React.Component<MessageContext> {
     );
 
     private addCoachForm = () => (
-        <form onSubmit={this.addCoach} className={styles.addCoachForm}>
+        <form className={styles.addCoachForm} onSubmit={this.addCoach}>
             <Input
                 required
-                type="email"
-                placeholder="Email address"
                 aria-label="Add a coach using their email address"
+                placeholder="Email address"
+                type="email"
                 value={this.emailInput}
                 onChange={this.handleEmailChange}
             />
             <Button
-                type="submit"
-                style={{ backgroundColor: '#345995' }}
                 intent={Intent.PRIMARY}
+                style={{ backgroundColor: '#345995' }}
+                type="submit"
             >
                 Add coach
             </Button>
@@ -255,8 +255,8 @@ class TabGroupsPre extends React.Component<MessageContext> {
                     key: `actions-${id}`,
                     content: (
                         <ButtonOutlined
-                            data-kind={kind}
                             data-id={id}
+                            data-kind={kind}
                             intent={Intent.DANGER}
                             onClick={this.removeMember}
                         >

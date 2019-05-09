@@ -7,7 +7,7 @@ import { HeaderRow, Row } from 'components/tables/base';
 import { Courses, Groups } from 'utils/api';
 import { CourseStatus, Intent } from 'utils/constants';
 import { displayUnicode } from 'utils/text-utils';
-import { ICourse, ILearner } from 'utils/types';
+import { Course, Learner } from 'utils/types';
 import { DateRange, isWithinDateRange } from './';
 import styles from './learner-view.scss';
 
@@ -21,7 +21,7 @@ import Tag from 'components/tag/';
 import { SectionHeading } from 'components/typography/headings';
 
 type Props = {
-    learner: ILearner;
+    learner: Learner;
     dateRange?: DateRange;
 } & MessageContext;
 
@@ -30,24 +30,21 @@ class LearnerViewPre extends React.Component<Props> {
     @observable
     coursesLoading = true;
 
-    courses = observable.map<number, ICourse>([], { deep: false });
+    courses = observable.map<number, Course>([], { deep: false });
 
-    fetchCourses = flow(function*(this: LearnerViewPre): IterableIterator<any> {
+    fetchCourses = flow(function*(this: LearnerViewPre) {
         this.coursesLoading = true;
         this.courses.clear();
 
         const include = this.props.learner.course_progress.map(({ id }) => id);
-        const courses: ICourse[] =
+        const courses: Course[] =
             include.length > 0 ? yield Courses.fetchMany({ include }) : [];
 
         this.courses.replace(courses.map(course => [course.id, course]));
         this.coursesLoading = false;
     });
 
-    handleRemoveTag = flow(function*(
-        this: LearnerViewPre,
-        tag: string,
-    ): IterableIterator<any> {
+    handleRemoveTag = flow(function*(this: LearnerViewPre, tag: string) {
         const { learner } = this.props;
         const oldTags = learner.learner_tags.slice();
         learner.learner_tags = learner.learner_tags.filter(t => t !== tag);
@@ -64,10 +61,7 @@ class LearnerViewPre extends React.Component<Props> {
         }
     }).bind(this);
 
-    handleAddTag = flow(function*(
-        this: LearnerViewPre,
-        tag: string,
-    ): IterableIterator<any> {
+    handleAddTag = flow(function*(this: LearnerViewPre, tag: string) {
         const { learner } = this.props;
         const oldTags = learner.learner_tags.slice();
         if (oldTags.includes(tag)) {
@@ -94,17 +88,21 @@ class LearnerViewPre extends React.Component<Props> {
     render(): JSX.Element {
         const { avatar_urls, id, learner_tags, name } = this.props.learner;
         return (
-            <div className={styles.containerOuter} key={id}>
+            <div key={id} className={styles.containerOuter}>
                 <h1 className={styles.name}>{name}</h1>
                 <div className={styles.containerInner}>
-                    <img className={styles.img} src={avatar_urls[150]} />
+                    <img
+                        alt="User avatar"
+                        className={styles.img}
+                        src={avatar_urls[150]}
+                    />
                     <div className={styles.metadata}>
                         <div className={styles.tagHeading}>
                             <SectionHeading>Tags</SectionHeading>
                             <ClickToEdit
                                 buttonElement={addTagButton}
-                                onSave={this.handleAddTag}
                                 inputProps={{ list: 'tag-list' }}
+                                onSave={this.handleAddTag}
                             />
                         </div>
                         <div className={styles.tagContainer}>
@@ -117,15 +115,15 @@ class LearnerViewPre extends React.Component<Props> {
                     </div>
                 </div>
                 <SimpleTable
-                    header={header}
                     caption="Course Progress"
                     containerClassName={styles.tableContainer}
+                    defaultSortKey="status"
+                    emptyState={emptyProgress}
+                    header={header}
+                    isEmpty={this.courses.size === 0}
+                    isLoading={this.coursesLoading}
                     rows={[...this.courseProgressRows]}
                     rowsPerPage={5}
-                    defaultSortKey="status"
-                    isLoading={this.coursesLoading}
-                    isEmpty={this.courses.size === 0}
-                    emptyState={emptyProgress}
                 />
             </div>
         );
@@ -155,7 +153,10 @@ class LearnerViewPre extends React.Component<Props> {
             .map(progress => {
                 const { id, status } = progress;
                 const isCompleted = status === CourseStatus.COMPLETED;
-                const course = this.courses.get(id)!;
+                const course = this.courses.get(id);
+                if (!course) {
+                    throw new Error(`Could not retrieve course id "${id}"`);
+                }
                 return {
                     key: id,
                     height: 50,
@@ -169,8 +170,8 @@ class LearnerViewPre extends React.Component<Props> {
                             content: (
                                 <ProgressRadial
                                     diameter={30}
-                                    thickness={3}
                                     max={isCompleted ? 1 : progress.steps_total}
+                                    thickness={3}
                                     value={
                                         isCompleted
                                             ? 1
@@ -202,11 +203,12 @@ class LearnerViewPre extends React.Component<Props> {
                                 progress.activity_completed !== null
                                     ? progress.activity_completed
                                     : '',
-                            content: isCompleted
-                                ? new Date(
-                                      progress.activity_completed!,
-                                  ).toLocaleDateString()
-                                : '',
+                            content:
+                                isCompleted && progress.activity_completed
+                                    ? new Date(
+                                          progress.activity_completed,
+                                      ).toLocaleDateString()
+                                    : '',
                         },
                         {
                             key: `hours-${id}`,
@@ -220,7 +222,7 @@ class LearnerViewPre extends React.Component<Props> {
 }
 
 const addTagButton = (props: React.HTMLProps<HTMLButtonElement>) => (
-    <ButtonIcon onClick={props.onClick} icon="add_circle_outline" size={16} />
+    <ButtonIcon icon="add_circle_outline" size={16} onClick={props.onClick} />
 );
 
 const emptyProgress = () => (

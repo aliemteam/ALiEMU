@@ -1,0 +1,28 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es6": true,
+        "jquery": true,
+        "node": true
+    },
+    "extends": ["@dsifford/eslint-config"],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "overrides": [
+        {
+            "files": ["*.d.ts"],
+            "rules": {
+                "@typescript-eslint/no-explicit-any": "off",
+                "no-undef": "off"
+            }
+        },
+        {
+          "files": ["{-,.}test.tsx?"],
+          "env": {
+            "jest": true
+          }
+        }
+    ]
+}

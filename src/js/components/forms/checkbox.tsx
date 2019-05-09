@@ -14,10 +14,6 @@ interface State {
 }
 
 export default class Checkbox extends PureComponent<Props, State> {
-    static defaultProps = {
-        onChange: () => void 0,
-    };
-
     state = {
         checked: this.props.checked === true,
     };
@@ -28,22 +24,19 @@ export default class Checkbox extends PureComponent<Props, State> {
         const className = classNames(styles.checkboxContainer, {
             [styles.disabled]: props.disabled,
         });
-        // FIXME: Remove below when the following issue resolves.
-        // https://github.com/Microsoft/tslint-microsoft-contrib/issues/409
-        // tslint:disable:react-a11y-role-has-required-aria-props
         return (
             <label className={className}>
                 <input
                     {...props}
-                    onChange={this.handleChange}
-                    className={styles.input}
                     checked={checked}
+                    className={styles.input}
                     type="checkbox"
+                    onChange={this.handleChange}
                 />
                 <span
-                    role="checkbox"
                     aria-checked={checked}
                     className={styles.checkbox}
+                    role="checkbox"
                 >
                     {checked && <Icon icon="check" size={13} />}
                 </span>
@@ -54,7 +47,8 @@ export default class Checkbox extends PureComponent<Props, State> {
 
     private handleChange = (e: FormEvent<HTMLInputElement>): void => {
         const { checked } = e.currentTarget;
-        this.props.onChange!(e);
+        const { onChange = () => void 0 } = this.props;
+        onChange(e);
         this.setState({ checked });
     };
 }

@@ -3,7 +3,7 @@ import React, { HTMLProps, PureComponent } from 'react';
 
 import styles from './card.scss';
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+type Props = HTMLProps<HTMLDivElement>;
 
 export default class Card extends PureComponent<Props> {
     render(): JSX.Element {

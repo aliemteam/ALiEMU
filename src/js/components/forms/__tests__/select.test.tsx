@@ -18,7 +18,7 @@ it('should render correctly', () => {
                 <option>Bar</option>
                 <option>Baz</option>
             </Select>
-            <Select label="Disabled Label Select" disabled>
+            <Select disabled label="Disabled Label Select">
                 <option>Foo</option>
                 <option>Bar</option>
                 <option>Baz</option>

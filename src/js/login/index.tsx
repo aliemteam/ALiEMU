@@ -48,15 +48,15 @@ export default class Login extends Component<{}, State> {
                     <Navbar>
                         <NavGroup fill>
                             <NavTab
-                                data-form={FormKind.LOGIN}
                                 active={activeForm === FormKind.LOGIN}
+                                data-form={FormKind.LOGIN}
                                 onClick={this.handleFormSwitch}
                             >
                                 Login
                             </NavTab>
                             <NavTab
-                                data-form={FormKind.REGISTER}
                                 active={activeForm === FormKind.REGISTER}
+                                data-form={FormKind.REGISTER}
                                 onClick={this.handleFormSwitch}
                             >
                                 Sign up

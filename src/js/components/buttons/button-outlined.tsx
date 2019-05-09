@@ -4,13 +4,13 @@ import React, { HTMLProps } from 'react';
 import { Intent } from 'utils/constants';
 import styles from './button-outlined.scss';
 
-interface IProps extends HTMLProps<HTMLButtonElement> {
+export interface ButtonOutlinedProps extends HTMLProps<HTMLButtonElement> {
     children: string;
     intent?: Intent;
     type?: 'button' | 'reset' | 'submit';
 }
 
-const ButtonOutlined = (props: IProps): JSX.Element => {
+const ButtonOutlined = (props: ButtonOutlinedProps): JSX.Element => {
     const { children, className, intent, ...btnProps } = props;
     const classname = classNames(
         styles.buttonOutlined,
@@ -30,5 +30,4 @@ const ButtonOutlined = (props: IProps): JSX.Element => {
     );
 };
 
-export { IProps as ButtonOutlinedProps };
 export default ButtonOutlined;

@@ -20,16 +20,12 @@ interface State {
 }
 
 export default class TextArea extends PureComponent<Props, State> {
-    static defaultProps = {
-        onChange: () => void 0,
-    };
-
     state = {
         length: this.props.defaultValue
             ? this.props.defaultValue.length
             : this.props.value && typeof this.props.value === 'string'
-                ? this.props.value.length
-                : 0,
+            ? this.props.value.length
+            : 0,
     };
 
     render(): JSX.Element {
@@ -46,7 +42,7 @@ export default class TextArea extends PureComponent<Props, State> {
                 : {}),
         };
         return (
-            <MaybeLabel label={label} disabled={props.disabled}>
+            <MaybeLabel disabled={props.disabled} label={label}>
                 <MaybeProgressBar length={length} maxLength={props.maxLength}>
                     <textarea
                         {...props}
@@ -61,8 +57,9 @@ export default class TextArea extends PureComponent<Props, State> {
 
     private handleChange = (e: FormEvent<HTMLTextAreaElement>): void => {
         const { value } = e.currentTarget;
+        const { onChange = () => void 0 } = this.props;
         this.setState({ length: value.length });
-        this.props.onChange!(e);
+        onChange(e);
     };
 }
 
@@ -80,7 +77,7 @@ const MaybeProgressBar = ({
     return maxLength ? (
         <div className={styles.progressRow}>
             {children}
-            <ProgressBar value={length} max={maxLength} />
+            <ProgressBar max={maxLength} value={length} />
         </div>
     ) : (
         children

@@ -14,16 +14,16 @@ export default class Spinner extends React.PureComponent<Props> {
         const C = 2 * Math.PI * r;
         return (
             <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox={`0 0 ${size} ${size}`}
-                width={size}
+                className={styles.spinner}
                 height={size}
                 style={{
                     strokeWidth: `${size / 10}px`,
                     strokeDasharray: `${C}px`,
                     strokeDashoffset: `${C * 0.8}px`,
                 }}
-                className={styles.spinner}
+                viewBox={`0 0 ${size} ${size}`}
+                width={size}
+                xmlns="http://www.w3.org/2000/svg"
             >
                 <circle cx={center} cy={center} r={r} />
             </svg>

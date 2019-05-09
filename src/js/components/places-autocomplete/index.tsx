@@ -34,13 +34,19 @@ export default class PlacesAutocomplete extends PureComponent<Props> {
                 process.env.GOOGLE_PLACES_KEY
             }`,
         );
-        this.autocomplete = new google.maps.places.Autocomplete(
-            this.inputRef.current!,
-            this.props.options,
-        );
-        this.autocomplete.addListener('place_changed', this.handlePlaceChange);
-        if (!this.props.defaultValue) {
-            this.handleChange();
+        if (this.inputRef.current) {
+            // eslint-disable-next-line no-undef
+            this.autocomplete = new google.maps.places.Autocomplete(
+                this.inputRef.current,
+                this.props.options,
+            );
+            this.autocomplete.addListener(
+                'place_changed',
+                this.handlePlaceChange,
+            );
+            if (!this.props.defaultValue) {
+                this.handleChange();
+            }
         }
     }
 

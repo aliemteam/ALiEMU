@@ -24,12 +24,12 @@ export default class SortIcon extends React.PureComponent<Props> {
         });
         return (
             <svg
-                xmlns="http://www.w3.org/2000/svg"
-                version="1.1"
-                width={size}
-                height={size}
-                viewBox="0 0 25 25"
                 className={classname}
+                height={size}
+                version="1.1"
+                viewBox="0 0 25 25"
+                width={size}
+                xmlns="http://www.w3.org/2000/svg"
             >
                 <polygon points="10 0, 20 10, 0 10" />
                 <polygon points="10 25, 20 15, 0 15" />

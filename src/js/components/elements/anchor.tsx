@@ -4,6 +4,7 @@ type Props = HTMLProps<HTMLAnchorElement>;
 
 export default class Anchor extends PureComponent<Props> {
     render(): JSX.Element {
-        return <a {...this.props} />;
+        const { children, ...props } = this.props;
+        return <a {...props}>{children}</a>;
     }
 }

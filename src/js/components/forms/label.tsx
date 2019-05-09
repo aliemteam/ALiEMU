@@ -13,6 +13,7 @@ export default class Label extends PureComponent<Props> {
         const className = classNames(styles.label, {
             [styles.disabled]: disabled,
         });
+        // eslint-disable-next-line
         return <label {...props} className={className} />;
     }
 }

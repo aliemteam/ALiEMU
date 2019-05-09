@@ -85,46 +85,46 @@ export default class DashboardHeader extends Component<Props, State> {
             >
                 <h2>Edit Profile</h2>
                 <Input
-                    name="first_name"
-                    label="First name"
+                    required
                     autoComplete="given-name"
                     defaultValue={user.first_name}
-                    required
+                    label="First name"
+                    name="first_name"
                 />
                 <Input
-                    name="last_name"
-                    label="Last name"
+                    required
                     autoComplete="family-name"
                     defaultValue={user.last_name}
-                    required
+                    label="Last name"
+                    name="last_name"
                 />
                 <Input
-                    name="name"
-                    label="Display name"
+                    required
                     autoComplete="name"
                     defaultValue={user.name}
-                    required
+                    label="Display name"
+                    name="name"
                 />
                 <Input
-                    name="email"
-                    label="Email"
-                    type="email"
+                    required
                     autoComplete="email"
                     defaultValue={user.email}
-                    required
+                    label="Email"
+                    name="email"
+                    type="email"
                 />
                 <TextArea
-                    name="description"
-                    label="Bio"
-                    rows={5}
-                    maxLength={500}
                     defaultValue={user.description}
+                    label="Bio"
+                    maxLength={500}
+                    name="description"
+                    rows={5}
                 />
                 <div>
                     <ButtonOutlined
+                        style={{ marginRight: 5 }}
                         type="button"
                         onClick={this.toggleModal}
-                        style={{ marginRight: 5 }}
                     >
                         Cancel
                     </ButtonOutlined>

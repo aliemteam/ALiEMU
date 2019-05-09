@@ -5,7 +5,7 @@ import ProgressRadial from '../index';
 
 it('renders correctly', () => {
     const tree = renderer.create(
-        <ProgressRadial diameter={50} thickness={5} max={100} value={50} />,
+        <ProgressRadial diameter={50} max={100} thickness={5} value={50} />,
     );
     expect(tree).toMatchSnapshot();
 });

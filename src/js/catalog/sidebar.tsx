@@ -57,44 +57,44 @@ export default class Sidebar extends PureComponent<Props> {
         return (
             <div className={styles.sidebar}>
                 <div className={styles.sticky}>
-                    <Menu role="group" aria-labelledby={`${uid}`}>
-                        <MenuDivider title="Category" id={`${uid++}`} />
+                    <Menu aria-labelledby={`${uid}`} role="group">
+                        <MenuDivider id={`${uid++}`} title="Category" />
                         {[...Sidebar.categories.entries()].map(([id, name]) => (
                             <MenuItem
                                 key={id}
                                 id={id.toString()}
-                                onClick={this.handleCategoryClick}
                                 selected={this.props.category === id}
+                                onClick={this.handleCategoryClick}
                             >
                                 {name}
                             </MenuItem>
                         ))}
                     </Menu>
-                    <Menu role="group" aria-labelledby={`${uid}`}>
-                        <MenuDivider title="Duration" id={`${uid++}`} />
+                    <Menu aria-labelledby={`${uid}`} role="group">
+                        <MenuDivider id={`${uid++}`} title="Duration" />
                         <MenuItem
+                            data-duration={Duration.LESS_THAN_TWO}
                             selected={
                                 this.props.duration === Duration.LESS_THAN_TWO
                             }
-                            data-duration={Duration.LESS_THAN_TWO}
                             onClick={this.handleDurationClick}
                         >
                             {'< 2 hours'}
                         </MenuItem>
                         <MenuItem
+                            data-duration={Duration.TWO_TO_FOUR}
                             selected={
                                 this.props.duration === Duration.TWO_TO_FOUR
                             }
-                            data-duration={Duration.TWO_TO_FOUR}
                             onClick={this.handleDurationClick}
                         >
                             {'2-4 hours'}
                         </MenuItem>
                         <MenuItem
+                            data-duration={Duration.FOUR_OR_MORE}
                             selected={
                                 this.props.duration === Duration.FOUR_OR_MORE
                             }
-                            data-duration={Duration.FOUR_OR_MORE}
                             onClick={this.handleDurationClick}
                         >
                             {'4+ hours'}

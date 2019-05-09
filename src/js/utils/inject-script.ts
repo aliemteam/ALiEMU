@@ -1,9 +1,9 @@
 async function waitForProperty(propertyKey: string): Promise<void> {
     const propertyChain = propertyKey.split('.');
-    // tslint:disable-next-line:promise-must-complete
     await new Promise((resolve, reject) => {
         let iterations = 0;
         const interval = setInterval(() => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let property: any = window;
             let propertyChainSuccess = true;
             for (const key of propertyChain) {

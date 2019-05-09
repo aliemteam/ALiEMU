@@ -36,16 +36,12 @@ function Input({
         className,
     );
     return (
-        <MaybeLabel label={label} disabled={props.disabled}>
+        <MaybeLabel disabled={props.disabled} label={label}>
             <div className={containerClass}>
                 <input
                     {...props}
                     ref={internalRef}
                     className={styles.input}
-                    onFocus={e => {
-                        setFocused(true);
-                        onFocus(e);
-                    }}
                     onBlur={e => {
                         setFocused(false);
                         onBlur(e);
@@ -59,6 +55,10 @@ function Input({
                                 input.setCustomValidity(validityMessage);
                             }
                         }
+                    }}
+                    onFocus={e => {
+                        setFocused(true);
+                        onFocus(e);
                     }}
                 />
             </div>

@@ -22,8 +22,8 @@ export default class Tag extends React.PureComponent<Props> {
                 {onRemove && (
                     <div
                         aria-label={`remove tag ${children}`}
-                        role="button"
                         className={styles.removeBtn}
+                        role="button"
                         onClick={this.handleRemove}
                     >
                         <Icon icon="close" size={12} />

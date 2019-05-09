@@ -24,11 +24,11 @@ export default class ProgressRadial extends React.Component<Props> {
         return (
             <div
                 {...props}
+                aria-valuemax={max}
+                aria-valuemin={0}
+                aria-valuenow={value}
                 className={classname}
                 role="progressbar"
-                aria-valuemax={max}
-                aria-valuenow={value}
-                aria-valuemin={0}
             >
                 <Circle {...this.props} />
             </div>
@@ -54,9 +54,9 @@ const Circle = (props: Props): JSX.Element => {
     return (
         <svg
             className={classname}
-            width={diameter}
             height={diameter}
             viewBox={`0 0 ${diameter} ${diameter}`}
+            width={diameter}
         >
             <circle
                 className={styles.circleBackground}
@@ -67,12 +67,12 @@ const Circle = (props: Props): JSX.Element => {
             />
             <circle
                 className={styles.circleFill}
-                style={style}
                 cx={center}
                 cy={center}
                 r={r}
-                strokeWidth={thickness}
                 strokeDasharray={C}
+                strokeWidth={thickness}
+                style={style}
             />
         </svg>
     );

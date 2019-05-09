@@ -38,9 +38,9 @@ export default class ResetForm extends PureComponent<{}, State> {
             <form className={styles.form} onSubmit={this.handleSubmit}>
                 {this.renderFormContent()}
                 <Button
+                    disabled={status !== Status.PENDING}
                     intent={Intent.PRIMARY}
                     loading={loading}
-                    disabled={status !== Status.PENDING}
                 >
                     Send Email
                 </Button>
@@ -50,7 +50,7 @@ export default class ResetForm extends PureComponent<{}, State> {
 
     private renderFormContent = (): JSX.Element => {
         const {
-            data: { user_login },
+            data: { user_login: username },
             loading,
             status,
         } = this.state;
@@ -61,8 +61,8 @@ export default class ResetForm extends PureComponent<{}, State> {
                         intent={Intent.SUCCESS}
                         title="Confirmation email sent"
                     >
-                        If an account exists for <strong>{user_login}</strong>,
-                        an email will be sent with further instructions.
+                        If an account exists for <strong>{username}</strong>, an
+                        email will be sent with further instructions.
                     </Notice>
                 );
             case Status.ERROR:
@@ -72,8 +72,8 @@ export default class ResetForm extends PureComponent<{}, State> {
                         title="Internal server error"
                     >
                         An internal error has occurred while attempting to reset
-                        the password for <strong>{user_login}</strong>. Please
-                        try again later.
+                        the password for <strong>{username}</strong>. Please try
+                        again later.
                     </Notice>
                 );
             case Status.PENDING:
@@ -81,16 +81,15 @@ export default class ResetForm extends PureComponent<{}, State> {
                 return (
                     <>
                         <span className={styles.span}>
-                            Enter your email address below and we'll send you a
+                            Enter your email address below and we&apos;ll send you a
                             link to reset your password.
                         </span>
                         <Input
-                            autoFocus
                             required
-                            type="email"
-                            label="Email"
                             disabled={loading}
-                            value={user_login}
+                            label="Email"
+                            type="email"
+                            value={username}
                             onChange={this.handleChange}
                         />
                     </>

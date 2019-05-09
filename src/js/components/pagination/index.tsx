@@ -34,13 +34,13 @@ export default class Pagination extends PureComponent<Props> {
         });
         return (
             <nav
-                role="navigation"
                 aria-labelledby={labelId}
                 className={classname}
+                role="navigation"
             >
                 <div className={styles.pager}>
                     <span aria-live="polite" role="status">
-                        <h2 id={labelId} className={styles.clipped}>
+                        <h2 className={styles.clipped} id={labelId}>
                             {`Table Pagination - Page ${value}`}
                         </h2>
                     </span>
@@ -48,29 +48,26 @@ export default class Pagination extends PureComponent<Props> {
                         aria-label="previous page"
                         className={styles.buttonPrev}
                         data-page={value - 1}
-                        onClick={onChange}
                         disabled={value === 1}
                         style={style}
+                        onClick={onChange}
                     >
                         <Icon icon="chevron_left" />
                     </button>
-                    <div role="list" className={styles.pageList}>
+                    <div className={styles.pageList} role="list">
                         {createPageRange(value, total).map(
                             (item, i) =>
                                 typeof item === 'number' ? (
                                     <button
                                         key={`page-${item}`}
-                                        role="listitem"
-                                        aria-label={`page ${item}`}
                                         aria-current={
                                             item === value ? 'page' : undefined
                                         }
-                                        aria-setsize={total}
-                                        aria-posinset={item}
-                                        data-page={item}
-                                        onClick={onChange}
+                                        aria-label={`page ${item}`}
                                         className={styles.button}
+                                        data-page={item}
                                         style={style}
+                                        onClick={onChange}
                                     >
                                         {item}
                                     </button>
@@ -89,9 +86,9 @@ export default class Pagination extends PureComponent<Props> {
                         aria-label="next page"
                         className={styles.buttonNext}
                         data-page={value + 1}
-                        onClick={onChange}
                         disabled={value === total}
                         style={style}
+                        onClick={onChange}
                     >
                         <Icon icon="chevron_right" />
                     </button>
