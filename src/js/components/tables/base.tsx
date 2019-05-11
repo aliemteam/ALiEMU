@@ -31,7 +31,6 @@ export const enum SortOrder {
     DESC = 'descending',
 }
 
-// tslint:disable react-unused-props-and-state
 interface Props {
     rows: Row[];
 }

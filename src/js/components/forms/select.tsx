@@ -10,9 +10,6 @@ interface Props extends HTMLProps<HTMLSelectElement> {
 }
 
 export default class Select extends PureComponent<Props> {
-    // FIXME: Remove this after this issue resolves:
-    // https://github.com/Microsoft/tslint-microsoft-contrib/issues/409
-    // tslint:disable:react-a11y-role-has-required-aria-props
     render(): JSX.Element {
         const {
             label,

@@ -176,9 +176,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     onChange={this.handleChange}
                 >
                     {UserTitles.map(title => (
-                        // FIXME: Remove this after this issue resolves:
-                        // https://github.com/Microsoft/tslint-microsoft-contrib/issues/409
-                        // tslint:disable-next-line:react-a11y-role-has-required-aria-props
                         <option key={title} value={title}>
                             {title}
                         </option>
@@ -193,9 +190,6 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     onChange={this.handleChange}
                 >
                     {UserPracticeLevels.map(level => (
-                        // FIXME: Remove this after this issue resolves:
-                        // https://github.com/Microsoft/tslint-microsoft-contrib/issues/409
-                        // tslint:disable-next-line:react-a11y-role-has-required-aria-props
                         <option key={level} value={level}>
                             {level}
                         </option>

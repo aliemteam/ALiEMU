@@ -1,25 +1,18 @@
-// tslint:disable:await-promise
 import { Coach, Course, Learner } from 'utils/types';
 
-interface Params {
-    [k: string]: string | number | boolean | string[] | number[];
-}
-
-type IComment = WordPress.Comment;
-type IUser = WordPress.User<'edit'>;
+type Params = Record<string, string | number | boolean | string[] | number[]>;
+type Comment = WordPress.Comment;
+type User = WordPress.User<'edit'>;
 
 export class Comments {
-    // {{{
     private static endpoint = '/wp-json/wp/v2/comments';
 
-    static async fetchOne(id: number, params?: Params): Promise<IComment> {
-        return _get<IComment>(`${Comments.endpoint}/${id}`, params);
+    static async fetchOne(id: number, params?: Params): Promise<Comment> {
+        return _get<Comment>(`${Comments.endpoint}/${id}`, params);
     }
-    // }}}
 }
 
 export class Courses {
-    // {{{
     private static endpoint = '/wp-json/aliemu/v1/courses';
 
     static async fetchOne(id: number, params?: Params): Promise<Course> {
@@ -33,11 +26,9 @@ export class Courses {
     ): Promise<Course[]> {
         return _getMany<Course>(Courses.endpoint, params, startPage, endPage);
     }
-    // }}}
 }
 
 export class Groups {
-    // {{{
     private static endpoint = '/wp-json/wp/v2/users/me/groups';
 
     static async fetchCoaches(params: Params = {}): Promise<Coach[]> {
@@ -69,24 +60,20 @@ export class Groups {
     static async removeLearnerTag(id: number, tag: string): Promise<void> {
         return _delete(`${Groups.endpoint}/learners/${id}/tags`, { tag });
     }
-    // }}}
 }
 
 export class Users {
-    // {{{
     private static endpoint = '/wp-json/wp/v2/users';
 
     static async update(
-        fields: Partial<IUser> | FormData,
+        fields: Partial<User> | FormData,
         id?: number,
-    ): Promise<IUser> {
-        return _post<IUser>(`${Users.endpoint}/${id ? id : 'me'}`, fields);
+    ): Promise<User> {
+        return _post<User>(`${Users.endpoint}/${id ? id : 'me'}`, fields);
     }
-    // }}}
 }
 
 async function _get<T>(endpoint: string, params?: Params): Promise<T> {
-    // {{{
     const response: T = await jQuery.ajax(endpoint, {
         headers: {
             'X-WP-Nonce': window.AU_API.nonce,
@@ -95,14 +82,12 @@ async function _get<T>(endpoint: string, params?: Params): Promise<T> {
         data: params,
     });
     return response;
-    // }}}
 }
 
 async function _post<T>(
     endpoint: string,
     params: object | FormData,
 ): Promise<T> {
-    // {{{
     const response: T = await jQuery.ajax(endpoint, {
         method: 'POST',
         data: JSON.stringify(params),
@@ -113,11 +98,9 @@ async function _post<T>(
         },
     });
     return response;
-    // }}}
 }
 
 async function _delete(endpoint: string, params: object = {}): Promise<void> {
-    // {{{
     const response = await jQuery.ajax(endpoint, {
         method: 'DELETE',
         data: JSON.stringify(params),
@@ -128,7 +111,6 @@ async function _delete(endpoint: string, params: object = {}): Promise<void> {
         },
     });
     return response;
-    // }}}
 }
 
 async function _getMany<T>(
@@ -138,7 +120,6 @@ async function _getMany<T>(
     endPage = Infinity,
     collection: T[] = [],
 ): Promise<T[]> {
-    // {{{
     params = {
         ...params,
         page,
@@ -164,7 +145,6 @@ async function _getMany<T>(
     return page >= totalPages || page === endPage
         ? collection
         : _getMany(endpoint, params, page + 1, endPage, collection);
-    // }}}
 }
 
-// vim: set fdm=marker:
+// vim: set fdl=0 fdn=1:

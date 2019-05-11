@@ -3,8 +3,6 @@ import renderer from 'react-test-renderer';
 
 import Select from '../select';
 
-// tslint:disable:react-a11y-role-has-required-aria-props
-
 it('should render correctly', () => {
     const tree = renderer.create(
         <>

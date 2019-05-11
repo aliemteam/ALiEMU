@@ -17,7 +17,7 @@ export const enum CourseStatus {
     STARTED = 'STARTED',
 }
 
-export const UserTitles: ReadonlyArray<string> = [
+export const UserTitles: readonly string[] = [
     'Physician',
     'Pharmacist',
     'Physician Assistant',
@@ -30,7 +30,7 @@ export const UserTitles: ReadonlyArray<string> = [
     'Other',
 ];
 
-export const UserPracticeLevels: ReadonlyArray<string> = [
+export const UserPracticeLevels: readonly string[] = [
     'Student',
     'Resident',
     'Fellow',
