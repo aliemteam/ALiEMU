@@ -5,15 +5,15 @@ terraform {
 }
 
 output "droplet_name" {
-  value = "${module.digitalocean_web.name}"
+  value = module.digitalocean_web.name
 }
 
 output "droplet_ip" {
-  value = "${module.digitalocean_web.ipv4_address}"
+  value = module.digitalocean_web.ipv4_address
 }
 
 output "droplet_region" {
-  value = "${module.digitalocean_web.region}"
+  value = module.digitalocean_web.region
 }
 
 variable "do_token" {
@@ -29,28 +29,29 @@ locals {
 }
 
 provider "cloudflare" {
-  version = "~> 1.11"
+  version = "~> 1.15"
 
   email = "mlin@aliem.com"
-  token = "${var.cf_token}"
+  token = var.cf_token
 }
 
 provider "digitalocean" {
-  version = "~> 1.1"
+  version = "~> 1.3.0"
 
-  token = "${var.do_token}"
+  token = var.do_token
 }
 
 module "digitalocean_web" {
   source = "github.com/aliemteam/infrastructure//compute/digitalocean/wordpress"
 
-  domain = "${local.domain}"
+  domain = local.domain
   image  = "docker-18-04"
 }
 
 module "cloudflare_dns" {
   source = "github.com/aliemteam/infrastructure//networking/cloudflare/dns"
 
-  domain       = "${local.domain}"
-  ipv4_address = "${module.digitalocean_web.ipv4_address}"
+  domain       = local.domain
+  ipv4_address = module.digitalocean_web.ipv4_address
 }
+
