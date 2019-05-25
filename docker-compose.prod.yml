@@ -36,9 +36,12 @@ services:
     volumes:
       - ./wp-content/themes:/app/wp-content/themes
       - ./letsencrypt:/etc/letsencrypt
+      - ./on-init.sh:/on-init.sh
 
   db:
     <<: *shared
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASS}
 

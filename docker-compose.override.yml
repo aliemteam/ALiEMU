@@ -10,8 +10,10 @@ services:
         define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
         define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
         define( 'IMAGE_EDIT_OVERWRITE', true );
-        define( 'WP_POST_REVISIONS', 3 );
+        define( 'SCRIPT_DEBUG', true );
         define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
+        define( 'WP_LOCAL_DEV', true );
+        define( 'WP_POST_REVISIONS', 3 );
         if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $$_SERVER['HTTP_HOST'] ) ) {
             $$_SERVER['HTTP_HOST'] = 'localhost';
         }
@@ -28,3 +30,4 @@ services:
       - 8080:80
     volumes:
       - ./dist:/app/wp-content/themes/aliemu.com
+      - ./lib/on-init.sh:/on-init.sh

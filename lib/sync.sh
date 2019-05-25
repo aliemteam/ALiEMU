@@ -95,7 +95,6 @@ if [ $# -eq 0 ]; then
 fi
 
 main() {
-	#{{{
 	set -e
 	source ./.env
 
@@ -180,11 +179,9 @@ main() {
 	fi
 
 	sync_project
-	#}}}
 }
 
 sync_database() {
-	#{{{
 	echo "==> $operation_verb database..."
 
 	touch ./data/database.sql.bak
@@ -205,20 +202,16 @@ sync_database() {
 		"$PWD"/data/database.sql
 
 	rm ./data/database.sql.old.bak
-	#}}}
 }
 
 sync_plugins() {
-	#{{{
 	echo "==> $operation_verb plugins..."
 	rsync -avz --no-owner --no-perms --delete \
 		"$src_base"/wp-content/plugins/ \
 		"$dest_base"/wp-content/plugins
-	#}}}
 }
 
 sync_project() {
-	#{{{
 	if [ "$dest_base" == "$PWD" ]; then
 		return
 	fi
@@ -233,37 +226,36 @@ sync_project() {
 		"$dest_base"/.env
 
 	rsync -avz --no-owner --no-perms \
-		"$src_base"/lib/production.yml \
+		"$src_base"/docker-compose.prod.yml \
 		"$dest_base"/docker-compose.override.yml
 
 	rsync -avz --no-owner --no-perms \
 		"$src_base"/docker-compose.yml \
 		"$dest_base"/docker-compose.yml
 
+	rsync -avz --no-owner --no-perms \
+		"$src_base"/lib/on-init.sh \
+		"$dest_base"/on-init.sh
+
 	rsync -avz --no-owner --no-perms --delete \
 		"$src_base"/dist/ \
 		"$dest_base"/wp-content/themes/"$project_name"
-	#}}}
 }
 
 sync_theme() {
-	#{{{
 	echo "==> $operation_verb parent theme..."
 	rsync -avz --no-owner --no-perms --delete \
 		"$src_base"/wp-content/themes/"$parent_theme" \
 		"$dest_base"/wp-content/themes
-	#}}}
 }
 
 sync_uploads() {
-	#{{{
 	echo "==> $operation_verb uploads..."
 	rsync -avz --no-owner --no-perms --delete \
 		"$src_base"/wp-content/uploads/ \
 		"$dest_base"/wp-content/uploads
-	#}}}
 }
 
 main "$@"
 
-# vim: set fdm=marker:
+# vim: set fdl=0:
