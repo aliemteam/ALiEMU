@@ -1,13 +1,15 @@
-import React from 'react';
+import { ReactNode } from '@wordpress/element';
 
 import styles from './navbar.scss';
 
-export default class Navbar extends React.Component {
-    render(): JSX.Element {
-        return (
-            <nav className={styles.navbar}>
-                <div className={styles.container}>{this.props.children}</div>
-            </nav>
-        );
-    }
+interface Props {
+    children: ReactNode;
+}
+
+export default function Navbar({ children }: Props) {
+    return (
+        <nav className={styles.navbar}>
+            <div className={styles.container}>{children}</div>
+        </nav>
+    );
 }

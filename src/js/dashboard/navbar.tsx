@@ -1,57 +1,49 @@
-import { observer } from 'mobx-react';
-import React from 'react';
+import { memo, useContext } from '@wordpress/element';
 
-import { Tabs } from 'dashboard/dashboard';
-import UserStore, { UserKind } from 'dashboard/user-store';
-
-import { Navbar, NavGroup, NavTab } from 'components/navbar/';
+import { Navbar, NavGroup, NavTab } from 'components/navbar';
+import { DashboardContext, Tab } from 'dashboard/dashboard';
 
 interface Props {
-    store: UserStore;
-    currentTab: Tabs;
-    onTabClick(tab: Tabs): void;
+    currentTab: Tab;
+    onTabClick(tab: Tab): void;
 }
-
-@observer
-export default class DashboardNavbar extends React.Component<Props> {
-    render(): JSX.Element {
-        const { currentTab, onTabClick, store } = this.props;
-        const isOwner = store.userKind === UserKind.OWNER;
-        return (
-            <Navbar>
-                <NavGroup>
-                    {isOwner && (
-                        <NavTab
-                            active={currentTab === Tabs.HOME}
-                            onClick={() => onTabClick(Tabs.HOME)}
-                        >
-                            Home
-                        </NavTab>
-                    )}
+function DashboardNavbar({ currentTab, onTabClick }: Props) {
+    const { isOwnProfile } = useContext(DashboardContext);
+    return (
+        <Navbar>
+            <NavGroup>
+                {isOwnProfile && (
                     <NavTab
-                        active={currentTab === Tabs.PROFILE}
-                        onClick={() => onTabClick(Tabs.PROFILE)}
+                        active={currentTab === 'home'}
+                        onClick={() => onTabClick('home')}
                     >
-                        Profile
+                        Home
                     </NavTab>
-                    {isOwner && (
-                        <NavTab
-                            active={currentTab === Tabs.PROGRESS}
-                            onClick={() => onTabClick(Tabs.PROGRESS)}
-                        >
-                            Progress
-                        </NavTab>
-                    )}
-                    {isOwner && (
-                        <NavTab
-                            active={currentTab === Tabs.GROUPS}
-                            onClick={() => onTabClick(Tabs.GROUPS)}
-                        >
-                            Groups
-                        </NavTab>
-                    )}
-                </NavGroup>
-            </Navbar>
-        );
-    }
+                )}
+                <NavTab
+                    active={currentTab === 'profile'}
+                    onClick={() => onTabClick('profile')}
+                >
+                    Profile
+                </NavTab>
+                {isOwnProfile && (
+                    <NavTab
+                        active={currentTab === 'progress'}
+                        onClick={() => onTabClick('progress')}
+                    >
+                        Progress
+                    </NavTab>
+                )}
+                {isOwnProfile && (
+                    <NavTab
+                        active={currentTab === 'groups'}
+                        onClick={() => onTabClick('groups')}
+                    >
+                        Groups
+                    </NavTab>
+                )}
+            </NavGroup>
+        </Navbar>
+    );
 }
+export default memo(DashboardNavbar);

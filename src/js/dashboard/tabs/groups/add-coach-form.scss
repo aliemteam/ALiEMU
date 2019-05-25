@@ -1,0 +1,10 @@
+.form {
+    display: flex;
+    flex: auto;
+    justify-content: center;
+}
+
+.submit {
+    margin-left: 5px;
+    flex-shrink: 0;
+}

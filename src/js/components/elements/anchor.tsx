@@ -1,10 +1,8 @@
-import React, { HTMLProps, PureComponent } from 'react';
+import { memo, HTMLProps } from '@wordpress/element';
 
 type Props = HTMLProps<HTMLAnchorElement>;
 
-export default class Anchor extends PureComponent<Props> {
-    render(): JSX.Element {
-        const { children, ...props } = this.props;
-        return <a {...props}>{children}</a>;
-    }
+function Anchor({ children, ...props }: Props) {
+    return <a {...props}>{children}</a>;
 }
+export default memo(Anchor);

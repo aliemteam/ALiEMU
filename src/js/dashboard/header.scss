@@ -55,16 +55,3 @@
     opacity: 0.5;
     color: white;
 }
-
-.edit-profile-form {
-    width: calc(100vw - (3 * #{$block-padding}));
-    max-width: 500px;
-
-    h2 {
-        margin: 0;
-    }
-
-    > div {
-        text-align: right;
-    }
-}

@@ -5,6 +5,7 @@ Array [
   <a
     className="btn"
     onClick={[Function]}
+    onKeyDown={[Function]}
     role="button"
     tabIndex={0}
   >
@@ -13,6 +14,7 @@ Array [
   <a
     className="btn"
     onClick={[Function]}
+    onKeyDown={[Function]}
     role="button"
     tabIndex={0}
   >

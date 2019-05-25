@@ -1,41 +1,46 @@
-interface AjaxSuccess<T> {
+import { addQueryArgs } from '@wordpress/url';
+
+interface Success<T> {
     success: true;
     data: T;
 }
 
-interface AjaxError {
+interface Error {
     success: false;
     data: {
-        code: string;
+        code: string | number;
         message: string;
     };
 }
 
-type AjaxResponse<T> = AjaxSuccess<T> | AjaxError;
+type Response<T> = Success<T> | Error;
 
-const { AU_AJAX } = window;
+declare const AU_AJAX_NONCE: string;
 
-export async function wpAjax<T>(
+export default async function ajax<T>(
     action: string,
-    data: { [k: string]: Scalar },
-): Promise<AjaxResponse<T>> {
-    const { nonce, url } = AU_AJAX;
-    let response: AjaxResponse<T>;
-    try {
-        response = await jQuery.post(url, {
-            _ajax_nonce: nonce,
-            action,
+    data: Record<string, string | number | boolean>,
+): Promise<Response<T>> {
+    const response = await fetch('/wp-admin/admin-ajax.php', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: addQueryArgs(undefined, {
             ...data,
-        });
-    } catch (_e) {
-        response = {
+            _ajax_nonce: AU_AJAX_NONCE,
+            action,
+        }).slice(1),
+    });
+    if (!response.ok) {
+        return {
             success: false,
             data: {
-                code: 'http_error',
-                message:
-                    'An unexpected error occurred while handling your request. Please try again later.',
+                code: response.status,
+                message: response.statusText,
             },
         };
     }
-    return response;
+    return response.json();
 }

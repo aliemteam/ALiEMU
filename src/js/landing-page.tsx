@@ -1,5 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
+import { render } from '@wordpress/element';
 
 import LandingPage from 'landing-page/index';
 

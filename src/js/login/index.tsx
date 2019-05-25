@@ -1,83 +1,48 @@
-import React, { Component, MouseEvent } from 'react';
+import { memo } from '@wordpress/element';
 
-import { mapUrlParams } from 'utils/helpers';
+import Card from 'components/card';
+import { Navbar, NavGroup, NavTab } from 'components/navbar';
+import useQueryParam from 'hooks/use-query-param';
 
-import Card from 'components/card/';
-import { Navbar, NavGroup, NavTab } from 'components/navbar/';
-
+import Logo from '../../assets/aliemu-logo-horizontal.svg';
 import LoginForm from './form-login';
 import RegistrationForm from './form-register';
 import ResetForm from './form-reset';
 
-import Logo from '../../assets/aliemu-logo-horizontal.svg';
 import * as styles from './index.scss';
 
-export const enum FormKind {
-    LOGIN = 'LOGIN',
-    REGISTER = 'REGISTER',
-    RESET = 'RESET',
+type FormKind = 'login' | 'register' | 'reset';
+
+function Login() {
+    const [activeForm, setActiveForm] = useQueryParam<FormKind>('tab', 'login');
+
+    return (
+        <div className={styles.container}>
+            <Card className={styles.card}>
+                <Logo className={styles.logo} />
+                <Navbar>
+                    <NavGroup fill>
+                        <NavTab
+                            active={activeForm === 'login'}
+                            onClick={() => setActiveForm('login')}
+                        >
+                            Login
+                        </NavTab>
+                        <NavTab
+                            active={activeForm === 'register'}
+                            onClick={() => setActiveForm('register')}
+                        >
+                            Sign up
+                        </NavTab>
+                    </NavGroup>
+                </Navbar>
+                {activeForm === 'register' && <RegistrationForm />}
+                {activeForm === 'reset' && <ResetForm />}
+                {!['register', 'reset'].includes(activeForm) && (
+                    <LoginForm onForgotClick={() => setActiveForm('reset')} />
+                )}
+            </Card>
+        </div>
+    );
 }
-
-interface State {
-    activeForm: FormKind;
-}
-
-export default class Login extends Component<{}, State> {
-    state = {
-        activeForm:
-            mapUrlParams().get('tab') === 'register'
-                ? FormKind.REGISTER
-                : FormKind.LOGIN,
-    };
-
-    handleFormSwitch = (
-        e: MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
-    ): void => {
-        const activeForm = e.currentTarget.dataset.form as FormKind | undefined;
-        if (activeForm) {
-            this.setState({ activeForm });
-        }
-    };
-
-    render(): JSX.Element {
-        const { activeForm } = this.state;
-        return (
-            <div className={styles.container}>
-                <Card className={styles.card}>
-                    <Logo className={styles.logo} />
-                    <Navbar>
-                        <NavGroup fill>
-                            <NavTab
-                                active={activeForm === FormKind.LOGIN}
-                                data-form={FormKind.LOGIN}
-                                onClick={this.handleFormSwitch}
-                            >
-                                Login
-                            </NavTab>
-                            <NavTab
-                                active={activeForm === FormKind.REGISTER}
-                                data-form={FormKind.REGISTER}
-                                onClick={this.handleFormSwitch}
-                            >
-                                Sign up
-                            </NavTab>
-                        </NavGroup>
-                    </Navbar>
-                    {this.renderForm()}
-                </Card>
-            </div>
-        );
-    }
-
-    private renderForm = (): JSX.Element => {
-        switch (this.state.activeForm) {
-            case FormKind.REGISTER:
-                return <RegistrationForm />;
-            case FormKind.RESET:
-                return <ResetForm />;
-            case FormKind.LOGIN:
-            default:
-                return <LoginForm onForgotClick={this.handleFormSwitch} />;
-        }
-    };
-}
+export default memo(Login);

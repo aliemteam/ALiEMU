@@ -1,13 +1,13 @@
-import React, {
-    createRef,
+import {
+    Component,
     FormEvent,
     MouseEvent,
-    PureComponent,
     ReactNode,
-} from 'react';
+    createRef,
+} from '@wordpress/element';
 
-import { wpAjax } from 'utils/ajax';
-import { Intent, UserPracticeLevels, UserTitles } from 'utils/constants';
+import ajax from 'utils/ajax';
+import { UserPracticeLevels, UserTitles } from 'utils/constants';
 import inject from 'utils/inject-script';
 
 import Button from 'components/buttons/button';
@@ -20,12 +20,7 @@ import ProgressDots from 'components/progress-dots';
 
 import * as styles from './form-register.scss';
 
-declare global {
-    interface Window {
-        grecaptcha: ReCaptchaV2.ReCaptcha;
-        handleSubmit(token: string): Promise<void>;
-    }
-}
+declare const grecaptcha: ReCaptchaV2.ReCaptcha;
 
 interface UserData {
     // Built-in meta fields
@@ -57,7 +52,8 @@ interface State {
     };
 }
 
-export default class RegistrationForm extends PureComponent<{}, State> {
+// FIXME: refactor into a function
+export default class RegistrationForm extends Component<{}, State> {
     state: State = {
         currentPage: 0,
         data: {
@@ -195,7 +191,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                         </option>
                     ))}
                 </Select>
-                <Button intent={Intent.PRIMARY} loading={this.state.loading}>
+                <Button intent="primary" isLoading={this.state.loading}>
                     Sign up
                 </Button>
             </>
@@ -205,11 +201,12 @@ export default class RegistrationForm extends PureComponent<{}, State> {
     private recaptchaRef = createRef<HTMLDivElement>();
 
     async componentDidMount(): Promise<void> {
-        window.handleSubmit = this.handleSubmit;
+        // @ts-ignore
+        window['handleSubmit'] = this.handleSubmit;
         await inject('https://www.google.com/recaptcha/api.js', 'grecaptcha');
         const { current: recaptchaRef } = this.recaptchaRef;
         if (recaptchaRef && !recaptchaRef.childElementCount) {
-            window.grecaptcha.render(recaptchaRef.id);
+            grecaptcha.render(recaptchaRef.id);
         }
     }
 
@@ -228,7 +225,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
     render(): JSX.Element {
         const { currentPage, loading, notice } = this.state;
         const isLastPage = currentPage === this.pages.length - 1;
-        if (notice && notice.intent === Intent.SUCCESS) {
+        if (notice && notice.intent === 'success') {
             return (
                 <Notice intent={notice.intent} title={notice.title}>
                     {notice.message}
@@ -248,7 +245,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                 <div className={styles.pagination}>
                     <ButtonOutlined
                         disabled={currentPage === 0 || loading}
-                        intent={Intent.PRIMARY}
+                        intent="primary"
                         name="prev"
                         onClick={this.handlePagination}
                     >
@@ -261,7 +258,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
                     <ButtonOutlined
                         disabled={isLastPage || loading}
                         form={styles.form}
-                        intent={Intent.PRIMARY}
+                        intent="primary"
                         name="next"
                     >
                         Next
@@ -282,7 +279,7 @@ export default class RegistrationForm extends PureComponent<{}, State> {
 
     private maybeRenderNotice = (): ReactNode => {
         const { notice } = this.state;
-        return notice && notice.intent !== Intent.SUCCESS ? (
+        return notice && notice.intent !== 'success' ? (
             <Notice intent={notice.intent} title={notice.title}>
                 {notice.message}
             </Notice>
@@ -349,23 +346,23 @@ export default class RegistrationForm extends PureComponent<{}, State> {
             return this.handlePagination(e);
         } else {
             this.setState({ loading: true });
-            return window.grecaptcha.execute();
+            return grecaptcha.execute();
         }
     };
 
     private handleSubmit = async (token: string): Promise<void> => {
         this.setState({ loading: true });
-        const response = await wpAjax('user_register', {
-            recaptcha_token: token,
+        const response = await ajax('user_register', {
             ...this.state.data,
+            recaptcha_token: token,
         });
         if (!response.success) {
-            window.grecaptcha.reset();
+            grecaptcha.reset();
         }
         this.setState({
             loading: false,
             notice: {
-                intent: response.success ? Intent.SUCCESS : Intent.DANGER,
+                intent: response.success ? 'success' : 'danger',
                 title: response.success
                     ? 'Registration submitted'
                     : 'Registration failed',

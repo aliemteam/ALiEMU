@@ -1,11 +1,7 @@
-import { configure } from 'mobx';
-import React from 'react';
-import { render } from 'react-dom';
+import { render } from '@wordpress/element';
 
-import MessageHub from 'components/message-hub/';
+import MessageHub from 'components/message-hub';
 import Dashboard from 'dashboard/dashboard';
-
-configure({ enforceActions: 'observed' });
 
 render(
     <MessageHub>

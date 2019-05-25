@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from '@wordpress/element';
 
 import Input from './input';
 
-namespace DateInput {
-    export interface Props extends Omit<Input.Props, 'onChange'> {
-        delimiter?: string;
-        value?: string;
-        onChange?(value: string): void;
-    }
+interface Props extends Omit<Input.Props, 'onChange'> {
+    delimiter?: string;
+    value?: string;
+    onChange?(value: string): void;
 }
 
 function DateInput({
@@ -15,7 +13,7 @@ function DateInput({
     value = '',
     onChange = () => void 0,
     ...props
-}: DateInput.Props) {
+}: Props) {
     const [inputValue, setValue] = useState(value);
     useEffect(() => onChange(inputValue));
     return (
@@ -61,7 +59,7 @@ function DateInput({
     );
 }
 
-export default DateInput;
+export default memo(DateInput);
 
 function parseYear(input: string = '', delimiter: string): string {
     return input.length === 4 ? `${input}${delimiter}` : input;

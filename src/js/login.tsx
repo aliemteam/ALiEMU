@@ -1,7 +1,6 @@
-import React from 'react';
-import { render } from 'react-dom';
+import { render } from '@wordpress/element';
 
-import MessageHub from 'components/message-hub/';
+import MessageHub from 'components/message-hub';
 import Login from 'login/index';
 
 render(

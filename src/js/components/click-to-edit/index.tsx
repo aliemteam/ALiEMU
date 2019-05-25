@@ -1,126 +1,73 @@
-import React, {
-    Component,
-    createRef,
-    FormEvent,
-    HTMLProps,
-    KeyboardEvent,
-    ReactNode,
-    SFC,
-} from 'react';
+import { useEffect, useRef, useState } from '@wordpress/element';
 
 import AnchorButton from 'components/buttons/anchor-button';
 import Input from 'components/forms/input';
 
 interface Props {
-    children?: string;
-    inputProps?: Omit<HTMLProps<HTMLInputElement>, 'ref'>;
-    buttonProps?: Omit<HTMLProps<HTMLAnchorElement>, 'ref'>;
-    buttonElement?: SFC<HTMLProps<HTMLButtonElement>>;
+    value?: string;
+    inputProps?: React.AllHTMLAttributes<HTMLInputElement>;
+    buttonProps?: React.AllHTMLAttributes<HTMLAnchorElement>;
+    buttonElement?: React.SFC<React.HTMLProps<HTMLButtonElement>>;
     placeholder?: string;
     onSave(value: string): void;
 }
 
-interface State {
-    isEditing: boolean;
-    value: string;
-}
+export default function ClickToEdit({
+    buttonElement: Button,
+    buttonProps,
+    placeholder,
+    inputProps,
+    onSave,
+    value: currentValue = '',
+}: Props) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [value, setValue] = useState(currentValue);
 
-export default class ClickToEdit extends Component<Props, State> {
-    static defaultProps = {
-        placeholder: '',
-    };
+    const inputElement = useRef<HTMLInputElement>(null);
 
-    state = {
-        isEditing: false,
-        value: this.props.children || '',
-    };
+    useEffect(() => setValue(currentValue), [currentValue]);
 
-    private ref = createRef<HTMLInputElement>();
-
-    render(): JSX.Element {
-        return (
-            <>
-                {this.maybeRenderInput()}
-                {this.maybeRenderButton()}
-            </>
-        );
-    }
-
-    private maybeRenderButton = (): ReactNode => {
-        if (this.state.isEditing) {
-            return null;
+    useEffect(() => {
+        if (isEditing && inputElement.current) {
+            inputElement.current.select();
         }
-        const {
-            buttonElement: Button,
-            buttonProps,
-            children,
-            placeholder,
-        } = this.props;
-        const value = children || placeholder;
-        return Button ? (
-            <Button onClick={this.toggleEdit} />
-        ) : (
-            <AnchorButton {...buttonProps} onClick={this.toggleEdit}>
-                {value}
-            </AnchorButton>
-        );
-    };
+    }, [isEditing]);
 
-    private maybeRenderInput = (): ReactNode => {
-        const { inputProps } = this.props;
-        const { isEditing, value } = this.state;
-        return isEditing ? (
+    if (isEditing) {
+        return (
             <Input
                 {...inputProps}
-                inputRef={this.ref}
+                ref={inputElement}
                 value={value}
-                onBlur={this.handleBlur}
-                onChange={this.handleChange}
-                onKeyUp={this.handleKeyUp}
+                onBlur={() => {
+                    setValue(currentValue);
+                    setIsEditing(false);
+                }}
+                onChange={e => setValue(e.currentTarget.value)}
+                onKeyDown={async e => {
+                    switch (e.key) {
+                        case 'Escape':
+                            setValue(currentValue);
+                            break;
+                        case 'Enter':
+                            if (currentValue !== value) {
+                                onSave(value);
+                            }
+                            break;
+                        default:
+                            return;
+                    }
+                    setIsEditing(false);
+                }}
             />
-        ) : null;
-    };
-
-    private handleBlur = () => {
-        this.setState({ value: this.props.children || '' });
-        this.toggleEdit();
-    };
-
-    private handleChange = (e: FormEvent<HTMLInputElement>): void => {
-        const { value } = e.currentTarget;
-        return this.setState(prev => ({ ...prev, value }));
-    };
-
-    private handleKeyUp = async (
-        e: KeyboardEvent<HTMLInputElement>,
-    ): Promise<void> => {
-        switch (e.key) {
-            case 'Escape':
-                return this.handleBlur();
-            case 'Enter':
-                this.toggleEdit();
-                if (this.props.children === this.state.value) {
-                    return;
-                }
-                await this.props.onSave(this.state.value);
-                this.setState(prev => ({
-                    ...prev,
-                    value: this.props.children || '',
-                }));
-                break;
-            default:
-                return;
-        }
-    };
-
-    private toggleEdit = (): void => {
-        this.setState(
-            prev => ({ ...prev, isEditing: !prev.isEditing }),
-            () => {
-                if (this.ref.current) {
-                    this.ref.current.select();
-                }
-            },
         );
-    };
+    }
+    if (Button) {
+        return <Button onClick={() => setIsEditing(true)} />;
+    }
+    return (
+        <AnchorButton {...buttonProps} onClick={() => setIsEditing(true)}>
+            {currentValue || placeholder || value}
+        </AnchorButton>
+    );
 }

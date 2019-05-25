@@ -11,7 +11,7 @@ it('should render correctly', () => {
             <Button intent={Intent.SUCCESS}>Success</Button>
             <Button intent={Intent.WARNING}>Warning</Button>
             <Button intent={Intent.DANGER}>Danger</Button>
-            <Button loading>Loading</Button>
+            <Button isLoading>Loading</Button>
         </>,
     );
     expect(tree).toMatchSnapshot();

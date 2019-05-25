@@ -1,37 +1,37 @@
+import { memo, useEffect, useState } from '@wordpress/element';
+import { decodeEntities } from '@wordpress/html-entities';
 import classNames from 'classnames';
-import distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
-import React, { useEffect, useState } from 'react';
+import { formatDistance } from 'date-fns';
 import ContentLoader, { IContentLoaderProps } from 'react-content-loader';
 import striptags from 'striptags';
 
 import { Comments } from 'utils/api';
-import { displayUnicode } from 'utils/text-utils';
 import styles from './comment-listing.scss';
 
-import Card from 'components/card/';
+import Card from 'components/card';
 
 interface Props {
     commentId: number;
 }
 
-export default function CommentListing({ commentId }: Props) {
-    const [comment, setComment] = useState<WordPress.Comment | null>(null);
+function CommentListing({ commentId }: Props) {
+    const [comment, setComment] = useState<Comments.Comment | null>(null);
     useEffect(() => {
         Comments.fetchOne(commentId, { _embed: true }).then(c => setComment(c));
     }, [commentId]);
     if (!comment) {
         return <LoadingListing />;
     }
-    const content = striptags(displayUnicode(comment.content.rendered));
+    const content = striptags(decodeEntities(comment.content.rendered));
     return (
         <Card className={styles.listing}>
             <h3 className={styles.title}>
                 <a href={comment._embedded.up[0].link}>
-                    {displayUnicode(comment._embedded.up[0].title.rendered)}
+                    {decodeEntities(comment._embedded.up[0].title.rendered)}
                 </a>
             </h3>
             <a className={styles.date} href={comment.link}>
-                {distanceInWordsToNow(comment.date_gmt, {
+                {formatDistance(new Date(comment.date_gmt), new Date(), {
                     addSuffix: true,
                 })}
             </a>
@@ -45,6 +45,8 @@ export default function CommentListing({ commentId }: Props) {
         </Card>
     );
 }
+
+export default memo(CommentListing);
 
 const LoadingListing = (props: IContentLoaderProps) => (
     <ContentLoader

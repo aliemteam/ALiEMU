@@ -30,7 +30,8 @@ Text Domain: aliemu
 
 const rimraf = promisify(rimrafLib);
 
-export default async (_: never, argv: any): Promise<Configuration> => { // eslint-disable-line
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async (_: never, argv: any): Promise<Configuration> => {
     const IS_PRODUCTION = argv.mode === 'production';
 
     await rimraf(path.join(__dirname, 'dist', '*'));
@@ -107,6 +108,15 @@ export default async (_: never, argv: any): Promise<Configuration> => { // eslin
             ignored: /(node_modules|__tests__)/,
         },
         context: path.resolve(__dirname, 'src'),
+        externals: {
+            '@wordpress/dom-ready': 'wp.domReady',
+            '@wordpress/html-entities': 'wp.htmlEntities',
+            '@wordpress/url': 'wp.url',
+            '@wordpress/element': 'wp.element',
+            'react-dom': 'ReactDOM',
+            lodash: 'lodash',
+            react: 'React',
+        },
         entry: {
             /**
              * JS Entrypoints

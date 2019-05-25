@@ -15,34 +15,38 @@ defined( 'ABSPATH' ) || exit;
 function localize() {
 	global $wp_rest_server;
 
-	$courses_req = new \WP_Rest_Request( 'GET', '/aliemu/v1/courses' );
-	$courses_req->set_param(
-		'_fields',
-		join(
-			',',
-			[
-				'_links',
-				'categories',
-				'description',
-				'date_gmt',
-				'featured_media',
-				'id',
-				'link',
-				'hours',
-				'title',
-			]
-		)
-	);
-	$response = rest_do_request( $courses_req );
-
-	if ( $response->is_error() ) {
-		wp_die(
-			printf( '<p>An unanticipated error occurred: %s</p>', $response->as_error()->get_error_message() ) // phpcs:ignore
+	$courses = wp_cache_get( 'aliemu_catalog_courses' );
+	if ( ! $courses ) {
+		$courses_req = new \WP_Rest_Request( 'GET', '/aliemu/v1/courses' );
+		$courses_req->set_param(
+			'_fields',
+			join(
+				',',
+				[
+					'_links',
+					'categories',
+					'description',
+					'date_gmt',
+					'featured_media',
+					'id',
+					'link',
+					'hours',
+					'title',
+				]
+			)
 		);
-	}
+		$courses_req->set_param( 'per_page', 100 );
+		$response = rest_do_request( $courses_req );
 
-	$headers = $response->get_headers();
-	$data    = $wp_rest_server->response_to_data( $response, true );
+		if ( $response->is_error() ) {
+			wp_die(
+				printf( '<p>An unanticipated error occurred: %s</p>', $response->as_error()->get_error_message() ) // phpcs:ignore
+			);
+		}
+
+		$courses = $wp_rest_server->response_to_data( $response, true );
+		wp_cache_set( 'aliemu_catalog_courses', $courses, '', DAY_IN_SECONDS );
+	}
 
 	$categories = wp_cache_get( 'aliemu_catalog_categories' );
 	if ( ! $categories ) {
@@ -67,10 +71,7 @@ function localize() {
 	}
 
 	return [
-		'headers'    => [
-			'courses' => $headers,
-		],
-		'courses'    => $data,
+		'courses'    => $courses,
 		'categories' => $categories,
 	];
 }

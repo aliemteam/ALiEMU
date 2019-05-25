@@ -1,75 +1,59 @@
-import React, { PureComponent } from 'react';
+import { memo, useContext, useState } from '@wordpress/element';
 
-import { MessageContext, withMessageDispatcher } from 'components/message-hub/';
-import { wpAjax } from 'utils/ajax';
-import { Intent } from 'utils/constants';
+import { MessageContext } from 'components/message-hub';
+import ajax from 'utils/ajax';
 
 import Button from 'components/buttons/button';
 import Notice from 'components/notice';
 
-interface Props extends MessageContext {
-    user_login: string;
+interface Props {
+    username: string;
 }
+function ActivationNotice({ username }: Props) {
+    const [isSent, setIsSent] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-interface State {
-    emailSent: boolean;
-    loading: boolean;
-}
+    const { dispatchMessage } = useContext(MessageContext);
 
-class ActivationNoticePre extends PureComponent<Props, State> {
-    state: State = {
-        emailSent: false,
-        loading: false,
-    };
-
-    render() {
-        const { emailSent, loading } = this.state;
-        if (emailSent) {
-            return (
-                <Notice
-                    intent={Intent.SUCCESS}
-                    title="Activation sent successfully!"
-                >
-                    To complete your activation, please click the link in the
-                    email.
-                </Notice>
-            );
-        } else {
-            return (
-                <Notice intent={Intent.PRIMARY} title="Activation required">
-                    <div style={{ display: 'grid', gap: 10 }}>
-                        <div>Your account is awaiting email verification.</div>
-                        <Button
-                            intent={Intent.PRIMARY}
-                            loading={loading}
-                            type="button"
-                            onClick={this.handleClick}
-                        >
-                            Resend activation email
-                        </Button>
-                    </div>
-                </Notice>
-            );
-        }
+    if (isSent) {
+        return (
+            <Notice intent="success" title="Activation sent successfully!">
+                To complete your activation, please click the link in the email.
+            </Notice>
+        );
     }
-
-    private handleClick = async () => {
-        const { dispatchMessage, user_login } = this.props;
-        this.setState({ loading: true });
-        const { success } = await wpAjax('user_resend_activation', {
-            user_login,
-        });
-        if (!success) {
-            dispatchMessage({
-                text: 'Uh oh!',
-                details:
-                    'An error occurred when attempting to communicate with our email server. Please try again later.',
-                intent: Intent.DANGER,
-            });
-        }
-        this.setState({ emailSent: success, loading: false });
-    };
+    return (
+        <Notice intent="primary" title="Activation required">
+            <div style={{ display: 'grid', gap: 10 }}>
+                <div>Your account is awaiting email verification.</div>
+                <Button
+                    intent="primary"
+                    isLoading={isLoading}
+                    type="button"
+                    onClick={async () => {
+                        setIsLoading(true);
+                        const { success } = await ajax(
+                            'user_resend_activation',
+                            {
+                                user_login: username,
+                            },
+                        );
+                        if (!success) {
+                            dispatchMessage({
+                                text: 'Uh oh!',
+                                details:
+                                    'An error occurred when attempting to communicate with our email server. Please try again later.',
+                                intent: 'danger',
+                            });
+                        }
+                        setIsSent(success);
+                        setIsLoading(false);
+                    }}
+                >
+                    Resend activation email
+                </Button>
+            </div>
+        </Notice>
+    );
 }
-
-const ActivationNotice = withMessageDispatcher(ActivationNoticePre);
-export default ActivationNotice;
+export default memo(ActivationNotice);

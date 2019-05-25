@@ -1,156 +1,136 @@
-import React, { FormEvent, MouseEvent, PureComponent, ReactNode } from 'react';
-
-import { wpAjax } from 'utils/ajax';
-import { Intent } from 'utils/constants';
-import { FormKind } from './index';
+import { memo, useEffect, useRef, useState } from '@wordpress/element';
 
 import AnchorButton from 'components/buttons/anchor-button';
 import Button from 'components/buttons/button';
 import Checkbox from 'components/forms/checkbox';
 import Input from 'components/forms/input';
 import Notice from 'components/notice';
-import ActivationNotice from './activation-notice';
+import ajax from 'utils/ajax';
 
+import ActivationNotice from './activation-notice';
 import * as styles from './form-login.scss';
 
 interface Props {
-    onForgotClick(e: MouseEvent<HTMLAnchorElement>): void;
+    onForgotClick(): void;
 }
+function LoginForm({ onForgotClick }: Props) {
+    const [data, setData] = useState({
+        user_login: '',
+        user_password: '',
+        remember: false,
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [notice, setNotice] = useState<React.ReactNode>(null);
+    const [shouldRenderForm, setShouldRenderForm] = useState(true);
+    const firstInputElement = useRef<HTMLInputElement>(null);
 
-interface State {
-    data: {
-        user_login: string;
-        user_password: string;
-        remember: boolean;
-    };
-    loading: boolean;
-    shouldRenderForm: boolean;
-    notice(): ReactNode;
-}
+    useEffect(() => {
+        firstInputElement.current && firstInputElement.current.focus();
+    }, []);
 
-const renderNoop = () => null;
-
-export default class LoginForm extends PureComponent<Props, State> {
-    state: State = {
-        data: {
-            user_login: '',
-            user_password: '',
-            remember: false,
-        },
-        loading: false,
-        shouldRenderForm: true,
-        notice: renderNoop,
-    };
-
-    render(): JSX.Element {
-        return (
-            <form className={styles.form} onSubmit={this.handleSubmit}>
-                {this.state.notice()}
-                {this.maybeRenderForm()}
-            </form>
-        );
-    }
-
-    private maybeRenderForm = (): ReactNode => {
-        const {
-            data: { user_login, user_password, remember },
-            loading,
-            shouldRenderForm,
-        } = this.state;
-        if (!shouldRenderForm) {
-            return null;
-        }
-        return (
-            <>
-                <Input
-                    required
-                    autoComplete="username"
-                    disabled={loading}
-                    label="Username or Email"
-                    name="user_login"
-                    value={user_login}
-                    onChange={this.handleChange}
-                />
-                <Input
-                    required
-                    autoComplete="current-password"
-                    disabled={loading}
-                    label="Password"
-                    name="user_password"
-                    type="password"
-                    value={user_password}
-                    onChange={this.handleChange}
-                />
-                <div className={styles.metaRow}>
-                    <Checkbox
-                        checked={remember}
-                        disabled={loading}
-                        label="Remember me"
-                        name="remember"
-                        onChange={this.handleChange}
+    return (
+        <form
+            className={styles.form}
+            onSubmit={async e => {
+                e.preventDefault();
+                setIsLoading(true);
+                const response = await ajax('user_login', { ...data });
+                if (response.success) {
+                    return window.location.replace('user');
+                }
+                switch (response.data.code) {
+                    case 'awaiting_email_confirmation':
+                        setNotice(
+                            <ActivationNotice username={data.user_login} />,
+                        );
+                        setShouldRenderForm(false);
+                        break;
+                    case 'invalid_username':
+                    case 'incorrect_password':
+                        setNotice(
+                            <Notice intent="danger">
+                                Invalid username or password.
+                            </Notice>,
+                        );
+                        break;
+                    case 'awaiting_admin_review':
+                    case 'inactive':
+                        setNotice(
+                            <Notice intent="warning">
+                                {response.data.message}
+                            </Notice>,
+                        );
+                        setShouldRenderForm(false);
+                        break;
+                    default:
+                        setNotice(
+                            <Notice intent="danger">
+                                An unexpected error occurred while attempting to
+                                log in. Please try again later.
+                            </Notice>,
+                        );
+                        setShouldRenderForm(false);
+                }
+                setIsLoading(false);
+            }}
+        >
+            {notice}
+            {shouldRenderForm && (
+                <>
+                    <Input
+                        ref={firstInputElement}
+                        required
+                        autoComplete="username"
+                        disabled={isLoading}
+                        label="Username or Email"
+                        value={data.user_login}
+                        onChange={e =>
+                            setData({
+                                ...data,
+                                user_login: e.currentTarget.value,
+                            })
+                        }
                     />
-                    <AnchorButton
-                        className={styles.anchorButton}
-                        data-form={FormKind.RESET}
-                        disabled={loading}
-                        onClick={this.props.onForgotClick}
-                    >
-                        Forgot your password?
-                    </AnchorButton>
-                </div>
-                <Button intent={Intent.PRIMARY} loading={loading}>
-                    Login
-                </Button>
-            </>
-        );
-    };
-
-    private handleChange = (e: FormEvent<HTMLInputElement>): void => {
-        const { value, checked, name, type } = e.currentTarget;
-        this.setState(prev => ({
-            data: {
-                ...prev.data,
-                [name]: type === 'checkbox' ? checked : value,
-            },
-        }));
-    };
-
-    private handleSubmit = async (
-        e: FormEvent<HTMLFormElement>,
-    ): Promise<void> => {
-        e.preventDefault();
-        const { data } = this.state;
-        this.setState({ notice: renderNoop, loading: true });
-        const response = await wpAjax('user_login', { ...data });
-        if (response.success) {
-            return window.location.replace('user');
-        }
-        const { code } = response.data;
-        let notice: () => ReactNode;
-        let shouldRenderForm = false;
-        switch (code) {
-            case 'awaiting_email_confirmation':
-                notice = () => (
-                    <ActivationNotice user_login={data.user_login} />
-                );
-                break;
-            case 'invalid_username':
-            case 'incorrect_password':
-                notice = () => (
-                    <Notice intent={Intent.DANGER}>
-                        Invalid username or password.
-                    </Notice>
-                );
-                shouldRenderForm = true;
-                break;
-            default:
-                notice = () => (
-                    <Notice intent={Intent.DANGER}>
-                        An unexpected error occurred while attempting to log in.
-                        Please try again later.
-                    </Notice>
-                );
-        }
-        this.setState({ notice, shouldRenderForm, loading: false });
-    };
+                    <Input
+                        required
+                        autoComplete="current-password"
+                        disabled={isLoading}
+                        label="Password"
+                        type="password"
+                        value={data.user_password}
+                        onChange={e =>
+                            setData({
+                                ...data,
+                                user_password: e.currentTarget.value,
+                            })
+                        }
+                    />
+                    <div className={styles.metaRow}>
+                        <Checkbox
+                            checked={data.remember}
+                            disabled={isLoading}
+                            label="Remember me"
+                            onChange={e =>
+                                setData({
+                                    ...data,
+                                    remember: e.currentTarget.checked,
+                                })
+                            }
+                        />
+                        <AnchorButton
+                            className={styles.anchorButton}
+                            disabled={isLoading}
+                            onClick={onForgotClick}
+                        >
+                            Forgot your password?
+                        </AnchorButton>
+                    </div>
+                    <Button intent="primary" isLoading={isLoading}>
+                        Login
+                    </Button>
+                </>
+            )}
+        </form>
+    );
 }
+export default memo(LoginForm);

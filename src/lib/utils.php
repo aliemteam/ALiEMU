@@ -91,11 +91,16 @@ function slack_message( string $channel, array $message ) {
 		],
 		$message
 	);
-	if ( WP_DEBUG ) {
+	if ( defined( 'WP_LOCAL_DEV' ) && WP_LOCAL_DEV ) {
 		$response = [
 			'response' => [
 				'code'    => 200,
-				'message' => 'OK',
+				'message' => wp_json_encode(
+					[
+						'channel' => $channel,
+						'message' => $message,
+					]
+				),
 			],
 		];
 	} else {

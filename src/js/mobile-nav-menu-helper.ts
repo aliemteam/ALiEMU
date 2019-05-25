@@ -1,15 +1,20 @@
-jQuery(document).ready($ => {
-    const BUTTON_OPEN_CLASS = 'nav__toggle-button--open';
-    const MENU_OPEN_CLASS = 'menu--open';
+import domReady from '@wordpress/dom-ready';
 
-    const button = $('.nav__toggle-button');
-    const menu = $('#menu-primary');
+const BUTTON_OPEN_CLASS = 'nav__toggle-button--open';
+const MENU_OPEN_CLASS = 'menu--open';
 
-    button.click(() => {
-        button.toggleClass(BUTTON_OPEN_CLASS);
-        button.attr('aria-expanded', (_, att) => {
-            return att === 'true' ? 'false' : 'true';
+domReady(() => {
+    const button = document.querySelector<HTMLButtonElement>(
+        '.nav__toggle-button',
+    );
+    const menu = document.querySelector<HTMLUListElement>('#menu-primary');
+
+    if (button && menu) {
+        button.addEventListener('click', () => {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.classList.toggle(BUTTON_OPEN_CLASS);
+            button.setAttribute('aria-expanded', (!isExpanded).toString());
+            menu.classList.toggle(MENU_OPEN_CLASS);
         });
-        menu.toggleClass(MENU_OPEN_CLASS);
-    });
+    }
 });

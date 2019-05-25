@@ -3,7 +3,6 @@
     "env": {
         "browser": true,
         "es6": true,
-        "jquery": true,
         "node": true
     },
     "extends": ["@dsifford/eslint-config"],
@@ -14,6 +13,7 @@
         {
             "files": ["*.d.ts"],
             "rules": {
+                "@typescript-eslint/no-empty-interface": "off",
                 "@typescript-eslint/no-explicit-any": "off",
                 "no-undef": "off"
             }

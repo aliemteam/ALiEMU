@@ -4,6 +4,6 @@ import renderer from 'react-test-renderer';
 import Tag from '../index';
 
 it('should render correctly', () => {
-    const tree = renderer.create(<Tag>Hello World</Tag>);
+    const tree = renderer.create(<Tag text="Hello World" />);
     expect(tree).toMatchSnapshot();
 });

@@ -3,15 +3,19 @@ import renderer from 'react-test-renderer';
 
 import { Navbar, NavGroup, NavTab } from '../index';
 
+const noOp = () => void 0;
+
 it('should render correctly', () => {
     const tree = renderer.create(
         <Navbar>
             <NavGroup>
-                <NavTab active>One</NavTab>
-                <NavTab>Two</NavTab>
+                <NavTab active onClick={noOp}>
+                    One
+                </NavTab>
+                <NavTab onClick={noOp}>Two</NavTab>
             </NavGroup>
             <NavGroup align="right">
-                <NavTab>Three</NavTab>
+                <NavTab onClick={noOp}>Three</NavTab>
             </NavGroup>
         </Navbar>,
     );

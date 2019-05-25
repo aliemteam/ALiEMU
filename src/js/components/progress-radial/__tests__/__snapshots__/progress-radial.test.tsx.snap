@@ -1,39 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<div
+<svg
   aria-valuemax={100}
   aria-valuemin={0}
   aria-valuenow={50}
-  className="container"
+  className="circle"
+  height={50}
   role="progressbar"
+  viewBox="0 0 50 50"
+  width={50}
 >
-  <svg
-    className="no-inherit circle"
-    height={50}
-    viewBox="0 0 50 50"
-    width={50}
-  >
-    <circle
-      className="circleBackground"
-      cx={25}
-      cy={25}
-      r={22.5}
-      strokeWidth={5}
-    />
-    <circle
-      className="circleFill"
-      cx={25}
-      cy={25}
-      r={22.5}
-      strokeDasharray={141.3716694115407}
-      strokeWidth={5}
-      style={
-        Object {
-          "strokeDashoffset": 70.68583470577035,
-        }
+  <circle
+    className="circleBackground"
+    cx={25}
+    cy={25}
+    r={22.5}
+    strokeWidth={5}
+  />
+  <circle
+    className="circleFill"
+    cx={25}
+    cy={25}
+    r={22.5}
+    strokeDasharray={141.3716694115407}
+    strokeWidth={5}
+    style={
+      Object {
+        "strokeDashoffset": 70.68583470577035,
       }
-    />
-  </svg>
-</div>
+    }
+  />
+</svg>
 `;

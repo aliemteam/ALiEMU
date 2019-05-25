@@ -2,7 +2,7 @@
 
 exports[`<Pagination /> should render correctly 1`] = `
 <nav
-  aria-labelledby="pagination-0"
+  aria-labelledby="pagination-TEST"
   className="nav alignRight"
   role="navigation"
 >
@@ -15,7 +15,7 @@ exports[`<Pagination /> should render correctly 1`] = `
     >
       <h2
         className="clipped"
-        id="pagination-0"
+        id="pagination-TEST"
       >
         Table Pagination - Page 3
       </h2>
@@ -23,9 +23,8 @@ exports[`<Pagination /> should render correctly 1`] = `
     <button
       aria-label="previous page"
       className="buttonPrev"
-      data-page={2}
       disabled={false}
-      onClick={[MockFunction]}
+      onClick={[Function]}
       style={
         Object {
           "fontSize": 15,
@@ -52,12 +51,8 @@ exports[`<Pagination /> should render correctly 1`] = `
     >
       <button
         aria-label="page 1"
-        aria-posinset={1}
-        aria-setsize={5}
         className="button"
-        data-page={1}
-        onClick={[MockFunction]}
-        role="listitem"
+        onClick={[Function]}
         style={
           Object {
             "fontSize": 15,
@@ -70,12 +65,8 @@ exports[`<Pagination /> should render correctly 1`] = `
       </button>
       <button
         aria-label="page 2"
-        aria-posinset={2}
-        aria-setsize={5}
         className="button"
-        data-page={2}
-        onClick={[MockFunction]}
-        role="listitem"
+        onClick={[Function]}
         style={
           Object {
             "fontSize": 15,
@@ -89,12 +80,8 @@ exports[`<Pagination /> should render correctly 1`] = `
       <button
         aria-current="page"
         aria-label="page 3"
-        aria-posinset={3}
-        aria-setsize={5}
         className="button"
-        data-page={3}
-        onClick={[MockFunction]}
-        role="listitem"
+        onClick={[Function]}
         style={
           Object {
             "fontSize": 15,
@@ -107,12 +94,8 @@ exports[`<Pagination /> should render correctly 1`] = `
       </button>
       <button
         aria-label="page 4"
-        aria-posinset={4}
-        aria-setsize={5}
         className="button"
-        data-page={4}
-        onClick={[MockFunction]}
-        role="listitem"
+        onClick={[Function]}
         style={
           Object {
             "fontSize": 15,
@@ -125,12 +108,8 @@ exports[`<Pagination /> should render correctly 1`] = `
       </button>
       <button
         aria-label="page 5"
-        aria-posinset={5}
-        aria-setsize={5}
         className="button"
-        data-page={5}
-        onClick={[MockFunction]}
-        role="listitem"
+        onClick={[Function]}
         style={
           Object {
             "fontSize": 15,
@@ -145,9 +124,8 @@ exports[`<Pagination /> should render correctly 1`] = `
     <button
       aria-label="next page"
       className="buttonNext"
-      data-page={4}
       disabled={false}
-      onClick={[MockFunction]}
+      onClick={[Function]}
       style={
         Object {
           "fontSize": 15,

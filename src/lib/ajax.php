@@ -22,30 +22,34 @@ function send_slack_message() : void {
 
 	if ( isset( $_POST['recaptcha_token'], $_POST['email'], $_POST['name'], $_POST['message'] )
 		&& recaptcha_token_is_valid( $_POST['recaptcha_token'] ) ) { // phpcs:ignore
-			$name    = sanitize_text_field( wp_unslash( $_POST['name'] ) );
-			$email   = sanitize_text_field( wp_unslash( $_POST['email'] ) );
-			$message = stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) ) );
-			slack_message(
-				'#aliemu',
-				[
-					'fallback'    => "Contact form message from {$name} ({$email}): {$message}",
-					'pretext'     => '*Feedback Form Message Received*',
-					'author_name' => $name,
-					'author_link' => "mailto:{$email}",
-					'author_icon' => add_query_arg(
-						[
-							'size'    => 16,
-							'default' => 'mp',
-						],
-						'https://www.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) )
-					),
-					'text'        => $message,
-				]
-			);
-			wp_send_json_success();
+		$name     = sanitize_text_field( wp_unslash( $_POST['name'] ) );
+		$email    = sanitize_text_field( wp_unslash( $_POST['email'] ) );
+		$message  = stripslashes( wp_strip_all_tags( sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) ) );
+		$response = slack_message(
+			'#aliemu',
+			[
+				'fallback'    => "Contact form message from {$name} ({$email}): {$message}",
+				'pretext'     => '*Feedback Form Message Received*',
+				'author_name' => $name,
+				'author_link' => "mailto:{$email}",
+				'author_icon' => add_query_arg(
+					[
+						'size'    => 16,
+						'default' => 'mp',
+					],
+					'https://www.gravatar.com/avatar/' . md5( strtolower( trim( $email ) ) )
+				),
+				'text'        => $message,
+			]
+		);
+		if ( is_wp_error( $response ) ) {
+			wp_send_json_error( get_first_error( $response ) );
+		}
+		wp_send_json_success( $response );
 	}
 
-	wp_send_json_error();
+	status_header( 400 );
+	die;
 }
 add_action( 'wp_ajax_send_slack_message', __NAMESPACE__ . '\send_slack_message' );
 add_action( 'wp_ajax_nopriv_send_slack_message', __NAMESPACE__ . '\send_slack_message' );
@@ -69,7 +73,8 @@ function reset_password() : void {
 		wp_send_json_success();
 	}
 
-	wp_send_json_error();
+	status_header( 400 );
+	die;
 }
 add_action( 'wp_ajax_nopriv_reset_password', __NAMESPACE__ . '\reset_password' );
 
@@ -97,7 +102,8 @@ function user_login() : void {
 		wp_send_json_success();
 	}
 
-	wp_send_json_error();
+	status_header( 400 );
+	die;
 }
 add_action( 'wp_ajax_nopriv_user_login', __NAMESPACE__ . '\user_login' );
 
@@ -141,7 +147,8 @@ function user_register() : void {
 		wp_send_json_success( $user_id );
 	}
 
-	wp_send_json_error();
+	status_header( 400 );
+	die;
 }
 add_action( 'wp_ajax_nopriv_user_register', __NAMESPACE__ . '\user_register' );
 
@@ -163,7 +170,8 @@ function user_resend_activation() : void {
 		}
 	}
 
-	wp_send_json_error();
+	status_header( 400 );
+	die;
 }
 add_action( 'wp_ajax_nopriv_user_resend_activation', __NAMESPACE__ . '\user_resend_activation' );
 

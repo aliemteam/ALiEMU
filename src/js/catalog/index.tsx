@@ -1,53 +1,32 @@
-import { action, computed, flow, observable } from 'mobx';
-import { observer } from 'mobx-react';
-import React, { Component, FormEvent } from 'react';
+import { useEffect, useMemo, useState } from '@wordpress/element';
 
-import { Courses } from 'utils/api';
-import { Course } from 'utils/types';
-
-import CourseListing from 'components/course-listing/';
+import CourseListing from 'components/course-listing';
 import Input from 'components/forms/input';
-import Sidebar, { Duration } from './sidebar';
+import { Courses } from 'utils/api';
 
+import Sidebar from './sidebar';
 import styles from './catalog.scss';
 
-export type CourseSubset = Pick<
-    Course,
-    | 'categories'
-    | 'description'
-    | 'date_gmt'
-    | 'featured_media'
-    | 'id'
-    | 'link'
-    | 'hours'
-    | 'title'
-    > & { _embedded: { [k: string]: any } }; // eslint-disable-line
+declare const AU_Catalog: {
+    categories: Record<number, string>;
+    courses: Courses.Course[];
+};
 
-export interface CatalogGlobals {
-    categories: {
-        [categoryId: string]: string;
-    };
-    courses: CourseSubset[];
-    headers: {
-        [k in keyof Omit<CatalogGlobals, 'headers'>]: WordPress.API.Headers
-    };
+export const enum Duration {
+    NONE,
+    LESS_THAN_TWO,
+    TWO_TO_FOUR,
+    FOUR_OR_MORE,
 }
 
-interface DurationObj {
-    min: number;
-    max: number;
-}
+export default function Catalog() {
+    const [courses, setCourses] = useState([...AU_Catalog.courses]);
+    const [categoryFilter, setCategoryFilter] = useState(0);
+    const [durationFilter, setDurationFilter] = useState(Duration.NONE);
+    const [textFilter, setTextFilter] = useState('');
 
-declare const AU_Catalog: CatalogGlobals;
-
-@observer
-export default class Catalog extends Component {
-    @observable filterText = '';
-    @observable categorySelection: number = 0;
-    @observable durationSelection: Duration = Duration.NONE;
-
-    fetchCourses = flow(function*(this: Catalog) {
-        const courses: CourseSubset[] = yield Courses.fetchMany(
+    useEffect(() => {
+        Courses.fetchMany(
             {
                 _fields: [
                     '_links',
@@ -59,125 +38,102 @@ export default class Catalog extends Component {
                     'link',
                     'hours',
                     'title',
-                ],
+                ].join(','),
+                per_page: 100,
             },
-            2,
-        );
-        this._courses.push(...courses);
-    }).bind(this);
+            [...courses],
+        ).then(data => setCourses([...data]));
+    }, []);
 
-    private _courses = observable([...AU_Catalog.courses], { deep: false });
-
-    componentDidMount(): void {
-        this.fetchCourses();
-    }
-
-    @computed
-    get courses(): CourseSubset[] {
-        return this._courses.filter(course => {
-            if (
-                this.categorySelection !== 0 &&
-                !course.categories.includes(this.categorySelection)
-            ) {
-                return false;
-            }
-
-            if (
-                this.filterText.length &&
-                `${course.title} ${course.description}`
-                    .toLowerCase()
-                    .indexOf(this.filterText.toLowerCase()) === -1
-            ) {
-                return false;
-            }
-
-            if (this.durationSelection !== Duration.NONE) {
-                const duration = course.hours;
-                switch (this.durationSelection) {
-                    case Duration.LESS_THAN_TWO:
-                        return duration < 2;
-                    case Duration.TWO_TO_FOUR:
-                        return 2 <= duration && duration < 4;
-                    case Duration.FOUR_OR_MORE:
-                        return duration >= 4;
+    const visibleCourses = useMemo(
+        () =>
+            courses.filter(course => {
+                if (
+                    categoryFilter > 0 &&
+                    !course.categories.includes(categoryFilter)
+                ) {
+                    return false;
                 }
-            }
-            return true;
-        });
-    }
 
-    @computed
-    get duration(): DurationObj {
-        switch (this.durationSelection) {
-            case Duration.LESS_THAN_TWO:
-                return { min: 0, max: 2 };
-            case Duration.TWO_TO_FOUR:
-                return { min: 2, max: 4 };
-            case Duration.FOUR_OR_MORE:
-                return { min: 4, max: 1000 };
-            default:
-                return { min: 0, max: 1000 };
-        }
-    }
+                if (
+                    textFilter &&
+                    `${course.title.rendered} ${course.description}`
+                        .toLowerCase()
+                        .indexOf(textFilter.toLowerCase()) === -1
+                ) {
+                    return false;
+                }
 
-    @computed
-    get structuredData(): string {
-        return JSON.stringify({
-            '@context': 'http://schema.org',
-            '@type': 'ItemList',
-            itemListElement: this.courses.map((course, idx) => ({
-                '@type': 'ListItem',
-                position: idx + 1,
-                url: course.link,
-            })),
-        });
-    }
+                switch (durationFilter) {
+                    case Duration.LESS_THAN_TWO:
+                        return course.hours < 2;
+                    case Duration.TWO_TO_FOUR:
+                        return 2 <= course.hours && course.hours < 4;
+                    case Duration.FOUR_OR_MORE:
+                        return course.hours >= 4;
+                    default:
+                        return true;
+                }
+            }),
 
-    @action
-    setDuration = (duration: Duration): void => {
-        this.durationSelection = duration;
-    };
+        [courses, categoryFilter, durationFilter, textFilter],
+    );
 
-    @action
-    setCategory = (cid: number): void => {
-        this.categorySelection = cid;
-    };
+    const structuredData = useMemo(
+        () =>
+            JSON.stringify({
+                '@context': 'http://schema.org',
+                '@type': 'ItemList',
+                itemListElement: visibleCourses.map(({ link }, i) => ({
+                    '@type': 'ListItem',
+                    position: i + 1,
+                    url: link,
+                })),
+            }),
+        [visibleCourses],
+    );
 
-    @action
-    handleFilterChange = (e: FormEvent<HTMLInputElement>): void => {
-        this.filterText = e.currentTarget.value;
-    };
-
-    render(): JSX.Element {
-        return (
-            <div className={styles.catalog}>
-                <h1>Course Catalog</h1>
-                <div className={styles.search}>
-                    <Input
-                        raised
-                        aria-label="course catalog search"
-                        placeholder="Search"
-                        type="search"
-                        value={this.filterText}
-                        onChange={this.handleFilterChange}
-                    />
-                </div>
-                <Sidebar
-                    category={this.categorySelection}
-                    duration={this.durationSelection}
-                    onCategoryChange={this.setCategory}
-                    onDurationChange={this.setDuration}
-                />
-                <section className={styles.courseList} id="content">
-                    {this.courses.map(course => (
-                        <CourseListing key={course.id} course={course} />
-                    ))}
-                </section>
-                <script
-                    dangerouslySetInnerHTML={{ __html: this.structuredData }}
-                    type="application/ld+json"
+    return (
+        <div className={styles.catalog}>
+            <h1>Course Catalog</h1>
+            <div className={styles.search}>
+                <Input
+                    isRaised
+                    aria-controls="content"
+                    aria-label="course catalog search"
+                    placeholder="Search"
+                    type="search"
+                    value={textFilter}
+                    onChange={e => setTextFilter(e.currentTarget.value)}
                 />
             </div>
-        );
-    }
+            <Sidebar
+                categories={AU_Catalog.categories}
+                selectedCategory={categoryFilter}
+                selectedDuration={durationFilter}
+                onCategoryChange={id =>
+                    setCategoryFilter(categoryFilter === id ? 0 : id)
+                }
+                onDurationChange={duration =>
+                    setDurationFilter(
+                        durationFilter === duration ? Duration.NONE : duration,
+                    )
+                }
+            />
+            <section
+                aria-live="assertive"
+                className={styles.courseList}
+                id="content"
+                role="list"
+            >
+                {visibleCourses.map(course => (
+                    <CourseListing key={course.id} course={course} />
+                ))}
+            </section>
+            <script
+                dangerouslySetInnerHTML={{ __html: structuredData }}
+                type="application/ld+json"
+            />
+        </div>
+    );
 }

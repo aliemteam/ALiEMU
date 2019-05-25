@@ -6,12 +6,9 @@ Array [
     className=""
   >
     <input
-      checked={false}
-      onChange={[Function]}
       type="checkbox"
     />
     <span
-      aria-checked={false}
       role="checkbox"
     />
     <span>
@@ -23,7 +20,6 @@ Array [
   >
     <input
       checked={true}
-      onChange={[Function]}
       type="checkbox"
     />
     <span

@@ -18,17 +18,6 @@
     }
 }
 
-.add-coach-form {
-    display: flex;
-    flex: auto;
-    justify-content: center;
-
-    > button {
-        margin-left: 5px;
-        flex-shrink: 0;
-    }
-}
-
 .table {
     grid-area: table;
 }

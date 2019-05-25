@@ -1,33 +1,30 @@
+import { memo, HTMLProps } from '@wordpress/element';
 import classNames from 'classnames';
-import React, { HTMLProps } from 'react';
 
-import { Intent } from 'utils/constants';
 import styles from './button-outlined.scss';
 
-export interface ButtonOutlinedProps extends HTMLProps<HTMLButtonElement> {
+export interface Props extends HTMLProps<HTMLButtonElement> {
     children: string;
     intent?: Intent;
     type?: 'button' | 'reset' | 'submit';
 }
-
-const ButtonOutlined = (props: ButtonOutlinedProps): JSX.Element => {
-    const { children, className, intent, ...btnProps } = props;
+function ButtonOutlined({ children, className, intent, ...props }: Props) {
     const classname = classNames(
         styles.buttonOutlined,
         {
-            [styles.buttonOutlinedPrimary]: intent === Intent.PRIMARY,
-            [styles.buttonOutlinedSecondary]: intent === Intent.SECONDARY,
-            [styles.buttonOutlinedDanger]: intent === Intent.DANGER,
-            [styles.buttonOutlinedSuccess]: intent === Intent.SUCCESS,
-            [styles.buttonOutlinedWarning]: intent === Intent.WARNING,
+            [styles.buttonOutlinedPrimary]: intent === "primary",
+            [styles.buttonOutlinedSecondary]: intent === "secondary",
+            [styles.buttonOutlinedDanger]: intent === "danger",
+            [styles.buttonOutlinedSuccess]: intent === "success",
+            [styles.buttonOutlinedWarning]: intent === "warning",
         },
         className,
     );
     return (
-        <button {...btnProps} className={classname}>
+        <button {...props} className={classname}>
             {children}
         </button>
     );
-};
+}
 
-export default ButtonOutlined;
+export default memo(ButtonOutlined);

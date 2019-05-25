@@ -1,23 +1,42 @@
+import { ReactNode } from '@wordpress/element';
 import classNames from 'classnames';
-import React from 'react';
 
 import styles from './item.scss';
 
-interface Props extends React.HTMLProps<HTMLButtonElement> {
-    selected?: boolean;
-    type?: 'button' | 'reset' | 'submit';
+interface Props {
+    children: ReactNode;
+    isActive?: boolean;
+    onClick(): void;
 }
 
-export default class MenuItem extends React.PureComponent<Props> {
-    render(): JSX.Element {
-        const { children, selected, ...props } = this.props;
-        const classname = classNames(styles.menuItem, {
-            [styles.selected]: selected,
-        });
-        return (
-            <button {...props} className={classname} role="menuitem">
-                {this.props.children}
-            </button>
-        );
-    }
+export function MenuItemRadio({ children, isActive, onClick }: Props) {
+    const classname = classNames(styles.menuItem, {
+        [styles.active]: isActive,
+    });
+    return (
+        <button
+            aria-checked={isActive}
+            className={classname}
+            role="menuitemradio"
+            onClick={onClick}
+        >
+            {children}
+        </button>
+    );
+}
+
+export function MenuItemCheckbox({ children, isActive, onClick }: Props) {
+    const classname = classNames(styles.menuItem, {
+        [styles.active]: isActive,
+    });
+    return (
+        <button
+            aria-checked={isActive}
+            className={classname}
+            role="menuitemcheckbox"
+            onClick={onClick}
+        >
+            {children}
+        </button>
+    );
 }

@@ -1,5 +1,5 @@
+import { memo, HTMLProps } from '@wordpress/element';
 import classNames from 'classnames';
-import React, { HTMLProps, PureComponent } from 'react';
 
 import { MaybeLabel } from './label';
 
@@ -9,27 +9,18 @@ interface Props extends HTMLProps<HTMLSelectElement> {
     label?: string;
 }
 
-export default class Select extends PureComponent<Props> {
-    render(): JSX.Element {
-        const {
-            label,
-            className,
-            children,
-            placeholder,
-            ...props
-        } = this.props;
-        const classname = classNames(styles.select, className);
-        return (
-            <MaybeLabel disabled={props.disabled} label={label}>
-                <select {...props} className={classname}>
-                    <>
-                        <option key="empty" value="">
-                            {placeholder}
-                        </option>
-                        {children}
-                    </>
-                </select>
-            </MaybeLabel>
-        );
-    }
+function Select({ label, className, children, placeholder, ...props }: Props) {
+    return (
+        <MaybeLabel disabled={props.disabled} label={label}>
+            <select {...props} className={classNames(styles.select, className)}>
+                <>
+                    <option key="empty" value="">
+                        {placeholder}
+                    </option>
+                    {children}
+                </>
+            </select>
+        </MaybeLabel>
+    );
 }
+export default memo(Select);

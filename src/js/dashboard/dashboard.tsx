@@ -1,46 +1,82 @@
-import React, { useState } from 'react';
+import { createContext, useCallback, useContext, useState } from '@wordpress/element';
+import { cloneDeep } from 'lodash';
 
-import UserStore, { UserKind } from 'dashboard/user-store';
-import DevTool from 'utils/dev-tools';
-import { Coach, Learner } from 'utils/types';
+import { MessageContext } from 'components/message-hub';
+import useQueryParam from 'hooks/use-query-param';
+import { CurrentUser } from 'utils/api';
 
 import Content from './content';
 import Header from './header';
 import Navbar from './navbar';
 
-export interface Globals {
+declare const AU_Dashboard: {
     recent_comments: number[];
-    user: Coach & Learner;
+    user: CurrentUser.User;
+};
+
+interface DashboardContext {
+    readonly recentComments: readonly number[];
+    readonly user: Readonly<CurrentUser.User>;
+    readonly isOwnProfile: boolean;
+    updateUser(data: Partial<CurrentUser.User>): Promise<void>;
 }
 
-export const enum Tabs {
-    GROUPS = 'GROUPS',
-    HOME = 'HOME',
-    PROFILE = 'PROFILE',
-    PROGRESS = 'PROGRESS',
-}
+const DEFAULT_CONTEXT: DashboardContext = {
+    recentComments: [...AU_Dashboard.recent_comments],
+    user: cloneDeep(AU_Dashboard.user),
+    isOwnProfile: AU_Dashboard.user.capabilities !== undefined,
+    updateUser: async () => {
+        throw new Error(
+            'DashboardContext: updateUser was not provided by a registered provider.',
+        );
+    },
+};
 
-declare const AU_Dashboard: Globals;
+export type Tab = 'groups' | 'home' | 'profile' | 'progress';
 
-const store = new UserStore(AU_Dashboard.user, AU_Dashboard.recent_comments);
+export const DashboardContext = createContext(DEFAULT_CONTEXT);
 
-function Dashboard() {
-    const [currentTab, setCurrentTab] = useState(
-        store.userKind === UserKind.OWNER ? Tabs.HOME : Tabs.PROFILE,
+export default function Dashboard() {
+    const [tabQueryParam, setTabQueryParam] = useQueryParam<Tab>(
+        'tab',
+        DEFAULT_CONTEXT.isOwnProfile ? 'home' : 'profile',
+    );
+    const [currentTab, setCurrentTab] = useState<Tab>(tabQueryParam);
+    const [user, setUser] = useState(cloneDeep(AU_Dashboard.user));
+
+    const { dispatchMessage } = useContext(MessageContext);
+
+    const updateUser = useCallback(
+        async (data: Partial<CurrentUser.User>) => {
+            setUser({ ...user, ...data });
+            try {
+                await CurrentUser.update(data);
+            } catch {
+                dispatchMessage({
+                    text: 'Error updating profile information.',
+                    intent: 'danger',
+                    details:
+                        'An unexpected error occurred while attempting to update your profile information. Please try again later.',
+                });
+                setUser(user);
+            }
+        },
+        [user],
     );
 
     return (
-        <>
-            <DevTool />
-            <Header store={store} />
+        <DashboardContext.Provider
+            value={{ ...DEFAULT_CONTEXT, user, updateUser }}
+        >
+            <Header />
             <Navbar
                 currentTab={currentTab}
-                store={store}
-                onTabClick={setCurrentTab}
+                onTabClick={tab => {
+                    setCurrentTab(tab);
+                    setTabQueryParam(tab);
+                }}
             />
-            <Content currentTab={currentTab} store={store} />
-        </>
+            <Content currentTab={currentTab} />
+        </DashboardContext.Provider>
     );
 }
-
-export default Dashboard;

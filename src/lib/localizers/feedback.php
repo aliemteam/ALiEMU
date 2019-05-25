@@ -15,9 +15,9 @@ defined( 'ABSPATH' ) || exit;
 function localize() {
 	$user = wp_get_current_user();
 	return [
-		'user' => $user->ID > 0 ? [
-			'name'  => $user->data->display_name,
-			'email' => $user->data->user_email,
-		] : null,
+		'user' => [
+			'name'  => $user->data->display_name ?? '',
+			'email' => $user->data->user_email ?? '',
+		],
 	];
 }

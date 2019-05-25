@@ -1,85 +1,69 @@
+import { memo, AllHTMLAttributes } from '@wordpress/element';
 import classNames from 'classnames';
-import React, {
-    CSSProperties,
-    HTMLProps,
-    MouseEvent,
-    PureComponent,
-} from 'react';
-
-import { Intent } from 'utils/constants';
 
 import Spinner from 'components/spinner';
 
 import styles from './button.scss';
 
-export interface ButtonProps extends Omit<HTMLProps<HTMLButtonElement>, 'ref'> {
+export interface ButtonProps extends AllHTMLAttributes<HTMLButtonElement> {
     children: string;
     intent?: Intent;
-    loading?: boolean;
+    isLoading?: boolean;
     scale?: number;
     type?: 'button' | 'reset' | 'submit';
 }
 
-class Button extends PureComponent<ButtonProps> {
-    static defaultProps = {
-        onClick: () => void 0,
-    };
-
-    render(): JSX.Element {
-        const {
-            children,
-            href,
-            intent,
-            loading,
-            scale,
-            style,
-            ...props
-        } = this.props;
-        const classname = classNames(styles.button, {
-            [styles.intentPrimary]: intent === Intent.PRIMARY,
-            [styles.intentSecondary]: intent === Intent.SECONDARY,
-            [styles.intentSuccess]: intent === Intent.SUCCESS,
-            [styles.intentWarning]: intent === Intent.WARNING,
-            [styles.intentDanger]: intent === Intent.DANGER,
-            [styles.loading]: loading,
-        });
-        const computedStyle: CSSProperties = scale
-            ? {
-                  fontSize: `calc(${styles.fontSize} * ${scale})`,
-                  height: `calc(${styles.height} * ${scale})`,
-                  ...style,
-              }
-            : { ...style };
-        return (
-            <button
-                {...props}
-                className={classname}
-                disabled={props.disabled || loading}
-                role={href ? 'link' : undefined}
-                style={computedStyle}
-                onClick={this.handleClick}
-            >
-                <span>{children}</span>
-                {loading && (
-                    <div className={styles.spinner}>
-                        <Spinner size={25} />
-                    </div>
-                )}
-            </button>
-        );
-    }
-
-    private handleClick = (e: MouseEvent<HTMLButtonElement>): void => {
-        const { href, loading, onClick = () => void 0 } = this.props;
-        if (loading) {
-            return e.preventDefault();
-        }
-        if (href) {
-            window.location.href = href;
-            return;
-        }
-        onClick(e);
-    };
+function Button({
+    children,
+    intent,
+    isLoading,
+    scale,
+    style,
+    href,
+    onClick = () => void 0,
+    ...props
+}: ButtonProps) {
+    const classname = classNames(styles.button, {
+        [styles.intentPrimary]: intent === 'primary',
+        [styles.intentSecondary]: intent === 'secondary',
+        [styles.intentSuccess]: intent === 'success',
+        [styles.intentWarning]: intent === 'warning',
+        [styles.intentDanger]: intent === 'danger',
+        [styles.loading]: isLoading,
+    });
+    const computedStyle = scale
+        ? {
+              fontSize: `calc(${styles.fontSize} * ${scale})`,
+              height: `calc(${styles.height} * ${scale})`,
+              ...style,
+          }
+        : { ...style };
+    return (
+        <button
+            {...props}
+            className={classname}
+            disabled={props.disabled || isLoading}
+            role={href ? 'link' : undefined}
+            style={computedStyle}
+            onClick={e => {
+                if (isLoading) {
+                    return e.preventDefault();
+                }
+                if (href) {
+                    window.location.href = href;
+                    return;
+                }
+                onClick(e);
+            }}
+        >
+            <span>{children}</span>
+            {isLoading && (
+                <div className={styles.spinner}>
+                    <Spinner size={25} />
+                </div>
+            )}
+        </button>
+    );
 }
 
-export default Button;
+export default memo(Button);

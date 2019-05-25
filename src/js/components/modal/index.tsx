@@ -1,121 +1,96 @@
-import React, { PureComponent } from 'react';
-import { createPortal } from 'react-dom';
+import { createPortal, useEffect, useRef } from '@wordpress/element';
 
-import Card from 'components/card/';
 import styles from './modal.scss';
+
+const FOCUSABLE_ELEMENT_SELECTOR = [
+    '[contenteditable]:not([contenteditable="false"])',
+    '[href]',
+    '[tabindex]:not([tabindex="-1"])',
+    'audio[controls],video[controls]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+].join(',');
 
 interface Props {
     closeOnClickOutside?: boolean;
+    children: React.ReactNode;
     onClose(): void;
 }
 
-export abstract class AbstractModal<P = {}, S = {}> extends PureComponent<
-    P & Props,
-    S
-> {
-    private static readonly FOCUSABLE_SELECTORS =
-        '[href], input, select, textarea, button';
-    private static BODY_OVERFLOW_CLASS = 'overflow-hidden';
+function Modal({ children, onClose, ...props }: Props) {
+    const modalRoot = useRef(document.createElement('div'));
 
-    private rootNode: HTMLDivElement;
-
-    private get firstFocusableElement(): HTMLElement | undefined {
-        const elements = this.rootNode.querySelectorAll<HTMLElement>(
-            AbstractModal.FOCUSABLE_SELECTORS,
+    useEffect(() => {
+        document.body.appendChild(modalRoot.current);
+        document.body.classList.add(styles.fixed);
+        const focusable = modalRoot.current.querySelector<HTMLElement>(
+            FOCUSABLE_ELEMENT_SELECTOR,
         );
-        return elements[0];
-    }
-
-    private get lastFocusableElement(): HTMLElement | undefined {
-        const elements = this.rootNode.querySelectorAll<HTMLElement>(
-            AbstractModal.FOCUSABLE_SELECTORS,
-        );
-        return elements[elements.length - 1];
-    }
-
-    constructor(props: P & Props) {
-        super(props);
-        this.rootNode = document.createElement('div');
-    }
-
-    componentDidMount(): void {
-        document.body.appendChild(this.rootNode);
-        document.body.classList.add(AbstractModal.BODY_OVERFLOW_CLASS);
-        const firstElement = this.firstFocusableElement;
-        if (firstElement) {
-            firstElement.focus();
+        if (focusable) {
+            focusable.focus();
         }
-    }
 
-    componentWillUnmount(): void {
-        document.body.removeChild(this.rootNode);
-        document.body.classList.remove(AbstractModal.BODY_OVERFLOW_CLASS);
-    }
+        return () => {
+            document.body.removeChild(modalRoot.current);
+            document.body.classList.remove(styles.fixed);
+        };
+    }, []);
 
-    render(): React.ReactPortal {
-        return createPortal(this.renderModal(), this.rootNode);
-    }
-
-    protected abstract renderContent(): JSX.Element;
-
-    private renderModal = (): JSX.Element => (
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    return createPortal(
         <div
             className={styles.modal}
-            onClick={this.handleOutsideClick}
-            onKeyDown={this.handleKeyDown}
+            role="presentation"
+            onClick={e => {
+                e.stopPropagation();
+                props.closeOnClickOutside && onClose();
+            }}
         >
-            {/* eslint-disable-next-line */}
-            <div role="dialog" onClick={this.stopClickPropagation}>
-                {this.renderContent()}
+            <div role="dialog">
+                <div
+                    role="presentation"
+                    onClick={e => e.stopPropagation()}
+                    onKeyDown={e => {
+                        switch (e.key) {
+                            case 'Tab':
+                                return shouldPreventTab(
+                                    modalRoot.current,
+                                    e.shiftKey,
+                                )
+                                    ? e.preventDefault()
+                                    : void 0;
+                            case 'Escape':
+                                return onClose();
+                        }
+                    }}
+                >
+                    {children}
+                </div>
             </div>
-        </div>
+        </div>,
+        modalRoot.current,
     );
-
-    private handleOutsideClick = () => {
-        const { closeOnClickOutside, onClose } = this.props;
-        if (closeOnClickOutside) {
-            onClose();
-        }
-    };
-
-    private stopClickPropagation = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        e.nativeEvent.stopImmediatePropagation();
-    };
-
-    private handleKeyDown = (e: React.KeyboardEvent) => {
-        switch (e.key) {
-            case 'Tab':
-                if (this.handleTab(e.shiftKey)) {
-                    e.preventDefault();
-                }
-                return;
-            case 'Escape':
-                return this.props.onClose();
-            default:
-                return;
-        }
-    };
-
-    private handleTab = (reverseOrder: boolean): boolean => {
-        const firstElement = this.firstFocusableElement;
-        const lastElement = this.lastFocusableElement;
-        const { activeElement } = document;
-        if (!firstElement || !lastElement) {
-            return true;
-        }
-        if (reverseOrder && activeElement === firstElement) {
-            lastElement.focus();
-            return true;
-        } else if (!reverseOrder && activeElement === lastElement) {
-            firstElement.focus();
-            return true;
-        }
-        return false;
-    };
 }
+export default Modal;
 
-export default class Modal extends AbstractModal {
-    protected renderContent = () => <Card>{this.props.children}</Card>;
+function shouldPreventTab(modalRoot: HTMLElement, isReverse: boolean): boolean {
+    const { activeElement } = document;
+    const focusable = modalRoot.querySelectorAll<HTMLElement>(
+        FOCUSABLE_ELEMENT_SELECTOR,
+    );
+    if (focusable.length === 0) {
+        return true;
+    }
+    const firstElement = focusable[0];
+    const lastElement = focusable[focusable.length - 1];
+    if (isReverse && activeElement === firstElement) {
+        lastElement.focus();
+        return true;
+    }
+    if (!isReverse && activeElement === lastElement) {
+        firstElement.focus();
+        return true;
+    }
+    return false;
 }

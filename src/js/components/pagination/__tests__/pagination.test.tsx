@@ -1,6 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
+jest.mock('lodash', () => ({
+    uniqueId: jest.fn(id => `${id}TEST`),
+}));
+
 import Pagination from '../index';
 
 describe('<Pagination />', () => {

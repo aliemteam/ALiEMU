@@ -1,28 +1,31 @@
 @import '_colors';
+@import 'mixins/reset';
 @import 'variables';
 
 .remove-btn {
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    @include reset-button;
+    position: absolute;
+    right: 0;
+    height: calc(100% - 4px);
     width: 0;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
     color: $black;
     background-color: #d1dfeb;
 
     i {
         font-weight: bold;
-        position: absolute;
     }
 }
 
 .tag {
+    position: relative;
     display: inline-flex;
-    cursor: default;
     background: rgba($primary, 0.15);
     color: $primary;
+    cursor: pointer;
     margin: 0 5px 5px 0;
     padding: 2px 6px;
     font-family: $font-mono;
@@ -30,18 +33,18 @@
     font-weight: 500;
     border-radius: 2px;
 
+    &:focus {
+        outline: dotted 1px;
+    }
+
     &:hover .remove-btn {
-        width: 15px;
-        margin-left: -15px;
+        width: 20px;
+        margin-left: -20px;
         animation: {
             duration: 0.2s;
             name: spring;
             fill-mode: cubic-bezier(0.4, 0, 0.2, 1);
         }
-    }
-
-    &[role='button'] {
-        cursor: pointer;
     }
 }
 
@@ -52,12 +55,12 @@
     }
 
     50% {
-        width: 17px;
-        margin-left: -17px;
+        width: 22px;
+        margin-left: -22px;
     }
 
     100% {
-        widows: 15px;
-        margin-left: -15px;
+        width: 20;
+        margin-left: -20px;
     }
 }

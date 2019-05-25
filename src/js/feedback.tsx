@@ -1,5 +1,4 @@
-import React from 'react';
-import { render } from 'react-dom';
+import { render } from '@wordpress/element';
 
 import Feedback from 'feedback/index';
 

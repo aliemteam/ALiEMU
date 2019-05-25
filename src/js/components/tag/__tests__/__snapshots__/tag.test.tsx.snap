@@ -3,6 +3,10 @@
 exports[`should render correctly 1`] = `
 <div
   className="tag"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+  role="button"
+  tabIndex={-1}
 >
   <span>
     Hello World

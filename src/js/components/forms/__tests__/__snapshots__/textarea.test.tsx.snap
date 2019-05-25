@@ -5,7 +5,6 @@ Array [
   <textarea
     className="textarea"
     onChange={[Function]}
-    style={Object {}}
   />,
   <label
     className=""
@@ -14,7 +13,6 @@ Array [
     <textarea
       className="textarea"
       onChange={[Function]}
-      style={Object {}}
     />
   </label>,
   <label
@@ -25,7 +23,6 @@ Array [
       className="textarea"
       disabled={true}
       onChange={[Function]}
-      style={Object {}}
     />
   </label>,
   <div
@@ -36,7 +33,6 @@ Array [
       defaultValue="12345"
       maxLength={10}
       onChange={[Function]}
-      style={Object {}}
     />
     <div
       aria-valuemax={10}
@@ -65,7 +61,6 @@ Array [
         defaultValue="12345"
         maxLength={10}
         onChange={[Function]}
-        style={Object {}}
       />
       <div
         aria-valuemax={10}

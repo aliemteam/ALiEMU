@@ -1,18 +1,16 @@
+import { memo, HTMLProps } from '@wordpress/element';
 import classNames from 'classnames';
-import React, { HTMLProps, PureComponent } from 'react';
 
 import styles from './card.scss';
 
 type Props = HTMLProps<HTMLDivElement>;
 
-export default class Card extends PureComponent<Props> {
-    render(): JSX.Element {
-        const { children, className, ...props } = this.props;
-        const classname = classNames(styles.card, className);
-        return (
-            <div {...props} className={classname}>
-                {children}
-            </div>
-        );
-    }
+function Card({ children, className, ...props }: Props) {
+    const classname = classNames(styles.card, className);
+    return (
+        <div {...props} className={classname}>
+            {children}
+        </div>
+    );
 }
+export default memo(Card);

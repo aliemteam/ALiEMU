@@ -1,3 +1,4 @@
+@import '_colors';
 @import 'mixins/state';
 @import 'variables';
 @import './shared';
@@ -8,8 +9,7 @@
     @extend .container;
     height: auto;
     overflow: auto;
-    // FIXME:
-    color: #424770;
+    color: $text-color-forms;
     font-family: $font-sans;
     padding: $padding-size;
     resize: vertical;

@@ -1,20 +1,17 @@
-import React, { MouseEvent, PureComponent } from 'react';
+import { memo, MouseEvent } from '@wordpress/element';
 
 import styles from './button-icon.scss';
 
-import Icon, { IconProps } from 'components/icon/';
+import Icon, { IconProps } from 'components/icon';
 
 interface Props extends IconProps {
     onClick?(e: MouseEvent<HTMLButtonElement>): void;
 }
-
-export default class ButtonIcon extends PureComponent<Props> {
-    render(): JSX.Element {
-        const { onClick, ...iconProps } = this.props;
-        return (
-            <button className={styles.button} onClick={onClick}>
-                <Icon {...iconProps} />
-            </button>
-        );
-    }
+function ButtonIcon({ onClick, ...iconProps }: Props) {
+    return (
+        <button className={styles.button} onClick={onClick}>
+            <Icon {...iconProps} />
+        </button>
+    );
 }
+export default memo(ButtonIcon);

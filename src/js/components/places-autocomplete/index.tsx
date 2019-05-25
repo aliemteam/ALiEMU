@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent, RefObject } from 'react';
+import { useEffect, useRef } from '@wordpress/element';
 
 import inject from 'utils/inject-script';
 
@@ -16,77 +16,64 @@ interface Props extends Input.Props {
     onPlaceChange(result?: Partial<Result>): void;
 }
 
-export default class PlacesAutocomplete extends PureComponent<Props> {
-    private static readonly VALIDATION_MESSAGE =
-        'Please choose an option from the completion list.';
+const VALIDATION_MESSAGE = 'Please choose an option from the completion list.';
 
-    private autocomplete!: google.maps.places.Autocomplete;
-    private inputRef: RefObject<HTMLInputElement>;
+export default function PlacesAutocomplete({
+    options,
+    onPlaceChange,
+    ...props
+}: Props) {
+    const inputRef = useRef<HTMLInputElement>(null);
+    const autocomplete = useRef<google.maps.places.Autocomplete>();
 
-    constructor(props: Props) {
-        super(props);
-        this.inputRef = createRef<HTMLInputElement>();
-    }
-
-    async componentDidMount() {
-        await inject(
-            `https://maps.googleapis.com/maps/api/js?libraries=places&key=${
-                process.env.GOOGLE_PLACES_KEY
-            }`,
-        );
-        if (this.inputRef.current) {
-            // eslint-disable-next-line no-undef
-            this.autocomplete = new google.maps.places.Autocomplete(
-                this.inputRef.current,
-                this.props.options,
+    useEffect(() => {
+        (async () => {
+            await inject(
+                `https://maps.googleapis.com/maps/api/js?libraries=places&key=${
+                    process.env.GOOGLE_PLACES_KEY
+                }`,
             );
-            this.autocomplete.addListener(
-                'place_changed',
-                this.handlePlaceChange,
-            );
-            if (!this.props.defaultValue) {
-                this.handleChange();
+            const input = inputRef.current;
+            if (input) {
+                !props.defaultValue &&
+                    input.setCustomValidity(VALIDATION_MESSAGE);
+                // eslint-disable-next-line no-undef
+                autocomplete.current = new google.maps.places.Autocomplete(
+                    input,
+                    options,
+                );
+                autocomplete.current.addListener('place_changed', () => {
+                    if (autocomplete.current) {
+                        const result = autocomplete.current.getPlace();
+                        const isInvalid =
+                            result &&
+                            Object.keys(result).length === 1 &&
+                            result.hasOwnProperty('name');
+                        if (inputRef.current) {
+                            inputRef.current.setCustomValidity(
+                                isInvalid ? VALIDATION_MESSAGE : '',
+                            );
+                        }
+                        onPlaceChange(isInvalid ? undefined : result);
+                    }
+                });
             }
-        }
-    }
+        })();
+        return () => {
+            for (const el of document.querySelectorAll('.pac-container')) {
+                el.parentElement && el.parentElement.removeChild(el);
+            }
+        };
+    }, []);
 
-    componentWillUnmount() {
-        for (const el of document.querySelectorAll('.pac-container')) {
-            el.parentElement && el.parentElement.removeChild(el);
-        }
-    }
-
-    render(): JSX.Element {
-        const { options, onPlaceChange, ...props } = this.props;
-        return (
-            <Input
-                inputRef={this.inputRef}
-                onChange={this.handleChange}
-                {...props}
-            />
-        );
-    }
-
-    private handleChange = () => {
-        // Invalidates the component if user makes any changes to place selected.
-        const { current: input } = this.inputRef;
-        if (input && input.validity.valid) {
-            input.setCustomValidity(PlacesAutocomplete.VALIDATION_MESSAGE);
-        }
-        this.props.onPlaceChange();
-    };
-
-    private handlePlaceChange = (): void => {
-        const result = this.autocomplete.getPlace();
-        const isInvalid =
-            result &&
-            Object.keys(result).length === 1 &&
-            result.hasOwnProperty('name');
-        if (this.inputRef.current) {
-            this.inputRef.current.setCustomValidity(
-                isInvalid ? PlacesAutocomplete.VALIDATION_MESSAGE : '',
-            );
-        }
-        this.props.onPlaceChange(isInvalid ? undefined : result);
-    };
+    return (
+        <Input
+            {...props}
+            ref={inputRef}
+            onChange={e => {
+                e.currentTarget.setCustomValidity(VALIDATION_MESSAGE);
+                onPlaceChange();
+            }}
+        />
+    );
 }

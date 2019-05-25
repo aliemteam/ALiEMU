@@ -12,11 +12,13 @@ exports[`should render correctly 1`] = `
     >
       <button
         className="btn active"
+        onClick={[Function]}
       >
         One
       </button>
       <button
         className="btn"
+        onClick={[Function]}
       >
         Two
       </button>
@@ -26,6 +28,7 @@ exports[`should render correctly 1`] = `
     >
       <button
         className="btn"
+        onClick={[Function]}
       >
         Three
       </button>

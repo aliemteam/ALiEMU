@@ -1,0 +1,22 @@
+@import 'variables';
+
+.controls {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 1fr auto auto;
+
+    > button:first-of-type {
+        grid-column: 2;
+    }
+}
+
+.form {
+    width: calc(100vw - (3 * #{$block-padding}));
+    max-width: 500px;
+}
+
+.title {
+    margin: 0;
+    font-family: $font-sans;
+    font-size: 1.25em;
+}

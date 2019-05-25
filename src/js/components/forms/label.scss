@@ -1,7 +1,7 @@
+@import '_colors';
 @import './shared';
 
 .label {
     font-size: 14px;
-    // FIXME:
-    color: #6b7c93;
+    color: $text-color-labels;
 }

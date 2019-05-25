@@ -1,8 +1,6 @@
 @import '_colors';
 @import 'variables';
 
-// FIXME: below needs to be refactored out into classes
-
 @mixin button($color: false, $modifiers: false) {
     $button-active: rgba(0, 0, 0, 0.12) !default;
     $button-disabled: #a0a5aa !default;

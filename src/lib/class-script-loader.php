@@ -46,14 +46,8 @@ class Script_Loader {
 		// phpcs:disable
 		?>
 			<script>
-				var AU_API = {
-					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>',
-					url: '<?php echo esc_url_raw( rest_url() ); ?>',
-				};
-				var AU_AJAX = {
-					nonce: '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>',
-					url: '<?php echo admin_url( 'admin-ajax.php', 'relative' ); ?>',
-				};
+				var AU_AJAX_NONCE = '<?php echo esc_html( wp_create_nonce( 'wp_ajax' ) ); ?>';
+				var AU_API_NONCE = '<?php echo esc_html( wp_create_nonce( 'wp_rest' ) ); ?>';
 				var AU_NONCE = '<?php echo esc_html( wp_create_nonce( 'aliemu' ) ); ?>';
 			</script>
 		<?php
@@ -85,22 +79,95 @@ class Script_Loader {
 			[],
 			filemtime( get_stylesheet_directory( 'style.css' ) )
 		);
-		wp_register_style( 'aliemu', get_stylesheet_uri(), [ 'aliemu-fonts', 'dashicons' ], filemtime( get_stylesheet_directory( 'style.css' ) ) );
-
+		wp_register_style(
+			'aliemu',
+			get_stylesheet_uri(),
+			[
+				'aliemu-fonts',
+				'dashicons',
+			],
+			filemtime( get_stylesheet_directory( 'style.css' ) )
+		);
 		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
 			$style = pathinfo( $stylesheet );
-			wp_register_style( 'aliemu-' . $style['filename'], ALIEMU_ROOT_URI . '/js/' . $style['basename'], [], filemtime( $stylesheet ) );
+			wp_register_style(
+				'aliemu-' . $style['filename'],
+				ALIEMU_ROOT_URI . '/js/' . $style['basename'],
+				[],
+				filemtime( $stylesheet )
+			);
 		}
 
 		// Header scripts.
-		wp_register_script( 'mobile-nav-menu-helper', ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ), false );
+		wp_register_script(
+			'mobile-nav-menu-helper',
+			ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js',
+			[
+				'wp-dom-ready',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ),
+			false
+		);
 
 		// Footer scripts.
-		wp_register_script( 'aliemu-catalog', ALIEMU_ROOT_URI . '/js/catalog.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/catalog.js' ), true );
-		wp_register_script( 'aliemu-dashboard', ALIEMU_ROOT_URI . '/js/dashboard.js', [ 'jquery' ], filemtime( ALIEMU_ROOT_PATH . '/js/dashboard.js' ), true );
-		wp_register_script( 'aliemu-feedback', ALIEMU_ROOT_URI . '/js/feedback.js', [ 'jquery', 'wp-util' ], filemtime( ALIEMU_ROOT_PATH . '/js/feedback.js' ), true );
-		wp_register_script( 'aliemu-landing-page', ALIEMU_ROOT_URI . '/js/landing-page.js', [], filemtime( ALIEMU_ROOT_PATH . '/js/landing-page.js' ), true );
-		wp_register_script( 'aliemu-login', ALIEMU_ROOT_URI . '/js/login.js', [ 'jquery', 'wp-util' ], filemtime( ALIEMU_ROOT_PATH . '/js/login.js' ), true );
+		wp_register_script(
+			'aliemu-catalog',
+			ALIEMU_ROOT_URI . '/js/catalog.js',
+			[
+				'lodash',
+				'react',
+				'wp-element',
+				'wp-html-entities',
+				'wp-url',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/catalog.js' ),
+			true
+		);
+		wp_register_script(
+			'aliemu-dashboard',
+			ALIEMU_ROOT_URI . '/js/dashboard.js',
+			[
+				'lodash',
+				'react',
+				'wp-element',
+				'wp-html-entities',
+				'wp-url',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/dashboard.js' ),
+			true
+		);
+		wp_register_script(
+			'aliemu-feedback',
+			ALIEMU_ROOT_URI . '/js/feedback.js',
+			[
+				'react',
+				'wp-element',
+				'wp-url',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/feedback.js' ),
+			true
+		);
+		wp_register_script(
+			'aliemu-landing-page',
+			ALIEMU_ROOT_URI . '/js/landing-page.js',
+			[
+				'react',
+				'wp-element',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/landing-page.js' ),
+			true
+		);
+		wp_register_script(
+			'aliemu-login',
+			ALIEMU_ROOT_URI . '/js/login.js',
+			[
+				'react',
+				'wp-element',
+				'wp-url',
+			],
+			filemtime( ALIEMU_ROOT_PATH . '/js/login.js' ),
+			true
+		);
 
 		$this->delegate();
 	}

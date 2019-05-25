@@ -1,60 +1,45 @@
+import { memo } from '@wordpress/element';
 import classNames from 'classnames';
-import React from 'react';
+import { animated, useSpring } from 'react-spring';
 
 import styles from './progress-radial.scss';
 
-interface Props extends React.HTMLProps<HTMLDivElement> {
+interface Props {
+    isAnimated?: boolean;
+    className?: string;
     diameter: number;
     max: number;
     thickness: number;
     value: number;
 }
-
-export default class ProgressRadial extends React.Component<Props> {
-    render(): JSX.Element {
-        const {
-            diameter,
-            max,
-            thickness,
-            value,
-            className,
-            ...props
-        } = this.props;
-        const classname = classNames(styles.container, className);
-        return (
-            <div
-                {...props}
-                aria-valuemax={max}
-                aria-valuemin={0}
-                aria-valuenow={value}
-                className={classname}
-                role="progressbar"
-            >
-                <Circle {...this.props} />
-            </div>
-        );
-    }
-}
-
-const Circle = (props: Props): JSX.Element => {
-    const { diameter, max, thickness, value } = props;
-    const { PI } = Math;
-
+function ProgressRadial({
+    isAnimated,
+    className,
+    diameter,
+    max,
+    thickness,
+    value,
+}: Props) {
     const center = diameter / 2;
     const r = diameter / 2 - thickness / 2;
-    const C = 2 * PI * r;
+    const C = 2 * Math.PI * r;
     const offset = C - C * (value / max);
 
-    const style = {
-        strokeDashoffset: offset,
-    };
-
-    const classname = classNames('no-inherit', styles.circle);
+    const style = isAnimated
+        ? useSpring({
+              from: { strokeDashoffset: C },
+              to: { strokeDashoffset: offset },
+          })
+        : { strokeDashoffset: offset };
 
     return (
         <svg
-            className={classname}
+            aria-valuemax={max}
+            aria-valuemin={0}
+            aria-valuenow={value}
+            className={classNames(className, styles.circle)}
             height={diameter}
+            role="progressbar"
             viewBox={`0 0 ${diameter} ${diameter}`}
             width={diameter}
         >
@@ -65,7 +50,7 @@ const Circle = (props: Props): JSX.Element => {
                 r={r}
                 strokeWidth={thickness}
             />
-            <circle
+            <animated.circle
                 className={styles.circleFill}
                 cx={center}
                 cy={center}
@@ -76,4 +61,5 @@ const Circle = (props: Props): JSX.Element => {
             />
         </svg>
     );
-};
+}
+export default memo(ProgressRadial);

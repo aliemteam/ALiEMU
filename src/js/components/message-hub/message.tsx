@@ -1,24 +1,26 @@
-import React from 'react';
-
-import { Msg } from './';
+import { memo } from '@wordpress/element';
+import classNames from 'classnames';
 
 import Button from 'components/buttons/button';
 import ButtonIcon from 'components/buttons/button-icon';
 import { IntentIcon } from 'components/icon';
 
+import { Msg } from './';
 import * as styles from './message.scss';
 
 interface Props {
     readonly message: Msg;
     dismiss(message: Msg): void;
 }
-
-const Message = ({ dismiss, message }: Props): JSX.Element => {
+function Message({ dismiss, message }: Props) {
     const { actions, details, intent, text } = message;
-    const onClick = () => dismiss(message);
     return (
         <div className={styles.container}>
-            <div className={styles.message}>
+            <div
+                className={classNames(styles.message, {
+                    [styles.withIcon]: intent,
+                })}
+            >
                 {intent && (
                     <div className={styles.iconContainer}>
                         <IntentIcon intent={intent} size={22} />
@@ -29,7 +31,7 @@ const Message = ({ dismiss, message }: Props): JSX.Element => {
                     {details && <div>{details}</div>}
                 </div>
                 <div className={styles.dismiss}>
-                    <ButtonIcon icon="close" onClick={onClick} />
+                    <ButtonIcon icon="close" onClick={() => dismiss(message)} />
                 </div>
                 {actions && (
                     <div className={styles.actions}>
@@ -41,6 +43,5 @@ const Message = ({ dismiss, message }: Props): JSX.Element => {
             </div>
         </div>
     );
-};
-
-export default Message;
+}
+export default memo(Message);

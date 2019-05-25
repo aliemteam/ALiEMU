@@ -1,38 +1,39 @@
-import React from 'react';
+import { memo } from '@wordpress/element';
 
-import Icon from 'components/icon/';
+import Icon from 'components/icon';
 
 import styles from './tag.scss';
 
 interface Props {
-    children: string;
+    text: string;
     onClick?(tag: string): void;
     onRemove?(tag: string): void;
 }
-
-export default class Tag extends React.PureComponent<Props> {
-    render(): JSX.Element {
-        const { children, onClick, onRemove } = this.props;
-        const divProps = {
-            ...(onClick ? { onClick: this.handleClick, role: 'button' } : {}),
-        };
-        return (
-            <div className={styles.tag} {...divProps}>
-                <span>{children}</span>
-                {onRemove && (
-                    <div
-                        aria-label={`remove tag ${children}`}
-                        className={styles.removeBtn}
-                        role="button"
-                        onClick={this.handleRemove}
-                    >
-                        <Icon icon="close" size={12} />
-                    </div>
-                )}
-            </div>
-        );
-    }
-    private handleRemove = (): void =>
-        this.props.onRemove!(this.props.children);
-    private handleClick = (): void => this.props.onClick!(this.props.children);
+function Tag({ text, onClick, onRemove }: Props) {
+    return (
+        <div
+            className={styles.tag}
+            role="button"
+            tabIndex={onClick ? 0 : -1}
+            onClick={() => onClick && onClick(text)}
+            onKeyDown={e => {
+                if (onClick && ['Enter', ' '].includes(e.key)) {
+                    e.preventDefault();
+                    onClick(text);
+                }
+            }}
+        >
+            <span>{text}</span>
+            {onRemove && (
+                <button
+                    aria-label={`remove tag ${text}`}
+                    className={styles.removeBtn}
+                    onClick={() => onRemove(text)}
+                >
+                    <Icon icon="close" size={12} />
+                </button>
+            )}
+        </div>
+    );
 }
+export default memo(Tag);

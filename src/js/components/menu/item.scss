@@ -12,12 +12,12 @@
     background: transparent;
     border: none;
 
-    &.selected {
+    &.active {
         color: white;
         background: $primary;
     }
 
-    &:hover:not(.selected) {
+    &:hover:not(.active) {
         background: rgba(0, 0, 0, 0.05);
     }
 }

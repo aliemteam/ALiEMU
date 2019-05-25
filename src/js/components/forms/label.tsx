@@ -1,40 +1,46 @@
+import { memo, HTMLProps, ReactNode } from '@wordpress/element';
 import classNames from 'classnames';
-import React, { HTMLProps, PureComponent, ReactNode } from 'react';
 
 import * as styles from './label.scss';
 
-interface Props extends HTMLProps<HTMLLabelElement> {
-    disabled?: boolean;
-}
-
-export default class Label extends PureComponent<Props> {
-    render(): JSX.Element {
-        const { disabled, ...props } = this.props;
-        const className = classNames(styles.label, {
-            [styles.disabled]: disabled,
-        });
-        // eslint-disable-next-line
-        return <label {...props} className={className} />;
+namespace Label {
+    export interface Props extends HTMLProps<HTMLLabelElement> {
+        disabled?: boolean;
     }
 }
+const Label = memo(function({ disabled, children, ...props }: Label.Props) {
+    const className = classNames(styles.label, {
+        [styles.disabled]: disabled,
+    });
+    return (
+        <label {...props} className={className}>
+            {children}
+        </label>
+    );
+});
+Label.displayName = 'Label';
+export default Label;
 
-interface MaybeLabelProps {
-    label?: string;
-    disabled?: boolean;
-    children: ReactNode;
+namespace MaybeLabel {
+    export interface Props {
+        label?: string;
+        disabled?: boolean;
+        children: ReactNode;
+    }
 }
-
-export const MaybeLabel = ({
+export const MaybeLabel = memo(function({
     children,
     disabled,
     label,
-}: MaybeLabelProps): JSX.Element => {
-    return label ? (
-        <Label disabled={disabled}>
-            {label}
-            {children}
-        </Label>
-    ) : (
-        <>{children}</>
-    );
-};
+}: MaybeLabel.Props) {
+    if (label) {
+        return (
+            <Label disabled={disabled}>
+                {label}
+                {children}
+            </Label>
+        );
+    }
+    return <>{children}</>;
+});
+MaybeLabel.displayName = 'MaybeLabel';

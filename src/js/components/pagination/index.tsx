@@ -1,126 +1,112 @@
+import { memo, useMemo } from '@wordpress/element';
 import classNames from 'classnames';
-import React, { MouseEvent, PureComponent } from 'react';
+import { uniqueId } from 'lodash';
+
+import Icon from 'components/icon';
 
 import styles from './pagination.scss';
 
-import Icon from 'components/icon/';
-
 interface Props {
-    value: number;
-    total: number;
-    size?: number;
     align?: 'left' | 'right' | 'center';
-    onChange(e: MouseEvent<HTMLButtonElement>): void;
+    size?: number;
+    total: number;
+    value: number;
+    onChange(page: number): void;
 }
-
-export default class Pagination extends PureComponent<Props> {
-    static defaultProps = {
-        align: 'right',
+function Pagination({
+    align = 'right',
+    size = 30,
+    total,
+    value,
+    onChange,
+}: Props) {
+    const id = uniqueId('pagination-');
+    const style = {
+        height: size,
+        minWidth: size,
+        fontSize: size / 2,
     };
-
-    render(): JSX.Element {
-        const { align, value, total, onChange, size } = this.props;
-        const uid = Date.now().toString();
-        const labelId = `pagination-${uid}`;
-        const style = {
-            height: size || 30,
-            minWidth: size || 30,
-            fontSize: size ? size / 2 : 15,
-        };
-        const classname = classNames(styles.nav, {
-            [styles.alignRight]: align === 'right',
-            [styles.alignLeft]: align === 'left',
-            [styles.alignCenter]: align === 'center',
-        });
-        return (
-            <nav
-                aria-labelledby={labelId}
-                className={classname}
-                role="navigation"
-            >
-                <div className={styles.pager}>
-                    <span aria-live="polite" role="status">
-                        <h2 className={styles.clipped} id={labelId}>
-                            {`Table Pagination - Page ${value}`}
-                        </h2>
-                    </span>
-                    <button
-                        aria-label="previous page"
-                        className={styles.buttonPrev}
-                        data-page={value - 1}
-                        disabled={value === 1}
-                        style={style}
-                        onClick={onChange}
-                    >
-                        <Icon icon="chevron_left" />
-                    </button>
-                    <div className={styles.pageList} role="list">
-                        {createPageRange(value, total).map(
-                            (item, i) =>
-                                typeof item === 'number' ? (
-                                    <button
-                                        key={`page-${item}`}
-                                        aria-current={
-                                            item === value ? 'page' : undefined
-                                        }
-                                        aria-label={`page ${item}`}
-                                        className={styles.button}
-                                        data-page={item}
-                                        style={style}
-                                        onClick={onChange}
-                                    >
-                                        {item}
-                                    </button>
-                                ) : (
-                                    <div
-                                        key={`ellipse-${i}`}
-                                        className={styles.ellipse}
-                                        style={style}
-                                    >
-                                        <Icon icon={item} />
-                                    </div>
-                                ),
-                        )}
-                    </div>
-                    <button
-                        aria-label="next page"
-                        className={styles.buttonNext}
-                        data-page={value + 1}
-                        disabled={value === total}
-                        style={style}
-                        onClick={onChange}
-                    >
-                        <Icon icon="chevron_right" />
-                    </button>
+    const classname = classNames(styles.nav, {
+        [styles.alignRight]: align === 'right',
+        [styles.alignLeft]: align === 'left',
+        [styles.alignCenter]: align === 'center',
+    });
+    const pageRange = useMemo(() => createPageRange(value, total), [
+        value,
+        total,
+    ]);
+    return (
+        <nav aria-labelledby={id} className={classname} role="navigation">
+            <div className={styles.pager}>
+                <span aria-live="polite" role="status">
+                    <h2 className={styles.clipped} id={id}>
+                        {`Table Pagination - Page ${value}`}
+                    </h2>
+                </span>
+                <button
+                    aria-label="previous page"
+                    className={styles.buttonPrev}
+                    disabled={value === 1}
+                    style={style}
+                    onClick={() => onChange(value - 1)}
+                >
+                    <Icon icon="chevron_left" />
+                </button>
+                <div className={styles.pageList} role="list">
+                    {pageRange.map((item, i) =>
+                        item !== -1 ? (
+                            <button
+                                key={`page-${item}`}
+                                aria-current={
+                                    item === value ? 'page' : undefined
+                                }
+                                aria-label={`page ${item}`}
+                                className={styles.button}
+                                style={style}
+                                onClick={() => onChange(item)}
+                            >
+                                {item}
+                            </button>
+                        ) : (
+                            <div
+                                key={`ellipse-${i}`}
+                                className={styles.ellipse}
+                                style={style}
+                            >
+                                <Icon icon="more_horiz" />
+                            </div>
+                        ),
+                    )}
                 </div>
-            </nav>
-        );
-    }
+                <button
+                    aria-label="next page"
+                    className={styles.buttonNext}
+                    disabled={value === total}
+                    style={style}
+                    onClick={() => onChange(value + 1)}
+                >
+                    <Icon icon="chevron_right" />
+                </button>
+            </div>
+        </nav>
+    );
 }
+export default memo(Pagination);
 
-type PageRange = Array<number | 'more_horiz'>;
-
-const createPageRange = (current: number, total: number): PageRange => {
+function createPageRange(current: number, total: number) {
+    const ELLIPSE = -1;
     if (total <= 7) {
         return Array.from(new Array(total), (_, i) => i + 1);
     }
     if (current <= 4) {
-        return [1, 2, 3, 4, 5, 'more_horiz', total];
+        return [1, 2, 3, 4, 5, ELLIPSE, total];
     }
     if (total - current <= 3) {
         return [
             1,
-            'more_horiz',
+            ELLIPSE,
             ...Array.from(new Array(5), (_, i) => total - 4 + i),
         ];
     }
-    return [
-        1,
-        'more_horiz',
-        current - 1,
-        current,
-        current + 1,
-        'more_horiz',
-        total,
-    ];
-};
+    return [1, ELLIPSE, current - 1, current, current + 1, ELLIPSE, total];
+}

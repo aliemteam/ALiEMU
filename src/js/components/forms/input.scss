@@ -1,3 +1,4 @@
+@import '_colors';
 @import 'variables';
 @import './shared';
 
@@ -10,8 +11,7 @@
     margin: 0;
     width: 100%;
 
-    // FIXME:
-    color: #424770;
+    color: $text-color-forms;
     font-family: $font-sans;
 
     &:focus {

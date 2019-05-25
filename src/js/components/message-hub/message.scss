@@ -24,10 +24,15 @@ $gap: 10px;
 
 .message {
     display: grid;
-    grid-template-columns: min-content 1fr min-content;
+    grid-template-columns: 1fr auto;
     gap: $gap;
-    padding: 10px;
-    padding-left: 15px;
+    padding: $gap {
+        left: $gap + 5;
+    }
+
+    &.with-icon {
+        grid-template-columns: auto 1fr auto;
+    }
 }
 
 .icon-container {
@@ -39,6 +44,8 @@ $gap: 10px;
     display: grid;
     gap: $gap;
     font-size: 16px;
+    flex: auto;
+    width: 100%;
 }
 
 .heading {
@@ -50,7 +57,7 @@ $gap: 10px;
 }
 
 .actions {
-    grid-column: 1 / span 3;
+    grid-column: 1 / span 2;
     display: flex;
     justify-content: flex-end;
 

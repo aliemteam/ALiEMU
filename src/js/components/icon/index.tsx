@@ -1,11 +1,7 @@
+import { memo } from '@wordpress/element';
 import classNames from 'classnames';
-import React from 'react';
-
-import { Intent } from 'utils/constants';
 
 import * as colors from 'css/_colors.scss';
-
-type IntentMapper = { readonly [k in Intent]: string };
 
 interface SharedProps {
     /**
@@ -43,47 +39,39 @@ export interface IconProps extends SharedProps {
      */
     color?: string;
 }
+function Icon({ className, color, icon, size: fontSize = 16 }: IconProps) {
+    return (
+        <i
+            className={classNames('material-icons', className)}
+            style={{ color, fontSize }}
+        >
+            {icon}
+        </i>
+    );
+}
+export default memo(Icon);
 
-export interface IntentIconProps extends SharedProps {
+interface IntentIconProps extends SharedProps {
     /**
      * The icon's intended intent
      */
     intent: Intent;
 }
-
-const Icon = (props: IconProps): JSX.Element => {
-    const { className, color, icon, size } = props;
-    const style = {
-        color,
-        fontSize: size,
-    };
-    const cls = classNames('material-icons', className);
-    return (
-        <i className={cls} style={style}>
-            {icon}
-        </i>
-    );
-};
-Icon.defaultProps = { size: 16 };
-
-export const IntentIcon = (props: IntentIconProps): JSX.Element => {
-    const { intent, ...iconProps } = props;
-    const icon: IntentMapper = {
+export const IntentIcon = memo(({ intent, ...props }: IntentIconProps) => {
+    const icon: Record<Intent, string> = {
         danger: 'error',
         primary: 'info',
         secondary: 'info',
         success: 'check_circle',
         warning: 'warning',
     };
-    const color: IntentMapper = {
+    const color: Record<Intent, string> = {
         danger: colors.intentDanger,
         primary: colors.intentPrimary,
         secondary: colors.intentSecondary,
         success: colors.intentSuccess,
         warning: colors.intentWarning,
     };
-    return <Icon {...iconProps} color={color[intent]} icon={icon[intent]} />;
-};
-IntentIcon.defaultProps = { size: 16 };
-
-export default Icon;
+    return <Icon {...props} color={color[intent]} icon={icon[intent]} />;
+});
+IntentIcon.displayName = 'IntentIcon';
