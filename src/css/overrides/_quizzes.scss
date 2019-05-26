@@ -39,6 +39,12 @@
     margin: 0 !important;
 }
 
+// Fix hardcoded display: block
+.quiz_continue_link {
+    display: inline-block !important;
+    float: right;
+}
+
 // The highlights of correct or incorrect answers.
 .wpProQuiz_questionListItem {
     &.wpProQuiz_answerIncorrect {
