@@ -30,4 +30,4 @@ services:
       - 8080:80
     volumes:
       - ./dist:/app/wp-content/themes/aliemu.com
-      - ./lib/on-init.sh:/on-init.sh
+      - ./scripts/on-init.sh:/on-init.sh

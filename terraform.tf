@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "lib/terraform.tfstate"
+    path = "scripts/terraform.tfstate"
   }
 }
 

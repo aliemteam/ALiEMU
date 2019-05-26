@@ -4,25 +4,18 @@ language: node_js
 node_js:
   - node
 
-services:
-  - docker
-
 branches:
   only:
     - master
-    - /^greenkeeper-.*$/
 
 cache:
   directories:
     - '$HOME/.npm'
 
-before_install:
-  - docker pull dsifford/phpcs
-
 install:
   - npm ci
 
-script: npm test -- --runInBand
+script: npm run test:ci
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
