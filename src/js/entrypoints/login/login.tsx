@@ -1,15 +1,15 @@
 import { memo } from '@wordpress/element';
 
+import Logo from 'assets/aliemu-logo-horizontal.svg';
 import Card from 'components/card';
 import { Navbar, NavGroup, NavTab } from 'components/navbar';
 import useQueryParam from 'hooks/use-query-param';
 
-import Logo from '../../assets/aliemu-logo-horizontal.svg';
 import LoginForm from './form-login';
 import RegistrationForm from './form-register';
 import ResetForm from './form-reset';
 
-import * as styles from './index.scss';
+import * as styles from './login.scss';
 
 type FormKind = 'login' | 'register' | 'reset';
 

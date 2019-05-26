@@ -110,10 +110,9 @@ export default async (_: never, argv: any): Promise<Configuration> => {
         context: path.resolve(__dirname, 'src'),
         externals: {
             '@wordpress/dom-ready': 'wp.domReady',
+            '@wordpress/element': 'wp.element',
             '@wordpress/html-entities': 'wp.htmlEntities',
             '@wordpress/url': 'wp.url',
-            '@wordpress/element': 'wp.element',
-            'react-dom': 'ReactDOM',
             lodash: 'lodash',
             react: 'React',
         },
@@ -121,13 +120,13 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             /**
              * JS Entrypoints
              */
-            'js/catalog': 'js/catalog',
-            'js/dashboard': ['datalist-polyfill', 'js/dashboard'],
-            'js/feedback': 'js/feedback',
-            'js/landing-page': 'js/landing-page',
-            'js/login': 'js/login',
-            'js/mobile-nav-menu-helper': 'js/mobile-nav-menu-helper',
-
+            'js/catalog': 'js/entrypoints/catalog',
+            'js/dashboard': ['datalist-polyfill', 'js/entrypoints/dashboard'],
+            'js/feedback': 'js/entrypoints/feedback',
+            'js/landing-page': 'js/entrypoints/landing-page',
+            'js/login': 'js/entrypoints/login',
+            'js/mobile-nav-menu-helper':
+                'js/entrypoints/mobile-nav-menu-helper',
             /**
              * Stylesheet entrypoints
              */

@@ -2,16 +2,15 @@ import { useContext, useEffect, useMemo, useState } from '@wordpress/element';
 import { isAfter, isBefore } from 'date-fns';
 
 import Button from 'components/buttons/button';
-import { DashboardContext } from 'dashboard/dashboard';
-import { Learners } from 'utils/api';
-
 import ButtonOutlined from 'components/buttons/button-outlined';
 import DateInput from 'components/forms/date-input';
 import Table from 'components/table';
 import Tag from 'components/tag';
 import { SectionHeading } from 'components/typography/headings';
-import LearnerView from './learner-view';
+import { Learners } from 'utils/api';
 
+import { DashboardContext } from '../../dashboard';
+import LearnerView from './learner-view';
 import styles from './tab-progress.scss';
 
 declare const AU_NONCE: string;
@@ -286,7 +285,7 @@ export default function TabProgress() {
 }
 
 export function isWithinDateRange(
-    inputDate: string | null | undefined,
+    inputDate?: string | null,
     range?: DateRange,
 ) {
     if (!inputDate) {

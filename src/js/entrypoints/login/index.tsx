@@ -1,7 +1,8 @@
 import { render } from '@wordpress/element';
 
 import MessageHub from 'components/message-hub';
-import Login from 'login/index';
+
+import Login from './login';
 
 render(
     <MessageHub>

@@ -1,7 +1,8 @@
 import { render } from '@wordpress/element';
 
 import MessageHub from 'components/message-hub';
-import Dashboard from 'dashboard/dashboard';
+
+import Dashboard from './dashboard';
 
 render(
     <MessageHub>

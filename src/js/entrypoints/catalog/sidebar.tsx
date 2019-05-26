@@ -2,7 +2,7 @@ import { memo } from '@wordpress/element';
 
 import { Menu, MenuGroup, MenuItemRadio } from 'components/menu';
 
-import { Duration } from './index';
+import { Duration } from './catalog';
 import styles from './sidebar.scss';
 
 interface Props {

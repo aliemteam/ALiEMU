@@ -29,6 +29,9 @@
     "paths": {
       "@wordpress/*": [
         "../../types/wordpress__*"
+      ],
+      "assets/*": [
+        "../assets/*"
       ]
     }
   },
@@ -36,8 +39,5 @@
     "src/js/**/*",
     "types/*.d.ts",
     "webpack.config.ts"
-  ],
-  "exclude": [
-    "dist/**"
   ]
 }

@@ -1,7 +1,8 @@
 import { memo, useContext } from '@wordpress/element';
 
 import { Navbar, NavGroup, NavTab } from 'components/navbar';
-import { DashboardContext, Tab } from 'dashboard/dashboard';
+
+import { DashboardContext, Tab } from './dashboard';
 
 interface Props {
     currentTab: Tab;

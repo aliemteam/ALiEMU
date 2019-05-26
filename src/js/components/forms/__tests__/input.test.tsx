@@ -10,7 +10,7 @@ it('should render correctly', () => {
             <Input defaultValue="Unlabelled Input" />
             <Input placeholder="Placeholder Input" />
             <Input disabled />
-            <Input raised label="Raised Input" />
+            <Input isRaised label="Raised Input" />
         </>,
     );
     expect(tree).toMatchSnapshot();

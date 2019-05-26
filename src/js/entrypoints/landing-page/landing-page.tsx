@@ -1,12 +1,11 @@
 import { memo, useState } from '@wordpress/element';
 
+import Logo from 'assets/aliemu-logo-horizontal.svg';
+import LightBulbSVG from 'assets/light-bulb.svg';
+import RocketSVG from 'assets/rocket.svg';
 import Button from 'components/buttons/button';
 import Anchor from 'components/elements/anchor';
 import Modal from 'components/modal';
-
-import Logo from '../../assets/aliemu-logo-horizontal.svg';
-import LightBulbSVG from '../../assets/light-bulb.svg';
-import RocketSVG from '../../assets/rocket.svg';
 
 import styles from './landing-page.scss';
 
