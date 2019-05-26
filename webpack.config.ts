@@ -124,7 +124,6 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             /**
              * Stylesheet entrypoints
              */
-            'css/editor': 'css/editor?global',
             style: 'css/style?global',
         },
         output: {
@@ -140,7 +139,7 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             plugins: [new TsConfigPathsPlugin()],
         },
         plugins: [...plugins],
-        stats: IS_PRODUCTION ? 'normal' : 'minimal',
+        stats: IS_PRODUCTION ? 'errors-warnings' : 'minimal',
         module: {
             rules: [
                 {

@@ -38,7 +38,6 @@ class Script_Loader {
 	 * Constructor. Initializes WordPress hooks.
 	 */
 	public function __construct() {
-		add_action( 'after_setup_theme', [ $this, 'add_editor_styles' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 999 );
 		add_action( 'wp_head', [ $this, 'print_globals' ] );
 	}
@@ -104,13 +103,6 @@ class Script_Loader {
 		register_script( 'login' );
 
 		$this->delegate();
-	}
-
-	/**
-	 * Adds custom stylesheet to the post editor.
-	 */
-	public function add_editor_styles() : void {
-		add_editor_style( [ ALIEMU_ROOT_URI . '/css/editor.css' ] );
 	}
 
 	/**
