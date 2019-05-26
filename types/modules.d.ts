@@ -1,4 +1,5 @@
 // TODO: send PR to definitelytyped for these
+declare module '@wordpress/dependency-extraction-webpack-plugin';
 declare module '@wordpress/dom-ready';
 declare module '@wordpress/html-entities';
 

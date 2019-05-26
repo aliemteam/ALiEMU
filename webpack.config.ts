@@ -3,6 +3,7 @@ import 'dotenv/config';
 import path from 'path';
 import { promisify } from 'util';
 
+import DependencyExtractionPlugin from '@wordpress/dependency-extraction-webpack-plugin';
 import { CheckerPlugin, TsConfigPathsPlugin } from 'awesome-typescript-loader';
 import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -37,6 +38,7 @@ export default async (_: never, argv: any): Promise<Configuration> => {
     await rimraf(path.join(__dirname, 'dist', '*'));
 
     const plugins = new Set<Plugin>([
+        new DependencyExtractionPlugin({ injectPolyfill: true }),
         new FixStyleOnlyEntriesPlugin({ silent: !IS_PRODUCTION }),
         new DefinePlugin({
             'process.env': {
@@ -108,24 +110,16 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             ignored: /(node_modules|__tests__)/,
         },
         context: path.resolve(__dirname, 'src'),
-        externals: {
-            '@wordpress/dom-ready': 'wp.domReady',
-            '@wordpress/element': 'wp.element',
-            '@wordpress/html-entities': 'wp.htmlEntities',
-            '@wordpress/url': 'wp.url',
-            lodash: 'lodash',
-            react: 'React',
-        },
         entry: {
             /**
              * JS Entrypoints
              */
-            'js/catalog': 'js/entrypoints/catalog',
-            'js/dashboard': ['datalist-polyfill', 'js/entrypoints/dashboard'],
-            'js/feedback': 'js/entrypoints/feedback',
-            'js/landing-page': 'js/entrypoints/landing-page',
-            'js/login': 'js/entrypoints/login',
-            'js/mobile-nav-menu-helper':
+            'bundle/catalog': 'js/entrypoints/catalog',
+            'bundle/dashboard': ['datalist-polyfill', 'js/entrypoints/dashboard'],
+            'bundle/feedback': 'js/entrypoints/feedback',
+            'bundle/landing-page': 'js/entrypoints/landing-page',
+            'bundle/login': 'js/entrypoints/login',
+            'bundle/mobile-nav-menu-helper':
                 'js/entrypoints/mobile-nav-menu-helper',
             /**
              * Stylesheet entrypoints

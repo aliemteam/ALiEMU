@@ -7,6 +7,10 @@
 
 namespace ALIEMU;
 
+use function ALIEMU\Utils\{
+	register_script,
+};
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -77,7 +81,7 @@ class Script_Loader {
 				'https://fonts.googleapis.com/css'
 			),
 			[],
-			filemtime( get_stylesheet_directory( 'style.css' ) )
+			filemtime( ALIEMU_ROOT_PATH . '/style.css' ),
 		);
 		wp_register_style(
 			'aliemu',
@@ -86,88 +90,18 @@ class Script_Loader {
 				'aliemu-fonts',
 				'dashicons',
 			],
-			filemtime( get_stylesheet_directory( 'style.css' ) )
+			filemtime( ALIEMU_ROOT_PATH . '/style.css' ),
 		);
-		foreach ( glob( ALIEMU_ROOT_PATH . '/js/*.css' ) as $stylesheet ) {
-			$style = pathinfo( $stylesheet );
-			wp_register_style(
-				'aliemu-' . $style['filename'],
-				ALIEMU_ROOT_URI . '/js/' . $style['basename'],
-				[],
-				filemtime( $stylesheet )
-			);
-		}
 
 		// Header scripts.
-		wp_register_script(
-			'mobile-nav-menu-helper',
-			ALIEMU_ROOT_URI . '/js/mobile-nav-menu-helper.js',
-			[
-				'wp-dom-ready',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/mobile-nav-menu-helper.js' ),
-			false
-		);
+		register_script( 'mobile-nav-menu-helper', false );
 
 		// Footer scripts.
-		wp_register_script(
-			'aliemu-catalog',
-			ALIEMU_ROOT_URI . '/js/catalog.js',
-			[
-				'lodash',
-				'react',
-				'wp-element',
-				'wp-html-entities',
-				'wp-url',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/catalog.js' ),
-			true
-		);
-		wp_register_script(
-			'aliemu-dashboard',
-			ALIEMU_ROOT_URI . '/js/dashboard.js',
-			[
-				'lodash',
-				'react',
-				'wp-element',
-				'wp-html-entities',
-				'wp-url',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/dashboard.js' ),
-			true
-		);
-		wp_register_script(
-			'aliemu-feedback',
-			ALIEMU_ROOT_URI . '/js/feedback.js',
-			[
-				'react',
-				'wp-element',
-				'wp-url',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/feedback.js' ),
-			true
-		);
-		wp_register_script(
-			'aliemu-landing-page',
-			ALIEMU_ROOT_URI . '/js/landing-page.js',
-			[
-				'react',
-				'wp-element',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/landing-page.js' ),
-			true
-		);
-		wp_register_script(
-			'aliemu-login',
-			ALIEMU_ROOT_URI . '/js/login.js',
-			[
-				'react',
-				'wp-element',
-				'wp-url',
-			],
-			filemtime( ALIEMU_ROOT_PATH . '/js/login.js' ),
-			true
-		);
+		register_script( 'catalog' );
+		register_script( 'dashboard' );
+		register_script( 'feedback' );
+		register_script( 'landing-page' );
+		register_script( 'login' );
 
 		$this->delegate();
 	}
@@ -203,7 +137,7 @@ class Script_Loader {
 
 		// Always load these.
 		$load = (object) [
-			'scripts' => [ 'mobile-nav-menu-helper' ],
+			'scripts' => [ 'aliemu-mobile-nav-menu-helper' ],
 			'styles'  => [ 'aliemu', 'aliemu-fonts' ],
 		];
 		// Always unload these.
@@ -212,31 +146,27 @@ class Script_Loader {
 			'styles'  => [],
 		];
 
-		if ( is_front_page() ) {
-			array_push( $load->scripts, 'aliemu-landing-page' );
-			array_push( $load->styles, 'aliemu-landing-page' );
-		}
-
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			array_push( $load->scripts, 'comment-reply' );
+		}
+
+		if ( is_singular( 'sfwd-quiz' ) ) {
+			// add quiz button fix here
 		}
 
 		if ( is_post_type_archive( 'sfwd-courses' ) ) {
 			array_push( $load->scripts, 'aliemu-catalog' );
 			array_push( $load->styles, 'aliemu-catalog' );
-		}
-
-		if ( is_page( 'user' ) ) {
+		} elseif ( is_front_page() ) {
+			array_push( $load->scripts, 'aliemu-landing-page' );
+			array_push( $load->styles, 'aliemu-landing-page' );
+		} elseif ( is_page( 'user' ) ) {
 			array_push( $load->scripts, 'aliemu-dashboard' );
 			array_push( $load->styles, 'aliemu-dashboard' );
-		}
-
-		if ( is_page( 'feedback' ) ) {
+		} elseif ( is_page( 'feedback' ) ) {
 			array_push( $load->scripts, 'aliemu-feedback' );
 			array_push( $load->styles, 'aliemu-feedback' );
-		}
-
-		if ( is_page( 'login' ) ) {
+		} elseif ( is_page( 'login' ) ) {
 			array_push( $load->scripts, 'aliemu-login' );
 			array_push( $load->styles, 'aliemu-login' );
 		}

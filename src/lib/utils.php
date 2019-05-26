@@ -146,3 +146,42 @@ function gravatar_profile_data( string $email ) : object {
 	}
 	return $data;
 }
+
+/**
+ * Helper function to register a script, its dependencies, and its associated
+ * stylesheet if it exists.
+ *
+ * @param string $name      The filename of the script (without the extension).
+ * @param bool   $in_footer If the script should be loaded in the footer.
+ */
+function register_script( string $name, bool $in_footer = true ) {
+	$handle      = "aliemu-$name";
+	$script_path = ALIEMU_ROOT_PATH . "/bundle/$name.js";
+	$style_path  = ALIEMU_ROOT_PATH . "/bundle/$name.css";
+	$deps_path   = ALIEMU_ROOT_PATH . "/bundle/$name.deps.json";
+	$script_uri  = ALIEMU_ROOT_URI . "/bundle/$name.js";
+	$style_uri   = ALIEMU_ROOT_URI . "/bundle/$name.css";
+
+	if ( ! file_exists( $script_path ) ) {
+		wp_die( esc_html( "Script file '$script_path' does not exist" ) );
+	}
+
+	wp_register_script(
+		$handle,
+		$script_uri,
+		file_exists( $deps_path )
+			? json_decode( file_get_contents( $deps_path ) ) // phpcs:ignore
+			: [],
+		filemtime( $script_path ),
+		$in_footer,
+	);
+
+	if ( file_exists( $style_path ) ) {
+		wp_register_style(
+			$handle,
+			$style_uri,
+			[],
+			filemtime( $style_path ),
+		);
+	}
+}
