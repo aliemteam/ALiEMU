@@ -21,7 +21,6 @@ interface Props {
     onUpdateLearner(learner: Learners.Learner): void;
 }
 
-// FIXME: broken layout on mobile
 export default function LearnerView({
     dateRange,
     learner,

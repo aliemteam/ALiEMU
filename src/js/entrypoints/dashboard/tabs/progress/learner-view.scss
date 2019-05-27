@@ -13,6 +13,7 @@
 
     @include devices {
         grid:
+            'name'
             'info'
             'table';
     }
@@ -31,7 +32,7 @@
         'meta';
 
     @include devices {
-        grid: 'img meta' / min-content 1fr;
+        grid: 'img meta' / max-content auto;
     }
 }
 

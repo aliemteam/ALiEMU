@@ -6,7 +6,6 @@
         'bio   bio'
         'stats comments' 1fr
         / 1fr 1fr;
-    justify-content: space-around;
     grid-gap: 20px 50px;
 
     @include device-mobile {
