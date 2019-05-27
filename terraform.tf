@@ -1,6 +1,10 @@
 terraform {
-  backend "local" {
-    path = "scripts/terraform.tfstate"
+  backend "remote" {
+    organization = "aliem"
+
+    workspaces {
+      name = "aliemu"
+    }
   }
 }
 
