@@ -92,15 +92,16 @@ class Script_Loader {
 			filemtime( ALIEMU_ROOT_PATH . '/style.css' ),
 		);
 
-		// Header scripts.
-		register_script( 'mobile-nav-menu-helper', false );
-
-		// Footer scripts.
+		// Main entrypoints.
 		register_script( 'catalog' );
 		register_script( 'dashboard' );
 		register_script( 'feedback' );
 		register_script( 'landing-page' );
 		register_script( 'login' );
+
+		// Monkey patches.
+		register_script( 'mobile-nav-menu-fix', false );
+		register_script( 'quiz-page-fix' );
 
 		$this->delegate();
 	}
@@ -129,7 +130,7 @@ class Script_Loader {
 
 		// Always load these.
 		$load = (object) [
-			'scripts' => [ 'aliemu-mobile-nav-menu-helper' ],
+			'scripts' => [ 'aliemu-mobile-nav-menu-fix' ],
 			'styles'  => [ 'aliemu', 'aliemu-fonts' ],
 		];
 		// Always unload these.
@@ -143,7 +144,7 @@ class Script_Loader {
 		}
 
 		if ( is_singular( 'sfwd-quiz' ) ) {
-			// add quiz button fix here
+			array_push( $load->scripts, 'aliemu-quiz-page-fix' );
 		}
 
 		if ( is_post_type_archive( 'sfwd-courses' ) ) {

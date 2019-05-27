@@ -38,8 +38,11 @@ export default async (_: never, argv: any): Promise<Configuration> => {
     await rimraf(path.join(__dirname, 'dist', '*'));
 
     const plugins = new Set<Plugin>([
+        new FixStyleOnlyEntriesPlugin({
+            extensions: ['css', 'scss', 'css?global', 'scss?global'],
+            silent: !IS_PRODUCTION,
+        }),
         new DependencyExtractionPlugin({ injectPolyfill: true }),
-        new FixStyleOnlyEntriesPlugin({ silent: !IS_PRODUCTION }),
         new DefinePlugin({
             'process.env': {
                 GOOGLE_PLACES_KEY: IS_PRODUCTION
@@ -115,12 +118,20 @@ export default async (_: never, argv: any): Promise<Configuration> => {
              * JS Entrypoints
              */
             'bundle/catalog': 'js/entrypoints/catalog',
-            'bundle/dashboard': ['datalist-polyfill', 'js/entrypoints/dashboard'],
+            'bundle/dashboard': [
+                'datalist-polyfill',
+                'js/entrypoints/dashboard',
+            ],
             'bundle/feedback': 'js/entrypoints/feedback',
             'bundle/landing-page': 'js/entrypoints/landing-page',
             'bundle/login': 'js/entrypoints/login',
-            'bundle/mobile-nav-menu-helper':
-                'js/entrypoints/mobile-nav-menu-helper',
+
+            /**
+             * Monkey patches.
+             */
+            'bundle/mobile-nav-menu-fix': 'js/entrypoints/mobile-nav-menu-fix',
+            'bundle/quiz-page-fix': 'js/entrypoints/quiz-page-fix',
+
             /**
              * Stylesheet entrypoints
              */
@@ -139,7 +150,7 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             plugins: [new TsConfigPathsPlugin()],
         },
         plugins: [...plugins],
-        stats: IS_PRODUCTION ? 'errors-warnings' : 'minimal',
+        stats: IS_PRODUCTION ? 'normal' : 'minimal',
         module: {
             rules: [
                 {
