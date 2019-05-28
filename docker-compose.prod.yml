@@ -36,7 +36,6 @@ services:
     volumes:
       - ./wp-content/themes:/app/wp-content/themes
       - ./letsencrypt:/etc/letsencrypt
-      - ./on-init.sh:/on-init.sh
 
   db:
     <<: *shared

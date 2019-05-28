@@ -234,8 +234,8 @@ sync_project() {
 		"$dest_base"/docker-compose.yml
 
 	rsync -avz --no-owner --no-perms \
-		"$src_base"/scripts/on-init.sh \
-		"$dest_base"/on-init.sh
+		"$src_base"/etc/ \
+		"$dest_base"/etc
 
 	rsync -avz --no-owner --no-perms --delete \
 		"$src_base"/dist/ \
