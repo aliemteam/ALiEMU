@@ -25,6 +25,7 @@ services:
         }
       PLUGINS: >-
         academic-bloggers-toolkit
+        gutenberg
         jetpack
         sendgrid-email-delivery-simplified
         ultimate-member
