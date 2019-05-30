@@ -20,7 +20,9 @@ export const enum Duration {
 }
 
 export default function Catalog() {
-    const [courses, setCourses] = useState([...AU_Catalog.courses]);
+    const [courses, setCourses] = useState([
+        ...AU_Catalog.courses.filter(c => !c.content.protected),
+    ]);
     const [categoryFilter, setCategoryFilter] = useState(0);
     const [durationFilter, setDurationFilter] = useState(Duration.NONE);
     const [textFilter, setTextFilter] = useState('');
@@ -31,6 +33,7 @@ export default function Catalog() {
                 _fields: [
                     '_links',
                     'categories',
+                    'content',
                     'description',
                     'date_gmt',
                     'featured_media',
@@ -39,10 +42,12 @@ export default function Catalog() {
                     'hours',
                     'title',
                 ].join(','),
+                orderby: 'date',
+                order: 'desc',
                 per_page: 100,
             },
-            [...courses],
-        ).then(data => setCourses([...data]));
+            [...AU_Catalog.courses],
+        ).then(data => setCourses([...data.filter(c => !c.content.protected)]));
     }, []);
 
     const visibleCourses = useMemo(

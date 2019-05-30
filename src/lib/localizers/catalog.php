@@ -25,6 +25,7 @@ function localize() {
 				[
 					'_links',
 					'categories',
+					'content',
 					'description',
 					'date_gmt',
 					'featured_media',
@@ -35,6 +36,10 @@ function localize() {
 				]
 			)
 		);
+		// LearnDash broke defaults by hardcoding orderby as 'title'.
+		// Error introduced in LearnDash v3.0.0.
+		$courses_req->set_param( 'orderby', 'date' );
+		$courses_req->set_param( 'order', 'desc' );
 		$courses_req->set_param( 'per_page', 100 );
 		$response = rest_do_request( $courses_req );
 
