@@ -40,7 +40,7 @@ provider "cloudflare" {
 }
 
 provider "digitalocean" {
-  version = "~> 1.3.0"
+  version = "~> 1.4.0"
 
   token = var.do_token
 }
