@@ -1,9 +1,12 @@
 import { memo, useEffect, useState } from '@wordpress/element';
 import { decodeEntities } from '@wordpress/html-entities';
 import classNames from 'classnames';
-import { formatDistance } from 'date-fns';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import ContentLoader, { IContentLoaderProps } from 'react-content-loader';
 import striptags from 'striptags';
+
+dayjs.extend(relativeTime);
 
 import { Comments } from 'utils/api';
 import styles from './comment-listing.scss';
@@ -31,9 +34,7 @@ function CommentListing({ commentId }: Props) {
                 </a>
             </h3>
             <a className={styles.date} href={comment.link}>
-                {formatDistance(new Date(comment.date_gmt), new Date(), {
-                    addSuffix: true,
-                })}
+                {dayjs(comment.date_gmt).fromNow()}
             </a>
             <div className={styles.comment}>
                 <div className={styles.lineClamp}>

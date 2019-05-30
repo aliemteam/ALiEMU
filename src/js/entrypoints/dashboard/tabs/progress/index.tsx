@@ -1,5 +1,5 @@
 import { useContext, useEffect, useMemo, useState } from '@wordpress/element';
-import { isAfter, isBefore } from 'date-fns';
+import dayjs from 'dayjs';
 
 import Button from 'components/buttons/button';
 import ButtonOutlined from 'components/buttons/button-outlined';
@@ -296,10 +296,10 @@ export function isWithinDateRange(
     }
     const { start, end } = range;
     const date = new Date(inputDate);
-    if (start && isBefore(date, start)) {
+    if (start && dayjs(date).isBefore(dayjs(start))) {
         return false;
     }
-    if (end && isAfter(date, end)) {
+    if (end && dayjs(date).isAfter(dayjs(end))) {
         return false;
     }
     return true;

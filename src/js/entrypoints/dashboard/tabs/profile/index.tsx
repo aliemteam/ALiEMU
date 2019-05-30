@@ -1,5 +1,8 @@
 import { memo, useContext, useMemo, useState } from '@wordpress/element';
-import { formatDistance } from 'date-fns';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 import AnchorButton from 'components/buttons/anchor-button';
 import Card from 'components/card';
@@ -32,14 +35,7 @@ function TabProfile() {
             <div className={styles.stats}>
                 <SectionHeading>Stats</SectionHeading>
                 <Card>
-                    Member since:{' '}
-                    {formatDistance(
-                        new Date(user.registered_date),
-                        new Date(),
-                        {
-                            addSuffix: true,
-                        },
-                    )}
+                    Member since: {dayjs(dayjs(user.registered_date)).fromNow()}
                 </Card>
             </div>
             {recentComments.length > 0 && (
