@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from '@wordpress/element';
 
 import CourseListing from 'components/course-listing';
 import Input from 'components/forms/input';
+import useQueryParam from 'hooks/use-query-param';
 import { Courses } from 'utils/api';
 
 import Sidebar from './sidebar';
@@ -23,9 +24,9 @@ export default function Catalog() {
     const [courses, setCourses] = useState([
         ...AU_Catalog.courses.filter(c => !c.content.protected),
     ]);
-    const [categoryFilter, setCategoryFilter] = useState(0);
-    const [durationFilter, setDurationFilter] = useState(Duration.NONE);
-    const [textFilter, setTextFilter] = useState('');
+    const [categoryFilter, setCategoryFilter] = useQueryParam<string>('c', '0');
+    const [durationFilter, setDurationFilter] = useQueryParam<string>('d', '0');
+    const [textFilter, setTextFilter] = useQueryParam<string>('q', '');
 
     useEffect(() => {
         Courses.fetchMany(
@@ -50,13 +51,13 @@ export default function Catalog() {
         ).then(data => setCourses([...data.filter(c => !c.content.protected)]));
     }, []);
 
+    const category = parseInt(categoryFilter, 10) || 0;
+    const duration = parseInt(durationFilter, 10) || 0;
+
     const visibleCourses = useMemo(
         () =>
             courses.filter(course => {
-                if (
-                    categoryFilter > 0 &&
-                    !course.categories.includes(categoryFilter)
-                ) {
+                if (category > 0 && !course.categories.includes(category)) {
                     return false;
                 }
 
@@ -69,7 +70,7 @@ export default function Catalog() {
                     return false;
                 }
 
-                switch (durationFilter) {
+                switch (duration) {
                     case Duration.LESS_THAN_TWO:
                         return course.hours < 2;
                     case Duration.TWO_TO_FOUR:
@@ -81,7 +82,7 @@ export default function Catalog() {
                 }
             }),
 
-        [courses, categoryFilter, durationFilter, textFilter],
+        [courses, category, duration, textFilter],
     );
 
     const structuredData = useMemo(
@@ -109,20 +110,26 @@ export default function Catalog() {
                     placeholder="Search"
                     type="search"
                     value={textFilter}
-                    onChange={e => setTextFilter(e.currentTarget.value)}
+                    onChange={e =>
+                        e.currentTarget.value === ''
+                            ? setTextFilter()
+                            : setTextFilter(e.currentTarget.value)
+                    }
                 />
             </div>
             <Sidebar
                 categories={AU_Catalog.categories}
-                selectedCategory={categoryFilter}
-                selectedDuration={durationFilter}
+                selectedCategory={category}
+                selectedDuration={duration}
                 onCategoryChange={id =>
-                    setCategoryFilter(categoryFilter === id ? 0 : id)
+                    category === id
+                        ? setCategoryFilter()
+                        : setCategoryFilter(id.toString())
                 }
-                onDurationChange={duration =>
-                    setDurationFilter(
-                        durationFilter === duration ? Duration.NONE : duration,
-                    )
+                onDurationChange={newDuration =>
+                    newDuration === duration
+                        ? setDurationFilter()
+                        : setDurationFilter(newDuration.toString())
                 }
             />
             <section
