@@ -1,5 +1,8 @@
-// Type definitions for @wordpress/element
-// Definitions by: Derek P Sifford <dereksifford@gmail.com>
+// Type definitions for @wordpress/element 2.4
+// Project: https://github.com/WordPress/gutenberg/tree/master/packages/element/README.md
+// Definitions by: Derek Sifford <https://github.com/dsifford>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 3.4
 
 import * as R from 'react';
 import * as RD from 'react-dom';
@@ -9,10 +12,10 @@ declare global {
         //
         // ReactDOM re-exports
         //
-        export const createPortal: typeof RD.createPortal;
-        export const findDOMNode: typeof RD.findDOMNode;
-        export const render: typeof RD.render;
-        export const unmountComponentAtNode: typeof RD.unmountComponentAtNode;
+        const createPortal: typeof RD.createPortal;
+        const findDOMNode: typeof RD.findDOMNode;
+        const render: typeof RD.render;
+        const unmountComponentAtNode: typeof RD.unmountComponentAtNode;
 
         /**
          * Component used as equivalent of Fragment with unescaped HTML, in cases where
@@ -24,8 +27,8 @@ declare global {
          *
          * @return Dangerously-rendering element.
          */
-        export function RawHTML(
-            props: { children: string } & R.HTMLProps<HTMLDivElement>,
+        function RawHTML(
+            props: { children: string } & HTMLProps<HTMLDivElement>,
         ): JSX.Element;
 
         /**
@@ -34,7 +37,7 @@ declare global {
          * @param element - WP element to check.
          * @return True when an element is considered empty.
          */
-        export function isEmptyElement(element: R.ReactNode): boolean;
+        function isEmptyElement(element: ReactNode): boolean;
 
         /**
          * Serializes a React element to string.
@@ -45,8 +48,8 @@ declare global {
          *
          * @return Serialized element.
          */
-        export function renderToString(
-            element: R.ReactNode,
+        function renderToString(
+            element: ReactNode,
             context?: any,
             legacyContext?: any,
         ): string;

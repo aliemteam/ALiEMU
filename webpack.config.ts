@@ -38,10 +38,7 @@ export default async (_: never, argv: any): Promise<Configuration> => {
     await rimraf(path.join(__dirname, 'dist', '*'));
 
     const plugins = new Set<Plugin>([
-        new FixStyleOnlyEntriesPlugin({
-            extensions: ['css', 'scss', 'css?global', 'scss?global'],
-            silent: !IS_PRODUCTION,
-        }),
+        new FixStyleOnlyEntriesPlugin({ silent: !IS_PRODUCTION }),
         new DependencyExtractionPlugin({ injectPolyfill: true }),
         new DefinePlugin({
             'process.env': {
