@@ -4,12 +4,12 @@
 @import 'mixins/media';
 
 // Center the "Mark Complete" button
-#sfwd-mark-complete {
+.sfwd-mark-complete {
     text-align: center;
     margin-bottom: $block-margin;
 }
 
-#learndash_mark_complete_button {
+.learndash_mark_complete_button {
     @include button($secondary);
 }
 
