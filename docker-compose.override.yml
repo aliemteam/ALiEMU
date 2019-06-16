@@ -5,7 +5,6 @@ services:
       URL_REPLACE: http://localhost:8080
       WP_DEBUG_DISPLAY: 'true'
       WP_DEBUG: 'true'
-      WP_VERSION: nightly
       EXTRA_PHP: |
         define( 'ALIEM_API_KEY', '${ALIEM_API_KEY?ALIEM_API_KEY not defined in .env}' );
         define( 'RECAPTCHA_KEY', '${RECAPTCHA_KEY?RECAPTCHA_KEY not defined in .env}' );
