@@ -122,3 +122,21 @@ function fix_course_list_output( $output ) : string {
 }
 add_filter( 'ld_course_list', __NAMESPACE__ . '\fix_course_list_output' );
 
+/**
+ * Hides the "Take this course" button unless the user is logged in.
+ *
+ * @param string $join_button The raw HTML of the container that contains the join button.
+ */
+function hide_join_button_unless_logged_in( string $join_button ) : string {
+	if ( ! is_user_logged_in() ) {
+		ob_start();
+		?>
+			<div style="display: flex; justify-content: center; align-items: center; height: 150px;">
+				<h3 style="margin: 0;">You must be logged in to take this course.</h3>
+			</div>
+		<?php
+		return ob_get_clean();
+	}
+	return $join_button;
+}
+add_filter( 'learndash_payment_button', __NAMESPACE__ . '\hide_join_button_unless_logged_in', 10, 2 );
