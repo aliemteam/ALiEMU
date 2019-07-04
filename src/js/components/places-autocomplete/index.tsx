@@ -29,9 +29,7 @@ export default function PlacesAutocomplete({
     useEffect(() => {
         (async () => {
             await inject(
-                `https://maps.googleapis.com/maps/api/js?libraries=places&key=${
-                    process.env.GOOGLE_PLACES_KEY
-                }`,
+                `https://maps.googleapis.com/maps/api/js?libraries=places&key=${process.env.GOOGLE_PLACES_KEY}`,
             );
             const input = inputRef.current;
             if (input) {
@@ -48,7 +46,10 @@ export default function PlacesAutocomplete({
                         const isInvalid =
                             result &&
                             Object.keys(result).length === 1 &&
-                            result.hasOwnProperty('name');
+                            Object.prototype.hasOwnProperty.call(
+                                result,
+                                'name',
+                            );
                         if (inputRef.current) {
                             inputRef.current.setCustomValidity(
                                 isInvalid ? VALIDATION_MESSAGE : '',

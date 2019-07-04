@@ -7,7 +7,7 @@ async function waitForProperty(propertyKey: string): Promise<void> {
             let property: any = window;
             let propertyChainSuccess = true;
             for (const key of propertyChain) {
-                if (!property.hasOwnProperty(key)) {
+                if (!Object.prototype.hasOwnProperty.call(property, key)) {
                     propertyChainSuccess = false;
                     break;
                 }
