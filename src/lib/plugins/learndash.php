@@ -24,8 +24,10 @@ function adjust_editor_capabilities() {
 		'edit_others_courses',
 		'edit_private_courses',
 		'edit_published_courses',
+		'manage_options',
 		'publish_courses',
 		'read_private_courses',
+		'tincanny_reporting',
 	];
 
 	foreach ( $capabilities as $cap ) {
