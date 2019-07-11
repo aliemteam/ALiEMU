@@ -100,11 +100,11 @@ export default function LearnerView({
                                 text={t}
                                 onRemove={async tag => {
                                     try {
+                                        await LearnerTags.remove(id, tag);
                                         onUpdateLearner({
                                             ...learner,
-                                            learner_tags: await LearnerTags.remove(
-                                                id,
-                                                tag,
+                                            learner_tags: learner_tags.filter(
+                                                t => t !== tag,
                                             ),
                                         });
                                     } catch {

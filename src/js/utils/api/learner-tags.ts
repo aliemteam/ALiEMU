@@ -8,6 +8,6 @@ export async function add(id: number, tag: string): Promise<string[]> {
     });
 }
 
-export async function remove(id: number, tag: string): Promise<string[]> {
+export async function remove(id: number, tag: string): Promise<void> {
     return api.DELETE(`${ENDPOINT}/${id}/tags`, { tag });
 }

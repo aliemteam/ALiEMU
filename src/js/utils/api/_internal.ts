@@ -38,12 +38,12 @@ export async function DELETE<T>(endpoint: string, params?: object): Promise<T> {
     const response = await fetch(endpoint, {
         ...fetchInit,
         method: 'DELETE',
-        body: JSON.stringify(params),
+        body: params ? JSON.stringify(params) : '',
     });
     if (!response.ok) {
         throw new Error(response.statusText);
     }
-    return response.json();
+    return response.bodyUsed ? response.json() : undefined;
 }
 
 export async function fetchMany<T>(
