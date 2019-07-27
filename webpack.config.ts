@@ -202,10 +202,12 @@ export default async (_: never, argv: any): Promise<Configuration> => {
                                             options: {
                                                 url: false,
                                                 importLoaders: 2,
-                                                modules: true,
-                                                camelCase: 'only',
-                                                localIdentName:
-                                                    '[name]__[local]___[hash:base64:5]',
+                                                modules: {
+                                                    localIdentName:
+                                                        '[name]__[local]___[hash:base64:5]',
+                                                },
+                                                localsConvention:
+                                                    'camelCaseOnly',
                                             },
                                         },
                                     ],

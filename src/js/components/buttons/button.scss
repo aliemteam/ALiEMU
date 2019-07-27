@@ -3,8 +3,8 @@
 @import 'mixins/reset';
 @import 'mixins/state';
 
-@value font-size 14px;
-@value height 36px;
+@value font-size: 14px;
+@value height: 36px;
 
 .button {
     @include reset-button;

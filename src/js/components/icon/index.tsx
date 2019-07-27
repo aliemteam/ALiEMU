@@ -1,8 +1,6 @@
 import { memo } from '@wordpress/element';
 import classNames from 'classnames';
 
-import * as colors from 'css/_colors.scss';
-
 interface SharedProps {
     /**
      * Size of icon in px.
@@ -66,11 +64,11 @@ export const IntentIcon = memo(({ intent, ...props }: IntentIconProps) => {
         warning: 'warning',
     };
     const color: Record<Intent, string> = {
-        danger: colors.intentDanger,
-        primary: colors.intentPrimary,
-        secondary: colors.intentSecondary,
-        success: colors.intentSuccess,
-        warning: colors.intentWarning,
+        danger: '#d32f2f',
+        primary: '#01579b',
+        secondary: '#00b092',
+        success: '#0f9960',
+        warning: '#ff9800',
     };
     return <Icon {...props} color={color[intent]} icon={icon[intent]} />;
 });
