@@ -1,7 +1,3 @@
-// TODO: send PR to definitelytyped for these
-declare module '@wordpress/dependency-extraction-webpack-plugin';
-
-declare module 'browser-sync-webpack-plugin';
 declare module 'webpack-fix-style-only-entries';
 
 declare module '*.scss' {
