@@ -1,0 +1,13 @@
+@import '_colors';
+
+.image {
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    opacity: 0.8;
+    background: $primary;
+    height: 100%;
+    width: 100%;
+}

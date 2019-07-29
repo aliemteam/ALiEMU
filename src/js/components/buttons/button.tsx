@@ -23,7 +23,6 @@ function Button({
     onClick = () => void 0,
     ...props
 }: ButtonProps) {
-    console.log(styles);
     const classname = classNames(styles.button, {
         [styles.intentPrimary]: intent === 'primary',
         [styles.intentSecondary]: intent === 'secondary',

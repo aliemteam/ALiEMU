@@ -139,7 +139,11 @@ export default function Catalog() {
                 role="list"
             >
                 {visibleCourses.map(course => (
-                    <CourseListing key={course.id} course={course} />
+                    <CourseListing
+                        key={course.id}
+                        category={AU_Catalog.categories[course.categories[0]]}
+                        course={course}
+                    />
                 ))}
             </section>
             <script
