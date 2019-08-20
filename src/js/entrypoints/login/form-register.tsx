@@ -201,6 +201,7 @@ export default class RegistrationForm extends Component<{}, State> {
     private recaptchaRef = createRef<HTMLDivElement>();
 
     async componentDidMount(): Promise<void> {
+        // eslint-disable-next-line
         // @ts-ignore
         window['handleSubmit'] = this.handleSubmit;
         await inject('https://www.google.com/recaptcha/api.js', 'grecaptcha');

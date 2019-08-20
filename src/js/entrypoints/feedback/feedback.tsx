@@ -40,6 +40,7 @@ export default function Feedback() {
                 onSubmit={e => {
                     e.preventDefault();
                     setIsLoading(true);
+                    // eslint-disable-next-line
                     // @ts-ignore
                     window['handleSubmit'] = async (token: string) => {
                         const { success } = await ajax('send_slack_message', {

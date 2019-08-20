@@ -61,11 +61,11 @@ function DateInput({
 
 export default memo(DateInput);
 
-function parseYear(input: string = '', delimiter: string): string {
+function parseYear(input = '', delimiter: string): string {
     return input.length === 4 ? `${input}${delimiter}` : input;
 }
 
-function parseMonth(input: string = '', delimiter: string): string {
+function parseMonth(input = '', delimiter: string): string {
     if (!input) {
         return input;
     }
@@ -85,7 +85,7 @@ function parseMonth(input: string = '', delimiter: string): string {
     return `12${delimiter}`;
 }
 
-function parseDay(input: string = ''): string {
+function parseDay(input = ''): string {
     if (!input) {
         return input;
     }

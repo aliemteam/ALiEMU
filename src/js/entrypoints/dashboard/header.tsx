@@ -22,7 +22,7 @@ function DashboardHeader() {
                             placeholder="Add your institution"
                             value={user.institution}
                             onSave={async institution =>
-                                updateUser({ institution })
+                                await updateUser({ institution })
                             }
                         />
                     )}

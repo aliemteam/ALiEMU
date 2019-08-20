@@ -44,7 +44,7 @@ export default function ClickToEdit({
                     setIsEditing(false);
                 }}
                 onChange={e => setValue(e.currentTarget.value)}
-                onKeyDown={async e => {
+                onKeyDown={e => {
                     switch (e.key) {
                         case 'Escape':
                             setValue(currentValue);

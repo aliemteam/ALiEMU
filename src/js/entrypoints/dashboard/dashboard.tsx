@@ -25,7 +25,7 @@ const DEFAULT_CONTEXT: DashboardContext = {
     recentComments: [...AU_Dashboard.recent_comments],
     user: cloneDeep(AU_Dashboard.user),
     isOwnProfile: AU_Dashboard.user.capabilities !== undefined,
-    updateUser: async () => {
+    updateUser() {
         throw new Error(
             'DashboardContext: updateUser was not provided by a registered provider.',
         );

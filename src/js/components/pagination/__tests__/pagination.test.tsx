@@ -9,7 +9,7 @@ import Pagination from '../index';
 
 describe('<Pagination />', () => {
     beforeAll(() => {
-        Date.now = jest.fn(() => 0);
+        Date.now = jest.fn(() => 0); // eslint-disable-line
     });
     it('should render correctly', () => {
         const tree = renderer.create(

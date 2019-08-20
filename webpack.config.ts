@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import 'dotenv/config';
 
 import path from 'path';
@@ -31,7 +32,7 @@ Text Domain: aliemu
 
 const rimraf = promisify(rimrafLib);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 export default async (_: never, argv: any): Promise<Configuration> => {
     const IS_PRODUCTION = argv.mode === 'production';
 

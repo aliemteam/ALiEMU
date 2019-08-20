@@ -65,7 +65,7 @@ export default function Catalog() {
                     textFilter &&
                     `${course.title.rendered} ${course.description}`
                         .toLowerCase()
-                        .indexOf(textFilter.toLowerCase()) === -1
+                        .includes(textFilter.toLowerCase())
                 ) {
                     return false;
                 }
