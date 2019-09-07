@@ -72,6 +72,7 @@ export default async (_: never, argv: any): Promise<Configuration> => {
             {
                 from: 'assets/**',
                 ignore: ['assets/icons'],
+                // eslint-disable-next-line
                 async transform(content, contentPath) {
                     if (!IS_PRODUCTION) {
                         return content;
