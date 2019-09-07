@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 use WP_Rest_Request;
 use function ALIEMU\Database\Queries\get_user_learners;
+use function ALIEMU\Utils\fetch_all_api_items;
 
 add_action(
 	'init',
@@ -40,13 +41,7 @@ function export_learner_data() {
 
 	global $wp_rest_server;
 
-	$response = rest_do_request(
-		new WP_Rest_Request(
-			'GET',
-			'/wp/v2/users/me/groups/learners'
-		)
-	);
-
+	$response = fetch_all_api_items( new WP_Rest_Request( 'GET', '/wp/v2/users/me/groups/learners' ) );
 	if ( $response->is_error() ) {
 		status_header( 500 );
 		die;
@@ -61,7 +56,7 @@ function export_learner_data() {
 	);
 
 	header( 'Content-Type: text/csv; charset=utf-8' );
-	header( 'Content-Disposition: attachment; filename="aliemu_learners_' . substr( date( 'c' ), 0, -6 ) . '.csv"' );
+	header( 'Content-Disposition: attachment; filename="aliemu_learners_' . substr( gmdate( 'c' ), 0, -6 ) . '.csv"' );
 
 	$output = fopen( 'php://output', 'w' );
 
@@ -107,7 +102,7 @@ function export_learner_data() {
 					$first_name,
 					join( ', ', $tags ),
 					$course->post_title,
-					date(
+					gmdate(
 						'Y-m-d H:i:s',
 						strtotime( $meta['activity_completed'] )
 					),

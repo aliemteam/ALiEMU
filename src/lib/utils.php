@@ -8,6 +8,8 @@
 namespace ALIEMU\Utils;
 
 use WP_Error;
+use WP_Rest_Response;
+use WP_Rest_Request;
 
 /**
  * Turns an associative array CSS keys and values into an inline CSS string.
@@ -184,4 +186,35 @@ function register_script( string $name, bool $in_footer = true ) {
 			filemtime( $style_path ),
 		);
 	}
+}
+
+/**
+ * Helper function that fetches all items of a paged API response and returns a
+ * response with all the items.
+ *
+ * @param WP_Rest_Request $request An API request to be iterated.
+ */
+function fetch_all_api_items( WP_Rest_Request $request ) : WP_Rest_Response {
+	global $wp_rest_server;
+
+	$request->set_param( 'per_page', 100 );
+	$page = 0;
+	$data = [];
+
+	do {
+		$page++;
+		$request->set_param( 'page', $page );
+		$response = rest_do_request( $request );
+
+		if ( $response->is_error() ) {
+			return $response;
+		}
+
+		$data = array_merge(
+			$data,
+			$wp_rest_server->response_to_data( $response, true )
+		);
+	} while ( intval( $response->get_headers()['X-WP-TotalPages'] ) > $page );
+
+	return new WP_Rest_Response( $data );
 }
