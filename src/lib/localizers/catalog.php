@@ -9,6 +9,8 @@ namespace ALIEMU;
 
 defined( 'ABSPATH' ) || exit;
 
+use function ALIEMU\Utils\fetch_all_api_items;
+
 /**
  * Main localizer function for catalog entrypoint.
  */
@@ -40,8 +42,7 @@ function localize() {
 		// Error introduced in LearnDash v3.0.0.
 		$courses_req->set_param( 'orderby', 'date' );
 		$courses_req->set_param( 'order', 'desc' );
-		$courses_req->set_param( 'per_page', 100 );
-		$response = rest_do_request( $courses_req );
+		$response = fetch_all_api_items( $courses_req );
 
 		if ( $response->is_error() ) {
 			wp_die(
