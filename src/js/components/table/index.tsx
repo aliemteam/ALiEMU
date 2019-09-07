@@ -91,9 +91,15 @@ const Table = memo(function({
         return [...rows].sort((a, b) => {
             const leftCell = a.cells[sortIndex] || {};
             const rightCell = b.cells[sortIndex] || {};
-            const left = leftCell.sortKey || leftCell.content || '';
-            const right = rightCell.sortKey || rightCell.content || '';
             const order = sortOrder === 'ascending' ? 1 : -1;
+            let left = leftCell.sortKey || leftCell.content || '';
+            let right = rightCell.sortKey || rightCell.content || '';
+            if (typeof left === 'string') {
+                left = left.toLowerCase();
+            }
+            if (typeof right === 'string') {
+                right = right.toLowerCase();
+            }
             // prettier-ignore
             return order * (
                 left < right ? -1 :
