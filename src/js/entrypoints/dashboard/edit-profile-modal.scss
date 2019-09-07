@@ -11,6 +11,7 @@
 }
 
 .form {
+    display: grid;
     width: calc(100vw - (3 * #{$block-padding}));
     max-width: 500px;
 }
