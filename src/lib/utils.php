@@ -157,12 +157,19 @@ function gravatar_profile_data( string $email ) : object {
  * @param bool   $in_footer If the script should be loaded in the footer.
  */
 function register_script( string $name, bool $in_footer = true ) {
-	$handle      = "aliemu-$name";
-	$script_path = ALIEMU_ROOT_PATH . "/bundle/$name.js";
-	$style_path  = ALIEMU_ROOT_PATH . "/bundle/$name.css";
-	$deps_path   = ALIEMU_ROOT_PATH . "/bundle/$name.deps.json";
-	$script_uri  = ALIEMU_ROOT_URI . "/bundle/$name.js";
-	$style_uri   = ALIEMU_ROOT_URI . "/bundle/$name.css";
+	$handle            = "aliemu-$name";
+	$script_path       = ALIEMU_ROOT_PATH . "/bundle/$name.js";
+	$style_path        = ALIEMU_ROOT_PATH . "/bundle/$name.css";
+	$script_asset_path = ALIEMU_ROOT_PATH . "/bundle/$name.asset.php";
+	$script_uri        = ALIEMU_ROOT_URI . "/bundle/$name.js";
+	$style_uri         = ALIEMU_ROOT_URI . "/bundle/$name.css";
+
+	$script_asset = file_exists( $script_asset_path )
+		? require $script_asset_path
+		: [
+			'dependencies' => [],
+			'version'      => filemtime( $script_path ),
+		];
 
 	if ( ! file_exists( $script_path ) ) {
 		wp_die( esc_html( "Script file '$script_path' does not exist" ) );
@@ -171,10 +178,8 @@ function register_script( string $name, bool $in_footer = true ) {
 	wp_register_script(
 		$handle,
 		$script_uri,
-		file_exists( $deps_path )
-			? json_decode( file_get_contents( $deps_path ) ) // phpcs:ignore
-			: [],
-		filemtime( $script_path ),
+		$script_asset['dependencies'],
+		$script_asset['version'],
 		$in_footer,
 	);
 
