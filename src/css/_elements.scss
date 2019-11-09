@@ -23,6 +23,11 @@ ul {
 }
 
 // Block elements --------------------------------------------------------------
+figcaption {
+    font-size: 0.8em;
+    text-align: center;
+}
+
 p {
     margin: $block-margin 0;
     padding: 0;
