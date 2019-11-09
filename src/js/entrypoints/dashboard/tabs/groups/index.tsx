@@ -23,7 +23,7 @@ function TabGroups() {
 
     useEffect(() => {
         let isSubscribed = true;
-        Promise.all([
+        Promise.all<Coaches.Coach[], Learners.Learner[]>([
             Coaches.fetch({ per_page: 100 }),
             Learners.fetch({ per_page: 100 }),
         ]).then(([c, l]) => {
