@@ -17,7 +17,9 @@ export interface Msg extends MsgParams {
 }
 
 export const MessageContext = createContext({
-    dispatchMessage: (_msg: MsgParams) => {},
+    dispatchMessage: (_msg: MsgParams) => {
+        return;
+    },
 });
 
 interface Props {
