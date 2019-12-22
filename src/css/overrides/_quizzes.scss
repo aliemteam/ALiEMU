@@ -1,6 +1,11 @@
 @import 'colors';
 @import 'variables';
 
+// Remove bullet point from quiz results page.
+.wpProQuiz_resultsList {
+    list-style: none;
+}
+
 // "Question x of n" text
 .wpProQuiz_question_page {
     font-weight: bold;
