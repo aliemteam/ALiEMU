@@ -13,12 +13,12 @@ add_action(
 		$user_is_logged_in = is_user_logged_in();
 
 		if ( is_page( 'login' ) && $user_is_logged_in ) {
-			wp_safe_redirect( '/user' );
+			wp_safe_redirect( '/courses' );
 			exit;
 		}
 
 		if ( is_front_page() && $user_is_logged_in ) {
-			wp_safe_redirect( '/user' );
+			wp_safe_redirect( '/courses' );
 			exit;
 		}
 
