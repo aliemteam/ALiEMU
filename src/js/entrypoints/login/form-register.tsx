@@ -106,7 +106,7 @@ export default class RegistrationForm extends Component<{}, State> {
                     name="user_pass"
                     pattern="[a-zA-Z0-9!@#$%^&*()]{8,}"
                     type="password"
-                    validityMessage="Password must be 8 or more characters."
+                    validityMessage="Password must be 8 or more valid characters: A-Z, a-z, 0-9, !, @, #, $, %, ^, &, *, (, )"
                     value={this.state.data.user_pass}
                     onChange={this.handleChange}
                 />
