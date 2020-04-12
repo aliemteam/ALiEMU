@@ -24,7 +24,6 @@ services:
             $$_SERVER['HTTP_HOST'] = 'aliemu.com';
         }
       PLUGINS: >-
-        academic-bloggers-toolkit
         gutenberg
         jetpack
         sendgrid-email-delivery-simplified
